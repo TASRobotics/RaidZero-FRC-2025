@@ -6,7 +6,6 @@ import raidzero.robot.subsystems.TelescopingArm;
 public class MoveTelescopingArm extends Command {
     private TelescopingArm arm;
     private double x, y;
-    private double wristAngle;
 
     private double[] setpoints;
 
@@ -22,22 +21,19 @@ public class MoveTelescopingArm extends Command {
 
     @Override
     public void execute() {
-        setpoints = arm.moveArmTo(x, y, wristAngle);
+        setpoints = arm.moveArmTo(x, y);
     }
 
     @Override
     public boolean isFinished() {
         // within 2 rotations of target (change this)
         return ((arm.getTelescopePosition() > setpoints[0] - 2) && (arm.getTelescopePosition() < setpoints[0] + 2))
-                && (arm.getArmPosition() > setpoints[1] - 2) && (arm.getArmPosition() < setpoints[1] + 2)
-                && (arm.getWristPosition() > setpoints[2] - 2) && (arm.getWristPosition() < setpoints[2] + 2);
+                && (arm.getArmPosition() > setpoints[1] - 2) && (arm.getArmPosition() < setpoints[1] + 2);
     }
 
     @Override
     public void end(boolean interrupted) {
         arm.stopTelescope();
         arm.stopArm();
-        arm.stopWrist();
     }
-
 }

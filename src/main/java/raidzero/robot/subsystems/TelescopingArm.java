@@ -10,64 +10,67 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
-/**
- * Telescoping arm skeleton code
- */
 public class TelescopingArm extends SubsystemBase {
     private static TelescopingArm system;
 
-
-    private TalonFX telescope, arm, wrist;
+    private TalonFX telescope, armJoint;
 
     private TelescopingArm() {
-        telescope = new TalonFX(Constants.TelescopingArm.TELESCOPE_MOTOR_ID);
+        telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID);
         telescope.getConfigurator().apply(telescopeConfiguration());
         telescope.setNeutralMode(NeutralModeValue.Brake);
 
-        arm = new TalonFX(Constants.TelescopingArm.ARM_MOTOR_ID);
-        arm.getConfigurator().apply((wristConfiguration()));
-        arm.setNeutralMode(NeutralModeValue.Brake);
-
-        wrist = new TalonFX(Constants.TelescopingArm.WRIST_MOTOR_ID);
-        wrist.getConfigurator().apply(armConfiguration());
-        wrist.setNeutralMode(NeutralModeValue.Brake);
+        armJoint = new TalonFX(Constants.TelescopingArm.ArmJoint.MOTOR_ID);
+        armJoint.getConfigurator().apply((armConfiguration()));
+        armJoint.setNeutralMode(NeutralModeValue.Brake);
     }
 
     /**
      * Method to automatically calculate the arm's position and move it to where it needs to be
      * 
-     * @param x the x setpoint
-     * @param y the y setpoint
-     * @return if it is done or not 
+     * @param x the x setpoint in meters
+     * @param y the y setpoint in meters
+     * @return the height and angle setpoints in rotations for the telescope and arm respectively 
      */
-    public double[] moveArmTo(double x, double y, double wristAngle) {
+    public double[] moveArmTo(double x, double y) {
         final MotionMagicVoltage telescopeRequest = new MotionMagicVoltage(0);
-        telescope.setControl(telescopeRequest.withPosition(calculateMinTelescopeHeight(x, y)));
+        telescope.setControl(telescopeRequest.withPosition(calculateTelescopeHeight(x, y)));
 
         final MotionMagicVoltage armRequest = new MotionMagicVoltage(0);
-        arm.setControl(armRequest.withPosition(calcualteArmAngle(x, y)));
-
-        final MotionMagicVoltage wristRequest = new MotionMagicVoltage(0);
-        arm.setControl(wristRequest.withPosition(wristAngle * Constants.TelescopingArm.WRIST_CONVERSION_FACTOR));
+        armJoint.setControl(armRequest.withPosition(calcualteArmAngle(x, y)));
 
         return new double[] {
-            calculateMinTelescopeHeight(x, y) / Constants.TelescopingArm.ARM_CONVERSION_FACTOR,
-            calcualteArmAngle(x, y) / Constants.TelescopingArm.ARM_CONVERSION_FACTOR,
-            wristAngle
+                calculateTelescopeHeight(x, y), 
+                calcualteArmAngle(x, y) 
         };
     }
 
-    private double calculateMinTelescopeHeight(double x, double y) throws IllegalStateException {
-        double height = y - Constants.TelescopingArm.ARM_LENGTH_M * Math.sin(Math.acos(x / Constants.TelescopingArm.ARM_LENGTH_M)) * Constants.TelescopingArm.TELESCOPE_CONVERSION_FACTOR;
+    /**
+     * Calculates the target telescope height given the x and y setpoint values
+     * 
+     * @param x the x setpoint in meters
+     * @param y the y setpoint in meters
+     * @return the position in rotations to move the motor to
+     * @throws IllegalStateException if the calculated target height is higher than the maximum height
+     */
+    private double calculateTelescopeHeight(double x, double y) throws IllegalStateException {
+        double height = Math.sqrt(x*x + y*y); 
 
-        if (height > Constants.TelescopingArm.TELESCOPE_MAX_LENGTH_M)
+        if (height > Constants.TelescopingArm.Telescope.MAX_LENGTH_M)
             throw new IllegalStateException("Arm setpoint too high");
 
-        return height;
+        return height * Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
     }
 
+    /**
+     * Calculates the target arm angle given the x and y setpoint values
+     * 
+     * @param x the x setpoint in meters
+     * @param y the y setpoint in meters
+     * @return the target arm angle in rotations
+     */
     private double calcualteArmAngle(double x, double y) {
-        return Math.acos(x / Constants.TelescopingArm.ARM_LENGTH_M) + (Math.PI / 4) * Constants.TelescopingArm.ARM_CONVERSION_FACTOR;
+        return Math.atan2(y, x) * Constants.TelescopingArm.ArmJoint.CONVERSION_FACTOR;
     }
 
     /**
@@ -85,16 +88,7 @@ public class TelescopingArm extends SubsystemBase {
      * @return arm motor encoder position in rotations
      */
     public double getArmPosition() {
-        return arm.getPosition().getValueAsDouble();
-    }
-
-    /**
-     * Get the wrist motor's encoder position
-     * 
-     * @return wrist motor encoder position in rotations
-     */
-    public double getWristPosition() {
-        return wrist.getPosition().getValueAsDouble();
+        return armJoint.getPosition().getValueAsDouble();
     }
 
     public void stopTelescope() {
@@ -102,11 +96,12 @@ public class TelescopingArm extends SubsystemBase {
     }
 
     public void stopArm() {
-        arm.stopMotor();
+        armJoint.stopMotor();
     }
 
-    public void stopWrist() {
-        wrist.stopMotor();
+    public void stopAll() {
+        stopTelescope();
+        stopArm();
     }
 
     public static TelescopingArm system() {
@@ -120,56 +115,37 @@ public class TelescopingArm extends SubsystemBase {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
         configuration.Slot0 = new Slot0Configs()
-            .withKS(Constants.TelescopingArm.TELESCOPE_KS)
-            .withKV(Constants.TelescopingArm.TELESCOPE_KV)
-            .withKA(Constants.TelescopingArm.TELESCOPE_KA)
-            .withKP(Constants.TelescopingArm.TELESCOPE_KP)
-            .withKI(Constants.TelescopingArm.TELESCOPE_KI)
-            .withKD(Constants.TelescopingArm.TELESCOPE_KD);
+                .withKS(Constants.TelescopingArm.Telescope.KS)
+                .withKV(Constants.TelescopingArm.Telescope.KV)
+                .withKA(Constants.TelescopingArm.Telescope.KA)
+                .withKP(Constants.TelescopingArm.Telescope.KP)
+                .withKI(Constants.TelescopingArm.Telescope.KI)
+                .withKD(Constants.TelescopingArm.Telescope.KD);
 
         configuration.MotionMagic = new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(Constants.TelescopingArm.TELESCOPE_CRUISE_VELOCITY)
-            .withMotionMagicAcceleration(Constants.TelescopingArm.TELESCOPE_ACCELERATION)
-            .withMotionMagicJerk(Constants.TelescopingArm.TELESCOPE_JERK);
+                .withMotionMagicCruiseVelocity(Constants.TelescopingArm.Telescope.CRUISE_VELOCITY)
+                .withMotionMagicAcceleration(Constants.TelescopingArm.Telescope.ACCELERATION)
+                .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
 
         return configuration;
     }
 
-        private TalonFXConfiguration armConfiguration() {
+    private TalonFXConfiguration armConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
         configuration.Slot0 = new Slot0Configs()
-            .withKS(Constants.TelescopingArm.ARM_KS)
-            .withKV(Constants.TelescopingArm.ARM_KV)
-            .withKA(Constants.TelescopingArm.ARM_KA)
-            .withKP(Constants.TelescopingArm.ARM_KP)
-            .withKI(Constants.TelescopingArm.ARM_KI)
-            .withKD(Constants.TelescopingArm.ARM_KD);
+                .withKS(Constants.TelescopingArm.ArmJoint.KS)
+                .withKV(Constants.TelescopingArm.ArmJoint.KV)
+                .withKA(Constants.TelescopingArm.ArmJoint.KA)
+                .withKP(Constants.TelescopingArm.ArmJoint.KP)
+                .withKI(Constants.TelescopingArm.ArmJoint.KI)
+                .withKD(Constants.TelescopingArm.ArmJoint.KD);
 
         configuration.MotionMagic = new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(Constants.TelescopingArm.ARM_CRUISE_VELOCITY)
-            .withMotionMagicAcceleration(Constants.TelescopingArm.ARM_ACCELERATION)
-            .withMotionMagicJerk(Constants.TelescopingArm.ARM_JERK);
+                .withMotionMagicCruiseVelocity(Constants.TelescopingArm.ArmJoint.CRUISE_VELOCITY)
+                .withMotionMagicAcceleration(Constants.TelescopingArm.ArmJoint.ACCELERATION)
+                .withMotionMagicJerk(Constants.TelescopingArm.ArmJoint.JERK);
 
         return configuration;
-        }
-
-        private TalonFXConfiguration wristConfiguration() {
-        TalonFXConfiguration configuration = new TalonFXConfiguration();
-
-        configuration.Slot0 = new Slot0Configs()
-            .withKS(Constants.TelescopingArm.WRIST_KS)
-            .withKV(Constants.TelescopingArm.WRIST_KV)
-            .withKA(Constants.TelescopingArm.WRIST_KA)
-            .withKP(Constants.TelescopingArm.WRIST_KP)
-            .withKI(Constants.TelescopingArm.WRIST_KI)
-            .withKD(Constants.TelescopingArm.WRIST_KD);
-
-        configuration.MotionMagic = new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(Constants.TelescopingArm.WRIST_CRUISE_VELOCITY)
-            .withMotionMagicAcceleration(Constants.TelescopingArm.WRIST_ACCELERATION)
-            .withMotionMagicJerk(Constants.TelescopingArm.WRIST_JERK);
-
-        return configuration;
-        }
+    }
 }
