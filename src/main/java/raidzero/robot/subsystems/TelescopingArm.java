@@ -25,7 +25,17 @@ public class TelescopingArm extends SubsystemBase {
     private TalonFX telescope, arm, wrist;
 
     private TelescopingArm() {
-        configureMotors();
+        telescope = new TalonFX(TELESCOPE_MOTOR_ID);
+        telescope.getConfigurator().apply(telescopeConfiguration());
+        telescope.setNeutralMode(NeutralModeValue.Brake);
+
+        arm = new TalonFX(ARM_MOTOR_ID);
+        arm.getConfigurator().apply((wristConfiguration()));
+        arm.setNeutralMode(NeutralModeValue.Brake);
+
+        wrist = new TalonFX(WRIST_MOTOR_ID);
+        wrist.getConfigurator().apply(armConfiguration());
+        wrist.setNeutralMode(NeutralModeValue.Brake);
     }
 
     /**
@@ -98,52 +108,63 @@ public class TelescopingArm extends SubsystemBase {
             arm.stopMotor();
             wrist.stopMotor();
         }
+
     }
 
-    private void configureMotors() {
-        telescope = new TalonFX(TELESCOPE_MOTOR_ID);
-        telescope.getConfigurator().apply(new TalonFXConfiguration()
-                .withSlot0(new Slot0Configs()
-                        .withKS(0.25)
-                        .withKV(0.12)
-                        .withKA(0.01)
-                        .withKP(4.8)
-                        .withKI(0)
-                        .withKD(0.1))
-                .withMotionMagic(new MotionMagicConfigs()
-                        .withMotionMagicCruiseVelocity(80)
-                        .withMotionMagicAcceleration(160)
-                        .withMotionMagicJerk(1600)));
-        telescope.setNeutralMode(NeutralModeValue.Brake);
+    private TalonFXConfiguration telescopeConfiguration() {
+        TalonFXConfiguration configuration = new TalonFXConfiguration();
 
-        arm = new TalonFX(ARM_MOTOR_ID);
-        arm.getConfigurator().apply(new TalonFXConfiguration()
-                .withSlot0(new Slot0Configs()
-                        .withKS(0.25)
-                        .withKV(0.12)
-                        .withKA(0.01)
-                        .withKP(4.8)
-                        .withKI(0)
-                        .withKD(0.1))
-                .withMotionMagic(new MotionMagicConfigs()
-                        .withMotionMagicCruiseVelocity(80)
-                        .withMotionMagicAcceleration(160)
-                        .withMotionMagicJerk(1600)));
-        arm.setNeutralMode(NeutralModeValue.Brake);
+        configuration.Slot0 = new Slot0Configs()
+                .withKS(0.25)
+                .withKV(0.12)
+                .withKA(0.01)
+                .withKP(4.8)
+                .withKI(0)
+                .withKD(0.1);
 
-        wrist = new TalonFX(WRIST_MOTOR_ID);
-        wrist.getConfigurator().apply(new TalonFXConfiguration()
-                .withSlot0(new Slot0Configs()
-                        .withKS(0.25)
-                        .withKV(0.12)
-                        .withKA(0.01)
-                        .withKP(4.8)
-                        .withKI(0)
-                        .withKD(0.1))
-                .withMotionMagic(new MotionMagicConfigs()
-                        .withMotionMagicCruiseVelocity(80)
-                        .withMotionMagicAcceleration(160)
-                        .withMotionMagicJerk(1600)));
-        wrist.setNeutralMode(NeutralModeValue.Brake);
+        configuration.MotionMagic = new MotionMagicConfigs()
+                .withMotionMagicCruiseVelocity(80)
+                .withMotionMagicAcceleration(160)
+                .withMotionMagicJerk(1600);
+
+        return configuration;
+    }
+
+    private TalonFXConfiguration armConfiguration() {
+        TalonFXConfiguration configuration = new TalonFXConfiguration();
+
+        configuration.Slot0 = new Slot0Configs()
+                .withKS(0.25)
+                .withKV(0.12)
+                .withKA(0.01)
+                .withKP(4.8)
+                .withKI(0)
+                .withKD(0.1);
+
+        configuration.MotionMagic = new MotionMagicConfigs()
+                .withMotionMagicCruiseVelocity(80)
+                .withMotionMagicAcceleration(160)
+                .withMotionMagicJerk(1600);
+
+        return configuration;
+    }
+
+    private TalonFXConfiguration wristConfiguration() {
+        TalonFXConfiguration configuration = new TalonFXConfiguration();
+
+        configuration.Slot0 = new Slot0Configs()
+                .withKS(0.25)
+                .withKV(0.12)
+                .withKA(0.01)
+                .withKP(4.8)
+                .withKI(0)
+                .withKD(0.1);
+
+        configuration.MotionMagic = new MotionMagicConfigs()
+                .withMotionMagicCruiseVelocity(80)
+                .withMotionMagicAcceleration(160)
+                .withMotionMagicJerk(1600);
+
+        return configuration;
     }
 }
