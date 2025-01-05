@@ -33,7 +33,6 @@ public class MoveTelescopingArm extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        arm.stopTelescope();
-        arm.stopArm();
+        arm.stopAll();
     }
 }
