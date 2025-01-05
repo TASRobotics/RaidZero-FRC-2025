@@ -60,8 +60,8 @@ public class TelescopingArm extends SubsystemBase {
         }
     }
 
-    private double calculateMinTelescopeHeight(double x, double y) {
-        double height = y - ARM_LENGTH_M * Math.sin(Math.asin(x / ARM_LENGTH_M)) * TELESCOPE_CONVERSION_FACTOR;
+    private double calculateMinTelescopeHeight(double x, double y) throws IllegalStateException {
+        double height = y - ARM_LENGTH_M * Math.sin(Math.acos(x / ARM_LENGTH_M)) * TELESCOPE_CONVERSION_FACTOR;
 
         if (height > TELESCOPE_MAX_LENGTH_M)
             throw new IllegalStateException("Arm setpoint too high");
