@@ -1,66 +1,73 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package raidzero.robot;
 
-import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.geometry.Pose2d;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import raidzero.robot.subsystems.Swerve;
 
 public class RobotContainer {
-	private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps;
-	private double MaxAngularRate = 1.5 * Math.PI;
+    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
+                                                                                      // max angular velocity
 
-	private final CommandXboxController joystick = new CommandXboxController(0);
-	private final Swerve drivetrain = Swerve.system();
+    /* Setting up bindings for necessary control of the swerve drive platform */
+    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-	private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-			.withDeadband(MaxSpeed * Constants.Swerve.STICK_DEADBAND)
-			.withRotationalDeadband(MaxAngularRate * Constants.Swerve.STICK_DEADBAND)
-			.withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    private final Telemetry logger = new Telemetry(MaxSpeed);
 
-	private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    private final CommandXboxController joystick = new CommandXboxController(0);
 
-	private final Telemetry logger = new Telemetry(MaxSpeed);
+    public final Swerve swerve = Swerve.system();
 
-	public RobotContainer() {
-		configureBindings();
+    public RobotContainer() {
+        configureBindings();
+    }
 
-		if (Utils.isSimulation()) {
-			drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-		}
+    private void configureBindings() {
+        // Note that X is defined as forward according to WPILib convention,
+        // and Y is defined as to the left according to WPILib convention.
+        swerve.setDefaultCommand(
+                // Drivetrain will execute this command periodically
+                swerve.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
+                                                                                               // negative Y (forward)
+                        .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                        .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with
+                                                                                    // negative X (left)
+                ));
 
-		drivetrain.registerTelemetry(logger::telemeterize);
+        joystick.a().whileTrue(swerve.applyRequest(() -> brake));
+        joystick.b().whileTrue(swerve.applyRequest(
+                () -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
-		SmartDashboard.putData(drivetrain.getField2d());
-	}
+        // Run SysId routines when holding back/start and X/Y.
+        // Note that each routine should be run exactly once in a single log.
+        joystick.back().and(joystick.y()).whileTrue(swerve.sysIdDynamic(Direction.kForward));
+        joystick.back().and(joystick.x()).whileTrue(swerve.sysIdDynamic(Direction.kReverse));
+        joystick.start().and(joystick.y()).whileTrue(swerve.sysIdQuasistatic(Direction.kForward));
+        joystick.start().and(joystick.x()).whileTrue(swerve.sysIdQuasistatic(Direction.kReverse));
 
-	private void configureBindings() {
-		drivetrain.setDefaultCommand(
-				drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed)
-						.withVelocityY(-joystick.getLeftX() * MaxSpeed)
-						.withRotationalRate(-joystick.getRightX() * MaxAngularRate)));
+        // reset the field-centric heading on left bumper press
+        joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
 
-		// * CONTROLS SUBJECT TO CHANGE
+        swerve.registerTelemetry(logger::telemeterize);
+    }
 
-		// Brake on A button press
-		joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-
-		// reset the pigeon2 heading on right bumper press
-		joystick.rightBumper().onTrue(new InstantCommand(() -> drivetrain.getPigeon2().setYaw(0)));
-
-		// reset the field-centric heading on left bumper press
-		joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-	}
-
-	public Command getAutonomousCommand() {
-		return Commands.print("No autonomous command configured");
-	}
+    public Command getAutonomousCommand() {
+        return Commands.print("No autonomous command configured");
+    }
 }
