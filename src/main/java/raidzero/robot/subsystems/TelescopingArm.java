@@ -35,45 +35,12 @@ public class TelescopingArm extends SubsystemBase {
      * @param y the y setpoint in meters
      * @return the height and angle setpoints in rotations for the telescope and arm respectively 
      */
-    public double[] moveTo(double x, double y) {
+    public void moveTo(double telescopeSetpoint, double armJointAngle) {
         final MotionMagicVoltage telescopeRequest = new MotionMagicVoltage(0);
-        telescope.setControl(telescopeRequest.withPosition(calculateTelescopeHeight(x, y)));
+        telescope.setControl(telescopeRequest.withPosition(telescopeSetpoint));
 
         final MotionMagicVoltage armRequest = new MotionMagicVoltage(0);
-        armJoint.setControl(armRequest.withPosition(calculateArmAngle(x, y)));
-
-        return new double[] {
-                calculateTelescopeHeight(x, y),
-                calculateArmAngle(x, y)
-        };
-    }
-
-    /**
-     * Calculates the target telescope position given the x and y setpoints
-     * 
-     * @param x the x setpoint in meters
-     * @param y the y setpoint in meters
-     * @return target motor position in rotations
-     * @throws IllegalStateException if the calculated target height is higher than the maximum height
-     */
-    private double calculateTelescopeHeight(double x, double y) throws IllegalStateException {
-        double height = Math.sqrt(x * x + y * y);
-
-        if (height > Constants.TelescopingArm.Telescope.MAX_LENGTH_M)
-            throw new IllegalStateException("Arm setpoint too high");
-
-        return height * Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
-    }
-
-    /**
-     * Calculates the target arm position given the x and y setpoints
-     * 
-     * @param x the x setpoint in meters
-     * @param y the y setpoint in meters
-     * @return the target arm position in rotations
-     */
-    private double calculateArmAngle(double x, double y) {
-        return Math.atan2(y, x) * Constants.TelescopingArm.ArmJoint.CONVERSION_FACTOR;
+        armJoint.setControl(armRequest.withPosition(armJointAngle));
     }
 
     /**
