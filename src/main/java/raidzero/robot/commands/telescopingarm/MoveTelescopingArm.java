@@ -3,7 +3,6 @@ package raidzero.robot.commands.telescopingarm;
 import edu.wpi.first.wpilibj2.command.Command;
 import raidzero.robot.Constants;
 import raidzero.robot.subsystems.TelescopingArm;
-import raidzero.robot.subsystems.StateManager.TelescopingArmState;
 
 public class MoveTelescopingArm extends Command {
     private TelescopingArm arm;
