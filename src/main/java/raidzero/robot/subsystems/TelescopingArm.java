@@ -40,8 +40,8 @@ public class TelescopingArm extends SubsystemBase {
         armJoint.setControl(armRequest.withPosition(calculateArmAngle(x, y)));
 
         return new double[] {
-                calculateTelescopeHeight(x, y), 
-                calculateArmAngle(x, y) 
+                calculateTelescopeHeight(x, y),
+                calculateArmAngle(x, y)
         };
     }
 
@@ -54,7 +54,7 @@ public class TelescopingArm extends SubsystemBase {
      * @throws IllegalStateException if the calculated target height is higher than the maximum height
      */
     private double calculateTelescopeHeight(double x, double y) throws IllegalStateException {
-        double height = Math.sqrt(x*x + y*y); 
+        double height = Math.sqrt(x * x + y * y);
 
         if (height > Constants.TelescopingArm.Telescope.MAX_LENGTH_M)
             throw new IllegalStateException("Arm setpoint too high");
