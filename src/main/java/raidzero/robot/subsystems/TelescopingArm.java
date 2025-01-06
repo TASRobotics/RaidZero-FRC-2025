@@ -35,7 +35,7 @@ public class TelescopingArm extends SubsystemBase {
      * @param y the y setpoint in meters
      * @return the height and angle setpoints in rotations for the telescope and arm respectively 
      */
-    public double[] moveArmTo(double x, double y) {
+    public double[] moveTo(double x, double y) {
         final MotionMagicVoltage telescopeRequest = new MotionMagicVoltage(0);
         telescope.setControl(telescopeRequest.withPosition(calculateTelescopeHeight(x, y)));
 
