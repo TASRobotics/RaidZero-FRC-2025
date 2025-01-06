@@ -21,7 +21,7 @@ public class MoveTelescopingArm extends Command {
 
     @Override
     public void execute() {
-        setpoints = arm.moveArmTo(x, y);
+        setpoints = arm.moveTo(x, y);
     }
 
     @Override
