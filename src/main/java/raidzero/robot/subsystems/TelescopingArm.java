@@ -6,7 +6,16 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
@@ -14,6 +23,7 @@ public class TelescopingArm extends SubsystemBase {
     private static TelescopingArm system;
 
     private TalonFX telescope, armJoint;
+    private SparkMax roller;
 
     /**
      * Constructor for the {@link TelescopingArm} subsystem
@@ -26,16 +36,45 @@ public class TelescopingArm extends SubsystemBase {
         armJoint = new TalonFX(Constants.TelescopingArm.ArmJoint.MOTOR_ID);
         armJoint.getConfigurator().apply((armConfiguration()));
         armJoint.setNeutralMode(NeutralModeValue.Brake);
+
+        roller = new SparkMax(Constants.TelescopingArm.Roller.MOTOR_ID, MotorType.kBrushless);
+        roller.configure(rollerConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     /**
-     * Method to calculate the arm's position and move it to the desired setpoint
+     * Creates a {@link Command} to move the arm to the specified x and y setpoints
      * 
      * @param x the x setpoint in meters
      * @param y the y setpoint in meters
-     * @return the height and angle setpoints in rotations for the telescope and arm respectively 
+     * @return the command to be scheudled and run
      */
-    public void moveTo(double telescopeSetpoint, double armJointAngle) {
+    public Command moveArm(double x, double y) {
+        double telescopeSetpoint = calculateTelescopeHeight(x, y);
+        double armJointSetpoint = calculateArmAngle(x, y);
+
+        return Commands.startEnd(
+                () -> moveTo(telescopeSetpoint, armJointSetpoint),
+                () -> stopAll(), this)
+                .until(() -> armWithinSetpoint(telescopeSetpoint, armJointSetpoint));
+    }
+
+    /**
+     * Creates a {@link Command} to run the intake at the specified speed
+     * 
+     * @param speed the speed as a percentage
+     * @return the command to be scheduled and run
+     */
+    public Command intake(double speed) {
+        return Commands.startEnd(() -> runRoller(speed), () -> stopRoller(), this);
+    }
+
+    /**
+     * Uses Motion Magic to move the telescope and arm joint to the target position
+     * 
+     * @param telescopeSetpoint the target telescope position in rotations
+     * @param armJointAngle     the target arm joint angle in rotations
+     */
+    private void moveTo(double telescopeSetpoint, double armJointAngle) {
         final MotionMagicVoltage telescopeRequest = new MotionMagicVoltage(0);
         telescope.setControl(telescopeRequest.withPosition(telescopeSetpoint));
 
@@ -43,8 +82,68 @@ public class TelescopingArm extends SubsystemBase {
         armJoint.setControl(armRequest.withPosition(armJointAngle));
     }
 
+    private void runRoller(double speed) {
+        roller.set(speed);
+    }
+
+    private void stopRoller() {
+        roller.stopMotor();
+    }
+
     /**
-     * Get the telescope motor's encoder position
+     * Calculates the target telescope position given the x and y setpoints
+     * 
+     * @param x the x setpoint in meters
+     * @param y the y setpoint in meters
+     * @return target motor position in rotations
+     * @throws IllegalStateException if the calculated target height is higher than
+     *                               the maximum height or lower than the minimum
+     *                               height
+     */
+    private double calculateTelescopeHeight(double x, double y) throws IllegalStateException {
+        double height = Math.sqrt(x * x + y * y);
+
+        if (height > Constants.TelescopingArm.Telescope.MAX_LENGTH_M)
+            throw new IllegalStateException("Arm setpoint too high");
+        else if (height < Constants.TelescopingArm.Telescope.MIN_LENGTH_M)
+            throw new IllegalStateException("Arm setpoint too low");
+
+        return height * Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
+    }
+
+    /**
+     * Calculates the target arm position given the x and y setpoints
+     * 
+     * @param x the x setpoint in meters
+     * @param y the y setpoint in meters
+     * @return the target arm position in rotations
+     */
+    private double calculateArmAngle(double x, double y) {
+        return Math.atan2(y, x) * Constants.TelescopingArm.ArmJoint.CONVERSION_FACTOR;
+    }
+
+    /**
+     * Checks if the arm encoder position is within the defined tolerance in
+     * {@link Constants.TelescopingArm.Telescope}
+     * 
+     * @param telescopeSetpoint the desired telescope position in rotations
+     * @param armJointSetpoint  the desired arm joint angle in rotations
+     * @return true if both the telescope and the arm are within the defined
+     *         tolerance of their setpoints
+     */
+    private boolean armWithinSetpoint(double telescopeSetpoint, double armJointSetpoint) {
+        return ((getTelescopePosition() > telescopeSetpoint
+                - Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS)
+                && (getTelescopePosition() < telescopeSetpoint
+                        + Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS))
+                && (getArmPosition() > armJointSetpoint
+                        - Constants.TelescopingArm.ArmJoint.POSITION_TOLERANCE_ROTATIONS)
+                && (getArmPosition() < armJointSetpoint
+                        + Constants.TelescopingArm.ArmJoint.POSITION_TOLERANCE_ROTATIONS);
+    }
+
+    /**
+     * Gets the telescope motor's encoder position
      * 
      * @return telescope motor encoder position in rotations
      */
@@ -53,7 +152,7 @@ public class TelescopingArm extends SubsystemBase {
     }
 
     /**
-     * Get the arm motor's encoder position
+     * Gets the arm motor's encoder position
      * 
      * @return arm motor encoder position in rotations
      */
@@ -62,21 +161,21 @@ public class TelescopingArm extends SubsystemBase {
     }
 
     /**
-     * Stop the telescope motor
+     * Stops the telescope motor
      */
     public void stopTelescope() {
         telescope.stopMotor();
     }
 
     /**
-     * Stop the arm motor
+     * Stops the arm motor
      */
     public void stopArm() {
         armJoint.stopMotor();
     }
 
     /**
-     * Stop all motors
+     * Stops all motors
      */
     public void stopAll() {
         stopTelescope();
@@ -84,20 +183,7 @@ public class TelescopingArm extends SubsystemBase {
     }
 
     /**
-     * Get the singleton instance of the {@link TelescopingArm} subsystem
-     * 
-     * @return the {@link TelescopingArm} subsystem
-     */
-    public static TelescopingArm system() {
-        if (system == null) {
-            system = new TelescopingArm();
-        }
-
-        return system;
-    }
-
-    /**
-     * Get the {@link TalonFXConfiguration} for the telescope
+     * Gets the {@link TalonFXConfiguration} for the telescope
      * 
      * @return the {@link TalonFXConfiguration} for the telescope
      */
@@ -121,7 +207,7 @@ public class TelescopingArm extends SubsystemBase {
     }
 
     /**
-     * Get the {@link TalonFXConfiguration} for the arm joint
+     * Gets the {@link TalonFXConfiguration} for the arm joint
      * 
      * @return the {@link TalonFXConfiguration} for the arm joint
      */
@@ -142,5 +228,28 @@ public class TelescopingArm extends SubsystemBase {
                 .withMotionMagicJerk(Constants.TelescopingArm.ArmJoint.JERK);
 
         return configuration;
+    }
+
+    private SparkBaseConfig rollerConfiguration() {
+        SparkMaxConfig config = new SparkMaxConfig();
+
+        config = new SparkMaxConfig();
+        config.idleMode(IdleMode.kBrake);
+        config.limitSwitch.forwardLimitSwitchEnabled(true);
+
+        return config;
+    }
+
+    /**
+     * Gets the singleton instance of the {@link TelescopingArm} subsystem
+     * 
+     * @return the {@link TelescopingArm} subsystem
+     */
+    public static TelescopingArm system() {
+        if (system == null) {
+            system = new TelescopingArm();
+        }
+
+        return system;
     }
 }
