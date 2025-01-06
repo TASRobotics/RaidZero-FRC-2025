@@ -37,11 +37,11 @@ public class TelescopingArm extends SubsystemBase {
         telescope.setControl(telescopeRequest.withPosition(calculateTelescopeHeight(x, y)));
 
         final MotionMagicVoltage armRequest = new MotionMagicVoltage(0);
-        armJoint.setControl(armRequest.withPosition(calcualteArmAngle(x, y)));
+        armJoint.setControl(armRequest.withPosition(calculateArmAngle(x, y)));
 
         return new double[] {
                 calculateTelescopeHeight(x, y), 
-                calcualteArmAngle(x, y) 
+                calculateArmAngle(x, y) 
         };
     }
 
@@ -69,7 +69,7 @@ public class TelescopingArm extends SubsystemBase {
      * @param y the y setpoint in meters
      * @return the target arm angle in rotations
      */
-    private double calcualteArmAngle(double x, double y) {
+    private double calculateArmAngle(double x, double y) {
         return Math.atan2(y, x) * Constants.TelescopingArm.ArmJoint.CONVERSION_FACTOR;
     }
 
