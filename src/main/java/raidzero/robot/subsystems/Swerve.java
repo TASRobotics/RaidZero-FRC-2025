@@ -29,7 +29,7 @@ import raidzero.robot.TunerConstants.TunerSwerveDrivetrain;
  * Subsystem so it can easily be used in command-based projects.
  */
 public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
-    private static final double kSimLoopPeriod = 0.005; // 5 ms
+    private static final double SIM_LOOP_PERIOD = 0.005; // 5 ms
     private Notifier simNotifier = null;
     private double lastSimTime;
 
@@ -40,9 +40,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     private boolean hasAppliedOperatorPerspective = false;
 
     // Swerve requests to apply during SysId characterization
-    private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
-    private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
-    private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+    private final SwerveRequest.SysIdSwerveTranslation translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
+    private final SwerveRequest.SysIdSwerveSteerGains steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
+    private final SwerveRequest.SysIdSwerveRotation rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
     private static Swerve system;
 
@@ -59,7 +59,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
             state -> SignalLogger.writeString("SysIdTranslation_State", state.toString())
         ),
         new SysIdRoutine.Mechanism(
-            output -> setControl(this.m_translationCharacterization.withVolts(output)),
+            output -> setControl(this.translationCharacterization.withVolts(output)),
             null,
             this
         )
@@ -78,7 +78,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
             state -> SignalLogger.writeString("SysIdSteer_State", state.toString())
         ),
         new SysIdRoutine.Mechanism(
-            volts -> setControl(this.m_steerCharacterization.withVolts(volts)),
+            volts -> setControl(this.steerCharacterization.withVolts(volts)),
             null,
             this
         )
@@ -100,7 +100,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         ),
         new SysIdRoutine.Mechanism(
             output -> {
-                setControl(this.m_rotationCharacterization.withRotationalRate(output.in(Volts))); // Rad/s but SysId only supports V
+                setControl(this.rotationCharacterization.withRotationalRate(output.in(Volts))); // Rad/s but SysId only supports V
                 SignalLogger.writeDouble("Rotational_Rate", output.in(Volts)); // Log output for SysId
             },
             null,
@@ -265,7 +265,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
 
-        this.simNotifier.startPeriodic(kSimLoopPeriod);
+        this.simNotifier.startPeriodic(SIM_LOOP_PERIOD);
     }
 
     /**
