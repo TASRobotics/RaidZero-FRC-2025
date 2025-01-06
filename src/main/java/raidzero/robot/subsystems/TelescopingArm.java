@@ -82,10 +82,18 @@ public class TelescopingArm extends SubsystemBase {
         armJoint.setControl(armRequest.withPosition(armJointAngle));
     }
 
+    /**
+     * Runs the roller at the specified speed
+     * 
+     * @param speed the speed to run at as a percentage
+     */
     private void runRoller(double speed) {
         roller.set(speed);
     }
 
+    /**
+     * Stops the roller motor
+     */
     private void stopRoller() {
         roller.stopMotor();
     }
