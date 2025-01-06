@@ -15,6 +15,9 @@ public class TelescopingArm extends SubsystemBase {
 
     private TalonFX telescope, armJoint;
 
+    /**
+     * Constructor for the {@link TelescopingArm} subsystem
+     */
     private TelescopingArm() {
         telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID);
         telescope.getConfigurator().apply(telescopeConfiguration());
@@ -26,7 +29,7 @@ public class TelescopingArm extends SubsystemBase {
     }
 
     /**
-     * Method to automatically calculate the arm's position and move it to where it needs to be
+     * Method to calculate the arm's position and move it to the desired setpoint
      * 
      * @param x the x setpoint in meters
      * @param y the y setpoint in meters
@@ -46,11 +49,11 @@ public class TelescopingArm extends SubsystemBase {
     }
 
     /**
-     * Calculates the target telescope height given the x and y setpoint values
+     * Calculates the target telescope position given the x and y setpoints
      * 
      * @param x the x setpoint in meters
      * @param y the y setpoint in meters
-     * @return the position in rotations to move the motor to
+     * @return target motor position in rotations
      * @throws IllegalStateException if the calculated target height is higher than the maximum height
      */
     private double calculateTelescopeHeight(double x, double y) throws IllegalStateException {
@@ -63,11 +66,11 @@ public class TelescopingArm extends SubsystemBase {
     }
 
     /**
-     * Calculates the target arm angle given the x and y setpoint values
+     * Calculates the target arm position given the x and y setpoints
      * 
      * @param x the x setpoint in meters
      * @param y the y setpoint in meters
-     * @return the target arm angle in rotations
+     * @return the target arm position in rotations
      */
     private double calculateArmAngle(double x, double y) {
         return Math.atan2(y, x) * Constants.TelescopingArm.ArmJoint.CONVERSION_FACTOR;
@@ -91,26 +94,46 @@ public class TelescopingArm extends SubsystemBase {
         return armJoint.getPosition().getValueAsDouble();
     }
 
+    /**
+     * Stop the telescope motor
+     */
     public void stopTelescope() {
         telescope.stopMotor();
     }
 
+    /**
+     * Stop the arm motor
+     */
     public void stopArm() {
         armJoint.stopMotor();
     }
 
+    /**
+     * Stop all motors
+     */
     public void stopAll() {
         stopTelescope();
         stopArm();
     }
 
+    /**
+     * Get the singleton instance of the {@link TelescopingArm} subsystem
+     * 
+     * @return the {@link TelescopingArm} subsystem
+     */
     public static TelescopingArm system() {
         if (system == null) {
             system = new TelescopingArm();
         }
+
         return system;
     }
 
+    /**
+     * Get the {@link TalonFXConfiguration} for the telescope
+     * 
+     * @return the {@link TalonFXConfiguration} for the telescope
+     */
     private TalonFXConfiguration telescopeConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
@@ -130,6 +153,11 @@ public class TelescopingArm extends SubsystemBase {
         return configuration;
     }
 
+    /**
+     * Get the {@link TalonFXConfiguration} for the arm joint
+     * 
+     * @return the {@link TalonFXConfiguration} for the arm joint
+     */
     private TalonFXConfiguration armConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
