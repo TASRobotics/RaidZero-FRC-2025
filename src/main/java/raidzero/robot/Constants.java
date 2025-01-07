@@ -1,6 +1,29 @@
 package raidzero.robot;
 
 public class Constants {
+
+    public class Limelight {
+        public static final double LEFT_X_OFFSET = 0.0;
+        public static final double RIGHT_X_OFFSET = 0.0;
+        public static final double BACK_X_OFFSET = 0.0;
+
+        public static final double LEFT_Y_OFFSET = 0.0;
+        public static final double RIGHT_Y_OFFSET = 0.0;
+        public static final double BACK_Y_OFFSET = 0.0;
+
+        public static final double LEFT_Z_OFFSET = 0.0;
+        public static final double RIGHT_Z_OFFSET = 0.0;
+        public static final double BACK_Z_OFFSET = 0.0;
+        
+        public static final double LEFT_PITCH = 0.0;
+        public static final double RIGHT_PITCH = 0.0;
+        public static final double BACK_PITCH = 0.0;
+
+        public static final double LEFT_YAW = 0.0;
+        public static final double RIGHT_YAW = 0.0;
+        public static final double BACK_YAW = 0.0;
+    }
+
     public class Swerve {
         public static final double STICK_DEADBAND = 0.2;
     }
