@@ -53,30 +53,30 @@ public class Limelight extends SubsystemBase {
     public void initialize() {
         LimelightHelpers.setCameraPose_RobotSpace(
             "limelight-left",
-            Constants.Limelight.Positions.LEFT_X,
-            Constants.Limelight.Positions.LEFT_Z,
-            Constants.Limelight.Positions.LEFT_Y,
-            Constants.Limelight.Positions.LEFT_ROLL,
+            Constants.Limelight.Offsets.LEFT_X_OFFSET,
+            Constants.Limelight.Offsets.LEFT_Z_OFFSET,
+            Constants.Limelight.Offsets.LEFT_Y_OFFSET,
+            Constants.Limelight.Offsets.LEFT_ROLL,
             Constants.Limelight.Offsets.LEFT_PITCH,
             Constants.Limelight.Offsets.LEFT_YAW
         );
 
         LimelightHelpers.setCameraPose_RobotSpace(
             "limelight-right",
-            Constants.Limelight.Positions.RIGHT_X,
-            Constants.Limelight.Positions.RIGHT_Z,
-            Constants.Limelight.Positions.RIGHT_Y,
-            Constants.Limelight.Positions.RIGHT_ROLL,
+            Constants.Limelight.Offsets.RIGHT_X_OFFSET,
+            Constants.Limelight.Offsets.RIGHT_Z_OFFSET,
+            Constants.Limelight.Offsets.RIGHT_Y_OFFSET,
+            Constants.Limelight.Offsets.RIGHT_ROLL,
             Constants.Limelight.Offsets.RIGHT_PITCH,
             Constants.Limelight.Offsets.RIGHT_YAW
         );
 
         LimelightHelpers.setCameraPose_RobotSpace(
             "limelight-back",
-            Constants.Limelight.Positions.BACK_Z,
-            Constants.Limelight.Positions.BACK_X,
-            Constants.Limelight.Positions.BACK_Y,
-            Constants.Limelight.Positions.BACK_ROLL,
+            Constants.Limelight.Offsets.BACK_Z_OFFSET,
+            Constants.Limelight.Offsets.BACK_X_OFFSET,
+            Constants.Limelight.Offsets.BACK_Y_OFFSET,
+            Constants.Limelight.Offsets.BACK_ROLL,
             Constants.Limelight.Offsets.BACK_PITCH,
             Constants.Limelight.Offsets.BACK_YAW
         );
