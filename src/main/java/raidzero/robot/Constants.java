@@ -30,7 +30,7 @@ public class Constants {
             public static final double BACK_YAW = 180.0;
         }
 
-        public static final String OBJECT_LIMELIGHT = "limelight-front";
+        public static final String OBJECT_LIMELIGHT_NAME = "limelight-front";
 
     }
 
