@@ -52,10 +52,9 @@ public class TelescopingArm extends SubsystemBase {
         double telescopeSetpoint = calculateTelescopeHeight(x, y);
         double armJointSetpoint = calculateArmAngle(x, y);
 
-        return Commands.startEnd(
-                () -> moveTo(telescopeSetpoint, armJointSetpoint),
-                () -> stopAll(), this)
-                .until(() -> armWithinSetpoint(telescopeSetpoint, armJointSetpoint));
+        return Commands.run(() -> moveTo(telescopeSetpoint, armJointSetpoint), this)
+                .until(() -> armWithinSetpoint(telescopeSetpoint, armJointSetpoint))
+                .andThen(() -> stopAll());
     }
 
     /**
@@ -65,7 +64,9 @@ public class TelescopingArm extends SubsystemBase {
      * @return the command to be scheduled and run
      */
     public Command intake(double speed) {
-        return Commands.startEnd(() -> runRoller(speed), () -> stopRoller(), this);
+        return Commands.run(() -> runRoller(speed), this)
+                .withTimeout(2)
+                .andThen(() -> stopRoller());
     }
 
     /**
