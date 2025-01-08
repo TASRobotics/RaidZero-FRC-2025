@@ -16,6 +16,10 @@ public class Constants {
             public static final double LEFT_Z_OFFSET = 0.0;
             public static final double RIGHT_Z_OFFSET = 0.0;
             public static final double BACK_Z_OFFSET = 0.0;
+
+            public static final double LEFT_ROLL = 0.0;
+            public static final double RIGHT_ROLL = 0.0;
+            public static final double BACK_ROLL = 0.0;
             
             public static final double LEFT_PITCH = 0.0;
             public static final double RIGHT_PITCH = 0.0;
