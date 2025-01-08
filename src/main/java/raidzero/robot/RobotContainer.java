@@ -9,14 +9,16 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import raidzero.robot.subsystems.Swerve;
@@ -88,6 +90,25 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
 
         swerve.registerTelemetry(logger::telemeterize);
+
+
+        //pathfinding
+        // Since we are using a holonomic drivetrain, the rotation component of this pose
+        // represents the goal holonomic rotation
+        Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
+        // Create the constraints to use while pathfinding
+        PathConstraints constraints = new PathConstraints(
+                3.0, 4.0,
+                Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        Command pathfindingCommand = AutoBuilder.pathfindToPose(
+                targetPose,
+                constraints,
+                0.0 // Goal end velocity in meters/sec
+        );
+        joystick.x().onTrue(pathfindingCommand);
+
     }
 
     public Command getAutonomousCommand() {
