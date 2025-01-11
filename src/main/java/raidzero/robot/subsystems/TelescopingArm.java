@@ -5,7 +5,11 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
+import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
+import com.ctre.phoenix6.signals.ReverseLimitValue;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -14,8 +18,10 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
@@ -31,7 +37,7 @@ public class TelescopingArm extends SubsystemBase {
     private TelescopingArm() {
         telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID);
         telescope.getConfigurator().apply(telescopeConfiguration());
-        telescope.setNeutralMode(NeutralModeValue.Brake);
+        telescope.setNeutralMode(NeutralModeValue.Coast);
 
         armJoint = new TalonFX(Constants.TelescopingArm.ArmJoint.MOTOR_ID);
         armJoint.getConfigurator().apply((armConfiguration()));
@@ -55,6 +61,41 @@ public class TelescopingArm extends SubsystemBase {
         return Commands.run(() -> moveTo(telescopeSetpoint, armJointSetpoint), this)
                 .until(() -> armWithinSetpoint(telescopeSetpoint, armJointSetpoint))
                 .andThen(() -> stopAll());
+    }
+
+    // * TEMP
+    public Command moveElevatorUp(double setpoint) {
+        MotionMagicVoltage request = new MotionMagicVoltage(0);
+
+        SmartDashboard.putNumber("Elevator Setpoint", setpoint);
+
+        return Commands.run(() -> telescope.setControl(request.withPosition(setpoint)), this)
+                .until(() -> forwardTelescopeWithinSetpoint(setpoint)).andThen(() -> stopTelescope());
+    }
+
+    // * TEMP
+    public Command moveElevatorDown(double setpoint) {
+        MotionMagicVoltage request = new MotionMagicVoltage(0);
+
+        SmartDashboard.putNumber("Elevator Setpoint", setpoint);
+
+        return Commands.run(() -> telescope.setControl(request.withPosition(setpoint)), this)
+                .until(() -> reverseTelescopeWithinSetpoint(setpoint)).andThen(() -> stopTelescope());
+    }
+
+    // * TEMP
+    private boolean forwardTelescopeWithinSetpoint(double setpoint) {
+        return Math.abs(getTelescopePosition() - setpoint) < 2
+                || telescope.getForwardLimit().getValue().equals(ForwardLimitValue.Open);
+    }
+
+    private boolean reverseTelescopeWithinSetpoint(double setpoint) {
+        return Math.abs(getTelescopePosition() - setpoint) < 2
+                || telescope.getReverseLimit().getValue().equals(ReverseLimitValue.Open);
+    }
+
+    public Command zeroElevator() {
+        return new InstantCommand(() -> telescope.setPosition(0));
     }
 
     /**
@@ -191,6 +232,11 @@ public class TelescopingArm extends SubsystemBase {
         stopArm();
     }
 
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Elevator pos", getTelescopePosition());
+    }
+
     /**
      * Gets the {@link TalonFXConfiguration} for the telescope
      * 
@@ -203,6 +249,7 @@ public class TelescopingArm extends SubsystemBase {
                 .withKS(Constants.TelescopingArm.Telescope.KS)
                 .withKV(Constants.TelescopingArm.Telescope.KV)
                 .withKA(Constants.TelescopingArm.Telescope.KA)
+                .withKG(Constants.TelescopingArm.Telescope.KG)
                 .withKP(Constants.TelescopingArm.Telescope.KP)
                 .withKI(Constants.TelescopingArm.Telescope.KI)
                 .withKD(Constants.TelescopingArm.Telescope.KD);
@@ -211,6 +258,15 @@ public class TelescopingArm extends SubsystemBase {
                 .withMotionMagicCruiseVelocity(Constants.TelescopingArm.Telescope.CRUISE_VELOCITY)
                 .withMotionMagicAcceleration(Constants.TelescopingArm.Telescope.ACCELERATION)
                 .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
+
+        configuration.HardwareLimitSwitch.ForwardLimitEnable = true;
+        configuration.HardwareLimitSwitch.ForwardLimitType = ForwardLimitTypeValue.NormallyClosed;
+
+        configuration.HardwareLimitSwitch.ReverseLimitEnable = true;
+        configuration.HardwareLimitSwitch.ReverseLimitType = ReverseLimitTypeValue.NormallyClosed;
+
+        configuration.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = true;
+        configuration.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = 0.0;
 
         return configuration;
     }
