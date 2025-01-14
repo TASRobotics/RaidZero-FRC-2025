@@ -39,18 +39,12 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // swerve.setDefaultCommand(
-        //         swerve.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed)
-        //                 .withVelocityY(-joystick.getLeftX() * MaxSpeed)
-        //                 .withRotationalRate(-joystick.getRightX() * MaxAngularRate)));
+        swerve.setDefaultCommand(
+                swerve.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed)
+                        .withVelocityY(-joystick.getLeftX() * MaxSpeed)
+                        .withRotationalRate(-joystick.getRightX() * MaxAngularRate)));
 
-        // joystick.a().whileTrue(swerve.applyRequest(() -> brake));
-
-        joystick.a().onTrue(arm.zeroTelescopePosition());
-        joystick.b().onTrue(arm.moveElevatorUp(Constants.TelescopingArm.Telescope.TOP_POSITION_ROTATION));
-        joystick.x().onTrue(arm.moveElevatorDown(Constants.TelescopingArm.Telescope.HOME_POSITION_ROTATIONS));
-        joystick.y().onTrue(arm.moveElevatorUp(35));
-        joystick.rightBumper().onTrue(arm.moveElevatorDown(35));
+        joystick.a().whileTrue(swerve.applyRequest(() -> brake));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.

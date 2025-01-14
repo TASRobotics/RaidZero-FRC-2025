@@ -63,37 +63,6 @@ public class TelescopingArm extends SubsystemBase {
                 .andThen(() -> stopAll());
     }
 
-    // * TEMP
-    public Command moveElevatorUp(double setpoint) {
-        MotionMagicVoltage request = new MotionMagicVoltage(0);
-
-        SmartDashboard.putNumber("Elevator Setpoint", setpoint);
-
-        return Commands.run(() -> telescope.setControl(request.withPosition(setpoint)), this)
-                .until(() -> forwardTelescopeWithinSetpoint(setpoint)).andThen(() -> stopTelescope());
-    }
-
-    // * TEMP
-    public Command moveElevatorDown(double setpoint) {
-        MotionMagicVoltage request = new MotionMagicVoltage(0);
-
-        SmartDashboard.putNumber("Elevator Setpoint", setpoint);
-
-        return Commands.run(() -> telescope.setControl(request.withPosition(setpoint)), this)
-                .until(() -> reverseTelescopeWithinSetpoint(setpoint)).andThen(() -> stopTelescope());
-    }
-
-    // * TEMP
-    private boolean forwardTelescopeWithinSetpoint(double setpoint) {
-        return Math.abs(getTelescopePosition() - setpoint) < 2
-                || telescope.getForwardLimit().getValue().equals(ForwardLimitValue.Open);
-    }
-
-    private boolean reverseTelescopeWithinSetpoint(double setpoint) {
-        return Math.abs(getTelescopePosition() - setpoint) < 2
-                || telescope.getReverseLimit().getValue().equals(ReverseLimitValue.Open);
-    }
-
     public Command zeroTelescopePosition() {
         return new InstantCommand(() -> telescope.setPosition(0));
     }
