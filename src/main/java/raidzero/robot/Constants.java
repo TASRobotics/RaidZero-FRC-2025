@@ -5,26 +5,32 @@ public class Constants {
     public class Limelight {
 
         public class Offsets {
+            public static final double FRONT_X_OFFSET = 0.0;
             public static final double LEFT_X_OFFSET = -0.2794;
             public static final double RIGHT_X_OFFSET = 0.2794;
             public static final double BACK_X_OFFSET = 0.0;
 
+            public static final double FRONT_Y_OFFSET = 0.22;
             public static final double LEFT_Y_OFFSET = 0.1577594;
             public static final double RIGHT_Y_OFFSET = 0.1577594;
             public static final double BACK_Y_OFFSET = 0.19812;
 
+            public static final double FRONT_Z_OFFSET = 0.2794;
             public static final double LEFT_Z_OFFSET = 0.2032;
             public static final double RIGHT_Z_OFFSET = 0.2032;
             public static final double BACK_Z_OFFSET = -0.25485;
 
+            public static final double FRONT_ROLL = 0.0;
             public static final double LEFT_ROLL = 0.0;
             public static final double RIGHT_ROLL = 0.0;
             public static final double BACK_ROLL = 0.0;
             
+            public static final double FRONT_PITCH = -10.0;
             public static final double LEFT_PITCH = 35.0;
             public static final double RIGHT_PITCH = 35.0;
             public static final double BACK_PITCH = 35.0;
 
+            public static final double FRONT_YAW = 0.0;
             public static final double LEFT_YAW = 90.0;
             public static final double RIGHT_YAW = -90.0;
             public static final double BACK_YAW = 180.0;
