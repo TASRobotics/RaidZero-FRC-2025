@@ -4,7 +4,6 @@ import com.ctre.phoenix6.Utils;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
@@ -117,8 +116,9 @@ public class Limelight extends SubsystemBase {
 
         LimelightHelpers.SetRobotOrientation(
             "limelight-left",
-            swerve.getState().Pose.getRotation().plus(Rotation2d.fromDegrees(Constants.Limelight.Offsets.LEFT_YAW)).getDegrees(),
-            swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble(), Constants.Limelight.Offsets.LEFT_PITCH,
+            swerve.getState().Pose.getRotation().getDegrees(),
+            swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble(),
+            0,
             0,
             0,
             0
@@ -126,12 +126,12 @@ public class Limelight extends SubsystemBase {
         limeLeft = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-left");
 
         if (limeLeft != null && limeLeft.pose != null) {
-            ignoreLeftLime = limeLeft.tagCount == 0 ||
-                !validPose(limeLeft.pose) ||
+            ignoreLeftLime = !validPose(limeLeft.pose) ||
+                (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-left").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-left") < 0.1) ||
-                (getLLposesDist(
-                    limeLeft.pose, limeLeftPrev.pose
-                ) > ((limeLeft.timestampSeconds - limeLeftPrev.timestampSeconds) * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude())) ||
+                (limeLeftPrev != null && getLLposesDist(limeLeft.pose, limeLeftPrev.pose) > 0.8) ||
+                (limeLeftPrev != null && (getLLposesDist(limeLeft.pose, limeLeftPrev.pose) /
+                    (limeLeft.timestampSeconds - limeLeftPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeLeft.rawFiducials.length > 0 && limeLeft.rawFiducials[0].ambiguity > 0.5 &&
                     limeLeft.rawFiducials[0].distToCamera > 3.5);
 
@@ -139,13 +139,9 @@ public class Limelight extends SubsystemBase {
                 SmartDashboard.putBoolean("Lpose", true);
 
                 swerve.addVisionMeasurement(
-                    new Pose2d(
-                        limeLeft.pose.getX(),
-                        limeLeft.pose.getY(),
-                        swerve.getPigeon2().getRotation2d()
-                    ),
-                    limeLeft.timestampSeconds,
-                    VecBuilder.fill(.1, .1, 9999999).div(LimelightHelpers.getTA("limelight-left"))
+                    limeLeft.pose,
+                    Utils.fpgaToCurrentTime(limeLeft.timestampSeconds),
+                    VecBuilder.fill(0.7, 0.7, 9999999).div(LimelightHelpers.getTA("limelight-left"))
                 );
             } else {
                 SmartDashboard.putBoolean("Lpose", false);
@@ -156,8 +152,9 @@ public class Limelight extends SubsystemBase {
 
         LimelightHelpers.SetRobotOrientation(
             "limelight-right",
-            swerve.getState().Pose.getRotation().minus(Rotation2d.fromDegrees(Constants.Limelight.Offsets.RIGHT_YAW)).getDegrees(),
-            swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble(), Constants.Limelight.Offsets.RIGHT_PITCH,
+            swerve.getState().Pose.getRotation().getDegrees(),
+            swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble(),
+            0,
             0,
             0,
             0
@@ -165,12 +162,12 @@ public class Limelight extends SubsystemBase {
         limeRight = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-right");
 
         if (limeRight != null && limeRight.pose != null) {
-            ignoreRightLime = limeRight.tagCount == 0 ||
-                !validPose(limeRight.pose) ||
+            ignoreRightLime = !validPose(limeRight.pose) ||
+                (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-right").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-right") < 0.1) ||
-                (getLLposesDist(
-                    limeRight.pose, limeRightPrev.pose
-                ) > ((limeRight.timestampSeconds - limeRightPrev.timestampSeconds) * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude())) ||
+                (limeRightPrev != null && getLLposesDist(limeRight.pose, limeRightPrev.pose) > 0.8) ||
+                (limeRightPrev != null && (getLLposesDist(limeRight.pose, limeRightPrev.pose) /
+                    (limeRight.timestampSeconds - limeRightPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeRight.rawFiducials.length > 0 && limeRight.rawFiducials[0].ambiguity > 0.5 &&
                     limeRight.rawFiducials[0].distToCamera > 3.5);
 
@@ -178,13 +175,9 @@ public class Limelight extends SubsystemBase {
                 SmartDashboard.putBoolean("Rpose", true);
 
                 swerve.addVisionMeasurement(
-                    new Pose2d(
-                        limeRight.pose.getX(),
-                        limeRight.pose.getY(),
-                        swerve.getPigeon2().getRotation2d()
-                    ),
-                    limeRight.timestampSeconds,
-                    VecBuilder.fill(.1, .1, 9999999).div(LimelightHelpers.getTA("limelight-right"))
+                    limeRight.pose,
+                    Utils.fpgaToCurrentTime(limeRight.timestampSeconds),
+                    VecBuilder.fill(0.7, 0.7, 9999999).div(LimelightHelpers.getTA("limelight-right"))
                 );
             } else {
                 SmartDashboard.putBoolean("Rpose", false);
@@ -195,8 +188,9 @@ public class Limelight extends SubsystemBase {
 
         LimelightHelpers.SetRobotOrientation(
             "limelight-back",
-            swerve.getState().Pose.getRotation().plus(Rotation2d.fromDegrees(Constants.Limelight.Offsets.BACK_YAW)).getDegrees(),
-            swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble(), Constants.Limelight.Offsets.BACK_PITCH,
+            swerve.getState().Pose.getRotation().getDegrees(),
+            swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble(),
+            0,
             0,
             0,
             0
@@ -204,12 +198,12 @@ public class Limelight extends SubsystemBase {
         limeBack = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-back");
 
         if (limeBack != null && limeBack.pose != null) {
-            ignoreBackLime = limeBack.tagCount == 0 ||
-                !validPose(limeBack.pose) ||
+            ignoreBackLime = !validPose(limeBack.pose) ||
+                (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-back").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-back") < 0.1) ||
-                (getLLposesDist(
-                    limeBack.pose, limeBackPrev.pose
-                ) > ((limeBack.timestampSeconds - limeBackPrev.timestampSeconds) * TunerConstants.kSpeedAt12Volts.baseUnitMagnitude())) ||
+                (limeBackPrev != null && getLLposesDist(limeBack.pose, limeBackPrev.pose) > 0.8) ||
+                (limeBackPrev != null && (getLLposesDist(limeBack.pose, limeBackPrev.pose) /
+                    (limeBack.timestampSeconds - limeBackPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeBack.rawFiducials.length > 0 && limeBack.rawFiducials[0].ambiguity > 0.5 &&
                     limeBack.rawFiducials[0].distToCamera > 3.5);
 
@@ -217,13 +211,9 @@ public class Limelight extends SubsystemBase {
                 SmartDashboard.putBoolean("Bpose", true);
 
                 swerve.addVisionMeasurement(
-                    new Pose2d(
-                        limeBack.pose.getX(),
-                        limeBack.pose.getY(),
-                        swerve.getPigeon2().getRotation2d()
-                    ),
-                    limeBack.timestampSeconds,
-                    VecBuilder.fill(.1, .1, 9999999).div(LimelightHelpers.getTA("limelight-back"))
+                    limeBack.pose,
+                    Utils.fpgaToCurrentTime(limeBack.timestampSeconds),
+                    VecBuilder.fill(0.7, 0.7, 9999999).div(LimelightHelpers.getTA("limelight-back"))
                 );
             } else {
                 SmartDashboard.putBoolean("Bpose", false);
