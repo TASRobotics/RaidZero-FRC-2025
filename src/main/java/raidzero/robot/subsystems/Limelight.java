@@ -23,8 +23,6 @@ public class Limelight extends SubsystemBase {
         PIP_SECOND
     }
 
-    private String objectLimelightName = Constants.Limelight.OBJECT_LIMELIGHT_NAME;
-
     private boolean ignoreLeftLime = false;
     private boolean ignoreRightLime = false;
     private boolean ignoreBackLime = false;
