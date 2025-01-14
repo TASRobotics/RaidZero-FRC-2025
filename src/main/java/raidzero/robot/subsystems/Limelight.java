@@ -12,16 +12,11 @@ import raidzero.robot.wrappers.LimelightHelpers;
 
 public class Limelight extends SubsystemBase {
     public enum LED_MODE {
-        PIPELINE,
-        OFF,
-        BLINK,
-        ON
+        PIPELINE, OFF, BLINK, ON
     }
 
     public enum STREAM_MODE {
-        STANDARD,
-        PIP_MAIN,
-        PIP_SECOND
+        STANDARD, PIP_MAIN, PIP_SECOND
     }
 
     private boolean ignoreFrontLime = false;
