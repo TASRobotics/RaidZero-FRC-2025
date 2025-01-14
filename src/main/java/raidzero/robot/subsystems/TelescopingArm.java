@@ -6,10 +6,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
-import com.ctre.phoenix6.signals.ForwardLimitValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
-import com.ctre.phoenix6.signals.ReverseLimitValue;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -63,6 +61,11 @@ public class TelescopingArm extends SubsystemBase {
                 .andThen(() -> stopAll());
     }
 
+    /**
+     * Zeroes the the relative encoder position in the telescope motor
+     * 
+     * @return the command to zero the position
+     */
     public Command zeroTelescopePosition() {
         return new InstantCommand(() -> telescope.setPosition(0));
     }
