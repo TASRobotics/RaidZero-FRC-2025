@@ -1,5 +1,7 @@
 package raidzero.robot.subsystems;
 
+import com.ctre.phoenix6.Utils;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,13 +25,14 @@ public class Limelight extends SubsystemBase {
         PIP_SECOND
     }
 
+    private boolean ignoreFrontLime = false;
     private boolean ignoreLeftLime = false;
     private boolean ignoreRightLime = false;
     private boolean ignoreBackLime = false;
     private boolean ignoreAllLimes = false;
 
-    private LimelightHelpers.PoseEstimate limeLeft, limeRight, limeBack;
-    private LimelightHelpers.PoseEstimate limeLeftPrev, limeRightPrev, limeBackPrev;
+    private LimelightHelpers.PoseEstimate limeFront, limeLeft, limeRight, limeBack;
+    private LimelightHelpers.PoseEstimate limeFrontPrev, limeLeftPrev, limeRightPrev, limeBackPrev;
 
     private Swerve swerve = Swerve.system();
     private static Limelight instance = null;
@@ -65,13 +68,51 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         if (swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble() > 720) {
+            ignoreFrontLime = true;
             ignoreLeftLime = true;
             ignoreRightLime = true;
             ignoreBackLime = true;
         } else {
+            ignoreFrontLime = false;
             ignoreLeftLime = false;
             ignoreRightLime = false;
             ignoreBackLime = false;
+        }
+
+        LimelightHelpers.SetRobotOrientation(
+            "limelight-front",
+            swerve.getState().Pose.getRotation().getDegrees(),
+            swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble(),
+            0,
+            0,
+            0,
+            0
+        );
+        limeFront = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front");
+
+        if (limeFront != null && limeFront.pose != null) {
+            ignoreFrontLime = !validPose(limeFront.pose) ||
+                (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-front").getZ()) > 0.4) ||
+                (LimelightHelpers.getTA("limelight-front") < 0.1) ||
+                (limeFrontPrev != null && getLLposesDist(limeFront.pose, limeFrontPrev.pose) > 0.8) ||
+                (limeFrontPrev != null && (getLLposesDist(limeFront.pose, limeFrontPrev.pose) /
+                    (limeFront.timestampSeconds - limeFrontPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
+                (limeFront.rawFiducials.length > 0 && limeFront.rawFiducials[0].ambiguity > 0.5 &&
+                    limeFront.rawFiducials[0].distToCamera > 3.5);
+
+            if (!ignoreAllLimes && !ignoreFrontLime) {
+                SmartDashboard.putBoolean("Fpose", true);
+
+                swerve.addVisionMeasurement(
+                    limeFront.pose,
+                    Utils.fpgaToCurrentTime(limeFront.timestampSeconds),
+                    VecBuilder.fill(0.7, 0.7, 9999999).div(LimelightHelpers.getTA("limelight-front"))
+                );
+            } else {
+                SmartDashboard.putBoolean("Fpose", false);
+            }
+
+            limeFrontPrev = limeFront;
         }
 
         LimelightHelpers.SetRobotOrientation(
@@ -204,6 +245,16 @@ public class Limelight extends SubsystemBase {
     }
 
     public void initialize() {
+        LimelightHelpers.setCameraPose_RobotSpace(
+            "limelight-front",
+            Constants.Limelight.Offsets.FRONT_X_OFFSET,
+            Constants.Limelight.Offsets.FRONT_Z_OFFSET,
+            Constants.Limelight.Offsets.FRONT_Y_OFFSET,
+            Constants.Limelight.Offsets.FRONT_ROLL,
+            Constants.Limelight.Offsets.FRONT_PITCH,
+            Constants.Limelight.Offsets.FRONT_YAW
+        );
+
         LimelightHelpers.setCameraPose_RobotSpace(
             "limelight-left",
             Constants.Limelight.Offsets.LEFT_X_OFFSET,
