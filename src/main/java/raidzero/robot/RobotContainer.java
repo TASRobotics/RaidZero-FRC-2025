@@ -46,7 +46,7 @@ public class RobotContainer {
 
         // joystick.a().whileTrue(swerve.applyRequest(() -> brake));
 
-        joystick.a().onTrue(arm.zeroElevator());
+        joystick.a().onTrue(arm.zeroTelescopePosition());
         joystick.b().onTrue(arm.moveElevatorUp(Constants.TelescopingArm.Telescope.TOP_POSITION_ROTATION));
         joystick.x().onTrue(arm.moveElevatorDown(Constants.TelescopingArm.Telescope.HOME_POSITION_ROTATIONS));
         joystick.y().onTrue(arm.moveElevatorUp(35));

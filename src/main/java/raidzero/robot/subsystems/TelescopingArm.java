@@ -94,7 +94,7 @@ public class TelescopingArm extends SubsystemBase {
                 || telescope.getReverseLimit().getValue().equals(ReverseLimitValue.Open);
     }
 
-    public Command zeroElevator() {
+    public Command zeroTelescopePosition() {
         return new InstantCommand(() -> telescope.setPosition(0));
     }
 
