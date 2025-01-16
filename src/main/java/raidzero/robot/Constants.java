@@ -46,16 +46,22 @@ public class Constants {
 
             // 2cm of tolerance
             public static final double POSITION_TOLERANCE_ROTATIONS = 0.02 * CONVERSION_FACTOR;
+            
+            public static final double TOP_SOFT_LIMIT = 2.0 * CONVERSION_FACTOR;
+            public static final double BOTTOM_SOFT_LIMIT = 0.0 * CONVERSION_FACTOR;
         }
 
         public class ArmJoint {
+            //* Zero degrees is pointing straight up!!!
+
             public static final int MOTOR_ID = 1;
-            public static final double CONVERSION_FACTOR = 1.0;
-            public static final double LENGTH_M = 1.0 * CONVERSION_FACTOR;
+            public static final double CONVERSION_FACTOR = 9*360;
 
             public static final double KS = 0.0;
+            public static final double KG = 0.0;
             public static final double KV = 0.0;
             public static final double KA = 0.0;
+
             public static final double KP = 0.0;
             public static final double KI = 0.0;
             public static final double KD = 0.0;
@@ -66,6 +72,9 @@ public class Constants {
 
             // 2cm of tolerance
             public static final double POSITION_TOLERANCE_ROTATIONS = 0.02 * CONVERSION_FACTOR;
+
+            public static final double TOP_SOFT_LIMIT = -5.0 * CONVERSION_FACTOR;
+            public static final double BOTTOM_SOFT_LIMIT = 45.0 * CONVERSION_FACTOR;
         }
 
         public class Roller {
@@ -80,5 +89,6 @@ public class Constants {
         public static final double[] L2_SCORING_POS_M = { 0.0, 0.0 };
         public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
         public static final double[] INTAKE_POS_M = { 0.0, 0.0 };
+        public static final double[] HOME_POS_M = {0.0, 0.0};
     }
 }
