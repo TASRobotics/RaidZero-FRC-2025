@@ -100,7 +100,7 @@ public class Limelight extends SubsystemBase {
                 swerve.addVisionMeasurement(
                     limeFront.pose,
                     Utils.fpgaToCurrentTime(limeFront.timestampSeconds),
-                    VecBuilder.fill(0.7, 0.7, 9999999).div(LimelightHelpers.getTA("limelight-front"))
+                    VecBuilder.fill(0.5, 0.5, 9999999).div(LimelightHelpers.getTA("limelight-front"))
                 );
             } else {
                 SmartDashboard.putBoolean("Fpose", false);
@@ -136,7 +136,7 @@ public class Limelight extends SubsystemBase {
                 swerve.addVisionMeasurement(
                     limeLeft.pose,
                     Utils.fpgaToCurrentTime(limeLeft.timestampSeconds),
-                    VecBuilder.fill(0.7, 0.7, 9999999).div(LimelightHelpers.getTA("limelight-left"))
+                    VecBuilder.fill(0.5, 0.5, 9999999).div(LimelightHelpers.getTA("limelight-left"))
                 );
             } else {
                 SmartDashboard.putBoolean("Lpose", false);
@@ -172,7 +172,7 @@ public class Limelight extends SubsystemBase {
                 swerve.addVisionMeasurement(
                     limeRight.pose,
                     Utils.fpgaToCurrentTime(limeRight.timestampSeconds),
-                    VecBuilder.fill(0.7, 0.7, 9999999).div(LimelightHelpers.getTA("limelight-right"))
+                    VecBuilder.fill(0.5, 0.5, 9999999).div(LimelightHelpers.getTA("limelight-right"))
                 );
             } else {
                 SmartDashboard.putBoolean("Rpose", false);
@@ -208,7 +208,7 @@ public class Limelight extends SubsystemBase {
                 swerve.addVisionMeasurement(
                     limeBack.pose,
                     Utils.fpgaToCurrentTime(limeBack.timestampSeconds),
-                    VecBuilder.fill(0.7, 0.7, 9999999).div(LimelightHelpers.getTA("limelight-back"))
+                    VecBuilder.fill(0.5, 0.5, 9999999).div(LimelightHelpers.getTA("limelight-back"))
                 );
             } else {
                 SmartDashboard.putBoolean("Bpose", false);
