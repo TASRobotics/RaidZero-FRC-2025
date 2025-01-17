@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import raidzero.robot.subsystems.Limelight;
 import raidzero.robot.subsystems.Swerve;
 
 public class RobotContainer {
@@ -33,6 +34,7 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(0);
 
     public final Swerve swerve = Swerve.system();
+    public final Limelight limes = Limelight.system();
 
     public RobotContainer() {
         configureBindings();
