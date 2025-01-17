@@ -4,6 +4,8 @@ import com.ctre.phoenix6.Utils;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
@@ -24,6 +26,10 @@ public class Limelight extends SubsystemBase {
     private boolean ignoreRightLime = false;
     private boolean ignoreBackLime = false;
     private boolean ignoreAllLimes = false;
+    
+    private StructPublisher <Pose2d> front = NetworkTableInstance.getDefault().getStructTopic("frontNT", Pose2d.struct).publish();
+    private StructPublisher <Pose2d> right = NetworkTableInstance.getDefault().getStructTopic("rightNT", Pose2d.struct).publish();
+    private StructPublisher <Pose2d> back = NetworkTableInstance.getDefault().getStructTopic("backNT", Pose2d.struct).publish();
 
     private LimelightHelpers.PoseEstimate limeFront, limeLeft, limeRight, limeBack;
     private Pose2d limeFrontPose, limeLeftPose, limeRightPose, limeBackPose;
@@ -98,6 +104,7 @@ public class Limelight extends SubsystemBase {
 
             if (!ignoreAllLimes && !ignoreFrontLime) {
                 SmartDashboard.putBoolean("Fpose", true);
+                front.set(limeFront.pose);
 
                 swerve.addVisionMeasurement(
                     // limeFront.pose,
@@ -174,6 +181,7 @@ public class Limelight extends SubsystemBase {
 
             if (!ignoreAllLimes && !ignoreRightLime) {
                 SmartDashboard.putBoolean("Rpose", true);
+                right.set(limeRight.pose);
 
                 swerve.addVisionMeasurement(
                     // limeRight.pose,
@@ -212,6 +220,7 @@ public class Limelight extends SubsystemBase {
 
             if (!ignoreAllLimes && !ignoreBackLime) {
                 SmartDashboard.putBoolean("Bpose", true);
+                back.set(limeBack.pose);
 
                 swerve.addVisionMeasurement(
                     // limeBack.pose,
