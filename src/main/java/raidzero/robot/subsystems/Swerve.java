@@ -57,6 +57,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     private final SwerveRequest.SysIdSwerveRotation rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
     private final SwerveRequest.ApplyRobotSpeeds pathplannerSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
+    private StructPublisher <Pose2d> botpose = NetworkTableInstance.getDefault().getStructTopic("botPoseNT", Pose2d.struct).publish();
+
     private final StructPublisher<Pose2d> botPosePublisher =
         NetworkTableInstance.getDefault().getStructTopic("RobotPose",Pose2d.struct).publish();
 
