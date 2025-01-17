@@ -219,7 +219,7 @@ public class Limelight extends SubsystemBase {
     }
 
     private boolean validPose(Pose2d pose) {
-        return pose.getTranslation().getX() < 10 && pose.getTranslation().getY() < 10;
+        return pose.getTranslation().getX() < 16 && pose.getTranslation().getY() < 8;
     }
 
     private double getLLposesDist(Pose2d pose1, Pose2d pose2) {
