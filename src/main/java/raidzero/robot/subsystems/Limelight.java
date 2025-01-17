@@ -26,6 +26,7 @@ public class Limelight extends SubsystemBase {
     private boolean ignoreAllLimes = false;
 
     private LimelightHelpers.PoseEstimate limeFront, limeLeft, limeRight, limeBack;
+    private Pose2d limeFrontPose, limeLeftPose, limeRightPose, limeBackPose;
     private LimelightHelpers.PoseEstimate limeFrontPrev, limeLeftPrev, limeRightPrev, limeBackPrev;
 
     private Swerve swerve = Swerve.system();
@@ -83,6 +84,7 @@ public class Limelight extends SubsystemBase {
             0
         );
         limeFront = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-front");
+        limeFrontPose = LimelightHelpers.getBotPose2d("limelight-front");
 
         if (limeFront != null && limeFront.pose != null) {
             ignoreFrontLime = !validPose(limeFront.pose) ||
@@ -98,7 +100,8 @@ public class Limelight extends SubsystemBase {
                 SmartDashboard.putBoolean("Fpose", true);
 
                 swerve.addVisionMeasurement(
-                    limeFront.pose,
+                    // limeFront.pose,
+                    new Pose2d(limeFrontPose.getX() + 8.7736, limeFrontPose.getY() + 4.0257, limeFrontPose.getRotation()),
                     Utils.fpgaToCurrentTime(limeFront.timestampSeconds),
                     VecBuilder.fill(0.5, 0.5, 9999999).div(LimelightHelpers.getTA("limelight-front"))
                 );
@@ -119,6 +122,7 @@ public class Limelight extends SubsystemBase {
             0
         );
         limeLeft = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-left");
+        limeLeftPose = LimelightHelpers.getBotPose2d("limelight-left");
 
         if (limeLeft != null && limeLeft.pose != null) {
             ignoreLeftLime = !validPose(limeLeft.pose) ||
@@ -134,7 +138,8 @@ public class Limelight extends SubsystemBase {
                 SmartDashboard.putBoolean("Lpose", true);
 
                 swerve.addVisionMeasurement(
-                    limeLeft.pose,
+                    // limeLeft.pose,
+                    new Pose2d(limeLeftPose.getX() + 8.7736, limeLeftPose.getY() + 4.0257, limeLeftPose.getRotation()),
                     Utils.fpgaToCurrentTime(limeLeft.timestampSeconds),
                     VecBuilder.fill(0.5, 0.5, 9999999).div(LimelightHelpers.getTA("limelight-left"))
                 );
@@ -155,6 +160,7 @@ public class Limelight extends SubsystemBase {
             0
         );
         limeRight = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-right");
+        limeRightPose = LimelightHelpers.getBotPose2d("limelight-right");
 
         if (limeRight != null && limeRight.pose != null) {
             ignoreRightLime = !validPose(limeRight.pose) ||
@@ -170,7 +176,8 @@ public class Limelight extends SubsystemBase {
                 SmartDashboard.putBoolean("Rpose", true);
 
                 swerve.addVisionMeasurement(
-                    limeRight.pose,
+                    // limeRight.pose,
+                    new Pose2d(limeRightPose.getX() + 8.7736, limeRightPose.getY() + 4.0257, limeRightPose.getRotation()),
                     Utils.fpgaToCurrentTime(limeRight.timestampSeconds),
                     VecBuilder.fill(0.5, 0.5, 9999999).div(LimelightHelpers.getTA("limelight-right"))
                 );
@@ -191,6 +198,7 @@ public class Limelight extends SubsystemBase {
             0
         );
         limeBack = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-back");
+        limeBackPose = LimelightHelpers.getBotPose2d("limelight-back");
 
         if (limeBack != null && limeBack.pose != null) {
             ignoreBackLime = !validPose(limeBack.pose) ||
@@ -206,7 +214,8 @@ public class Limelight extends SubsystemBase {
                 SmartDashboard.putBoolean("Bpose", true);
 
                 swerve.addVisionMeasurement(
-                    limeBack.pose,
+                    // limeBack.pose,
+                    new Pose2d(limeBackPose.getX() + 8.7736, limeBackPose.getY() + 4.0257, limeBackPose.getRotation()),
                     Utils.fpgaToCurrentTime(limeBack.timestampSeconds),
                     VecBuilder.fill(0.5, 0.5, 9999999).div(LimelightHelpers.getTA("limelight-back"))
                 );
