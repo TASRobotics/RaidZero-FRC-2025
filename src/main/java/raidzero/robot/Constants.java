@@ -9,16 +9,14 @@ public class Constants {
         public class Telescope {
             public static final int MOTOR_ID = 10;
             public static final double PULLEY_RADIUS_M = 0.0243205;
-            public static final double PLANETARY_GEAR_RATIO = 1 / 9;
+            public static final double PLANETARY_GEAR_RATIO = 9 / 1;
 
             public static final double GROUND_OFFSET_M = 0.0; // TODO: Find this
             public static final double TIP_OFFSET_M = 0.0; // TODO: Find this
 
             public static final double PULLEY_TO_TIP_RATIO = 1 / 2;
             // * Mutliply by num rotations to get meters
-            public static final double CONVERSION_FACTOR = PULLEY_RADIUS_M * (1 / (2 * Math.PI) * PLANETARY_GEAR_RATIO) *
-                PULLEY_TO_TIP_RATIO;
-
+            public static final double CONVERSION_FACTOR = 1 / (2 * Math.PI * PULLEY_RADIUS_M) * PLANETARY_GEAR_RATIO;
             // TODO: find these
             public static final double MAX_LENGTH_M = 2.0 * CONVERSION_FACTOR;
             public static final double MIN_LENGTH_M = 0.0;
@@ -46,16 +44,15 @@ public class Constants {
 
             // 2cm of tolerance
             public static final double POSITION_TOLERANCE_ROTATIONS = 0.02 * CONVERSION_FACTOR;
-            
+
             public static final double TOP_SOFT_LIMIT = 2.0 * CONVERSION_FACTOR;
             public static final double BOTTOM_SOFT_LIMIT = 0.0 * CONVERSION_FACTOR;
         }
 
         public class ArmJoint {
-            //* Zero degrees is pointing straight up!!!
-
+            // * Zero degrees is pointing straight up!!!
             public static final int MOTOR_ID = 1;
-            public static final double CONVERSION_FACTOR = 9*360;
+            public static final double CONVERSION_FACTOR = 360 / 9;
 
             public static final double KS = 0.0;
             public static final double KG = 0.0;
@@ -89,6 +86,6 @@ public class Constants {
         public static final double[] L2_SCORING_POS_M = { 0.0, 0.0 };
         public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
         public static final double[] INTAKE_POS_M = { 0.0, 0.0 };
-        public static final double[] HOME_POS_M = {0.0, 0.0};
+        public static final double[] HOME_POS_M = { 0.0, 0.0 };
     }
 }
