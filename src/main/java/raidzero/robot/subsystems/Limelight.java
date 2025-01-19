@@ -96,7 +96,7 @@ public class Limelight extends SubsystemBase {
             ignoreFrontLime = !poseInField(limeFront.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-front").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-front") < 0.1) ||
-                (limeFrontPrev != null && (getLLposesDist(limeFront.pose, limeFrontPrev.pose) /
+                (limeFrontPrev != null && (limeFront.pose.getTranslation().getDistance(limeFrontPrev.pose.getTranslation()) /
                     (limeFront.timestampSeconds - limeFrontPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeFront.rawFiducials.length > 0 && limeFront.rawFiducials[0].ambiguity > 0.5 &&
                     limeFront.rawFiducials[0].distToCamera > 3.5);
@@ -134,7 +134,7 @@ public class Limelight extends SubsystemBase {
             ignoreLeftLime = !poseInField(limeLeft.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-left").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-left") < 0.1) ||
-                (limeLeftPrev != null && (getLLposesDist(limeLeft.pose, limeLeftPrev.pose) /
+                (limeLeftPrev != null && (limeLeft.pose.getTranslation().getDistance(limeLeftPrev.pose.getTranslation()) /
                     (limeLeft.timestampSeconds - limeLeftPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeLeft.rawFiducials.length > 0 && limeLeft.rawFiducials[0].ambiguity > 0.5 &&
                     limeLeft.rawFiducials[0].distToCamera > 3.5);
@@ -171,7 +171,7 @@ public class Limelight extends SubsystemBase {
             ignoreRightLime = !poseInField(limeRight.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-right").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-right") < 0.1) ||
-                (limeRightPrev != null && (getLLposesDist(limeRight.pose, limeRightPrev.pose) /
+                (limeRightPrev != null && (limeRight.pose.getTranslation().getDistance(limeRightPrev.pose.getTranslation()) /
                     (limeRight.timestampSeconds - limeRightPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeRight.rawFiducials.length > 0 && limeRight.rawFiducials[0].ambiguity > 0.5 &&
                     limeRight.rawFiducials[0].distToCamera > 3.5);
@@ -209,7 +209,7 @@ public class Limelight extends SubsystemBase {
             ignoreBackLime = !poseInField(limeBack.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-back").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-back") < 0.1) ||
-                (limeBackPrev != null && (getLLposesDist(limeBack.pose, limeBackPrev.pose) /
+                (limeBackPrev != null && (limeBack.pose.getTranslation().getDistance(limeBackPrev.pose.getTranslation()) /
                     (limeBack.timestampSeconds - limeBackPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeBack.rawFiducials.length > 0 && limeBack.rawFiducials[0].ambiguity > 0.5 &&
                     limeBack.rawFiducials[0].distToCamera > 3.5);
@@ -234,13 +234,6 @@ public class Limelight extends SubsystemBase {
 
     private boolean poseInField(Pose2d pose) {
         return pose.getTranslation().getX() < 16 && pose.getTranslation().getY() < 8;
-    }
-
-    private double getLLposesDist(Pose2d pose1, Pose2d pose2) {
-        return Math.sqrt(
-            Math.pow(pose1.getTranslation().getX() - pose2.getTranslation().getX(), 2) +
-                Math.pow(pose1.getTranslation().getY() - pose2.getTranslation().getY(), 2)
-        );
     }
 
     public void initialize() {
