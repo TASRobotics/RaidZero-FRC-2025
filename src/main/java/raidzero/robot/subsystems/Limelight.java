@@ -38,7 +38,9 @@ public class Limelight extends SubsystemBase {
     private Swerve swerve = Swerve.system();
     private static Limelight instance = null;
 
-    private Limelight() {}
+    private Limelight() {
+        initialize();
+    }
 
     public void setStreamMode(String limelightName, STREAM_MODE mode) {
         if (mode == STREAM_MODE.STANDARD) {
@@ -230,7 +232,7 @@ public class Limelight extends SubsystemBase {
         return pose.getTranslation().getX() < 16 && pose.getTranslation().getY() < 8;
     }
 
-    public void initialize() {
+    private void initialize() {
         LimelightHelpers.setCameraPose_RobotSpace(
             "limelight-front",
             Constants.Limelight.Offsets.FRONT_X_OFFSET,
