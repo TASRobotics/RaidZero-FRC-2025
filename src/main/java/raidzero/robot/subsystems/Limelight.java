@@ -69,15 +69,9 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         if (swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble() > 720) {
-            ignoreFrontLime = true;
-            ignoreLeftLime = true;
-            ignoreRightLime = true;
-            ignoreBackLime = true;
+            ignoreAllLimes = true;
         } else {
-            ignoreFrontLime = false;
-            ignoreLeftLime = false;
-            ignoreRightLime = false;
-            ignoreBackLime = false;
+            ignoreAllLimes = false;
         }
 
         LimelightHelpers.SetRobotOrientation(
