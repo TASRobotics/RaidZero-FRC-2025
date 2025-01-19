@@ -52,10 +52,22 @@ public class Limelight extends SubsystemBase {
         }
     }
 
+    /**
+     * Sets the pipeline of the limelight
+     * 
+     * @param limelightName The name of the limelight
+     * @param pipeline The pipeline index
+     */
     public void setPipeline(String limelightName, int pipeline) {
         LimelightHelpers.setPipelineIndex(limelightName, pipeline);
     }
 
+    /**
+     * Sets the LED mode of the limelight
+     * 
+     * @param limelightName The name of the limelight
+     * @param mode The LED mode
+     */
     public void setLedMode(String limelightName, LED_MODE mode) {
         if (mode == LED_MODE.PIPELINE) {
             LimelightHelpers.setLEDMode_PipelineControl(limelightName);
@@ -228,10 +240,20 @@ public class Limelight extends SubsystemBase {
         }
     }
 
+    /**
+     * Checks if a pose is inside the field dimensions
+     * 
+     * @param pose The {@link Pose2d} to check
+     * @return True if the pose is inside the field dimensions, false otherwise
+     */
     private boolean poseInField(Pose2d pose) {
         return pose.getTranslation().getX() < 16 && pose.getTranslation().getY() < 8;
     }
 
+    /**
+     * <ul><li>Initializes the limelight subsystem
+     * <li>Configures the limelight camera poses</ul>
+     */
     private void initialize() {
         LimelightHelpers.setCameraPose_RobotSpace(
             "limelight-front",
@@ -274,6 +296,11 @@ public class Limelight extends SubsystemBase {
         );
     }
 
+    /**
+     * Gets the Limelight instance
+     * 
+     * @return The {@link Limelight} instance
+     */
     public static Limelight system() {
         if (instance == null) {
             instance = new Limelight();
