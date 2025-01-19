@@ -96,7 +96,6 @@ public class Limelight extends SubsystemBase {
             ignoreFrontLime = !validPose(limeFront.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-front").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-front") < 0.1) ||
-                (limeFrontPrev != null && getLLposesDist(limeFront.pose, limeFrontPrev.pose) > 0.8) ||
                 (limeFrontPrev != null && (getLLposesDist(limeFront.pose, limeFrontPrev.pose) /
                     (limeFront.timestampSeconds - limeFrontPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeFront.rawFiducials.length > 0 && limeFront.rawFiducials[0].ambiguity > 0.5 &&
@@ -135,7 +134,6 @@ public class Limelight extends SubsystemBase {
             ignoreLeftLime = !validPose(limeLeft.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-left").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-left") < 0.1) ||
-                (limeLeftPrev != null && getLLposesDist(limeLeft.pose, limeLeftPrev.pose) > 0.8) ||
                 (limeLeftPrev != null && (getLLposesDist(limeLeft.pose, limeLeftPrev.pose) /
                     (limeLeft.timestampSeconds - limeLeftPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeLeft.rawFiducials.length > 0 && limeLeft.rawFiducials[0].ambiguity > 0.5 &&
@@ -173,7 +171,6 @@ public class Limelight extends SubsystemBase {
             ignoreRightLime = !validPose(limeRight.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-right").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-right") < 0.1) ||
-                (limeRightPrev != null && getLLposesDist(limeRight.pose, limeRightPrev.pose) > 0.8) ||
                 (limeRightPrev != null && (getLLposesDist(limeRight.pose, limeRightPrev.pose) /
                     (limeRight.timestampSeconds - limeRightPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeRight.rawFiducials.length > 0 && limeRight.rawFiducials[0].ambiguity > 0.5 &&
@@ -212,7 +209,6 @@ public class Limelight extends SubsystemBase {
             ignoreBackLime = !validPose(limeBack.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-back").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-back") < 0.1) ||
-                (limeBackPrev != null && getLLposesDist(limeBack.pose, limeBackPrev.pose) > 0.8) ||
                 (limeBackPrev != null && (getLLposesDist(limeBack.pose, limeBackPrev.pose) /
                     (limeBack.timestampSeconds - limeBackPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeBack.rawFiducials.length > 0 && limeBack.rawFiducials[0].ambiguity > 0.5 &&
