@@ -93,7 +93,7 @@ public class Limelight extends SubsystemBase {
         limeFrontPose = LimelightHelpers.getBotPose2d("limelight-front");
 
         if (limeFront != null && limeFront.pose != null) {
-            ignoreFrontLime = !validPose(limeFront.pose) ||
+            ignoreFrontLime = !poseInField(limeFront.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-front").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-front") < 0.1) ||
                 (limeFrontPrev != null && (getLLposesDist(limeFront.pose, limeFrontPrev.pose) /
@@ -131,7 +131,7 @@ public class Limelight extends SubsystemBase {
         limeLeftPose = LimelightHelpers.getBotPose2d("limelight-left");
 
         if (limeLeft != null && limeLeft.pose != null) {
-            ignoreLeftLime = !validPose(limeLeft.pose) ||
+            ignoreLeftLime = !poseInField(limeLeft.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-left").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-left") < 0.1) ||
                 (limeLeftPrev != null && (getLLposesDist(limeLeft.pose, limeLeftPrev.pose) /
@@ -168,7 +168,7 @@ public class Limelight extends SubsystemBase {
         limeRightPose = LimelightHelpers.getBotPose2d("limelight-right");
 
         if (limeRight != null && limeRight.pose != null) {
-            ignoreRightLime = !validPose(limeRight.pose) ||
+            ignoreRightLime = !poseInField(limeRight.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-right").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-right") < 0.1) ||
                 (limeRightPrev != null && (getLLposesDist(limeRight.pose, limeRightPrev.pose) /
@@ -206,7 +206,7 @@ public class Limelight extends SubsystemBase {
         limeBackPose = LimelightHelpers.getBotPose2d("limelight-back");
 
         if (limeBack != null && limeBack.pose != null) {
-            ignoreBackLime = !validPose(limeBack.pose) ||
+            ignoreBackLime = !poseInField(limeBack.pose) ||
                 (Math.abs(LimelightHelpers.getBotPose3d_wpiBlue("limelight-back").getZ()) > 0.4) ||
                 (LimelightHelpers.getTA("limelight-back") < 0.1) ||
                 (limeBackPrev != null && (getLLposesDist(limeBack.pose, limeBackPrev.pose) /
@@ -232,7 +232,7 @@ public class Limelight extends SubsystemBase {
         }
     }
 
-    private boolean validPose(Pose2d pose) {
+    private boolean poseInField(Pose2d pose) {
         return pose.getTranslation().getX() < 16 && pose.getTranslation().getY() < 8;
     }
 
