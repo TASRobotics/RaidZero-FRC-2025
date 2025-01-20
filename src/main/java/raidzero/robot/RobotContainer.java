@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import raidzero.robot.subsystems.AlgaeIntake;
 import raidzero.robot.subsystems.Swerve;
 
 public class RobotContainer {
@@ -23,8 +24,8 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
@@ -33,6 +34,7 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(0);
 
     public final Swerve swerve = Swerve.system();
+    public final AlgaeIntake algaeIntake = AlgaeIntake.system();
 
     public RobotContainer() {
         configureBindings();
@@ -45,6 +47,9 @@ public class RobotContainer {
                         .withRotationalRate(-joystick.getRightX() * MaxAngularRate)));
 
         joystick.a().whileTrue(swerve.applyRequest(() -> brake));
+
+        joystick.b().onTrue(algaeIntake.runJoint(Constants.AlgaeIntake.Joint.INTAKE_POSITION));
+        joystick.x().onTrue(algaeIntake.runJoint(0));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
