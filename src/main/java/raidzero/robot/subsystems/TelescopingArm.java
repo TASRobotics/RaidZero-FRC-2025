@@ -57,8 +57,8 @@ public class TelescopingArm extends SubsystemBase {
         double armJointSetpoint = calculateArmAngle(x, y);
 
         return Commands.run(() -> moveTo(telescopeSetpoint, armJointSetpoint), this)
-                .until(() -> armWithinSetpoint(telescopeSetpoint, armJointSetpoint))
-                .andThen(() -> stopAll());
+            .until(() -> armWithinSetpoint(telescopeSetpoint, armJointSetpoint))
+            .andThen(() -> stopAll());
     }
 
     /**
@@ -78,8 +78,8 @@ public class TelescopingArm extends SubsystemBase {
      */
     public Command intake(double speed) {
         return Commands.run(() -> runRoller(speed), this)
-                .withTimeout(2)
-                .andThen(() -> stopRoller());
+            .withTimeout(2)
+            .andThen(() -> stopRoller());
     }
 
     /**
@@ -154,14 +154,10 @@ public class TelescopingArm extends SubsystemBase {
      *         tolerance of their setpoints
      */
     private boolean armWithinSetpoint(double telescopeSetpoint, double armJointSetpoint) {
-        return ((getTelescopePosition() > telescopeSetpoint
-                - Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS)
-                && (getTelescopePosition() < telescopeSetpoint
-                        + Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS))
-                && (getArmPosition() > armJointSetpoint
-                        - Constants.TelescopingArm.ArmJoint.POSITION_TOLERANCE_ROTATIONS)
-                && (getArmPosition() < armJointSetpoint
-                        + Constants.TelescopingArm.ArmJoint.POSITION_TOLERANCE_ROTATIONS);
+        return ((getTelescopePosition() > telescopeSetpoint - Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS) &&
+            (getTelescopePosition() < telescopeSetpoint + Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS)) &&
+            (getArmPosition() > armJointSetpoint - Constants.TelescopingArm.ArmJoint.POSITION_TOLERANCE_ROTATIONS) &&
+            (getArmPosition() < armJointSetpoint + Constants.TelescopingArm.ArmJoint.POSITION_TOLERANCE_ROTATIONS);
     }
 
     /**
@@ -218,18 +214,18 @@ public class TelescopingArm extends SubsystemBase {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
         configuration.Slot0 = new Slot0Configs()
-                .withKS(Constants.TelescopingArm.Telescope.KS)
-                .withKV(Constants.TelescopingArm.Telescope.KV)
-                .withKA(Constants.TelescopingArm.Telescope.KA)
-                .withKG(Constants.TelescopingArm.Telescope.KG)
-                .withKP(Constants.TelescopingArm.Telescope.KP)
-                .withKI(Constants.TelescopingArm.Telescope.KI)
-                .withKD(Constants.TelescopingArm.Telescope.KD);
+            .withKS(Constants.TelescopingArm.Telescope.KS)
+            .withKV(Constants.TelescopingArm.Telescope.KV)
+            .withKA(Constants.TelescopingArm.Telescope.KA)
+            .withKG(Constants.TelescopingArm.Telescope.KG)
+            .withKP(Constants.TelescopingArm.Telescope.KP)
+            .withKI(Constants.TelescopingArm.Telescope.KI)
+            .withKD(Constants.TelescopingArm.Telescope.KD);
 
         configuration.MotionMagic = new MotionMagicConfigs()
-                .withMotionMagicCruiseVelocity(Constants.TelescopingArm.Telescope.CRUISE_VELOCITY)
-                .withMotionMagicAcceleration(Constants.TelescopingArm.Telescope.ACCELERATION)
-                .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
+            .withMotionMagicCruiseVelocity(Constants.TelescopingArm.Telescope.CRUISE_VELOCITY)
+            .withMotionMagicAcceleration(Constants.TelescopingArm.Telescope.ACCELERATION)
+            .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
 
         configuration.HardwareLimitSwitch.ForwardLimitEnable = true;
         configuration.HardwareLimitSwitch.ForwardLimitType = ForwardLimitTypeValue.NormallyClosed;
@@ -239,6 +235,8 @@ public class TelescopingArm extends SubsystemBase {
 
         configuration.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = true;
         configuration.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = 0.0;
+
+        configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
 
         return configuration;
     }
@@ -252,17 +250,17 @@ public class TelescopingArm extends SubsystemBase {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
         configuration.Slot0 = new Slot0Configs()
-                .withKS(Constants.TelescopingArm.ArmJoint.KS)
-                .withKV(Constants.TelescopingArm.ArmJoint.KV)
-                .withKA(Constants.TelescopingArm.ArmJoint.KA)
-                .withKP(Constants.TelescopingArm.ArmJoint.KP)
-                .withKI(Constants.TelescopingArm.ArmJoint.KI)
-                .withKD(Constants.TelescopingArm.ArmJoint.KD);
+            .withKS(Constants.TelescopingArm.ArmJoint.KS)
+            .withKV(Constants.TelescopingArm.ArmJoint.KV)
+            .withKA(Constants.TelescopingArm.ArmJoint.KA)
+            .withKP(Constants.TelescopingArm.ArmJoint.KP)
+            .withKI(Constants.TelescopingArm.ArmJoint.KI)
+            .withKD(Constants.TelescopingArm.ArmJoint.KD);
 
         configuration.MotionMagic = new MotionMagicConfigs()
-                .withMotionMagicCruiseVelocity(Constants.TelescopingArm.ArmJoint.CRUISE_VELOCITY)
-                .withMotionMagicAcceleration(Constants.TelescopingArm.ArmJoint.ACCELERATION)
-                .withMotionMagicJerk(Constants.TelescopingArm.ArmJoint.JERK);
+            .withMotionMagicCruiseVelocity(Constants.TelescopingArm.ArmJoint.CRUISE_VELOCITY)
+            .withMotionMagicAcceleration(Constants.TelescopingArm.ArmJoint.ACCELERATION)
+            .withMotionMagicJerk(Constants.TelescopingArm.ArmJoint.JERK);
 
         return configuration;
     }

@@ -14,12 +14,12 @@ public class Constants {
             public static final double GROUND_OFFSET_M = 0.0; // TODO: Find this
             public static final double TIP_OFFSET_M = 0.0; // TODO: Find this
 
-            public static final double PULLEY_TO_TIP_RATIO = 1 / 2;
+            public static final double PULLEY_TO_TIP_RATIO = 2;
             // * Mutliply by num rotations to get meters
-            public static final double CONVERSION_FACTOR = 1 / (2 * Math.PI * PULLEY_RADIUS_M) * PLANETARY_GEAR_RATIO;
+            public static final double CONVERSION_FACTOR = 2 * Math.PI * PULLEY_RADIUS_M * PLANETARY_GEAR_RATIO * PULLEY_TO_TIP_RATIO;
             // TODO: find these
-            public static final double MAX_LENGTH_M = 2.0 * CONVERSION_FACTOR;
-            public static final double MIN_LENGTH_M = 0.0;
+            public static final double MAX_LENGTH_M = 2.0 / 360.0;
+            public static final double MIN_LENGTH_M = 0.0 / 360.0;
 
             // TODO: find these
             /*
@@ -81,11 +81,11 @@ public class Constants {
         }
 
         // TODO: find these
-        public static final double[] L4_SCORING_POS_M = { 0.0, 0.0 };
-        public static final double[] L3_SCORING_POS_M = { 0.0, 0.0 };
-        public static final double[] L2_SCORING_POS_M = { 0.0, 0.0 };
-        public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
-        public static final double[] INTAKE_POS_M = { 0.0, 0.0 };
-        public static final double[] HOME_POS_M = { 0.0, 0.0 };
+        public static final double[] L4_SCORING_POS_M = { 0.0 / 360, 0.0 / 360 };
+        public static final double[] L3_SCORING_POS_M = { 0.0 / 360, 0.0 / 360 };
+        public static final double[] L2_SCORING_POS_M = { 0.0 / 360, 0.0 / 360 };
+        public static final double[] L1_SCORING_POS_M = { 0.0 / 360, 0.0 / 360 };
+        public static final double[] INTAKE_POS_M = { 0.0 / 360, 0.0 / 360 };
+        public static final double[] HOME_POS_M = { 0.0 / 360, 0.0 / 360 };
     }
 }
