@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
 public class TelescopingArm extends SubsystemBase {
-    private static TelescopingArm system;
+    private static TelescopingArm system;  
 
     private TalonFX telescope, armJoint;
     private SparkMax roller;
@@ -125,12 +125,7 @@ public class TelescopingArm extends SubsystemBase {
     private double calculateTelescopeHeight(double x, double y) throws IllegalStateException {
         double height = Math.sqrt(x * x + y * y);
 
-        if (height > Constants.TelescopingArm.Telescope.MAX_LENGTH_M)
-            throw new IllegalStateException("Arm setpoint too high");
-        else if (height < Constants.TelescopingArm.Telescope.MIN_LENGTH_M)
-            throw new IllegalStateException("Arm setpoint too low");
-
-        return height * Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
+        return height / 360.0;
     }
 
     /**
@@ -141,7 +136,7 @@ public class TelescopingArm extends SubsystemBase {
      * @return the target arm position in rotations
      */
     private double calculateArmAngle(double x, double y) {
-        return Math.atan2(y, x) * Constants.TelescopingArm.ArmJoint.CONVERSION_FACTOR;
+        return Math.atan2(y, x) / 360.0;
     }
 
     /**
@@ -227,16 +222,12 @@ public class TelescopingArm extends SubsystemBase {
             .withMotionMagicAcceleration(Constants.TelescopingArm.Telescope.ACCELERATION)
             .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
 
-        configuration.HardwareLimitSwitch.ForwardLimitEnable = true;
-        configuration.HardwareLimitSwitch.ForwardLimitType = ForwardLimitTypeValue.NormallyClosed;
-
-        configuration.HardwareLimitSwitch.ReverseLimitEnable = true;
-        configuration.HardwareLimitSwitch.ReverseLimitType = ReverseLimitTypeValue.NormallyClosed;
-
-        configuration.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = true;
-        configuration.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = 0.0;
+        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
+        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = 0.0;
 
         configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
+
+        configuration.Slot0.GravityType = Constants.TelescopingArm.Telescope.GRAVITY_TYPE_VALUE;
 
         return configuration;
     }
