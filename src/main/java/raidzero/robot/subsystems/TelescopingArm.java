@@ -5,9 +5,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -24,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
 public class TelescopingArm extends SubsystemBase {
-    private static TelescopingArm system;  
+    private static TelescopingArm system;
 
     private TalonFX telescope, armJoint;
     private SparkMax roller;
@@ -35,7 +33,7 @@ public class TelescopingArm extends SubsystemBase {
     private TelescopingArm() {
         telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID);
         telescope.getConfigurator().apply(telescopeConfiguration());
-        telescope.setNeutralMode(NeutralModeValue.Coast);
+        telescope.setNeutralMode(NeutralModeValue.Brake);
 
         armJoint = new TalonFX(Constants.TelescopingArm.ArmJoint.MOTOR_ID);
         armJoint.getConfigurator().apply((armConfiguration()));
@@ -59,6 +57,10 @@ public class TelescopingArm extends SubsystemBase {
         return Commands.run(() -> moveTo(telescopeSetpoint, armJointSetpoint), this)
             .until(() -> armWithinSetpoint(telescopeSetpoint, armJointSetpoint))
             .andThen(() -> stopAll());
+    }
+
+    public Command runTelescope(double setpoint) {
+        return Commands.run(() -> moveTelescope(setpoint), this);
     }
 
     /**
@@ -96,6 +98,11 @@ public class TelescopingArm extends SubsystemBase {
         armJoint.setControl(armRequest.withPosition(armJointAngle));
     }
 
+    private void moveTelescope(double setpoint) {
+        final MotionMagicVoltage request = new MotionMagicVoltage(0);
+        telescope.setControl(request.withPosition(setpoint));
+    }
+
     /**
      * Runs the roller at the specified speed
      * 
@@ -125,7 +132,7 @@ public class TelescopingArm extends SubsystemBase {
     private double calculateTelescopeHeight(double x, double y) throws IllegalStateException {
         double height = Math.sqrt(x * x + y * y);
 
-        return height / 360.0;
+        return height / Constants.TelescopingArm.Telescope.MAX_HEIGHT_M;
     }
 
     /**

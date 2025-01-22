@@ -24,8 +24,8 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -41,11 +41,17 @@ public class RobotContainer {
 
     private void configureBindings() {
         swerve.setDefaultCommand(
-                swerve.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed)
-                        .withVelocityY(-joystick.getLeftX() * MaxSpeed)
-                        .withRotationalRate(-joystick.getRightX() * MaxAngularRate)));
+            swerve.applyRequest(
+                () -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed)
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed)
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
+            )
+        );
 
         joystick.a().whileTrue(swerve.applyRequest(() -> brake));
+
+        joystick.b().onTrue(arm.runTelescope(-0.8));
+        joystick.x().onTrue(arm.runTelescope(0.0));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
