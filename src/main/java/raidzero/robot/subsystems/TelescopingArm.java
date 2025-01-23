@@ -247,18 +247,27 @@ public class TelescopingArm extends SubsystemBase {
     private TalonFXConfiguration armConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
+        configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.ArmJoint.CONVERSION_FACTOR;
+
         configuration.Slot0 = new Slot0Configs()
             .withKS(Constants.TelescopingArm.ArmJoint.KS)
             .withKV(Constants.TelescopingArm.ArmJoint.KV)
             .withKA(Constants.TelescopingArm.ArmJoint.KA)
+            .withKG(Constants.TelescopingArm.ArmJoint.KG)
             .withKP(Constants.TelescopingArm.ArmJoint.KP)
             .withKI(Constants.TelescopingArm.ArmJoint.KI)
             .withKD(Constants.TelescopingArm.ArmJoint.KD);
+
+        configuration.Slot0.GravityType = Constants.TelescopingArm.ArmJoint.GRAVITY_TYPE_VALUE;
 
         configuration.MotionMagic = new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(Constants.TelescopingArm.ArmJoint.CRUISE_VELOCITY)
             .withMotionMagicAcceleration(Constants.TelescopingArm.ArmJoint.ACCELERATION)
             .withMotionMagicJerk(Constants.TelescopingArm.ArmJoint.JERK);
+
+        configuration.CurrentLimits.StatorCurrentLimit = Constants.TelescopingArm.ArmJoint.STATOR_CURRENT_LIMT;
+        configuration.CurrentLimits.SupplyCurrentLimit = Constants.TelescopingArm.ArmJoint.SUPPLY_CURRENT_LIMIT;
+        configuration.CurrentLimits.SupplyCurrentLowerTime = Constants.TelescopingArm.ArmJoint.SUPPLY_CURRENT_LOWER_TIME;
 
         return configuration;
     }
