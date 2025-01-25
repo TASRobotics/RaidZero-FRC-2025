@@ -50,11 +50,13 @@ public class Constants {
         public class ArmJoint {
             // * Zero degrees is pointing straight up!!!
             public static final int MOTOR_ID = 11;
+            public static final int CANCODER_ID = 11;
             private static final double PLANETARY_GEAR_RATIO = 9.0 / 1;
             private static final double PIVOT_GEAR_RATIO = 10.0 / 1;
             public static final double CONVERSION_FACTOR = PLANETARY_GEAR_RATIO * PIVOT_GEAR_RATIO;
 
-            // !!!!! CHANGE GRAVITY TYPE TO ARM COSINE PLEASEEEEEEE
+            public static final double MAGNET_OFFSET = 0.0;
+
             public static final double KS = 0.0125;
             public static final double KG = 0.0275;
             public static final double KV = 1.1;
@@ -72,7 +74,7 @@ public class Constants {
 
             // 2cm of tolerance
             public static final double POSITION_TOLERANCE_ROTATIONS = 0.02 * CONVERSION_FACTOR;
-            
+
             public static final double STATOR_CURRENT_LIMT = 30.0;
             public static final double SUPPLY_CURRENT_LIMIT = 40.0;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
@@ -88,11 +90,11 @@ public class Constants {
         }
 
         // TODO: find these
-        public static final double[] L4_SCORING_POS_M = { 0.0 / 360, 0.0 / 360 };
-        public static final double[] L3_SCORING_POS_M = { 0.0 / 360, 0.0 / 360 };
-        public static final double[] L2_SCORING_POS_M = { 0.0 / 360, 0.0 / 360 };
-        public static final double[] L1_SCORING_POS_M = { 0.0 / 360, 0.0 / 360 };
-        public static final double[] INTAKE_POS_M = { 0.0 / 360, 0.0 / 360 };
-        public static final double[] HOME_POS_M = { 0.0 / 360, 0.0 / 360 };
+        public static final double[] L4_SCORING_POS_M = { 0.0, 0.0 };
+        public static final double[] L3_SCORING_POS_M = { 0.0, 0.0 };
+        public static final double[] L2_SCORING_POS_M = { 0.0, 0.0 };
+        public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
+        public static final double[] INTAKE_POS_M = { 0.0, 0.0 };
+        public static final double[] HOME_POS_M = { 0.0, 0.0 };
     }
 }

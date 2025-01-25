@@ -1,10 +1,13 @@
 package raidzero.robot.subsystems;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -19,12 +22,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import raidzero.robot.Constants;
 
 public class TelescopingArm extends SubsystemBase {
     private static TelescopingArm system;
 
     private TalonFX telescope, armJoint;
+    private CANcoder jointCANcoder;
+
     private SparkMax roller, rollerFollow;
 
     /**
@@ -36,8 +42,11 @@ public class TelescopingArm extends SubsystemBase {
         telescope.setNeutralMode(NeutralModeValue.Brake);
 
         armJoint = new TalonFX(Constants.TelescopingArm.ArmJoint.MOTOR_ID);
-        armJoint.getConfigurator().apply((armConfiguration()));
+        armJoint.getConfigurator().apply((jointConfiguration()));
         armJoint.setNeutralMode(NeutralModeValue.Brake);
+
+        jointCANcoder = new CANcoder(Constants.TelescopingArm.ArmJoint.CANCODER_ID);
+        jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
 
         roller = new SparkMax(Constants.TelescopingArm.Roller.MOTOR_ID, MotorType.kBrushless);
         roller.configure(rollerConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -146,7 +155,7 @@ public class TelescopingArm extends SubsystemBase {
      * @return the target arm position in rotations
      */
     private double calculateArmAngle(double x, double y) {
-        return Math.atan2(y, x) / 360.0;
+        return (Math.atan2(y, x) - Math.PI / 2) * 180 / Math.PI / 360.0;
     }
 
     /**
@@ -159,10 +168,8 @@ public class TelescopingArm extends SubsystemBase {
      *         tolerance of their setpoints
      */
     private boolean armWithinSetpoint(double telescopeSetpoint, double armJointSetpoint) {
-        return ((getTelescopePosition() > telescopeSetpoint - Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS) &&
-            (getTelescopePosition() < telescopeSetpoint + Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS)) &&
-            (getArmPosition() > armJointSetpoint - Constants.TelescopingArm.ArmJoint.POSITION_TOLERANCE_ROTATIONS) &&
-            (getArmPosition() < armJointSetpoint + Constants.TelescopingArm.ArmJoint.POSITION_TOLERANCE_ROTATIONS);
+        return Math.abs(getTelescopePosition() - telescopeSetpoint) < Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS &&
+            Math.abs(getArmPosition() - armJointSetpoint) < Constants.TelescopingArm.ArmJoint.POSITION_TOLERANCE_ROTATIONS;
     }
 
     /**
@@ -247,7 +254,7 @@ public class TelescopingArm extends SubsystemBase {
      * 
      * @return the {@link TalonFXConfiguration} for the arm joint
      */
-    private TalonFXConfiguration armConfiguration() {
+    private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
         configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.ArmJoint.CONVERSION_FACTOR;
@@ -263,6 +270,9 @@ public class TelescopingArm extends SubsystemBase {
 
         configuration.Slot0.GravityType = Constants.TelescopingArm.ArmJoint.GRAVITY_TYPE_VALUE;
 
+        configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+        configuration.Feedback.FeedbackRemoteSensorID = Constants.TelescopingArm.ArmJoint.CANCODER_ID;
+
         configuration.MotionMagic = new MotionMagicConfigs()
             .withMotionMagicCruiseVelocity(Constants.TelescopingArm.ArmJoint.CRUISE_VELOCITY)
             .withMotionMagicAcceleration(Constants.TelescopingArm.ArmJoint.ACCELERATION)
@@ -275,18 +285,27 @@ public class TelescopingArm extends SubsystemBase {
         return configuration;
     }
 
+    private CANcoderConfiguration jointCANCoderConfiguration() {
+        CANcoderConfiguration configuration = new CANcoderConfiguration();
+
+        configuration.MagnetSensor.MagnetOffset = Constants.TelescopingArm.ArmJoint.MAGNET_OFFSET;
+
+        return configuration;
+    }
+
     private SparkBaseConfig rollerConfiguration() {
-        SparkMaxConfig config = new SparkMaxConfig();
+        SparkMaxConfig configuration = new SparkMaxConfig();
 
-        config.idleMode(IdleMode.kBrake);
+        configuration.idleMode(IdleMode.kBrake);
 
-        return config;
+        return configuration;
     }
 
     private SparkBaseConfig rollerFollowConfiguration() {
         SparkMaxConfig configuration = new SparkMaxConfig();
 
         configuration.follow(Constants.TelescopingArm.Roller.MOTOR_ID);
+        configuration.idleMode(IdleMode.kBrake);
 
         return configuration;
     }
