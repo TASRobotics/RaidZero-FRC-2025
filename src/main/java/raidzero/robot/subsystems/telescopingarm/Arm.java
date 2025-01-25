@@ -21,7 +21,7 @@ import raidzero.robot.subsystems.telescopingarm.Constants.TelescopingArm.Joint;
 public class Arm extends SubsystemBase {
     private static Arm system;
 
-    private TalonFX telescope, armJoint;
+    private TalonFX telescope, joint;
     private CANcoder jointCANcoder;
 
     /**
@@ -33,14 +33,14 @@ public class Arm extends SubsystemBase {
         telescope.setNeutralMode(NeutralModeValue.Brake);
 
 
-        armJoint = new TalonFX(Joint.MOTOR_ID);
-        armJoint.getConfigurator().apply((jointConfiguration()));
-        armJoint.setNeutralMode(NeutralModeValue.Brake);
+        joint = new TalonFX(Joint.MOTOR_ID);
+        joint.getConfigurator().apply((jointConfiguration()));
+        joint.setNeutralMode(NeutralModeValue.Brake);
 
         jointCANcoder = new CANcoder(Joint.CANCODER_ID);
         jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
 
-        armJoint.setPosition(jointCANcoder.getPosition().getValueAsDouble() / 90.0);
+        joint.setPosition(jointCANcoder.getPosition().getValueAsDouble() / 90.0);
     }
 
     /**
@@ -52,10 +52,10 @@ public class Arm extends SubsystemBase {
      */
     public Command moveArm(double x, double y) {
         double telescopeSetpoint = calculateTelescopeHeight(x, y);
-        double armJointSetpoint = calculateArmAngle(x, y);
+        double jointSetpoint = calculateJointAngle(x, y);
 
-        return Commands.run(() -> moveTo(telescopeSetpoint, armJointSetpoint), this)
-            .until(() -> armWithinSetpoint(telescopeSetpoint, armJointSetpoint))
+        return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this)
+            .until(() -> armWithinSetpoint(telescopeSetpoint, jointSetpoint))
             .andThen(() -> stopAll());
     }
 
@@ -93,7 +93,7 @@ public class Arm extends SubsystemBase {
         telescope.setControl(telescopeRequest.withPosition(telescopeSetpoint));
 
         final MotionMagicVoltage armRequest = new MotionMagicVoltage(0);
-        armJoint.setControl(armRequest.withPosition(armJointAngle));
+        joint.setControl(armRequest.withPosition(armJointAngle));
     }
 
     private void moveTelescope(double setpoint) {
@@ -103,7 +103,7 @@ public class Arm extends SubsystemBase {
 
     private void moveJoint(double setpoint) {
         final MotionMagicVoltage request = new MotionMagicVoltage(0);
-        armJoint.setControl(request.withPosition(setpoint));
+        joint.setControl(request.withPosition(setpoint));
     }
 
     /**
@@ -129,7 +129,7 @@ public class Arm extends SubsystemBase {
      * @param y the y setpoint in meters
      * @return the target arm position in rotations
      */
-    private double calculateArmAngle(double x, double y) {
+    private double calculateJointAngle(double x, double y) {
         return (Math.atan2(y, x) - Math.PI / 2) * 180 / Math.PI / 360.0;
     }
 
@@ -144,7 +144,7 @@ public class Arm extends SubsystemBase {
      */
     private boolean armWithinSetpoint(double telescopeSetpoint, double armJointSetpoint) {
         return Math.abs(getTelescopePosition() - telescopeSetpoint) < Telescope.POSITION_TOLERANCE_ROTATIONS &&
-            Math.abs(getArmPosition() - armJointSetpoint) < Joint.POSITION_TOLERANCE_ROTATIONS;
+            Math.abs(getJointPosition() - armJointSetpoint) < Joint.POSITION_TOLERANCE_ROTATIONS;
     }
 
     /**
@@ -161,8 +161,8 @@ public class Arm extends SubsystemBase {
      * 
      * @return arm motor encoder position in rotations
      */
-    public double getArmPosition() {
-        return armJoint.getPosition().getValueAsDouble();
+    public double getJointPosition() {
+        return joint.getPosition().getValueAsDouble();
     }
 
     /**
@@ -176,7 +176,7 @@ public class Arm extends SubsystemBase {
      * Stops the arm motor
      */
     public void stopArm() {
-        armJoint.stopMotor();
+        joint.stopMotor();
     }
 
     /**
