@@ -25,7 +25,7 @@ public class TelescopingArm extends SubsystemBase {
     private static TelescopingArm system;
 
     private TalonFX telescope, armJoint;
-    private SparkMax roller;
+    private SparkMax roller, rollerFollow;
 
     /**
      * Constructor for the {@link TelescopingArm} subsystem
@@ -41,6 +41,9 @@ public class TelescopingArm extends SubsystemBase {
 
         roller = new SparkMax(Constants.TelescopingArm.Roller.MOTOR_ID, MotorType.kBrushless);
         roller.configure(rollerConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        rollerFollow = new SparkMax(Constants.TelescopingArm.Roller.FOLLOW_ID, MotorType.kBrushless);
+        rollerFollow.configure(rollerFollowConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     /**
@@ -275,11 +278,17 @@ public class TelescopingArm extends SubsystemBase {
     private SparkBaseConfig rollerConfiguration() {
         SparkMaxConfig config = new SparkMaxConfig();
 
-        config = new SparkMaxConfig();
         config.idleMode(IdleMode.kBrake);
-        config.limitSwitch.forwardLimitSwitchEnabled(true);
 
         return config;
+    }
+
+    private SparkBaseConfig rollerFollowConfiguration() {
+        SparkMaxConfig configuration = new SparkMaxConfig();
+
+        configuration.follow(Constants.TelescopingArm.Roller.MOTOR_ID);
+
+        return configuration;
     }
 
     /**
