@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
 public class Climb extends SubsystemBase {
-    private Climb system;
+    private static Climb system;
 
     private SparkMax joint;
     private SparkClosedLoopController jointController;
@@ -39,33 +39,36 @@ public class Climb extends SubsystemBase {
         winch.setNeutralMode(NeutralModeValue.Brake);
     }
 
-    public Command runJoint(double setpoint) {
+    public Command runJoint(double setpoint, BooleanSupplier stopCondition) {
         return Commands.run(() -> jointController.setReference(setpoint, ControlType.kPosition), this)
-            .until(() -> jointWithinSetpoint(setpoint))
+            .until(stopCondition)
             .andThen(() -> joint.stopMotor());
     }
 
-    public Command runWinch(BooleanSupplier stopCondition) {
-        return Commands.run(() -> {
-            joint.configure(disableJointBrake(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-            winch.set(0.2);
-        }).until(stopCondition).andThen(() -> {
-            winch.stopMotor();
-            joint.configure(jointConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        });
+    public Command runWinch() {
+        return Commands.run(() -> winch.set(0.3));
     }
 
-    private boolean jointWithinSetpoint(double setpoint) {
-        if (Math.abs(setpoint - joint.getEncoder().getPosition()) < 0.2)
-            return true;
-        return false;
+    public Command stopClimb() {
+        return Commands.run(() -> winch.stopMotor(), this);
     }
+
+    public Command unwindWinch() {
+        return Commands.run(() -> winch.set(-0.1), this);
+    }
+
+    // private boolean jointWithinSetpoint(double setpoint) {
+    // if (Math.abs(setpoint - joint.getEncoder().getPosition()) < 0.2)
+    // return true;
+    // return false;
+    // }
 
     private SparkBaseConfig jointConfig() {
         SparkMaxConfig configuration = new SparkMaxConfig();
 
         configuration.idleMode(IdleMode.kBrake);
-        configuration.closedLoop.pid(Constants.Climb.Joint.KP, Constants.Climb.Joint.KI, Constants.Climb.Joint.KD);
+        configuration.closedLoop
+            .pidf(Constants.Climb.Joint.KP, Constants.Climb.Joint.KI, Constants.Climb.Joint.KD, Constants.Climb.Joint.KF);
         configuration.smartCurrentLimit(Constants.Climb.Joint.CURRENT_LIMIT);
 
         return configuration;
@@ -75,7 +78,8 @@ public class Climb extends SubsystemBase {
         SparkMaxConfig configuration = new SparkMaxConfig();
 
         configuration.idleMode(IdleMode.kCoast);
-        configuration.closedLoop.pid(Constants.Climb.Joint.KP, Constants.Climb.Joint.KI, Constants.Climb.Joint.KD);
+        configuration.closedLoop
+            .pidf(Constants.Climb.Joint.KP, Constants.Climb.Joint.KI, Constants.Climb.Joint.KD, Constants.Climb.Joint.KF);
         configuration.smartCurrentLimit(Constants.Climb.Joint.CURRENT_LIMIT);
 
         return configuration;
@@ -87,7 +91,7 @@ public class Climb extends SubsystemBase {
         return configuration;
     }
 
-    public Climb system() {
+    public static Climb system() {
         if (system == null) {
             system = new Climb();
         }
