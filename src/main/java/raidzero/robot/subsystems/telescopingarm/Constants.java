@@ -55,6 +55,7 @@ public class Constants {
             private static final double PIVOT_GEAR_RATIO = 10.0 / 1;
             public static final double CONVERSION_FACTOR = PLANETARY_GEAR_RATIO * PIVOT_GEAR_RATIO;
 
+            //* Set the magnet offset so that straight up is 90 degrees pi/2
             public static final double MAGNET_OFFSET = 0.0;
 
             public static final double KS = 0.0125;

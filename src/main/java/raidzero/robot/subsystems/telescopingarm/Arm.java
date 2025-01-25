@@ -129,7 +129,7 @@ public class Arm extends SubsystemBase {
      * @return the target arm position in rotations
      */
     private double calculateJointAngle(double x, double y) {
-        return (Math.atan2(y, x) - Math.PI / 2) * 180 / Math.PI / 360.0;
+        return (Math.atan2(y, x)) * 180 / Math.PI / 360.0;
     }
 
     /**
