@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import raidzero.robot.subsystems.AlgaeIntake;
 import raidzero.robot.subsystems.Swerve;
+import raidzero.robot.subsystems.algaeintake.Roller;
+import raidzero.robot.subsystems.algaeintake.Constants;
+import raidzero.robot.subsystems.algaeintake.Joint;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -33,7 +35,9 @@ public class RobotContainer {
     private final CommandXboxController joystick = new CommandXboxController(0);
 
     public final Swerve swerve = Swerve.system();
-    public final AlgaeIntake algaeIntake = AlgaeIntake.system();
+    public final Joint joint = Joint.system();
+    public final Roller roller = Roller.system();
+
 
     public RobotContainer() {
         configureBindings();
@@ -47,8 +51,8 @@ public class RobotContainer {
 
         joystick.a().whileTrue(swerve.applyRequest(() -> brake));
 
-        joystick.b().onTrue(algaeIntake.runJoint(Constants.AlgaeIntake.Joint.INTAKE_POSITION));
-        joystick.x().onTrue(algaeIntake.runJoint(0));
+        joystick.b().onTrue(joint.runJointWithCurrentSpike(Constants.Joint.INTAKE_POSITION));
+        joystick.x().onTrue(joint.runJointWithCurrentSpike(0));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
