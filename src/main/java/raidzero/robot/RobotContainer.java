@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import raidzero.robot.subsystems.Swerve;
 import raidzero.robot.subsystems.telescopingarm.Arm;
+import raidzero.robot.subsystems.telescopingarm.Intake;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -33,6 +34,7 @@ public class RobotContainer {
 
     public final Swerve swerve = Swerve.system();
     public final Arm arm = Arm.system();
+    public final Intake intake = Intake.system();
 
     public RobotContainer() {
         configureBindings();

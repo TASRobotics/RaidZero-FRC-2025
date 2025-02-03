@@ -12,16 +12,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import raidzero.robot.subsystems.telescopingarm.Constants.Roller;
+
 public class Intake extends SubsystemBase {
     private static Intake system;
 
     private SparkMax roller, rollerFollow;
 
     private Intake() {
-        roller = new SparkMax(Constants.TelescopingArm.Roller.MOTOR_ID, MotorType.kBrushless);
+        roller = new SparkMax(Roller.MOTOR_ID, MotorType.kBrushless);
         roller.configure(rollerConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        rollerFollow = new SparkMax(Constants.TelescopingArm.Roller.FOLLOW_ID, MotorType.kBrushless);
+        rollerFollow = new SparkMax(Roller.FOLLOW_ID, MotorType.kBrushless);
         rollerFollow.configure(rollerFollowConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
@@ -74,7 +76,7 @@ public class Intake extends SubsystemBase {
     private SparkBaseConfig rollerFollowConfiguration() {
         SparkMaxConfig configuration = new SparkMaxConfig();
 
-        configuration.follow(Constants.TelescopingArm.Roller.MOTOR_ID);
+        configuration.follow(Roller.MOTOR_ID);
         configuration.idleMode(IdleMode.kBrake);
 
         return configuration;
