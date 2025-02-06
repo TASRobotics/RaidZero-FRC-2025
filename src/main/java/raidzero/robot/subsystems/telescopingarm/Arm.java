@@ -1,5 +1,8 @@
 package raidzero.robot.subsystems.telescopingarm;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -16,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import raidzero.robot.subsystems.telescopingarm.Constants.Telescope;
+import raidzero.robot.Telemetry;
 import raidzero.robot.subsystems.telescopingarm.Constants.Joint;
 
 public class Arm extends SubsystemBase {
@@ -39,7 +43,6 @@ public class Arm extends SubsystemBase {
         jointCANcoder = new CANcoder(Joint.CANCODER_ID);
         jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
 
-        joint.setPosition(jointCANcoder.getPosition().getValueAsDouble() / 90.0);
     }
 
     /**
@@ -50,12 +53,17 @@ public class Arm extends SubsystemBase {
      * @return the command to be scheudled and run
      */
     public Command moveArm(double x, double y) {
-        double telescopeSetpoint = calculateTelescopeHeight(x, y);
+        double telescopeSetpoint = -1 * calculateTelescopeHeight(x, y);
         double jointSetpoint = calculateJointAngle(x, y);
 
-        return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this)
-            .until(() -> armWithinSetpoint(telescopeSetpoint, jointSetpoint))
-            .andThen(() -> stopAll());
+        // return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this);
+        return Commands.run(() -> moveTelescope(telescopeSetpoint), this)
+            .alongWith(Commands.waitSeconds(0.3).andThen(() -> moveJoint(jointSetpoint)));
+    }
+
+    public Command moveArmWithRotations(double jointSetpoint, double telescopeSetpoint) {
+        return Commands.run(() -> moveJoint(jointSetpoint), this)
+            .alongWith(Commands.waitSeconds(0.3).andThen(() -> moveTelescope(telescopeSetpoint)));
     }
 
     /**
@@ -85,14 +93,16 @@ public class Arm extends SubsystemBase {
      * Uses Motion Magic to move the telescope and arm joint to the target position
      * 
      * @param telescopeSetpoint the target telescope position in rotations
-     * @param armJointAngle     the target arm joint angle in rotations
+     * @param jointAngle     the target arm joint angle in rotations
      */
-    private void moveTo(double telescopeSetpoint, double armJointAngle) {
+    private void moveTo(double telescopeSetpoint, double jointAngle) {
         final MotionMagicVoltage telescopeRequest = new MotionMagicVoltage(0);
         telescope.setControl(telescopeRequest.withPosition(telescopeSetpoint));
+        SmartDashboard.putNumber("Telescope Setpoint", telescopeSetpoint);
 
         final MotionMagicVoltage armRequest = new MotionMagicVoltage(0);
-        joint.setControl(armRequest.withPosition(armJointAngle));
+        joint.setControl(armRequest.withPosition(jointAngle));
+        SmartDashboard.putNumber("Joint Setpoint", jointAngle);
     }
 
     private void moveTelescope(double setpoint) {
@@ -115,7 +125,7 @@ public class Arm extends SubsystemBase {
      *                               the maximum height or lower than the minimum
      *                               height
      */
-    private double calculateTelescopeHeight(double x, double y) throws IllegalStateException {
+    private double calculateTelescopeHeight(double x, double y) {
         double height = Math.sqrt(x * x + y * y);
 
         return height / Telescope.MAX_HEIGHT_M;
@@ -164,6 +174,14 @@ public class Arm extends SubsystemBase {
         return joint.getPosition().getValueAsDouble();
     }
 
+    public void setJointPosition(double position) {
+        joint.setPosition(position);
+    }
+
+    public void resetJointPosition() {
+        joint.setPosition(jointCANcoder.getPosition().getValueAsDouble() + 0.25);
+    }
+
     /**
      * Stops the telescope motor
      */
@@ -184,6 +202,10 @@ public class Arm extends SubsystemBase {
     public void stopAll() {
         stopTelescope();
         stopArm();
+    }
+
+    public Command stopAllCommand() {
+        return Commands.run(() -> stopAll(), this);
     }
 
     /**
@@ -222,6 +244,9 @@ public class Arm extends SubsystemBase {
         configuration.Feedback.SensorToMechanismRatio = Telescope.CONVERSION_FACTOR;
 
         configuration.Slot0.GravityType = Telescope.GRAVITY_TYPE_VALUE;
+
+        configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Telescope.FORWARD_SOFT_LIMIT_PERCENT;
 
         return configuration;
     }
@@ -266,9 +291,7 @@ public class Arm extends SubsystemBase {
      */
     private CANcoderConfiguration jointCANCoderConfiguration() {
         CANcoderConfiguration configuration = new CANcoderConfiguration();
-
-        configuration.MagnetSensor.MagnetOffset = Joint.MAGNET_OFFSET;
-
+        configuration.MagnetSensor.MagnetOffset = Joint.CANCODER_OFFSET;
         return configuration;
     }
 
@@ -278,10 +301,8 @@ public class Arm extends SubsystemBase {
      * @return the {@link Arm} subsystem
      */
     public static Arm system() {
-        if (system == null) {
+        if (system == null)
             system = new Arm();
-        }
-
         return system;
     }
 }

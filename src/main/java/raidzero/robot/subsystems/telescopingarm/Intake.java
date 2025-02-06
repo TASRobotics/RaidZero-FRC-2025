@@ -3,11 +3,16 @@ package raidzero.robot.subsystems.telescopingarm;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
+import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
+import au.grapplerobotics.interfaces.LaserCanInterface.RegionOfInterest;
+import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,12 +24,24 @@ public class Intake extends SubsystemBase {
 
     private SparkMax roller, rollerFollow;
 
+    private LaserCan limit;
+
     private Intake() {
         roller = new SparkMax(Roller.MOTOR_ID, MotorType.kBrushless);
         roller.configure(rollerConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         rollerFollow = new SparkMax(Roller.FOLLOW_ID, MotorType.kBrushless);
         rollerFollow.configure(rollerFollowConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        limit = new LaserCan(0);
+
+        try {
+            limit.setRangingMode(RangingMode.SHORT);
+            limit.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
+            limit.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
+        } catch (Exception e) {
+            System.out.println("LaserCan Config Error");
+        }
     }
 
     /**
@@ -35,8 +52,12 @@ public class Intake extends SubsystemBase {
      */
     public Command runIntake(double speed) {
         return Commands.run(() -> runRoller(speed), this)
-            .withTimeout(2)
-            .andThen(() -> stopRoller());
+            .until(() -> limit.getMeasurement().distance_mm <= 40)
+            .andThen(Commands.run(() -> runRoller(-0.1), this).withTimeout(0.2).andThen(() -> stopRoller()));
+    }
+
+    public Command extake(double speed) {
+        return Commands.run(() -> runRoller(-speed), this).withTimeout(1.0).andThen(() -> stopRoller());
     }
 
     /**
@@ -45,13 +66,13 @@ public class Intake extends SubsystemBase {
      * @param speed the speed to run at as a percentage
      */
     private void runRoller(double speed) {
-        roller.set(speed);
+        roller.set(-speed);
     }
 
     /**
      * Stops the roller motor
      */
-    private void stopRoller() {
+    public void stopRoller() {
         roller.stopMotor();
     }
 
@@ -76,7 +97,7 @@ public class Intake extends SubsystemBase {
     private SparkBaseConfig rollerFollowConfiguration() {
         SparkMaxConfig configuration = new SparkMaxConfig();
 
-        configuration.follow(Roller.MOTOR_ID);
+        configuration.follow(Roller.MOTOR_ID, true);
         configuration.idleMode(IdleMode.kBrake);
 
         return configuration;
