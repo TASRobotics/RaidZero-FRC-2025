@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import raidzero.robot.subsystems.Limelight;
-import raidzero.robot.subsystems.Swerve;
+import raidzero.robot.subsystems.drivetrain.Limelight;
+import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.telescopingarm.*;
 import raidzero.robot.subsystems.telescopingarm.Constants;
 
