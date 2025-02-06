@@ -6,17 +6,16 @@ package raidzero.robot;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.lang.constant.Constable;
-
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import raidzero.robot.subsystems.Limelight;
 import raidzero.robot.subsystems.Swerve;
 import raidzero.robot.subsystems.telescopingarm.*;
 import raidzero.robot.subsystems.telescopingarm.Constants;
@@ -39,8 +38,14 @@ public class RobotContainer {
     public final Swerve swerve = Swerve.system();
     public final Arm arm = Arm.system();
     public final Intake intake = Intake.system();
+    public final Limelight limes = Limelight.system();
+
+    public final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("AutoChooser", autoChooser);
+        
         configureBindings();
 
         // * Set positions for things here in the future
@@ -79,6 +84,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
+        return AutoBuilder.buildAuto("Auton1");
     }
 }

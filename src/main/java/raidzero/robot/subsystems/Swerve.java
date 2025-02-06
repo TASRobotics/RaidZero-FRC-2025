@@ -9,15 +9,26 @@ import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -43,6 +54,15 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     private final SwerveRequest.SysIdSwerveTranslation translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+    private final SwerveRequest.ApplyRobotSpeeds pathplannerSpeeds = new SwerveRequest.ApplyRobotSpeeds();
+
+    private StructArrayPublisher<SwerveModuleState> modulePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("ModuleStates", SwerveModuleState.struct).publish();
+    private StructPublisher <Pose2d> botpose = NetworkTableInstance.getDefault().getStructTopic("botPoseNT", Pose2d.struct).publish();
+
+    private final StructPublisher<Pose2d> botPosePublisher =
+        NetworkTableInstance.getDefault().getStructTopic("RobotPose",Pose2d.struct).publish();
+
+    private final Field2d field = new Field2d();
 
     private static Swerve system;
 
@@ -125,6 +145,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     public Swerve(SwerveDrivetrainConstants drivetrainConstants, SwerveModuleConstants<?, ?, ?>... modules) {
         super(drivetrainConstants, modules);
+
+        SmartDashboard.putData("Field", field);
+
+        configureAutoBuilder();
+
         if (Utils.isSimulation()) {
             this.startSimThread();
         }
@@ -147,6 +172,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     public Swerve(SwerveDrivetrainConstants drivetrainConstants, double odometryUpdateFrequency, SwerveModuleConstants<?, ?, ?>... modules) {
         super(drivetrainConstants, odometryUpdateFrequency, modules);
+
+        SmartDashboard.putData("Field", field);
+
+        configureAutoBuilder();
+
         if (Utils.isSimulation()) {
             this.startSimThread();
         }
@@ -181,6 +211,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     public Swerve(SwerveDrivetrainConstants drivetrainConstants, double odometryUpdateFrequency, Matrix<N3, N1> odometryStandardDeviation, Matrix<N3, N1> visionStandardDeviation, SwerveModuleConstants<?, ?, ?>... modules) {
         super(drivetrainConstants, odometryUpdateFrequency, odometryStandardDeviation, visionStandardDeviation, modules);
+
+        SmartDashboard.putData("Field", field);
+
+        configureAutoBuilder();
+
         if (Utils.isSimulation()) {
             this.startSimThread();
         }
@@ -245,6 +280,10 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                 this.hasAppliedOperatorPerspective = true;
             });
         }
+
+        modulePublisher.set(this.getState().ModuleStates);
+        botpose.set(this.getState().Pose);
+        field.setRobotPose(this.getState().Pose);
     }
 
     /**
@@ -266,6 +305,30 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         });
 
         this.simNotifier.startPeriodic(SIM_LOOP_PERIOD);
+    }
+
+    private void configureAutoBuilder() {
+        try {
+            AutoBuilder.configure(
+                () -> this.getState().Pose,
+                this::resetPose,
+                () -> this.getState().Speeds,
+                (speeds, feedforwards) -> setControl(
+                    pathplannerSpeeds.withSpeeds(speeds)
+                        .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())
+                        .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
+                ),
+                new PPHolonomicDriveController(
+                    new PIDConstants(5, 0, 0),
+                    new PIDConstants(1, 0, 0)
+                ),
+                RobotConfig.fromGUISettings(),
+                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                this
+            );
+        } catch (Exception e) {
+            DriverStation.reportError("Failed to load PathPlanner config and configure Autobuilder", e.getStackTrace());
+        }
     }
 
     /**
