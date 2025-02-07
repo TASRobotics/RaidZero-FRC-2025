@@ -58,7 +58,7 @@ public class Arm extends SubsystemBase {
 
         // return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this);
         return Commands.run(() -> moveTelescope(telescopeSetpoint), this)
-            .alongWith(Commands.waitSeconds(0.3).andThen(() -> moveJoint(jointSetpoint)));
+            .alongWith(Commands.waitSeconds(0.5).andThen(() -> moveJoint(jointSetpoint)));
     }
 
     public Command moveArmWithRotations(double jointSetpoint, double telescopeSetpoint) {
@@ -108,11 +108,13 @@ public class Arm extends SubsystemBase {
     private void moveTelescope(double setpoint) {
         final MotionMagicVoltage request = new MotionMagicVoltage(0);
         telescope.setControl(request.withPosition(setpoint));
+        SmartDashboard.putNumber("Telescope Setpoint", setpoint);
     }
 
     private void moveJoint(double setpoint) {
         final MotionMagicVoltage request = new MotionMagicVoltage(0);
         joint.setControl(request.withPosition(setpoint));
+        SmartDashboard.putNumber("Joint Setpoint", setpoint);
     }
 
     /**
@@ -127,6 +129,7 @@ public class Arm extends SubsystemBase {
      */
     private double calculateTelescopeHeight(double x, double y) {
         double height = Math.sqrt(x * x + y * y);
+        height -= Telescope.GROUND_OFFSET;
 
         return height / Telescope.MAX_HEIGHT_M;
     }
@@ -138,7 +141,7 @@ public class Arm extends SubsystemBase {
      * @param y the y setpoint in meters
      * @return the target arm position in rotations
      */
-    private double calculateJointAngle(double x, double y) {
+    public double calculateJointAngle(double x, double y) {
         return (Math.atan2(y, x)) * 180 / Math.PI / 360.0;
     }
 

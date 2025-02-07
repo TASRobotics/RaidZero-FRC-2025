@@ -37,10 +37,12 @@ public class Constants {
         // 2cm of tolerance
         public static final double POSITION_TOLERANCE_ROTATIONS = 0.02; // 2% of the full range of motion
 
-        public static final double MAX_HEIGHT_M = 1.88;
+        public static final double MAX_HEIGHT_M = 1.66;
 
         public static final double TOP_SOFT_LIMIT = 1.0; // 100% range of motion
         public static final double BOTTOM_SOFT_LIMIT = 0.0; // 0% range of motion
+
+        public static final double GROUND_OFFSET = 0.9;
     }
 
     public class Joint {
@@ -48,7 +50,7 @@ public class Constants {
         public static final int MOTOR_ID = 11;
         public static final int CANCODER_ID = 11;
 
-        public static final double CANCODER_GEAR_RATIO = 1.0; //TODO: find this gear ratio
+        public static final double CANCODER_GEAR_RATIO = 1.0; // TODO: find this gear ratio
         public static final double CANCODER_OFFSET = -0.274170;
 
         private static final double PLANETARY_GEAR_RATIO = 9.0 / 1.0;
@@ -90,12 +92,13 @@ public class Constants {
     }
 
     // TODO: find these
-    public static final double[] L4_SCORING_POS_M = { 0.0, 0.0 };
-    public static final double[] L3_SCORING_POS_M = { -0.1, 0.8 };
-    public static final double[] L2_SCORING_POS_M = { -0.1, 0.1 };
+    public static final double[] L4_SCORING_POS_M = { 0.0, Telescope.MAX_HEIGHT_M };
+    // public static final double[] L3_SCORING_POS_M = { -0.1, 0.8 - Telescope.GROUND_OFFSET };
+    public static final double[] L3_SCORING_POS_M = { -0.1, 1.55 };
+    public static final double[] L2_SCORING_POS_M = { -0.0, 0.2 };
     public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-    public static final double[] INTAKE_POS_M = { 0.0, 0.0 };
+    public static final double[] INTAKE_POS_M = { 0.53, 0.82 };
 
     public static final double[] HOME_POS_M = { 0.0, 0.0 };
 }
