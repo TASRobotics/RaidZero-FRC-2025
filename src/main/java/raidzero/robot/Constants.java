@@ -5,35 +5,35 @@ public class Constants {
     public class Limelight {
 
         public class Offsets {
-            public static final double FRONT_X_OFFSET = 0.0;
-            public static final double LEFT_X_OFFSET = -0.2794;
-            public static final double RIGHT_X_OFFSET = 0.2794;
-            public static final double BACK_X_OFFSET = 0.0;
+            public static final double FL_X_OFFSET = -0.1976;
+            public static final double FR_X_OFFSET = 0.1976;
+            public static final double BL_X_OFFSET = -0.2794;
+            public static final double BR_X_OFFSET = 0.2794;
 
-            public static final double FRONT_Y_OFFSET = 0.22;
-            public static final double LEFT_Y_OFFSET = 0.1577594;
-            public static final double RIGHT_Y_OFFSET = 0.1577594;
-            public static final double BACK_Y_OFFSET = 0.19812;
+            public static final double FL_Y_OFFSET = 0.1908;
+            public static final double FR_Y_OFFSET = 0.1908;
+            public static final double BL_Y_OFFSET = 0.1577594;
+            public static final double BR_Y_OFFSET = 0.1577594;
 
-            public static final double FRONT_Z_OFFSET = 0.2794;
-            public static final double LEFT_Z_OFFSET = 0.2032;
-            public static final double RIGHT_Z_OFFSET = 0.2032;
-            public static final double BACK_Z_OFFSET = -0.25485;
+            public static final double FL_Z_OFFSET = 0.2689;
+            public static final double FR_Z_OFFSET = 0.2689;
+            public static final double BL_Z_OFFSET = -0.2032;
+            public static final double BR_Z_OFFSET = -0.2032;
 
-            public static final double FRONT_ROLL = 0.0;
-            public static final double LEFT_ROLL = 0.0;
-            public static final double RIGHT_ROLL = 0.0;
-            public static final double BACK_ROLL = 0.0;
+            public static final double FL_ROLL = 180.0;
+            public static final double FR_ROLL = 0.0;
+            public static final double BL_ROLL = 0.0;
+            public static final double BR_ROLL = 0.0;
             
-            public static final double FRONT_PITCH = -10.0;
-            public static final double LEFT_PITCH = 35.0;
-            public static final double RIGHT_PITCH = 35.0;
-            public static final double BACK_PITCH = 35.0;
+            public static final double FL_PITCH = 10.0;
+            public static final double FR_PITCH = 10.0;
+            public static final double BL_PITCH = 35.0;
+            public static final double BR_PITCH = 35.0;
 
-            public static final double FRONT_YAW = 0.0;
-            public static final double LEFT_YAW = 90.0;
-            public static final double RIGHT_YAW = -90.0;
-            public static final double BACK_YAW = 180.0;
+            public static final double FL_YAW = -45.0;
+            public static final double FR_YAW = 45.0;
+            public static final double BL_YAW = 90.0;
+            public static final double BR_YAW = -90.0;
         }
 
     }
