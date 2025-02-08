@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
+import raidzero.robot.subsystems.drivetrain.TunerConstants;
 import raidzero.robot.subsystems.telescopingarm.*;
 import raidzero.robot.subsystems.telescopingarm.Constants;
 
@@ -64,7 +65,7 @@ public class RobotContainer {
 
         arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]), 0.0));
 
-        // joystick.a().whileTrue(swerve.applyRequest(() -> brake));
+        joystick.a().whileTrue(swerve.applyRequest(() -> brake));
 
         joystick.b().whileTrue(arm.moveArm(Constants.L3_SCORING_POS_M[0], Constants.L3_SCORING_POS_M[1]));
         joystick.x().whileTrue(arm.moveArm(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]));
@@ -73,13 +74,6 @@ public class RobotContainer {
 
         joystick.rightTrigger().onTrue(intake.runIntake(0.1));
         joystick.leftTrigger().onTrue(intake.extake(0.1));
-
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        // joystick.back().and(joystick.y()).whileTrue(swerve.sysIdDynamic(Direction.kForward));
-        // joystick.back().and(joystick.x()).whileTrue(swerve.sysIdDynamic(Direction.kReverse));
-        // joystick.start().and(joystick.y()).whileTrue(swerve.sysIdQuasistatic(Direction.kForward));
-        // joystick.start().and(joystick.x()).whileTrue(swerve.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));

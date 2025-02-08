@@ -32,8 +32,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import raidzero.robot.TunerConstants;
-import raidzero.robot.TunerConstants.TunerSwerveDrivetrain;
+import raidzero.robot.subsystems.drivetrain.TunerConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -129,7 +128,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     );
 
     // The SysId routine to test
-    private SysIdRoutine sysIdRoutineToApply = sysIdRoutineTranslation;
+    private SysIdRoutine sysIdRoutineToApply = sysIdRoutineSteer;
 
     /**
      * Constructs a CTRE SwerveDrivetrain using the specified constants.
