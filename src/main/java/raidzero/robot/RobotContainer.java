@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -48,6 +49,7 @@ public class RobotContainer {
         SmartDashboard.putData("AutoChooser", autoChooser);
 
         configureBindings();
+        registerPathplannerCommands();
 
         // * Set positions for things here in the future
         // arm.resetJointPosition();
@@ -79,6 +81,15 @@ public class RobotContainer {
         joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
 
         swerve.registerTelemetry(logger::telemeterize);
+    }
+
+    private void registerPathplannerCommands() {
+        NamedCommands.registerCommand("ArmIntakeCoral", arm.moveArm(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]));
+        NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.L3_SCORING_POS_M[0], Constants.L3_SCORING_POS_M[1]));
+        NamedCommands.registerCommand("ArmVertical", arm.moveArmWithRotations(0.25, 0.0));
+
+        NamedCommands.registerCommand("ExtakeCoral", intake.extake(0.6));
+        NamedCommands.registerCommand("IntakeCoral", intake.runIntake(0.6));
     }
 
     public Command getAutonomousCommand() {
