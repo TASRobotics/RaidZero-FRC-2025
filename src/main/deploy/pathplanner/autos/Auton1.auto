@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auton1-1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auton1-2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auton1-3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auton1-4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Auton1-3"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
