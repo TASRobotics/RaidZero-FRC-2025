@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.149,
-        "y": 2.869
+        "x": 7.099118852459018,
+        "y": 0.4502663934426221
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.273430813117951,
-        "y": 2.02111269614827
+        "x": 7.099118852459018,
+        "y": 1.450266393442624
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.198,
-        "y": 1.057
+        "x": 7.099118852459018,
+        "y": 4.053770491803278
       },
       "prevControl": {
-        "x": 2.483129043865917,
-        "y": 1.4307293733784359
+        "x": 7.099118852459018,
+        "y": 2.737913590008199
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 53.5
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Auton1",
+  "folder": "Tuning",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

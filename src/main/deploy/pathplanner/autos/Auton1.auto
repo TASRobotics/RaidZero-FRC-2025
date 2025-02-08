@@ -5,33 +5,98 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Auton1-1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Auton1-1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmL3"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Auton1-2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Auton1-2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmIntakeCoral"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Auton1-3"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Auton1-3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmL3"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Auton1-4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Auton1-4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmIntakeCoral"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Auton1-3"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Auton1-3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmL3"
+                }
+              }
+            ]
           }
         }
       ]
