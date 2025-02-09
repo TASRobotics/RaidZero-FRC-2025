@@ -84,12 +84,12 @@ public class RobotContainer {
     }
 
     private void registerPathplannerCommands() {
-        NamedCommands.registerCommand("ArmIntakeCoral", arm.moveArm(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]));
-        NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.L3_SCORING_POS_M[0], Constants.L3_SCORING_POS_M[1]));
-        NamedCommands.registerCommand("ArmVertical", arm.moveArmWithRotations(0.25, 0.0));
+        NamedCommands.registerCommand("ArmIntakeCoral", arm.moveArm(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]).withTimeout(2.0));
+        NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.L3_SCORING_POS_M[0], Constants.L3_SCORING_POS_M[1]).withTimeout(2.0));
+        NamedCommands.registerCommand("ArmVertical", arm.moveArmWithRotations(0.25, 0.0).withTimeout(2.0));
 
-        NamedCommands.registerCommand("ExtakeCoral", intake.extake(0.6));
-        NamedCommands.registerCommand("IntakeCoral", intake.runIntake(0.6));
+        NamedCommands.registerCommand("ExtakeCoral", intake.extake(0.1));
+        NamedCommands.registerCommand("IntakeCoral", intake.runIntake(0.1));
     }
 
     public Command getAutonomousCommand() {
