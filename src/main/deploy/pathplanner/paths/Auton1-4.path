@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.841,
-        "y": 2.914
+        "x": 3.8408533079300025,
+        "y": 2.9135428474814624
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.096345151808547,
-        "y": 3.031756494924806
+        "x": 4.09619845973855,
+        "y": 3.0312993424062684
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Auton1-3End"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "StationPickup"
     }
   ],
   "rotationTargets": [],

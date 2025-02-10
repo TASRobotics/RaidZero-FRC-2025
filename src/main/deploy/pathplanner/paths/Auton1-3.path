@@ -12,7 +12,7 @@
         "y": 1.2425052891074075
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "StationPickup"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Auton1-3End"
     }
   ],
   "rotationTargets": [],
