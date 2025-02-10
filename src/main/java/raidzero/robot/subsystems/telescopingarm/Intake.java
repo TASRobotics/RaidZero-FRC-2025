@@ -53,7 +53,8 @@ public class Intake extends SubsystemBase {
     public Command runIntake(double speed) {
         return Commands.run(() -> runRoller(speed), this)
             .until(() -> limit.getMeasurement().distance_mm <= 40)
-            .andThen(Commands.run(() -> runRoller(-0.1), this).withTimeout(0.1).andThen(() -> stopRoller()));
+            .andThen(Commands.run(() -> runRoller(-0.1), this).withTimeout(0.1))
+            .andThen(() -> stopRoller());
     }
 
     public Command extake(double speed) {

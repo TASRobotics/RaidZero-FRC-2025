@@ -29,7 +29,7 @@ public class RobotContainer {
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+        .withDriveRequestType(DriveRequestType.Velocity); // Use open-loop control for drive motors
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
@@ -65,7 +65,7 @@ public class RobotContainer {
 
         arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]), 0.0));
 
-        joystick.a().whileTrue(swerve.applyRequest(() -> brake));
+        // joystick.a().whileTrue(swerve.applyRequest(() -> brake));
 
         joystick.b().whileTrue(arm.moveArm(Constants.L3_SCORING_POS_M[0], Constants.L3_SCORING_POS_M[1]));
         joystick.x().whileTrue(arm.moveArm(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]));
@@ -74,6 +74,13 @@ public class RobotContainer {
 
         joystick.rightTrigger().onTrue(intake.runIntake(0.1));
         joystick.leftTrigger().onTrue(intake.extake(0.1));
+
+        // Run SysId routines when holding back/start and X/Y.
+        // Note that each routine should be run exactly once in a single log.
+        // joystick.y().whileTrue(swerve.sysIdDynamic(Direction.kForward));
+        // joystick.x().whileTrue(swerve.sysIdDynamic(Direction.kReverse));
+        // joystick.b().whileTrue(swerve.sysIdQuasistatic(Direction.kForward));
+        // joystick.a().whileTrue(swerve.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
         joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
