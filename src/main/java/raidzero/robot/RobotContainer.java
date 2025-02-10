@@ -45,11 +45,12 @@ public class RobotContainer {
     public final SendableChooser<Command> autoChooser;
 
     public RobotContainer() {
+        registerPathplannerCommands();
+
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("AutoChooser", autoChooser);
 
         configureBindings();
-        registerPathplannerCommands();
 
         // * Set positions for things here in the future
         // arm.resetJointPosition();
