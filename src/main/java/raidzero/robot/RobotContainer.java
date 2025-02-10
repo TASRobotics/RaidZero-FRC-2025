@@ -94,6 +94,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return AutoBuilder.buildAuto("Auton1");
+        return autoChooser.getSelected();
     }
 }
