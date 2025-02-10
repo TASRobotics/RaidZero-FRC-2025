@@ -4,6 +4,7 @@
   "holonomicMode": true,
   "pathFolders": [
     "Auton1",
+    "Auton2",
     "Tuning"
   ],
   "autoFolders": [],
