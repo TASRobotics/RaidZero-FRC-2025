@@ -96,7 +96,7 @@ public class Limelight extends SubsystemBase {
             0,
             0
         );
-        SmartDashboard.putBoolean("limeFLNULL", limeFL == null);
+        limeFL = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-fl");
 
         if (limeFL != null && limeFL.pose != null) {
             ignoreFlLime = !poseInField(limeFL.pose) ||
