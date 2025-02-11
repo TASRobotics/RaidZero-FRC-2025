@@ -38,7 +38,7 @@ public class Limelight extends SubsystemBase {
     private static Limelight instance = null;
 
     private Limelight() {
-        initialize();
+        // initialize();
     }
 
     public void setStreamMode(String limelightName, STREAM_MODE mode) {
