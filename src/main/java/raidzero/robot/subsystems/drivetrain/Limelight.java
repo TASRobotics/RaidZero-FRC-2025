@@ -105,7 +105,7 @@ public class Limelight extends SubsystemBase {
                 (limeFLPrev != null && (limeFL.pose.getTranslation().getDistance(limeFLPrev.pose.getTranslation()) /
                     (limeFL.timestampSeconds - limeFLPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeFL.rawFiducials.length > 0 && limeFL.rawFiducials[0].ambiguity > 0.5 &&
-                    limeFL.rawFiducials[0].distToCamera > 3.5);
+                    limeFL.rawFiducials[0].distToCamera > 4.0);
 
             if (!ignoreAllLimes && !ignoreFlLime) {
                 SmartDashboard.putBoolean("FLpose", true);
@@ -141,7 +141,7 @@ public class Limelight extends SubsystemBase {
                 (limeFRPrev != null && (limeFR.pose.getTranslation().getDistance(limeFRPrev.pose.getTranslation()) /
                     (limeFR.timestampSeconds - limeFRPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeFR.rawFiducials.length > 0 && limeFR.rawFiducials[0].ambiguity > 0.5 &&
-                    limeFR.rawFiducials[0].distToCamera > 3.5);
+                    limeFR.rawFiducials[0].distToCamera > 4.0);
 
             if (!ignoreAllLimes && !ignoreFrLime) {
                 SmartDashboard.putBoolean("FRpose", true);
@@ -177,7 +177,7 @@ public class Limelight extends SubsystemBase {
                 (limeBLPrev != null && (limeBL.pose.getTranslation().getDistance(limeBLPrev.pose.getTranslation()) /
                     (limeBL.timestampSeconds - limeBLPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeBL.rawFiducials.length > 0 && limeBL.rawFiducials[0].ambiguity > 0.5 &&
-                    limeBL.rawFiducials[0].distToCamera > 3.5);
+                    limeBL.rawFiducials[0].distToCamera > 4.0);
 
             if (!ignoreAllLimes && !ignoreBlLime) {
                 SmartDashboard.putBoolean("BLpose", true);
@@ -213,7 +213,7 @@ public class Limelight extends SubsystemBase {
                 (limeBRPrev != null && (limeBR.pose.getTranslation().getDistance(limeBRPrev.pose.getTranslation()) /
                     (limeBR.timestampSeconds - limeBRPrev.timestampSeconds)) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude()) ||
                 (limeBR.rawFiducials.length > 0 && limeBR.rawFiducials[0].ambiguity > 0.5 &&
-                    limeBR.rawFiducials[0].distToCamera > 3.5);
+                    limeBR.rawFiducials[0].distToCamera > 4.0);
 
             if (!ignoreAllLimes && !ignoreBrLime) {
                 SmartDashboard.putBoolean("BRpose", true);
