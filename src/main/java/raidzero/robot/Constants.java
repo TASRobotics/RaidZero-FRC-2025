@@ -17,8 +17,8 @@ public class Constants {
 
             public static final double FL_Z_OFFSET = 0.2689;
             public static final double FR_Z_OFFSET = 0.2689;
-            public static final double BL_Z_OFFSET = 0.2521;
-            public static final double BR_Z_OFFSET = 0.2521;
+            public static final double BL_Z_OFFSET = -0.2521;
+            public static final double BR_Z_OFFSET = -0.2521;
 
             public static final double FL_ROLL = 0.0;
             public static final double FR_ROLL = 0.0;
