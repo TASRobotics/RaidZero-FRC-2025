@@ -24,6 +24,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ExtakeCoral"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -75,6 +81,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ExtakeCoral"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -100,7 +112,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton2-3"
+                  "pathName": "Auton2-5"
                 }
               },
               {
@@ -123,6 +135,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeCoral"
           }
         }
       ]

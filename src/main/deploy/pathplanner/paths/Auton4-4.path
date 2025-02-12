@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.9388001794378456,
-        "y": 2.857544790013532
+        "x": 3.7342500000000003,
+        "y": 3.02075
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7960951254401407,
-        "y": 1.106155438490316
+        "x": 2.46675,
+        "y": 1.919
       },
       "isLocked": false,
-      "linkedName": "Auton1-3End"
+      "linkedName": "Auton4-3End"
     },
     {
       "anchor": {
@@ -45,10 +45,10 @@
     "rotation": 53.5
   },
   "reversed": false,
-  "folder": "Auton1",
+  "folder": "Auton4",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 118.50264882531862
+    "rotation": 60.11996803481537
   },
   "useDefaultConstraints": true
 }

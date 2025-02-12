@@ -318,8 +318,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                         .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
                 ),
                 new PPHolonomicDriveController(
-                    new PIDConstants(5, 0, 0),
-                    new PIDConstants(1, 0, 0)
+                    new PIDConstants(3.0, 0, 0),
+                    new PIDConstants(3, 0, 0)
                 ),
                 RobotConfig.fromGUISettings(),
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
