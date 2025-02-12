@@ -53,8 +53,8 @@ public class RobotContainer {
         configureBindings();
 
         // * Set positions for things here in the future
-        // arm.resetJointPosition();
-        arm.setJointPosition(0.25);
+        arm.resetJointPosition();
+        // arm.setJointPosition(0.25);
     }
 
     private void configureBindings() {
