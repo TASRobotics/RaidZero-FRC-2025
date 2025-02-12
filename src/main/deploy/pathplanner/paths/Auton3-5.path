@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.200193044362767,
+        "y": 1.0787473025492056
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.0785736400456645,
+        "y": 1.791013836380157
+      },
+      "isLocked": false,
+      "linkedName": "StationPickup"
+    },
+    {
+      "anchor": {
+        "x": 4.019635186451738,
+        "y": 2.862323798533174
+      },
+      "prevControl": {
+        "x": 3.3197929274918607,
+        "y": 2.1988865812027916
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Auton1-5End"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 1.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 60.11996803481537
+  },
+  "reversed": false,
+  "folder": "Auton3",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 53.5
+  },
+  "useDefaultConstraints": true
+}
