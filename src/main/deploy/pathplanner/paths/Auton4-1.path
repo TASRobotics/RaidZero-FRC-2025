@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.200193044362767,
-        "y": 1.0787473025492056
+        "x": 7.592189728958631,
+        "y": 1.9062767475035651
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.58375,
-        "y": 1.7434999999999992
+        "x": 5.1675,
+        "y": 0.7197499999999986
       },
       "isLocked": false,
-      "linkedName": "StationPickup"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 2.862323798533174
       },
       "prevControl": {
-        "x": 3.315,
-        "y": 1.8214999999999995
+        "x": 2.9445000000000006,
+        "y": 1.6654999999999993
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Auton3-3End"
+      "linkedName": "Auton4-1End"
     }
   ],
   "rotationTargets": [],
@@ -45,10 +45,10 @@
     "rotation": 60.11996803481537
   },
   "reversed": false,
-  "folder": "Auton3",
+  "folder": "Auton4",
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": 53.5
+    "velocity": 0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

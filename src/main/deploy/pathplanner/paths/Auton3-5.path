@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 4.019635186451738,
-        "y": 2.862323798533174
+        "x": 3.7342500000000003,
+        "y": 3.02075
       },
       "prevControl": {
-        "x": 3.3197929274918607,
-        "y": 2.1988865812027916
+        "x": 3.0344077410401233,
+        "y": 2.3573127826696174
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Auton1-5End"
+      "linkedName": "Auton4-3End"
     }
   ],
   "rotationTargets": [],

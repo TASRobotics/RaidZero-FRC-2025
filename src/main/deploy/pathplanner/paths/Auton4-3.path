@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.58375,
-        "y": 1.7434999999999992
+        "x": 2.2620000000000005,
+        "y": 1.8215
       },
       "isLocked": false,
       "linkedName": "StationPickup"
     },
     {
       "anchor": {
-        "x": 4.019635186451738,
-        "y": 2.862323798533174
+        "x": 3.7342500000000003,
+        "y": 3.02075
       },
       "prevControl": {
-        "x": 3.315,
-        "y": 1.8214999999999995
+        "x": 2.8957500000000005,
+        "y": 1.9774999999999998
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Auton3-3End"
+      "linkedName": "Auton4-3End"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": 60.11996803481537
   },
   "reversed": false,
-  "folder": "Auton3",
+  "folder": "Auton4",
   "idealStartingState": {
     "velocity": 0.0,
     "rotation": 53.5
