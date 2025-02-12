@@ -85,7 +85,7 @@ public class RobotContainer {
     }
 
     private void registerPathplannerCommands() {
-        NamedCommands.registerCommand("ArmIntakeCoral", arm.moveArm(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]));
+        NamedCommands.registerCommand("ArmIntakeCoral", arm.goToIntakePos());
         NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.L3_SCORING_POS_M[0], Constants.L3_SCORING_POS_M[1]));
         NamedCommands.registerCommand("ArmVertical", arm.moveArmWithRotations(0.25, 0.0));
 
