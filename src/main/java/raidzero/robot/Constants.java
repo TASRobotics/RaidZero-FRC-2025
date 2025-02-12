@@ -12,7 +12,7 @@ public class Constants {
             public static final double CONVERSION_FACTOR = 0.022 * Math.PI;
 
             public static final double MAX_LENGTH_M = 1.8288;
-            public static final double MIN_LENGTH_M = 0.0; 
+            public static final double MIN_LENGTH_M = 0.0;
 
             public static final double KS = 0.0;
             public static final double KV = 0.0;

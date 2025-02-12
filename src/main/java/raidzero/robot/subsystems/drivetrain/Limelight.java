@@ -25,11 +25,11 @@ public class Limelight extends SubsystemBase {
     private boolean ignoreBlLime = false;
     private boolean ignoreBrLime = false;
     private boolean ignoreAllLimes = false;
-    
-    private StructPublisher <Pose2d> flNT = NetworkTableInstance.getDefault().getStructTopic("flNT", Pose2d.struct).publish();
-    private StructPublisher <Pose2d> frNT = NetworkTableInstance.getDefault().getStructTopic("frNT", Pose2d.struct).publish();
-    private StructPublisher <Pose2d> blNT = NetworkTableInstance.getDefault().getStructTopic("blNT", Pose2d.struct).publish();
-    private StructPublisher <Pose2d> brNT = NetworkTableInstance.getDefault().getStructTopic("brNT", Pose2d.struct).publish();
+
+    private StructPublisher<Pose2d> flNT = NetworkTableInstance.getDefault().getStructTopic("flNT", Pose2d.struct).publish();
+    private StructPublisher<Pose2d> frNT = NetworkTableInstance.getDefault().getStructTopic("frNT", Pose2d.struct).publish();
+    private StructPublisher<Pose2d> blNT = NetworkTableInstance.getDefault().getStructTopic("blNT", Pose2d.struct).publish();
+    private StructPublisher<Pose2d> brNT = NetworkTableInstance.getDefault().getStructTopic("brNT", Pose2d.struct).publish();
 
     private LimelightHelpers.PoseEstimate limeFL, limeFR, limeBL, limeBR;
     private LimelightHelpers.PoseEstimate limeFLPrev, limeFRPrev, limeBLPrev, limeBRPrev;
