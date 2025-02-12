@@ -37,9 +37,7 @@ public class Limelight extends SubsystemBase {
     private Swerve swerve = Swerve.system();
     private static Limelight instance = null;
 
-    private Limelight() {
-        // initialize();
-    }
+    private Limelight() {}
 
     public void setStreamMode(String limelightName, STREAM_MODE mode) {
         if (mode == STREAM_MODE.STANDARD) {
@@ -240,52 +238,6 @@ public class Limelight extends SubsystemBase {
      */
     private boolean poseInField(Pose2d pose) {
         return pose.getTranslation().getX() < 16 && pose.getTranslation().getY() < 8;
-    }
-
-    /**
-     * <ul><li>Initializes the limelight subsystem
-     * <li>Configures the limelight camera poses</ul>
-     */
-    private void initialize() {
-        LimelightHelpers.setCameraPose_RobotSpace(
-            "limelight-fl",
-            Constants.Limelight.Offsets.FL_X_OFFSET,
-            Constants.Limelight.Offsets.FL_Z_OFFSET,
-            Constants.Limelight.Offsets.FL_Y_OFFSET,
-            Constants.Limelight.Offsets.FL_ROLL,
-            Constants.Limelight.Offsets.FL_PITCH,
-            Constants.Limelight.Offsets.FL_YAW
-        );
-
-        LimelightHelpers.setCameraPose_RobotSpace(
-            "limelight-fr",
-            Constants.Limelight.Offsets.FR_X_OFFSET,
-            Constants.Limelight.Offsets.FR_Z_OFFSET,
-            Constants.Limelight.Offsets.FR_Y_OFFSET,
-            Constants.Limelight.Offsets.FR_ROLL,
-            Constants.Limelight.Offsets.FR_PITCH,
-            Constants.Limelight.Offsets.FR_YAW
-        );
-
-        LimelightHelpers.setCameraPose_RobotSpace(
-            "limelight-bl",
-            Constants.Limelight.Offsets.BL_X_OFFSET,
-            Constants.Limelight.Offsets.BL_Z_OFFSET,
-            Constants.Limelight.Offsets.BL_Y_OFFSET,
-            Constants.Limelight.Offsets.BL_ROLL,
-            Constants.Limelight.Offsets.BL_PITCH,
-            Constants.Limelight.Offsets.BL_YAW
-        );
-
-        LimelightHelpers.setCameraPose_RobotSpace(
-            "limelight-br",
-            Constants.Limelight.Offsets.BR_Z_OFFSET,
-            Constants.Limelight.Offsets.BR_X_OFFSET,
-            Constants.Limelight.Offsets.BR_Y_OFFSET,
-            Constants.Limelight.Offsets.BR_ROLL,
-            Constants.Limelight.Offsets.BR_PITCH,
-            Constants.Limelight.Offsets.BR_YAW
-        );
     }
 
     /**
