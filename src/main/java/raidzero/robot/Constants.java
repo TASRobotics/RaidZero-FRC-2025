@@ -7,17 +7,17 @@ public class Constants {
         public class Offsets {
             public static final double FL_X_OFFSET = -0.2155;
             public static final double FR_X_OFFSET = 0.2155;
-            public static final double BL_X_OFFSET = -0.2445;
+            public static final double BL_X_OFFSET = -0.254;
             public static final double BR_X_OFFSET = 0.2445;
 
             public static final double FL_Y_OFFSET = 0.2216;
             public static final double FR_Y_OFFSET = 0.2216;
-            public static final double BL_Y_OFFSET = 0.2216;
+            public static final double BL_Y_OFFSET = 0.2286;
             public static final double BR_Y_OFFSET = 0.2216;
 
             public static final double FL_Z_OFFSET = 0.2689;
             public static final double FR_Z_OFFSET = 0.2689;
-            public static final double BL_Z_OFFSET = -0.2521;
+            public static final double BL_Z_OFFSET = 0.1778;
             public static final double BR_Z_OFFSET = -0.2521;
 
             public static final double FL_ROLL = 0.0;
@@ -27,12 +27,12 @@ public class Constants {
             
             public static final double FL_PITCH = 20.0;
             public static final double FR_PITCH = 20.0;
-            public static final double BL_PITCH = 35.0;
+            public static final double BL_PITCH = 45.0;
             public static final double BR_PITCH = 35.0;
 
             public static final double FL_YAW = -45.0;
             public static final double FR_YAW = 45.0;
-            public static final double BL_YAW = 135.0;
+            public static final double BL_YAW = 180.0;
             public static final double BR_YAW = -135.0;
         }
 
