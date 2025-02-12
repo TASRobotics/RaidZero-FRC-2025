@@ -9,15 +9,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "ArmL3"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "Auton1-1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ArmL3"
                 }
               }
             ]
@@ -126,7 +126,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton1-3"
+                  "pathName": "Auton1-5"
                 }
               },
               {
