@@ -94,11 +94,11 @@ public class Constants {
     // TODO: find these
     public static final double[] L4_SCORING_POS_M = { 0.0, Telescope.MAX_HEIGHT_M };
     // public static final double[] L3_SCORING_POS_M = { -0.1, 0.8 - Telescope.GROUND_OFFSET };
-    public static final double[] L3_SCORING_POS_M = { -0.1, 1.55 };
+    public static final double[] L3_SCORING_POS_M = { -0.13, 1.55 };
     public static final double[] L2_SCORING_POS_M = { -0.0, 0.2 };
     public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-    public static final double[] INTAKE_POS_M = { 0.53, 0.82 };
+    public static final double[] INTAKE_POS_M = { 0.53, 0.85 };
 
     public static final double[] HOME_POS_M = { 0.0, 0.0 };
 }
