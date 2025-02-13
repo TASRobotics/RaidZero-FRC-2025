@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import raidzero.robot.subsystems.drivetrain.TunerConstants.TunerSwerveDrivetrain;
+import raidzero.robot.wrappers.LimelightHelpers;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -252,6 +253,25 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return this.sysIdRoutineToApply.dynamic(direction);
+    }
+
+    /**
+     * Moves towards a desired coral station using Limelight TX and TY values
+     * 
+     * @return The command to move towards the station
+     */
+    public Command goToStation() {
+        SwerveRequest.RobotCentric swerveRequest = new SwerveRequest.RobotCentric();
+
+        return Commands.run(
+            () -> this.setControl(
+                swerveRequest.withVelocityX(1.0).withRotationalRate(LimelightHelpers.getTX("limelight-bl") * -0.125)
+            )
+        ).until(() -> {
+            return LimelightHelpers.getTX("limelight-bl") < 0.05 && LimelightHelpers.getTY("limelight-bl") < 0.05;
+        }).andThen(
+            this.stop()
+        );
     }
 
     /**
