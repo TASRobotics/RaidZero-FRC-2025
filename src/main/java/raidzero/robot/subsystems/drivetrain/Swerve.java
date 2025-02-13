@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import raidzero.robot.subsystems.drivetrain.TunerConstants.TunerSwerveDrivetrain;
@@ -251,6 +252,21 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return this.sysIdRoutineToApply.dynamic(direction);
+    }
+
+    /**
+     * Stops the swerve
+     * 
+     * @return The command to stop the swerve
+     */
+    public Command stop() {
+        SwerveRequest.RobotCentric swerveRequest = new SwerveRequest.RobotCentric();
+
+        return Commands.runOnce(
+            () -> this.setControl(
+                swerveRequest.withVelocityX(0.0).withVelocityY(0.0).withRotationalRate(0.0)
+            )
+        );
     }
 
     @Override
