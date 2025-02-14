@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.149,
-        "y": 2.869
+        "x": 5.244082371603729,
+        "y": 3.027995859616813
       },
       "prevControl": {
-        "x": 6.07968476419966,
-        "y": 2.1880163183790886
+        "x": 6.174767135803389,
+        "y": 2.3470121779959014
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Auton1-1End"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 119.75670901143404
   },
   "reversed": false,
   "folder": "Auton1",

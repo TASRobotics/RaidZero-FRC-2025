@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton1-1"
+                  "pathName": "Auton2-1"
                 }
               },
               {
@@ -24,26 +24,19 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ExtakeCoral"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Auton1-2"
-                      }
-                    }
-                  ]
+                  "pathName": "Auton2-2"
                 }
               },
               {
@@ -62,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton1-3"
+                  "pathName": "Auton2-3"
                 }
               },
               {
@@ -88,32 +81,25 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ExtakeCoral"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton1-4"
+                  "pathName": "Auton2-4"
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "ArmIntakeCoral"
-                      }
-                    }
-                  ]
+                  "name": "ArmIntakeCoral"
                 }
               }
             ]
@@ -126,7 +112,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton1-5"
+                  "pathName": "Auton2-5"
                 }
               },
               {
@@ -149,6 +135,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeCoral"
           }
         }
       ]

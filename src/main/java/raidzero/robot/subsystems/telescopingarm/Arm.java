@@ -3,6 +3,8 @@ package raidzero.robot.subsystems.telescopingarm;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import javax.sql.rowset.JoinRowSet;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -11,6 +13,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -59,6 +62,16 @@ public class Arm extends SubsystemBase {
         // return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this);
         return Commands.run(() -> moveTelescope(telescopeSetpoint), this)
             .alongWith(Commands.waitSeconds(0.5).andThen(() -> moveJoint(jointSetpoint)));
+    }
+
+    public Command goToIntakePos() {
+        double telescopeSetpoint = -1 * calculateTelescopeHeight(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]);
+        double jointSetpoint = calculateJointAngle(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]);
+
+        return Commands.run(() -> {
+            moveTelescope(telescopeSetpoint);
+            moveJoint(jointSetpoint);
+        }, this);
     }
 
     public Command moveArmWithRotations(double jointSetpoint, double telescopeSetpoint) {
@@ -182,7 +195,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void resetJointPosition() {
-        joint.setPosition(jointCANcoder.getPosition().getValueAsDouble() + 0.25);
+        joint.setPosition((jointCANcoder.getPosition().getValueAsDouble() * Joint.CANCODER_GEAR_RATIO));
     }
 
     /**
@@ -294,7 +307,10 @@ public class Arm extends SubsystemBase {
      */
     private CANcoderConfiguration jointCANCoderConfiguration() {
         CANcoderConfiguration configuration = new CANcoderConfiguration();
+
         configuration.MagnetSensor.MagnetOffset = Joint.CANCODER_OFFSET;
+        configuration.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+
         return configuration;
     }
 

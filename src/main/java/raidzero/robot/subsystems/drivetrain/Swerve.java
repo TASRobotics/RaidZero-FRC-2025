@@ -30,9 +30,11 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import raidzero.robot.subsystems.drivetrain.TunerConstants.TunerSwerveDrivetrain;
+import raidzero.robot.wrappers.LimelightHelpers;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -253,6 +255,42 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         return this.sysIdRoutineToApply.dynamic(direction);
     }
 
+    /**
+     * Moves towards a desired coral station using Limelight TX and TY values
+     * 
+     * @return The command to move towards the station
+     */
+    public Command goToStation() {
+        SwerveRequest.RobotCentric swerveRequest = new SwerveRequest.RobotCentric();
+
+        return Commands.run(
+            () -> this.setControl(
+                swerveRequest
+                    .withVelocityX(LimelightHelpers.getTY("limelight-bl") * 0.07)
+                    .withRotationalRate(LimelightHelpers.getTX("limelight-bl") * -0.07)
+            )
+        ).until(() -> {
+            return LimelightHelpers.getTX("limelight-bl") < 0.08 && LimelightHelpers.getTY("limelight-bl") < 0.08;
+        }).andThen(
+            this.stop()
+        );
+    }
+
+    /**
+     * Stops the swerve
+     * 
+     * @return The command to stop the swerve
+     */
+    public Command stop() {
+        SwerveRequest.RobotCentric swerveRequest = new SwerveRequest.RobotCentric();
+
+        return Commands.runOnce(
+            () -> this.setControl(
+                swerveRequest.withVelocityX(0.0).withVelocityY(0.0).withRotationalRate(0.0)
+            )
+        );
+    }
+
     @Override
     public void periodic() {
         /*
@@ -318,8 +356,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                         .withWheelForceFeedforwardsY(feedforwards.robotRelativeForcesYNewtons())
                 ),
                 new PPHolonomicDriveController(
-                    new PIDConstants(5, 0, 0),
-                    new PIDConstants(1, 0, 0)
+                    new PIDConstants(3.5, 0, 0),
+                    new PIDConstants(3, 0, 0)
                 ),
                 RobotConfig.fromGUISettings(),
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
