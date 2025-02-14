@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import raidzero.robot.subsystems.telescopingarm.Constants.Telescope;
-import raidzero.robot.Telemetry;
 import raidzero.robot.subsystems.telescopingarm.Constants.Joint;
 
 public class Arm extends SubsystemBase {
