@@ -91,6 +91,8 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("ExtakeCoral", intake.extake(0.1));
         NamedCommands.registerCommand("IntakeCoral", intake.runIntake(0.1));
+
+        NamedCommands.registerCommand("GoToStation", swerve.goToStation());
     }
 
     public Command getAutonomousCommand() {
