@@ -265,10 +265,12 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
         return Commands.run(
             () -> this.setControl(
-                swerveRequest.withVelocityX(1.0).withRotationalRate(LimelightHelpers.getTX("limelight-bl") * -0.125)
+                swerveRequest
+                    .withVelocityX(LimelightHelpers.getTY("limelight-bl") * 0.07)
+                    .withRotationalRate(LimelightHelpers.getTX("limelight-bl") * -0.07)
             )
         ).until(() -> {
-            return LimelightHelpers.getTX("limelight-bl") < 0.05 && LimelightHelpers.getTY("limelight-bl") < 0.05;
+            return LimelightHelpers.getTX("limelight-bl") < 0.08 && LimelightHelpers.getTY("limelight-bl") < 0.08;
         }).andThen(
             this.stop()
         );
