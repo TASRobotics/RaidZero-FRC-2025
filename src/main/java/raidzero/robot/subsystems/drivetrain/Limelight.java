@@ -250,7 +250,10 @@ public class Limelight extends SubsystemBase {
      * @return True if the pose is inside the field dimensions, false otherwise
      */
     private boolean poseInField(Pose2d pose) {
-        return pose.getTranslation().getX() < 16 && pose.getTranslation().getY() < 8;
+        return pose.getTranslation().getX() > 0 &&
+            pose.getTranslation().getX() < 16 &&
+            pose.getTranslation().getY() > 0 &&
+            pose.getTranslation().getY() < 8;
     }
 
     /**
