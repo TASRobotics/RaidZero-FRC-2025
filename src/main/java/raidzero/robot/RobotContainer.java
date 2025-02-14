@@ -53,8 +53,8 @@ public class RobotContainer {
         configureBindings();
 
         // * Set positions for things here in the future
-        // arm.resetJointPosition();
-        arm.setJointPosition(0.25);
+        arm.resetJointPosition();
+        // arm.setJointPosition(0.25);
     }
 
     private void configureBindings() {
@@ -67,7 +67,6 @@ public class RobotContainer {
         );
 
         arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]), 0.0));
-        // arm.setDefaultCommand(arm.moveArmWithRotations(0.25, 0.0));
 
         joystick.a().whileTrue(swerve.applyRequest(() -> brake));
 

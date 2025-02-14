@@ -195,7 +195,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void resetJointPosition() {
-        joint.setPosition((jointCANcoder.getPosition().getValueAsDouble() + 0.25));
+        joint.setPosition((jointCANcoder.getPosition().getValueAsDouble() * Joint.CANCODER_GEAR_RATIO));
     }
 
     /**
@@ -308,8 +308,8 @@ public class Arm extends SubsystemBase {
     private CANcoderConfiguration jointCANCoderConfiguration() {
         CANcoderConfiguration configuration = new CANcoderConfiguration();
 
-        configuration.MagnetSensor.MagnetOffset = -0.274170;
-        // configuration.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        configuration.MagnetSensor.MagnetOffset = Joint.CANCODER_OFFSET;
+        configuration.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
 
         return configuration;
     }
