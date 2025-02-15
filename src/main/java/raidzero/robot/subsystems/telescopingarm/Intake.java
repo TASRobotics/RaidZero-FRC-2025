@@ -10,6 +10,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
 import au.grapplerobotics.interfaces.LaserCanInterface.RegionOfInterest;
 import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
@@ -74,6 +75,17 @@ public class Intake extends SubsystemBase {
      */
     public void stopRoller() {
         roller.stopMotor();
+    }
+
+    /**
+     * Gets the distance from the LaserCAN
+     * 
+     * @return The distance in mm, -1 if the LaserCAN cannot be found
+     */
+    public int getLimitDistance() {
+        Measurement measurement = limit.getMeasurement();
+
+        return measurement != null ? measurement.distance_mm : -1;
     }
 
     /**
