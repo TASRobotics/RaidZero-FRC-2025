@@ -15,7 +15,7 @@ public class Constants {
             LEFT, RIGHT
         }
 
-        public static final List<Pose2d> OTF_WAYPOINTS = new ArrayList<Pose2d>(List.of(
+        public static final List<Pose2d> STATION_WAYPOINTS = new ArrayList<Pose2d>(List.of(
             new Pose2d(1.10, 0.98, Rotation2d.fromDegrees(55)), // 12 Station
             new Pose2d(1.10, 7.07, Rotation2d.fromDegrees(-55)) // 13 Station
         ));
