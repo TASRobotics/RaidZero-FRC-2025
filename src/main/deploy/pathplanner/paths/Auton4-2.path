@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.0748223486452972,
-        "y": 1.0818069416070342
+        "x": 1.02,
+        "y": 1.1
       },
       "prevControl": {
-        "x": 2.1634534119727746,
-        "y": 2.3837886217880095
+        "x": 2.1086310633274774,
+        "y": 2.4019816801809757
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 53.5
+    "rotation": 52.56097758665035
   },
   "reversed": false,
   "folder": "Auton4",

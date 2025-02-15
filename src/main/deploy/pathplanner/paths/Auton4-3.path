@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0748223486452972,
-        "y": 1.0818069416070342
+        "x": 1.02,
+        "y": 1.1
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.136629304282531,
-        "y": 1.8245596390578285
+        "x": 2.0818069556372336,
+        "y": 1.8427526974507944
       },
       "isLocked": false,
       "linkedName": "StationPickup"
@@ -48,7 +48,7 @@
   "folder": "Auton4",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 53.5
+    "rotation": 52.56097758665035
   },
   "useDefaultConstraints": true
 }
