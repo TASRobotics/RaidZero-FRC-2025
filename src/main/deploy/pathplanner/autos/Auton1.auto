@@ -24,6 +24,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ExtakeCoral"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -53,6 +59,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
           }
         },
         {
@@ -88,6 +100,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ExtakeCoral"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -120,6 +138,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -149,6 +173,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeCoral"
           }
         }
       ]

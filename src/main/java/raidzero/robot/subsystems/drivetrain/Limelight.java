@@ -38,7 +38,9 @@ public class Limelight extends SubsystemBase {
     private Swerve swerve = Swerve.system();
     private static Limelight instance = null;
 
-    private Limelight() {}
+    private Limelight() {
+        this.startThread();
+    }
 
     public void setStreamMode(String limelightName, STREAM_MODE mode) {
         if (mode == STREAM_MODE.STANDARD) {
@@ -78,8 +80,25 @@ public class Limelight extends SubsystemBase {
         }
     }
 
-    @Override
-    public void periodic() {
+    /**
+     * Starts the Limelight odometry thread
+     */
+    private void startThread() {
+        new Thread(() -> {
+            while (true) {
+                loop();
+
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    // @Override
+    private void loop() {
         if (swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble() > 720) {
             ignoreAllLimes = true;
         } else {
@@ -250,7 +269,10 @@ public class Limelight extends SubsystemBase {
      * @return True if the pose is inside the field dimensions, false otherwise
      */
     private boolean poseInField(Pose2d pose) {
-        return pose.getTranslation().getX() < 16 && pose.getTranslation().getY() < 8;
+        return pose.getTranslation().getX() > 0 &&
+            pose.getTranslation().getX() < 16 &&
+            pose.getTranslation().getY() > 0 &&
+            pose.getTranslation().getY() < 8;
     }
 
     /**
