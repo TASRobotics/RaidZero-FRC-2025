@@ -2,6 +2,7 @@ package raidzero.robot.subsystems.drivetrain;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -13,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -20,6 +22,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.networktables.StructArrayPublisher;
@@ -34,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import raidzero.robot.subsystems.drivetrain.TunerConstants.TunerSwerveDrivetrain;
+import raidzero.robot.Constants;
 import raidzero.robot.wrappers.LimelightHelpers;
 
 /**
@@ -150,6 +154,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         SmartDashboard.putData("Field", field);
 
         configureAutoBuilder();
+        initializeOtf();
 
         if (Utils.isSimulation()) {
             this.startSimThread();
@@ -177,6 +182,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         SmartDashboard.putData("Field", field);
 
         configureAutoBuilder();
+        initializeOtf();
 
         if (Utils.isSimulation()) {
             this.startSimThread();
@@ -216,6 +222,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         SmartDashboard.putData("Field", field);
 
         configureAutoBuilder();
+        initializeOtf();
 
         if (Utils.isSimulation()) {
             this.startSimThread();
@@ -274,6 +281,61 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         }).andThen(
             this.stop()
         );
+    }
+
+    /**
+     * Returns a {@link Command} that moves the robot to the specified reef
+     * 
+     * @param reef The left or right reef
+     * @return The command to move to the reef
+     */
+    public Command pathToReef(Constants.Swerve.REEFS reef) {
+        if (reef == Constants.Swerve.REEFS.LEFT) {
+            return AutoBuilder.pathfindToPose(
+                this.getState().Pose.nearest(Constants.Swerve.LEFT_REEF_WAYPOINTS),
+                new PathConstraints(
+                    1.0,
+                    3.0,
+                    Units.degreesToRadians(540),
+                    Units.degreesToRadians(720)
+                )
+            );
+        } else {
+            return AutoBuilder.pathfindToPose(
+                this.getState().Pose.nearest(Constants.Swerve.RIGHT_REEF_WAYPOINTS),
+                new PathConstraints(
+                    1.0,
+                    3.0,
+                    Units.degreesToRadians(540),
+                    Units.degreesToRadians(720)
+                )
+            );
+        }
+    }
+
+    /**
+     * <ul>
+     * <li>Transforms each waypoint in the provided list for the red alliance
+     * <li><b><em>This method modifies the points within the list
+     * </ul>
+     * 
+     * @param waypoints The list of Pose2d waypoints (defined in blue origin coordinates)
+     */
+    private void transformWaypointsForAlliance(List<Pose2d> waypoints) {
+        final double FIELD_LENGTH = 17.55;
+        final double X_OFFSET = 0.0;
+
+        for (int i = 0; i < waypoints.size(); i++) {
+            Pose2d bluePose = waypoints.get(i);
+            waypoints.set(
+                i,
+                new Pose2d(
+                    FIELD_LENGTH - bluePose.getX() + X_OFFSET,
+                    bluePose.getY(),
+                    Rotation2d.fromDegrees(180 - bluePose.getRotation().getDegrees())
+                )
+            );
+        }
     }
 
     /**
@@ -342,6 +404,20 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         });
 
         this.simNotifier.startPeriodic(SIM_LOOP_PERIOD);
+    }
+
+    /**
+     * <ul>
+     * <li>Initializes the on-the-fly (OTF) waypoints for the robot
+     * <li>Transforms the waypoints for the red alliance if needed
+     * </ul>
+     */
+    private void initializeOtf() {
+        if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+            transformWaypointsForAlliance(Constants.Swerve.STATION_WAYPOINTS);
+            transformWaypointsForAlliance(Constants.Swerve.LEFT_REEF_WAYPOINTS);
+            transformWaypointsForAlliance(Constants.Swerve.RIGHT_REEF_WAYPOINTS);
+        }
     }
 
     private void configureAutoBuilder() {
