@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.9334125095492904,
+        "x": 4.943,
         "y": 2.853172854605601
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7907074555515856,
-        "y": 1.1017835030823855
+        "x": 3.8493741596848645,
+        "y": 1.1082072513204215
       },
       "isLocked": false,
       "linkedName": "Auton1-3End"
     },
     {
       "anchor": {
-        "x": 1.02,
-        "y": 1.1
+        "x": 1.032,
+        "y": 1.08
       },
       "prevControl": {
-        "x": 1.9834302490669171,
-        "y": 2.114446262597351
+        "x": 2.1705202288732393,
+        "y": 1.8696407350352118
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,11 +29,25 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 2.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,7 +56,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 52.56097758665035
+    "rotation": 54.0
   },
   "reversed": false,
   "folder": "Auton1",

@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.244082371603729,
-        "y": 3.027995859616813
+        "x": 5.261,
+        "y": 3.035
       },
       "prevControl": {
-        "x": 6.174767135803389,
-        "y": 2.3470121779959014
+        "x": 6.19168476419966,
+        "y": 2.3540163183790885
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,11 +29,25 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Reef appr",
+      "minWaypointRelativePos": 0.75,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.2,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 2.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,7 +56,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.75670901143404
+    "rotation": 119.76315889024825
   },
   "reversed": false,
   "folder": "Auton1",

@@ -3,24 +3,24 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.02,
-        "y": 1.1
+        "x": 1.032,
+        "y": 1.08
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3017428591045723,
-        "y": 1.3316193204715683
+        "x": 2.313742859104572,
+        "y": 1.3116193204715683
       },
       "isLocked": false,
       "linkedName": "StationPickup"
     },
     {
       "anchor": {
-        "x": 4.9334125095492904,
+        "x": 4.943,
         "y": 2.853172854605601
       },
       "prevControl": {
-        "x": 5.083671391513536,
+        "x": 5.093258881964245,
         "y": 1.5837181284081883
       },
       "nextControl": null,
@@ -29,11 +29,25 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Reef appr",
+      "minWaypointRelativePos": 0.75,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.2,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 2.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -48,7 +62,7 @@
   "folder": "Auton1",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 52.56097758665035
+    "rotation": 54.0
   },
   "useDefaultConstraints": true
 }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.02,
-        "y": 1.1
+        "x": 1.032,
+        "y": 1.08
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3895569556372331,
-        "y": 2.0280026974507948
+        "x": 1.4015569556372331,
+        "y": 2.0080026974507947
       },
       "isLocked": false,
       "linkedName": "StationPickup"
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 2.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -48,7 +48,7 @@
   "folder": "Auton4",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 52.56097758665035
+    "rotation": 54.0
   },
   "useDefaultConstraints": true
 }
