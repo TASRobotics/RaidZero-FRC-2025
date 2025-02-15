@@ -38,13 +38,12 @@ public class Arm extends SubsystemBase {
         telescope.getConfigurator().apply(telescopeConfiguration());
         telescope.setNeutralMode(NeutralModeValue.Brake);
 
-        joint = new TalonFX(Joint.MOTOR_ID);
-        joint.getConfigurator().apply((jointConfiguration()));
-        joint.setNeutralMode(NeutralModeValue.Brake);
-
         jointCANcoder = new CANcoder(Joint.CANCODER_ID);
         jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
 
+        joint = new TalonFX(Joint.MOTOR_ID);
+        joint.getConfigurator().apply((jointConfiguration()));
+        joint.setNeutralMode(NeutralModeValue.Brake);
     }
 
     /**

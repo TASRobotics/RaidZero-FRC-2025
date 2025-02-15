@@ -19,8 +19,7 @@ import raidzero.robot.subsystems.climb.Constants.Winch;
 public class Climb extends SubsystemBase {
     private static Climb system;
 
-    private TalonFX joint;
-    private TalonFX winch;
+    private TalonFX joint, winch;
 
     private Climb() {
         joint = new TalonFX(Joint.MOTOR_ID);
@@ -38,16 +37,35 @@ public class Climb extends SubsystemBase {
         }, this).until(stopCondition);
     }
 
-    public Command runWinch() {
-        return Commands.run(() -> winch.set(0.3));
+    public Command runJoint() {
+        return Commands.run(() -> joint.set(0.1), this);
     }
 
-    public Command stopClimb() {
-        return Commands.run(() -> winch.stopMotor(), this);
+    public Command reverseJoint() {
+        return Commands.run(() -> joint.set(-0.1), this);
+    }
+
+    public Command windWinch() {
+        return Commands.run(() -> winch.set(0.1));
     }
 
     public Command unwindWinch() {
         return Commands.run(() -> winch.set(-0.1), this);
+    }
+
+    public Command stopJoint() {
+        return Commands.run(() -> joint.stopMotor(), this);
+    }
+
+    public Command stopWinch() {
+        return Commands.run(() -> winch.stopMotor(), this);
+    }
+
+    public Command stopAll() {
+        return Commands.run(() -> {
+            winch.stopMotor();
+            joint.stopMotor();
+        }, this);
     }
 
     private TalonFXConfiguration jointConfig() {

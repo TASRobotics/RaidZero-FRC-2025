@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import raidzero.robot.subsystems.climb.Climb;
 import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
@@ -40,6 +41,7 @@ public class RobotContainer {
     public final Arm arm = Arm.system();
     public final Intake intake = Intake.system();
     public final Limelight limes = Limelight.system();
+    public final Climb climb = Climb.system();
 
     public final SendableChooser<Command> autoChooser;
 
@@ -65,7 +67,13 @@ public class RobotContainer {
             )
         );
 
-        arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]), 0.0));
+        // reset the field-centric heading on left bumper press
+        joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
+
+        swerve.registerTelemetry(logger::telemeterize);
+
+        // arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]), 0.0));
+        arm.setDefaultCommand(arm.moveArmWithRotations(0.25, 0.0));
 
         joystick.a().whileTrue(swerve.applyRequest(() -> brake));
 
@@ -77,10 +85,13 @@ public class RobotContainer {
         joystick.rightTrigger().onTrue(intake.runIntake(0.1));
         joystick.leftTrigger().onTrue(intake.extake(0.1));
 
-        // reset the field-centric heading on left bumper press
-        joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
+        climb.setDefaultCommand(climb.stopAll());
 
-        swerve.registerTelemetry(logger::telemeterize);
+        joystick.povLeft().whileTrue(climb.runJoint());
+        joystick.povRight().whileTrue(climb.reverseJoint());
+
+        joystick.povUp().whileTrue(climb.windWinch());
+        joystick.povDown().whileTrue(climb.unwindWinch());
     }
 
     private void registerPathplannerCommands() {
