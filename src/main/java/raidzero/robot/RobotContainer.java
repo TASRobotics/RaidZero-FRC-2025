@@ -94,7 +94,7 @@ public class RobotContainer {
                 () -> intake.getLimitDistance() >= 40
             ).withTimeout(1.0).andThen(() -> intake.stopRoller())
         );
-        NamedCommands.registerCommand("IntakeCoral", intake.runIntake(0.15).withTimeout(0.8).andThen(() -> intake.stopRoller()));
+        NamedCommands.registerCommand("IntakeCoral", intake.runIntake(0.12).withTimeout(0.8).andThen(() -> intake.stopRoller()));
 
         NamedCommands.registerCommand("GoToStation", swerve.goToStation());
     }
