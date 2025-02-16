@@ -270,9 +270,9 @@ public class Limelight extends SubsystemBase {
      */
     private boolean poseInField(Pose2d pose) {
         return pose.getTranslation().getX() > 0 &&
-            pose.getTranslation().getX() < 16 &&
+            pose.getTranslation().getX() < 17.55 &&
             pose.getTranslation().getY() > 0 &&
-            pose.getTranslation().getY() < 8;
+            pose.getTranslation().getY() < 8.05;
     }
 
     /**
