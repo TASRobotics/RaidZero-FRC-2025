@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import raidzero.robot.subsystems.algaeintake.Joint;
 import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
@@ -40,6 +41,7 @@ public class RobotContainer {
     public final Arm arm = Arm.system();
     public final Intake intake = Intake.system();
     public final Limelight limes = Limelight.system();
+    public final Joint algaeIntake = Joint.system();
 
     public final SendableChooser<Command> autoChooser;
 
@@ -66,13 +68,15 @@ public class RobotContainer {
         );
 
         arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]), 0.0));
+        
+        algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
 
         joystick.a().whileTrue(swerve.applyRequest(() -> brake));
 
         joystick.b().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
         joystick.x().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]));
         joystick.a().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L4_SCORING_POS_M[1]));
-        joystick.y().whileTrue(arm.moveArmWithRotations(0.25, 0.0));
+        joystick.y().whileTrue(arm.moveArmWithRotations(0.25, 0.0).alongWith(algaeIntake.moveJoint(0.0)));
 
         joystick.rightTrigger().onTrue(intake.runIntake(0.1));
         joystick.leftTrigger().onTrue(intake.extake(0.1));
