@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import raidzero.robot.subsystems.telescopingarm.Constants.Roller;
+import raidzero.robot.Constants;
 
 public class Intake extends SubsystemBase {
     private static Intake system;
@@ -28,10 +28,10 @@ public class Intake extends SubsystemBase {
     private LaserCan limit;
 
     private Intake() {
-        roller = new SparkMax(Roller.MOTOR_ID, MotorType.kBrushless);
+        roller = new SparkMax(Constants.TelescopingArm.Intake.MOTOR_ID, MotorType.kBrushless);
         roller.configure(rollerConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        rollerFollow = new SparkMax(Roller.FOLLOW_ID, MotorType.kBrushless);
+        rollerFollow = new SparkMax(Constants.TelescopingArm.Intake.FOLLOW_ID, MotorType.kBrushless);
         rollerFollow.configure(rollerFollowConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         limit = new LaserCan(0);
@@ -109,7 +109,7 @@ public class Intake extends SubsystemBase {
     private SparkBaseConfig rollerFollowConfiguration() {
         SparkMaxConfig configuration = new SparkMaxConfig();
 
-        configuration.follow(Roller.MOTOR_ID, true);
+        configuration.follow(Constants.TelescopingArm.Intake.MOTOR_ID, true);
         configuration.idleMode(IdleMode.kBrake);
 
         return configuration;
