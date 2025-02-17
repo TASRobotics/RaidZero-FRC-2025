@@ -60,7 +60,7 @@ public class Arm extends SubsystemBase {
 
         // return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this);
         return Commands.run(() -> moveTelescope(telescopeSetpoint), this)
-            .alongWith(Commands.waitSeconds(0.5).andThen(() -> moveJoint(jointSetpoint)));
+            .alongWith(Commands.waitSeconds(0.3).andThen(() -> moveJoint(jointSetpoint)));
     }
 
     public Command goToIntakePos() {
