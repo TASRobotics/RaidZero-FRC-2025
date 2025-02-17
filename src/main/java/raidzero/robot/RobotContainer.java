@@ -20,7 +20,6 @@ import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
 import raidzero.robot.subsystems.telescopingarm.*;
-import raidzero.robot.subsystems.telescopingarm.Constants;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -66,13 +65,13 @@ public class RobotContainer {
             )
         );
 
-        arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]), 0.0));
+        arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]), 0.0));
 
         joystick.a().whileTrue(swerve.applyRequest(() -> brake));
 
-        joystick.b().whileTrue(arm.moveArm(Constants.L3_SCORING_POS_M[0], Constants.L3_SCORING_POS_M[1]));
-        joystick.x().whileTrue(arm.moveArm(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]));
-        joystick.a().whileTrue(arm.moveArm(Constants.L4_SCORING_POS_M[0], Constants.L4_SCORING_POS_M[1]));
+        joystick.b().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
+        joystick.x().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]));
+        joystick.a().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L4_SCORING_POS_M[1]));
         joystick.y().whileTrue(arm.moveArmWithRotations(0.25, 0.0));
 
         joystick.rightTrigger().onTrue(intake.runIntake(0.1));
@@ -86,7 +85,7 @@ public class RobotContainer {
 
     private void registerPathplannerCommands() {
         NamedCommands.registerCommand("ArmIntakeCoral", arm.goToIntakePos());
-        NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.L3_SCORING_POS_M[0], Constants.L3_SCORING_POS_M[1]));
+        NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
         NamedCommands.registerCommand("ArmVertical", arm.moveArmWithRotations(0.25, 0.0));
 
         NamedCommands.registerCommand(

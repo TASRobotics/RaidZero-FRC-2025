@@ -135,7 +135,7 @@ public class Limelight extends SubsystemBase {
                 swerve.addVisionMeasurement(
                     limeFL.pose,
                     Utils.fpgaToCurrentTime(limeFL.timestampSeconds),
-                    VecBuilder.fill(0.5, 0.5, 9999999).div(LimelightHelpers.getTA("limelight-fl"))
+                    VecBuilder.fill(0.5, 0.5, 5).div(LimelightHelpers.getTA("limelight-fl"))
                 );
             } else {
                 SmartDashboard.putBoolean("FLpose", false);
@@ -174,7 +174,7 @@ public class Limelight extends SubsystemBase {
                 swerve.addVisionMeasurement(
                     limeFR.pose,
                     Utils.fpgaToCurrentTime(limeFR.timestampSeconds),
-                    VecBuilder.fill(0.5, 0.5, 9999999).div(LimelightHelpers.getTA("limelight-fr"))
+                    VecBuilder.fill(0.5, 0.5, 5).div(LimelightHelpers.getTA("limelight-fr"))
                 );
             } else {
                 SmartDashboard.putBoolean("FRpose", false);
@@ -213,7 +213,7 @@ public class Limelight extends SubsystemBase {
                 swerve.addVisionMeasurement(
                     limeBL.pose,
                     Utils.fpgaToCurrentTime(limeBL.timestampSeconds),
-                    VecBuilder.fill(0.75, 0.75, 9999999).div(LimelightHelpers.getTA("limelight-bl"))
+                    VecBuilder.fill(0.75, 0.75, 5).div(LimelightHelpers.getTA("limelight-bl"))
                 );
             } else {
                 SmartDashboard.putBoolean("BLpose", false);
@@ -252,7 +252,7 @@ public class Limelight extends SubsystemBase {
                 swerve.addVisionMeasurement(
                     limeBR.pose,
                     Utils.fpgaToCurrentTime(limeBR.timestampSeconds),
-                    VecBuilder.fill(0.75, 0.75, 9999999).div(LimelightHelpers.getTA("limelight-br"))
+                    VecBuilder.fill(0.75, 0.75, 5).div(LimelightHelpers.getTA("limelight-br"))
                 );
             } else {
                 SmartDashboard.putBoolean("BRpose", false);
@@ -270,9 +270,9 @@ public class Limelight extends SubsystemBase {
      */
     private boolean poseInField(Pose2d pose) {
         return pose.getTranslation().getX() > 0 &&
-            pose.getTranslation().getX() < 16 &&
+            pose.getTranslation().getX() < 17.55 &&
             pose.getTranslation().getY() > 0 &&
-            pose.getTranslation().getY() < 8;
+            pose.getTranslation().getY() < 8.05;
     }
 
     /**
