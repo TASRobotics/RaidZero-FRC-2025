@@ -84,8 +84,8 @@ public class RobotContainer {
         // reset the field-centric heading on left bumper press
         // joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
 
-        joystick. leftBumper().whileTrue(swerve.pathToReef(Constants.Swerve.REEFS.LEFT));
-        joystick. rightBumper().whileTrue(swerve.pathToReef(Constants.Swerve.REEFS.RIGHT));
+        joystick.leftBumper().whileTrue(swerve.pathToReef(Constants.Swerve.REEFS.LEFT));
+        joystick.rightBumper().whileTrue(swerve.pathToReef(Constants.Swerve.REEFS.RIGHT));
 
         swerve.registerTelemetry(logger::telemeterize);
     }
