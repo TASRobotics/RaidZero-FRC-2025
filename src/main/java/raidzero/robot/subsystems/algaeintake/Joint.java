@@ -2,11 +2,14 @@ package raidzero.robot.subsystems.algaeintake;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import raidzero.robot.subsystems.algaeintake.Constants.JointC;
@@ -22,9 +25,9 @@ public class Joint extends SubsystemBase {
         joint.setNeutralMode(NeutralModeValue.Brake);
     }
 
-    private void moveJoint(double setpoint) {
-        final PositionVoltage request = new PositionVoltage(0);
-        joint.setControl(request.withPosition(setpoint));
+    public Command moveJoint(double setpoint) {
+        final MotionMagicVoltage request = new MotionMagicVoltage(0);
+        return Commands.run(() -> joint.setControl(request.withPosition(setpoint)), this);
     }
 
     private boolean jointCurrentSpike(double currentThreshold) {
@@ -43,10 +46,10 @@ public class Joint extends SubsystemBase {
         configuration.Feedback.SensorToMechanismRatio = JointC.CONVERSION_FACTOR;
 
         configuration.Slot0 = new Slot0Configs()
-            .withKS(JointC.KS)  //inc until moves
-            .withKV(JointC.KV) //min volt required to get to one rotation per sec w/ conversion factor
-            .withKA(JointC.KA) //achieve smooth acceleration w/o overshoot
-            .withKG(JointC.KG) //to move up
+            .withKS(JointC.KS) // inc until moves
+            .withKV(JointC.KV) // min volt required to get to one rotation per sec w/ conversion factor
+            .withKA(JointC.KA) // achieve smooth acceleration w/o overshoot
+            .withKG(JointC.KG) // to move up
             .withKP(JointC.KP)
             .withKI(JointC.KI)
             .withKD(JointC.KD)

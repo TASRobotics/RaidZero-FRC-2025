@@ -4,7 +4,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 
 public class Constants {
     public class JointC {
-        public static final int MOTOR_ID = 12;
+        public static final int MOTOR_ID = 14;
         public static final double CONVERSION_FACTOR = (54 / 30) * 9;
 
         public static final double INTAKE_POSITION = 0.0;
