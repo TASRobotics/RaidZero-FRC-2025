@@ -21,9 +21,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import raidzero.robot.subsystems.telescopingarm.Constants.Telescope;
+import raidzero.robot.Constants;
 import raidzero.robot.Telemetry;
-import raidzero.robot.subsystems.telescopingarm.Constants.Joint;
 
 public class Arm extends SubsystemBase {
     private static Arm system;
@@ -35,15 +34,15 @@ public class Arm extends SubsystemBase {
      * Constructor for the {@link Arm} subsystem
      */
     private Arm() {
-        telescope = new TalonFX(Telescope.MOTOR_ID);
+        telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID);
         telescope.getConfigurator().apply(telescopeConfiguration());
         telescope.setNeutralMode(NeutralModeValue.Brake);
 
-        joint = new TalonFX(Joint.MOTOR_ID);
+        joint = new TalonFX(Constants.TelescopingArm.Joint.MOTOR_ID);
         joint.getConfigurator().apply((jointConfiguration()));
         joint.setNeutralMode(NeutralModeValue.Brake);
 
-        jointCANcoder = new CANcoder(Joint.CANCODER_ID);
+        jointCANcoder = new CANcoder(Constants.TelescopingArm.Joint.CANCODER_ID);
         jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
 
     }
@@ -65,8 +64,8 @@ public class Arm extends SubsystemBase {
     }
 
     public Command goToIntakePos() {
-        double telescopeSetpoint = -1 * calculateTelescopeHeight(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]);
-        double jointSetpoint = calculateJointAngle(Constants.INTAKE_POS_M[0], Constants.INTAKE_POS_M[1]);
+        double telescopeSetpoint = -1 * calculateTelescopeHeight(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]);
+        double jointSetpoint = calculateJointAngle(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]);
 
         return Commands.run(() -> {
             moveTelescope(telescopeSetpoint);
@@ -142,9 +141,9 @@ public class Arm extends SubsystemBase {
      */
     private double calculateTelescopeHeight(double x, double y) {
         double height = Math.sqrt(x * x + y * y);
-        height -= Telescope.GROUND_OFFSET;
+        height -= Constants.TelescopingArm.Telescope.GROUND_OFFSET;
 
-        return height / Telescope.MAX_HEIGHT_M;
+        return height / Constants.TelescopingArm.Telescope.MAX_HEIGHT_M;
     }
 
     /**
@@ -168,8 +167,8 @@ public class Arm extends SubsystemBase {
      *         tolerance of their setpoints
      */
     private boolean armWithinSetpoint(double telescopeSetpoint, double armJointSetpoint) {
-        return Math.abs(getTelescopePosition() - telescopeSetpoint) < Telescope.POSITION_TOLERANCE_ROTATIONS &&
-            Math.abs(getJointPosition() - armJointSetpoint) < Joint.POSITION_TOLERANCE_ROTATIONS;
+        return Math.abs(getTelescopePosition() - telescopeSetpoint) < Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS &&
+            Math.abs(getJointPosition() - armJointSetpoint) < Constants.TelescopingArm.Joint.POSITION_TOLERANCE_ROTATIONS;
     }
 
     /**
@@ -195,7 +194,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void resetJointPosition() {
-        joint.setPosition((jointCANcoder.getPosition().getValueAsDouble() * Joint.CANCODER_GEAR_RATIO));
+        joint.setPosition((jointCANcoder.getPosition().getValueAsDouble() * Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO));
     }
 
     /**
@@ -241,28 +240,28 @@ public class Arm extends SubsystemBase {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
         configuration.Slot0 = new Slot0Configs()
-            .withKS(Telescope.KS)
-            .withKV(Telescope.KV)
-            .withKA(Telescope.KA)
-            .withKG(Telescope.KG)
-            .withKP(Telescope.KP)
-            .withKI(Telescope.KI)
-            .withKD(Telescope.KD);
+            .withKS(Constants.TelescopingArm.Telescope.KS)
+            .withKV(Constants.TelescopingArm.Telescope.KV)
+            .withKA(Constants.TelescopingArm.Telescope.KA)
+            .withKG(Constants.TelescopingArm.Telescope.KG)
+            .withKP(Constants.TelescopingArm.Telescope.KP)
+            .withKI(Constants.TelescopingArm.Telescope.KI)
+            .withKD(Constants.TelescopingArm.Telescope.KD);
 
         configuration.MotionMagic = new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(Telescope.CRUISE_VELOCITY)
-            .withMotionMagicAcceleration(Telescope.ACCELERATION)
-            .withMotionMagicJerk(Telescope.JERK);
+            .withMotionMagicCruiseVelocity(Constants.TelescopingArm.Telescope.CRUISE_VELOCITY)
+            .withMotionMagicAcceleration(Constants.TelescopingArm.Telescope.ACCELERATION)
+            .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
 
         configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
         configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = 0.0;
 
-        configuration.Feedback.SensorToMechanismRatio = Telescope.CONVERSION_FACTOR;
+        configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
 
-        configuration.Slot0.GravityType = Telescope.GRAVITY_TYPE_VALUE;
+        configuration.Slot0.GravityType = Constants.TelescopingArm.Telescope.GRAVITY_TYPE_VALUE;
 
         configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Telescope.FORWARD_SOFT_LIMIT_PERCENT;
+        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.TelescopingArm.Telescope.FORWARD_SOFT_LIMIT_PERCENT;
 
         return configuration;
     }
@@ -275,27 +274,27 @@ public class Arm extends SubsystemBase {
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
-        configuration.Feedback.SensorToMechanismRatio = Joint.CONVERSION_FACTOR;
+        configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR;
 
         configuration.Slot0 = new Slot0Configs()
-            .withKS(Joint.KS)
-            .withKV(Joint.KV)
-            .withKA(Joint.KA)
-            .withKG(Joint.KG)
-            .withKP(Joint.KP)
-            .withKI(Joint.KI)
-            .withKD(Joint.KD);
+            .withKS(Constants.TelescopingArm.Joint.KS)
+            .withKV(Constants.TelescopingArm.Joint.KV)
+            .withKA(Constants.TelescopingArm.Joint.KA)
+            .withKG(Constants.TelescopingArm.Joint.KG)
+            .withKP(Constants.TelescopingArm.Joint.KP)
+            .withKI(Constants.TelescopingArm.Joint.KI)
+            .withKD(Constants.TelescopingArm.Joint.KD);
 
-        configuration.Slot0.GravityType = Joint.GRAVITY_TYPE_VALUE;
+        configuration.Slot0.GravityType = Constants.TelescopingArm.Joint.GRAVITY_TYPE_VALUE;
 
         configuration.MotionMagic = new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(Joint.CRUISE_VELOCITY)
-            .withMotionMagicAcceleration(Joint.ACCELERATION)
-            .withMotionMagicJerk(Joint.JERK);
+            .withMotionMagicCruiseVelocity(Constants.TelescopingArm.Joint.CRUISE_VELOCITY)
+            .withMotionMagicAcceleration(Constants.TelescopingArm.Joint.ACCELERATION)
+            .withMotionMagicJerk(Constants.TelescopingArm.Joint.JERK);
 
-        configuration.CurrentLimits.StatorCurrentLimit = Joint.STATOR_CURRENT_LIMT;
-        configuration.CurrentLimits.SupplyCurrentLimit = Joint.SUPPLY_CURRENT_LIMIT;
-        configuration.CurrentLimits.SupplyCurrentLowerTime = Joint.SUPPLY_CURRENT_LOWER_TIME;
+        configuration.CurrentLimits.StatorCurrentLimit = Constants.TelescopingArm.Joint.STATOR_CURRENT_LIMT;
+        configuration.CurrentLimits.SupplyCurrentLimit = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LIMIT;
+        configuration.CurrentLimits.SupplyCurrentLowerTime = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LOWER_TIME;
 
         return configuration;
     }
@@ -308,7 +307,7 @@ public class Arm extends SubsystemBase {
     private CANcoderConfiguration jointCANCoderConfiguration() {
         CANcoderConfiguration configuration = new CANcoderConfiguration();
 
-        configuration.MagnetSensor.MagnetOffset = Joint.CANCODER_OFFSET;
+        configuration.MagnetSensor.MagnetOffset = Constants.TelescopingArm.Joint.CANCODER_OFFSET;
         configuration.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
 
         return configuration;
