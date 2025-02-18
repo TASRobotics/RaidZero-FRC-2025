@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.198,
-        "y": 7.002
+        "x": 1.068225018677404,
+        "y": 6.949371634186422
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4625,
-        "y": 6.917354910714286
+        "x": 1.332725018677404,
+        "y": 6.864726544900708
       },
       "isLocked": false,
       "linkedName": "Auton2-2End"
     },
     {
       "anchor": {
-        "x": 4.0365623472818575,
-        "y": 5.114778447921005
+        "x": 4.029424897961689,
+        "y": 5.157246758174719
       },
       "prevControl": {
-        "x": 2.384720829424715,
-        "y": 6.061486037206719
+        "x": 2.377583380104546,
+        "y": 6.103954347460434
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,11 +29,25 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.85,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.2,
+        "maxAcceleration": 5.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
+    "maxVelocity": 4.5,
     "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
