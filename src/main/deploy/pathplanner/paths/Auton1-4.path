@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.859374159684865,
-        "y": 1.1280343967148205
+        "x": 3.6422896264304576,
+        "y": 1.5271793849031692
       },
       "isLocked": false,
       "linkedName": "Auton1-3End"
     },
     {
       "anchor": {
-        "x": 1.1,
-        "y": 1.014
+        "x": 1.0836,
+        "y": 1.031
       },
       "prevControl": {
-        "x": 1.945658038072183,
-        "y": 2.1900880419234143
+        "x": 1.9292580380721829,
+        "y": 2.2070880419234142
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,10 +32,10 @@
   "constraintZones": [
     {
       "name": "station appr",
-      "minWaypointRelativePos": 0.9,
+      "minWaypointRelativePos": 0.8,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.2,
+        "maxVelocity": 1.4,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.5,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

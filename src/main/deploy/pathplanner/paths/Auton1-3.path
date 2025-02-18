@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1,
-        "y": 1.014
+        "x": 1.0836,
+        "y": 1.031
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.381742859104572,
-        "y": 1.2456193204715682
+        "x": 2.3653428591045715,
+        "y": 1.262619320471568
       },
       "isLocked": false,
       "linkedName": "StationPickup"
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Reef appr",
-      "minWaypointRelativePos": 0.75,
+      "minWaypointRelativePos": 0.8,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.5,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

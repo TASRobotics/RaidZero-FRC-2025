@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1,
-        "y": 1.014
+        "x": 1.0836,
+        "y": 1.031
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1618069556372332,
-        "y": 1.7567526974507948
+        "x": 2.145406955637233,
+        "y": 1.7737526974507947
       },
       "isLocked": false,
       "linkedName": "StationPickup"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.5,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
