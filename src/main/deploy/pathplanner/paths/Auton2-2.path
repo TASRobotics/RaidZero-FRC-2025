@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.007756696428571,
-        "y": 5.272042410714286
+        "x": 4.9262509451921845,
+        "y": 5.099760286952922
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.132190418004171,
-        "y": 6.119932717968882
+        "x": 4.0506846667677845,
+        "y": 5.947650594207518
       },
       "isLocked": false,
       "linkedName": "Auton2-1End"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 1.198,
-        "y": 7.002
+        "y": 6.992
       },
       "prevControl": {
         "x": 2.483129043865917,
-        "y": 6.628270626621564
+        "y": 6.618270626621564
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.5,
+    "maxVelocity": 1.5,
     "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
