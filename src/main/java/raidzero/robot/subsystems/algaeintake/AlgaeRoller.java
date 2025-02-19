@@ -12,13 +12,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Roller extends SubsystemBase {
-    private static Roller system;
+import raidzero.robot.Constants;
+
+public class AlgaeRoller extends SubsystemBase {
+    private static AlgaeRoller system;
 
     private SparkMax roller;
 
-    private Roller() {
-        roller = new SparkMax(Constants.Roller.MOTOR_ID, MotorType.kBrushless);
+    private AlgaeRoller() {
+        roller = new SparkMax(Constants.AlgaeIntake.Roller.MOTOR_ID, MotorType.kBrushless);
         roller.configure(rollerConfig(), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 
@@ -30,8 +32,8 @@ public class Roller extends SubsystemBase {
         roller.set(speed);
     }
 
-    private void stopRoller() {
-        roller.stopMotor();
+    public Command stopRoller() {
+        return Commands.run(() -> roller.stopMotor(), this);
     }
 
     private SparkBaseConfig rollerConfig() {
@@ -42,9 +44,9 @@ public class Roller extends SubsystemBase {
         return configuration;
     }
 
-    public static Roller system() {
+    public static AlgaeRoller system() {
         if (system == null)
-            system = new Roller();
+            system = new AlgaeRoller();
         return system;
     }
 }
