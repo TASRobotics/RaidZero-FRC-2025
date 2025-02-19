@@ -1,10 +1,5 @@
 package raidzero.robot.subsystems.telescopingarm;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
-import javax.sql.rowset.JoinRowSet;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -12,6 +7,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
@@ -22,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import raidzero.robot.Constants;
-import raidzero.robot.Telemetry;
 
 public class Arm extends SubsystemBase {
     private static Arm system;
@@ -285,6 +280,8 @@ public class Arm extends SubsystemBase {
         configuration.CurrentLimits.StatorCurrentLimit = Constants.TelescopingArm.Joint.STATOR_CURRENT_LIMT;
         configuration.CurrentLimits.SupplyCurrentLimit = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LIMIT;
         configuration.CurrentLimits.SupplyCurrentLowerTime = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LOWER_TIME;
+
+        configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         return configuration;
     }

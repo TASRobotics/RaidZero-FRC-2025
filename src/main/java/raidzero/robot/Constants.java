@@ -49,22 +49,22 @@ public class Constants {
 
             // TODO: Tune new cancoder
             public static final double CANCODER_GEAR_RATIO = 28.0 / 80.0;
-            public static final double CANCODER_OFFSET = -0.779785 + (0.25 / CANCODER_GEAR_RATIO);
+            public static final double CANCODER_OFFSET = -0.214600 + (0.25 / CANCODER_GEAR_RATIO);
 
             public static final double CONVERSION_FACTOR = (80 / 12) * 15.0;
 
             // TODO: tune
-            public static final double KS = 0.0;//0.0125;
-            public static final double KG = 0.0;//0.0275;
-            public static final double KV = 0.0;//1.1;
-            public static final double KA = 0.0;//0.05;
+            public static final double KS = 0.02;
+            public static final double KG = 0.03;
+            public static final double KV = 1.2;
+            public static final double KA = 0.1;
 
-            public static final double KP = 0.0; //100.0;
+            public static final double KP = 300.0; //100.0;
             public static final double KI = 0.0; //0.0;
             public static final double KD = 0.0; //0.0;
 
-            public static final double CRUISE_VELOCITY = 0.0; //0.3;
-            public static final double ACCELERATION = 0.0; //0.75;
+            public static final double CRUISE_VELOCITY = 0.3;
+            public static final double ACCELERATION = 1.0;
             public static final double JERK = 0.0; //0.0;
 
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Arm_Cosine;

@@ -13,7 +13,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import raidzero.robot.subsystems.algaeintake.Joint;
@@ -67,7 +66,7 @@ public class RobotContainer {
             )
         );
 
-        // arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]), 0.0));
+        arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]), 0.0));
         
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
 
