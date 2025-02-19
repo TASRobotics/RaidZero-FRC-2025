@@ -97,6 +97,7 @@ public class Intake extends SubsystemBase {
         SparkMaxConfig configuration = new SparkMaxConfig();
 
         configuration.idleMode(IdleMode.kBrake);
+        configuration.smartCurrentLimit(Constants.TelescopingArm.Intake.CURRENT_LIMIT);
 
         return configuration;
     }
@@ -111,6 +112,7 @@ public class Intake extends SubsystemBase {
 
         configuration.follow(Constants.TelescopingArm.Intake.MOTOR_ID, true);
         configuration.idleMode(IdleMode.kBrake);
+        configuration.smartCurrentLimit(Constants.TelescopingArm.Intake.CURRENT_LIMIT);
 
         return configuration;
     }

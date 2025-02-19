@@ -64,8 +64,12 @@ public class Arm extends SubsystemBase {
     }
 
     public Command goToIntakePos() {
-        double telescopeSetpoint = -1 * calculateTelescopeHeight(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]);
-        double jointSetpoint = calculateJointAngle(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]);
+        double telescopeSetpoint = -1 * calculateTelescopeHeight(
+            Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]
+        );
+        double jointSetpoint = calculateJointAngle(
+            Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]
+        );
 
         return Commands.run(() -> {
             moveTelescope(telescopeSetpoint);
@@ -141,7 +145,7 @@ public class Arm extends SubsystemBase {
      */
     private double calculateTelescopeHeight(double x, double y) {
         double height = Math.sqrt(x * x + y * y);
-        height -= Constants.TelescopingArm.Telescope.GROUND_OFFSET;
+        height -= Constants.TelescopingArm.Telescope.GROUND_OFFSET_M;
 
         return height / Constants.TelescopingArm.Telescope.MAX_HEIGHT_M;
     }
@@ -155,20 +159,6 @@ public class Arm extends SubsystemBase {
      */
     public double calculateJointAngle(double x, double y) {
         return (Math.atan2(y, x)) * 180 / Math.PI / 360.0;
-    }
-
-    /**
-     * Checks if the arm encoder position is within the defined tolerance in
-     * {@link Constants.TelescopingArm.Telescope}
-     * 
-     * @param telescopeSetpoint the desired telescope position in rotations
-     * @param armJointSetpoint  the desired arm joint angle in rotations
-     * @return true if both the telescope and the arm are within the defined
-     *         tolerance of their setpoints
-     */
-    private boolean armWithinSetpoint(double telescopeSetpoint, double armJointSetpoint) {
-        return Math.abs(getTelescopePosition() - telescopeSetpoint) < Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS &&
-            Math.abs(getJointPosition() - armJointSetpoint) < Constants.TelescopingArm.Joint.POSITION_TOLERANCE_ROTATIONS;
     }
 
     /**
@@ -261,7 +251,7 @@ public class Arm extends SubsystemBase {
         configuration.Slot0.GravityType = Constants.TelescopingArm.Telescope.GRAVITY_TYPE_VALUE;
 
         configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.TelescopingArm.Telescope.FORWARD_SOFT_LIMIT_PERCENT;
+        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.TelescopingArm.Telescope.TOP_SOFT_LIMIT;
 
         return configuration;
     }
