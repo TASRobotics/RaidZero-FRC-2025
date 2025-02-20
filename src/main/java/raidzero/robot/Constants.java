@@ -2,7 +2,23 @@ package raidzero.robot;
 
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
+
+
 public class Constants {
+
+    public class CANdle {
+        public static final int CANdleID = 0;
+        public static final int ledCount = 300;
+
+        public static enum COLORS {
+            RED, GREEN, YELLOW, ORANGE
+        }
+        public static enum MODES {
+            COLOR_FLOW, STROBE, RAINDBOW, LARSON
+        }
+        public static final int[] stationIds = new int[] { 12, 13, 1, 2};
+        public static final double distThreshold = 0.30;
+    }
 
     public class Swerve {
         public static final double STICK_DEADBAND = 0.2;
