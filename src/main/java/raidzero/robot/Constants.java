@@ -48,10 +48,11 @@ public class Constants {
             public static final int CANCODER_ID = 11;
 
             // TODO: Tune new cancoder
-            public static final double CANCODER_GEAR_RATIO = 28.0 / 80.0;
-            public static final double CANCODER_OFFSET = -0.214600 + (0.25 / CANCODER_GEAR_RATIO);
+            public static final double CANCODER_GEAR_RATIO = 28.0/80;
+            public static final double CANCODER_OFFSET = -(.3596  - (0.25 / CANCODER_GEAR_RATIO));
+            public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
 
-            public static final double CONVERSION_FACTOR = (80 / 12) * 15.0;
+            public static final double CONVERSION_FACTOR = (120 / 12) * 15.0;
 
             // TODO: tune
             public static final double KS = 0.02;

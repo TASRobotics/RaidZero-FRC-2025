@@ -1,12 +1,14 @@
 package raidzero.robot.subsystems.telescopingarm;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -179,7 +181,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void resetJointPosition() {
-        joint.setPosition((jointCANcoder.getPosition().getValueAsDouble() * Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO));
+        // joint.setPosition((jointCANcoder.getPosition().getValueAsDouble() * Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO));
     }
 
     /**
@@ -259,7 +261,9 @@ public class Arm extends SubsystemBase {
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
-        configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR;
+        configuration.Feedback.SensorToMechanismRatio = 1.0/Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
+        configuration.Feedback.RotorToSensorRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR*Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
+
 
         configuration.Slot0 = new Slot0Configs()
             .withKS(Constants.TelescopingArm.Joint.KS)
@@ -281,6 +285,9 @@ public class Arm extends SubsystemBase {
         configuration.CurrentLimits.SupplyCurrentLimit = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LIMIT;
         configuration.CurrentLimits.SupplyCurrentLowerTime = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LOWER_TIME;
 
+        configuration.Feedback.FeedbackRemoteSensorID = Constants.TelescopingArm.Joint.CANCODER_ID;
+        configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
+
         configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         return configuration;
@@ -294,6 +301,7 @@ public class Arm extends SubsystemBase {
     private CANcoderConfiguration jointCANCoderConfiguration() {
         CANcoderConfiguration configuration = new CANcoderConfiguration();
 
+        configuration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = Constants.TelescopingArm.Joint.CANCODER_DISCONTINUITY_POINT;
         configuration.MagnetSensor.MagnetOffset = Constants.TelescopingArm.Joint.CANCODER_OFFSET;
         configuration.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
 
