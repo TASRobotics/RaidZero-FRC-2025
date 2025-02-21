@@ -40,7 +40,7 @@ public class Joint extends SubsystemBase {
     /**
      * Stops the joint motor
      */
-    private void stopJoint() {
+    public void stopJoint() {
         joint.stopMotor();
     }
 
