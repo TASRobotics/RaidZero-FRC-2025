@@ -65,8 +65,8 @@ public class Constants {
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Elevator_Static;
 
             // TODO: tune
-            public static final double CRUISE_VELOCITY = 2.0;
-            public static final double ACCELERATION = 7.5;
+            public static final double CRUISE_VELOCITY = 1.5;
+            public static final double ACCELERATION = 5.5;
             public static final double JERK = 0.0;
 
             // public static final double TOP_SOFT_LIMIT = 1.0; // 100% range of motion
@@ -97,8 +97,8 @@ public class Constants {
             public static final double KI = 0.0; //0.0;
             public static final double KD = 0.0; //0.0;
 
-            public static final double CRUISE_VELOCITY = 0.3;
-            public static final double ACCELERATION = 1.0;
+            public static final double CRUISE_VELOCITY = 0.2;
+            public static final double ACCELERATION = 0.8;
             public static final double JERK = 0.0; //0.0;
 
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Arm_Cosine;
