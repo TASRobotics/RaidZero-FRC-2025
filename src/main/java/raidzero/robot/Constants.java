@@ -76,8 +76,8 @@ public class Constants {
         }
 
         public class Intake {
-            public static final int MOTOR_ID = 13;
-            public static final int FOLLOW_ID = 12;
+            public static final int MOTOR_ID = 12;
+            public static final int FOLLOW_ID = 13;
 
             public static final double ROLLER_SPEED = 0.35; // 35%
 
@@ -91,7 +91,7 @@ public class Constants {
             public static final double[] L2_SCORING_POS_M = { -0.0, 0.2 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static final double[] INTAKE_POS_M = { 0.53, 0.805 };
+            public static final double[] INTAKE_POS_M = { 0.50, 0.81 };
 
             public static final double[] HOME_POS_M = { 0.0, 0.0 };
         }

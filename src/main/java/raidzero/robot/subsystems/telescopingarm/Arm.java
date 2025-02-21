@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import raidzero.robot.Constants;
 
 public class Arm extends SubsystemBase {
@@ -56,7 +56,7 @@ public class Arm extends SubsystemBase {
 
         // return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this);
         return Commands.run(() -> moveTelescope(telescopeSetpoint), this)
-            .alongWith(Commands.waitSeconds(0.0).andThen(() -> moveJoint(jointSetpoint)));
+            .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
     }
 
     public Command goToIntakePos() {
@@ -75,7 +75,9 @@ public class Arm extends SubsystemBase {
 
     public Command moveArmWithRotations(double jointSetpoint, double telescopeSetpoint) {
         return Commands.run(() -> moveJoint(jointSetpoint), this)
-            .alongWith(Commands.waitSeconds(0.3).andThen(() -> moveTelescope(telescopeSetpoint)));
+            .alongWith(
+                Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
+                .andThen(() -> moveTelescope(telescopeSetpoint)));
     }
 
     /**
@@ -173,14 +175,6 @@ public class Arm extends SubsystemBase {
      */
     public double getJointPosition() {
         return joint.getPosition().getValueAsDouble();
-    }
-
-    public void setJointPosition(double position) {
-        joint.setPosition(position);
-    }
-
-    public void resetJointPosition() {
-        // joint.setPosition((jointCANcoder.getPosition().getValueAsDouble() * Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO));
     }
 
     /**

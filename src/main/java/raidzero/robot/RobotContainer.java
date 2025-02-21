@@ -50,10 +50,6 @@ public class RobotContainer {
         SmartDashboard.putData("AutoChooser", autoChooser);
 
         configureBindings();
-
-        // * Set positions for things here in the future
-        arm.resetJointPosition();
-        // arm.setJointPosition(0.25);
     }
 
     private void configureBindings() {
@@ -73,9 +69,9 @@ public class RobotContainer {
         joystick.b().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
         joystick.x().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]));
         joystick.a().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L4_SCORING_POS_M[1]));
-        joystick.y().whileTrue(arm.moveArmWithRotations(0.25, 0.0).alongWith(algaeIntake.moveJoint(0.0)));
+        joystick.y().whileTrue(arm.moveArmWithRotations(0.23, 0.0).alongWith(algaeIntake.moveJoint(0.0)));
 
-        joystick.rightTrigger().whileTrue(intake.runIntake(0.1));
+        joystick.rightTrigger().onTrue(intake.runIntake(0.1));
         joystick.leftTrigger().onTrue(intake.extake(0.1));
 
         // reset the field-centric heading on left bumper press

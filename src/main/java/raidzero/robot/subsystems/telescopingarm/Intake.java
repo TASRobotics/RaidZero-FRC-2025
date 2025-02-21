@@ -3,6 +3,7 @@ package raidzero.robot.subsystems.telescopingarm;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
@@ -49,8 +50,8 @@ public class Intake extends SubsystemBase {
      */
     public Command runIntake(double speed) {
         return Commands.run(() -> runRoller(speed), this)
-            .until(() -> laserCan.getMeasurement().distance_mm <= 50);
-        // .andThen(Commands.run(() -> runRoller(-0.1), this).withTimeout(0.1).andThen(() -> stopRoller()));
+            .until(() -> laserCan.getMeasurement().distance_mm <= 50)
+            .andThen(Commands.run(() -> runRoller(-0.1), this).withTimeout(0.1).andThen(() -> stopRoller()));
     }
 
     public Command stopRollerCommand() {
@@ -67,7 +68,7 @@ public class Intake extends SubsystemBase {
      * @param speed the speed to run at as a percentage
      */
     private void runRoller(double speed) {
-        roller.set(speed);
+        roller.set(-speed);
     }
 
     /**
@@ -96,6 +97,8 @@ public class Intake extends SubsystemBase {
     private TalonFXSConfiguration rollerConfiguration() {
         TalonFXSConfiguration configuration = new TalonFXSConfiguration();
 
+        configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
+
         return configuration;
     }
 
@@ -106,6 +109,8 @@ public class Intake extends SubsystemBase {
      */
     private TalonFXSConfiguration followConfiguration() {
         TalonFXSConfiguration configuration = new TalonFXSConfiguration();
+
+        configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
 
         return configuration;
     }
