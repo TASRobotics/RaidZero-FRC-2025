@@ -26,7 +26,7 @@ public class Joint extends SubsystemBase {
 
     public Command moveJoint(double setpoint) {
         final MotionMagicVoltage request = new MotionMagicVoltage(0);
-        return Commands.run(() -> joint.setControl(request.withPosition(setpoint)), this);
+        return run(() -> joint.setControl(request.withPosition(setpoint)));
     }
 
     private void stopJoint() {

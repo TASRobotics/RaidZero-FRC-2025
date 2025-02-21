@@ -25,7 +25,7 @@ public class Roller extends SubsystemBase {
     }
 
     public Command runRoller(double speed) {
-        return Commands.run(() -> moveRoller(speed)).withTimeout(2).andThen(() -> stopRoller());
+        return run(() -> moveRoller(speed)).withTimeout(2).andThen(() -> stopRoller());
     }
 
     private void moveRoller(double speed) {

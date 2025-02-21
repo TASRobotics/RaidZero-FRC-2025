@@ -49,17 +49,17 @@ public class Intake extends SubsystemBase {
      * @return the command to be scheduled and run
      */
     public Command runIntake(double speed) {
-        return Commands.run(() -> runRoller(speed), this)
+        return run(() -> runRoller(speed))
             .until(() -> laserCan.getMeasurement().distance_mm <= 50)
-            .andThen(Commands.run(() -> runRoller(-0.1), this).withTimeout(0.1).andThen(() -> stopRoller()));
+            .andThen(run(() -> runRoller(-0.1)).withTimeout(0.1).andThen(() -> stopRoller()));
     }
 
     public Command stopRollerCommand() {
-        return Commands.run(() -> stopRoller(), this);
+        return run(() -> stopRoller());
     }
 
     public Command extake(double speed) {
-        return Commands.run(() -> runRoller(speed), this).withTimeout(1.0).andThen(() -> stopRoller());
+        return run(() -> runRoller(speed)).withTimeout(1.0).andThen(() -> stopRoller());
     }
 
     /**

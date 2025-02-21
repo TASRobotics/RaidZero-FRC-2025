@@ -272,7 +272,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     public Command goToStation() {
         SwerveRequest.RobotCentric swerveRequest = new SwerveRequest.RobotCentric();
 
-        return Commands.run(
+        return run(
             () -> this.setControl(
                 swerveRequest
                     .withVelocityX(LimelightHelpers.getTY("limelight-bl") * 0.07)
@@ -366,7 +366,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     public Command stop() {
         SwerveRequest.RobotCentric swerveRequest = new SwerveRequest.RobotCentric();
 
-        return Commands.runOnce(
+        return runOnce(
             () -> this.setControl(
                 swerveRequest.withVelocityX(0.0).withVelocityY(0.0).withRotationalRate(0.0)
             )

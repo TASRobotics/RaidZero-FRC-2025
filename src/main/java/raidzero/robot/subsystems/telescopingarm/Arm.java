@@ -55,7 +55,7 @@ public class Arm extends SubsystemBase {
         double jointSetpoint = calculateJointAngle(x, y);
 
         // return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this);
-        return Commands.run(() -> moveTelescope(telescopeSetpoint), this)
+        return run(() -> moveTelescope(telescopeSetpoint))
             .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
     }
 
@@ -67,14 +67,14 @@ public class Arm extends SubsystemBase {
             Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]
         );
 
-        return Commands.run(() -> {
+        return run(() -> {
             moveTelescope(telescopeSetpoint);
             moveJoint(jointSetpoint);
-        }, this);
+        });
     }
 
     public Command moveArmWithRotations(double jointSetpoint, double telescopeSetpoint) {
-        return Commands.run(() -> moveJoint(jointSetpoint), this)
+        return run(() -> moveJoint(jointSetpoint))
             .alongWith(
                 Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
                 .andThen(() -> moveTelescope(telescopeSetpoint)));
@@ -87,11 +87,11 @@ public class Arm extends SubsystemBase {
      * @return the command to be scheduled and run
      */
     public Command runTelescope(double setpoint) {
-        return Commands.run(() -> moveTelescope(setpoint), this);
+        return run(() -> moveTelescope(setpoint));
     }
 
     public Command runJoint(double setpoint) {
-        return Commands.run(() -> moveJoint(setpoint), this);
+        return run(() -> moveJoint(setpoint));
     }
 
     /**
@@ -200,7 +200,7 @@ public class Arm extends SubsystemBase {
     }
 
     public Command stopAllCommand() {
-        return Commands.run(() -> stopAll(), this);
+        return run(() -> stopAll());
     }
 
     /**
