@@ -13,6 +13,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,6 +36,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
+    private final CommandGenericHID operator = new CommandGenericHID(1);
 
     public final Swerve swerve = Swerve.system();
     public final Arm arm = Arm.system();
@@ -68,23 +70,29 @@ public class RobotContainer {
         
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
 
-        joystick.b().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
-        joystick.x().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]));
-        joystick.a().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L4_SCORING_POS_M[1]));
-        joystick.y().whileTrue(arm.moveArmWithRotations(0.23, 0.0).alongWith(algaeIntake.moveJoint(0.0)));
+        //* Driver controls
+        joystick.leftBumper().whileTrue(intake.extake(0.1));
+        joystick.rightBumper().onTrue(intake.runIntake(0.1));
 
-        joystick.rightTrigger().onTrue(intake.runIntake(0.1));
-        joystick.leftTrigger().onTrue(intake.extake(0.1));
-
-        // reset the field-centric heading on left bumper press
-        // joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
-
-        joystick.leftBumper().whileTrue(
+        joystick.x().whileTrue(
             swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
         );
-        joystick.rightBumper().whileTrue(
+
+        joystick.y().whileTrue(
             swerve.pathToReef(Constants.Swerve.REEFS.RIGHT)
         );
+
+        joystick.povLeft().whileTrue(
+            swerve.pathToStation()
+        );
+
+        //* Operator controls
+        operator.button(8).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
+        operator.button(9).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L4_SCORING_POS_M[1]));
+
+        operator.button(10).whileTrue(intake.extake(0.1));
+        operator.button(11).onTrue(intake.runIntake(0.1));
+        operator.button(12).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]));
 
         swerve.registerTelemetry(logger::telemeterize);
     }
