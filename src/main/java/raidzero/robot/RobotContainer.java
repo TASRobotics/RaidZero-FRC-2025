@@ -10,6 +10,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -56,6 +57,7 @@ public class RobotContainer {
         // * Set positions for things here in the future
         arm.resetJointPosition();
         // arm.setJointPosition(0.25);
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     private void configureBindings() {
@@ -84,8 +86,16 @@ public class RobotContainer {
         // reset the field-centric heading on left bumper press
         // joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
 
-        joystick.leftBumper().whileTrue(swerve.pathToReef(Constants.Swerve.REEFS.LEFT));
-        joystick.rightBumper().whileTrue(swerve.pathToReef(Constants.Swerve.REEFS.RIGHT));
+        joystick.leftBumper().whileTrue(
+            swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
+                .withTimeout(0.01)
+                .andThen(swerve.pathToReef(Constants.Swerve.REEFS.LEFT))
+        );
+        joystick.rightBumper().whileTrue(
+            swerve.pathToReef(Constants.Swerve.REEFS.RIGHT)
+                .withTimeout(0.01)
+                .andThen(swerve.pathToReef(Constants.Swerve.REEFS.RIGHT))
+        );
 
         swerve.registerTelemetry(logger::telemeterize);
     }
