@@ -3,6 +3,7 @@ package raidzero.robot.subsystems.telescopingarm;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 
 import au.grapplerobotics.LaserCan;
@@ -81,7 +82,7 @@ public class Intake extends SubsystemBase {
      * @param speed The speed to run at as a percentage
      */
     private void runRoller(double speed) {
-        roller.set(-speed);
+        roller.set(speed);
     }
 
     /**
@@ -111,6 +112,7 @@ public class Intake extends SubsystemBase {
         TalonFXSConfiguration configuration = new TalonFXSConfiguration();
 
         configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
+        configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         return configuration;
     }
