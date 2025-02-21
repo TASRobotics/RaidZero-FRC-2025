@@ -37,10 +37,19 @@ public class Limelight extends SubsystemBase {
     private Swerve swerve = Swerve.system();
     private static Limelight instance = null;
 
+    /**
+     * Constructs a {@link Limelight} subsytem instance
+     */
     private Limelight() {
         this.startThread();
     }
 
+    /**
+     * Sets the stream mode of the limelight
+     * 
+     * @param limelightName The name of the limelight
+     * @param mode {@link STREAM_MODE} of the limelight
+     */
     public void setStreamMode(String limelightName, STREAM_MODE mode) {
         if (mode == STREAM_MODE.STANDARD) {
             LimelightHelpers.setStreamMode_Standard(limelightName);
@@ -96,7 +105,9 @@ public class Limelight extends SubsystemBase {
         }).start();
     }
 
-    // @Override
+    /**
+     * The main loop of the Limelight odometry thread
+     */
     private void loop() {
         if (swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble() > 720) {
             ignoreAllLimes = true;
@@ -275,9 +286,9 @@ public class Limelight extends SubsystemBase {
     }
 
     /**
-     * Gets the Limelight instance
+     * Gets the {@link Limelight} subsystem instance
      * 
-     * @return The {@link Limelight} instance
+     * @return The {@link Limelight} subsystem instance
      */
     public static Limelight system() {
         if (instance == null) {

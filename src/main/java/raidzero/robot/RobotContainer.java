@@ -46,6 +46,9 @@ public class RobotContainer {
 
     public final SendableChooser<Command> autoChooser;
 
+    /**
+     * Constructs a {@link RobotContainer} instance
+     */
     public RobotContainer() {
         registerPathplannerCommands();
 
@@ -56,6 +59,9 @@ public class RobotContainer {
         PathfindingCommand.warmupCommand().schedule();
     }
 
+    /**
+     * Configures button bindings for the robot
+     */
     private void configureBindings() {
         swerve.setDefaultCommand(
             swerve.applyRequest(
@@ -97,6 +103,9 @@ public class RobotContainer {
         swerve.registerTelemetry(logger::telemeterize);
     }
 
+    /**
+     * Registers PathPlanner commands
+     */
     private void registerPathplannerCommands() {
         NamedCommands.registerCommand("ArmIntakeCoral", arm.goToIntakePos());
         NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
@@ -110,6 +119,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("IntakeCoral", intake.runIntake(0.12).withTimeout(0.8).andThen(() -> intake.stopRoller()));
     }
 
+    /**
+     * Returns the selected autonomous command
+     * 
+     * @return A {@link Command} representing the selected autonomous command
+     */
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }

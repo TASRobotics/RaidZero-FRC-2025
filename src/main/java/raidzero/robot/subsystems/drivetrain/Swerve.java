@@ -413,6 +413,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         }
     }
 
+    /**
+     * Configures the AutoBuilder for the Swerve subsystem
+     */
     private void configureAutoBuilder() {
         try {
             AutoBuilder.configure(
@@ -438,9 +441,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /**
-     * Gets the singleton instance of the Swerve subsystem.
+     * Gets the {@link Swerve} subsystem instance
      * 
-     * @return the Swerve subsystem
+     * @return The {@link Swerve} subsystem instance
      */
     public static Swerve system() {
         if (system == null) {

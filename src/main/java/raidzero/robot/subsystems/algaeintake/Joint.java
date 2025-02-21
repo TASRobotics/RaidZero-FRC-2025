@@ -18,21 +18,38 @@ public class Joint extends SubsystemBase {
 
     private TalonFX joint;
 
+    /**
+     * Constructs a {@link Joint} subsystem instance
+     */
     private Joint() {
         joint = new TalonFX(Constants.AlgaeIntake.Joint.MOTOR_ID);
         joint.getConfigurator().apply(jointConfiguration());
         joint.setNeutralMode(NeutralModeValue.Brake);
     }
 
+    /**
+     * Moves the joint to the desired setpoint
+     * 
+     * @param setpoint The desired setpoint
+     * @return A {@link Command} that moves the joint to the desired setpoint
+     */
     public Command moveJoint(double setpoint) {
         final MotionMagicVoltage request = new MotionMagicVoltage(0);
         return run(() -> joint.setControl(request.withPosition(setpoint)));
     }
 
+    /**
+     * Stops the joint motor
+     */
     private void stopJoint() {
         joint.stopMotor();
     }
 
+    /**
+     * Gets the {@link TalonFXConfiguration} for the joint motor
+     * 
+     * @return The {@link TalonFXConfiguration} for the joint motor
+     */
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
@@ -60,6 +77,11 @@ public class Joint extends SubsystemBase {
         return configuration;
     }
 
+    /**
+     * Gets the {@link Joint} subsystem instance
+     * 
+     * @return The {@link Joint} subsystem instance
+     */
     public static Joint system() {
         if (system == null)
             system = new Joint();

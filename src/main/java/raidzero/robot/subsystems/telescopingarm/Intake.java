@@ -22,6 +22,9 @@ public class Intake extends SubsystemBase {
 
     private LaserCan laserCan;
 
+    /**
+     * Constructs a {@link Intake} subsystem instance
+     */
     private Intake() {
         roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID);
         roller.getConfigurator().apply(rollerConfiguration());
@@ -44,8 +47,8 @@ public class Intake extends SubsystemBase {
     /**
      * Creates a {@link Command} to run the intake at the specified speed
      * 
-     * @param speed the speed as a percentage
-     * @return the command to be scheduled and run
+     * @param speed The speed as a percentage
+     * @return The command to be scheduled and run
      */
     public Command runIntake(double speed) {
         return run(() -> runRoller(speed))
@@ -53,10 +56,21 @@ public class Intake extends SubsystemBase {
             .andThen(run(() -> runRoller(-0.1)).withTimeout(0.1).andThen(() -> stopRoller()));
     }
 
+    /**
+     * Creates a {@link Command} to stop the intake
+     * 
+     * @return A {@link Command} to stop the intake
+     */
     public Command stopRollerCommand() {
         return run(() -> stopRoller());
     }
 
+    /**
+     * Creates a {@link Command} to extake at the specified speed
+     * 
+     * @param speed The desired speed [0, 1.0]
+     * @return A {@link Command} to extake at the specified speed
+     */
     public Command extake(double speed) {
         return run(() -> runRoller(speed)).withTimeout(1.0).andThen(() -> stopRoller());
     }
@@ -64,7 +78,7 @@ public class Intake extends SubsystemBase {
     /**
      * Runs the roller at the specified speed
      * 
-     * @param speed the speed to run at as a percentage
+     * @param speed The speed to run at as a percentage
      */
     private void runRoller(double speed) {
         roller.set(-speed);
@@ -89,9 +103,9 @@ public class Intake extends SubsystemBase {
     }
 
     /**
-     * Gets the {@link SparkBaseConfig} for the roller motor
+     * Gets the {@link TalonFXSConfiguration} for the roller motor
      * 
-     * @return the {@link SparkBaseConfig} for the roller motor
+     * @return The {@link TalonFXSConfiguration} for the roller motor
      */
     private TalonFXSConfiguration rollerConfiguration() {
         TalonFXSConfiguration configuration = new TalonFXSConfiguration();
@@ -102,9 +116,9 @@ public class Intake extends SubsystemBase {
     }
 
     /**
-     * Gets the {@link SparkBaseConfig} for the roller motor
+     * Gets the {@link TalonFXSConfiguration} for the roller follower
      * 
-     * @return the {@link SparkBaseConfig} for the roller motor
+     * @return The {@link TalonFXSConfiguration} for the roller follower
      */
     private TalonFXSConfiguration followConfiguration() {
         TalonFXSConfiguration configuration = new TalonFXSConfiguration();
@@ -114,6 +128,11 @@ public class Intake extends SubsystemBase {
         return configuration;
     }
 
+    /**
+     * Gets the {@link Intake} subsystem instance
+     * 
+     * @return The {@link Intake} subsystem instance
+     */
     public static Intake system() {
         if (system == null)
             system = new Intake();

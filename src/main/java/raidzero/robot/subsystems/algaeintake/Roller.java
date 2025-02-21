@@ -19,23 +19,45 @@ public class Roller extends SubsystemBase {
 
     private SparkMax roller;
 
+    /**
+     * Constructs a {@link Roller} subsystem instance
+     */
     private Roller() {
         roller = new SparkMax(Constants.AlgaeIntake.Roller.MOTOR_ID, MotorType.kBrushless);
         roller.configure(rollerConfig(), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 
+    /**
+     * Runs the roller at the desired speed
+     * 
+     * @param speed The desired speed
+     * @return A {@link Command} that runs the roller at the desired speed
+     */
     public Command runRoller(double speed) {
         return run(() -> moveRoller(speed)).withTimeout(2).andThen(() -> stopRoller());
     }
 
+    /**
+     * Moves the roller at the desired speed
+     * 
+     * @param speed The desired speed
+     */
     private void moveRoller(double speed) {
         roller.set(speed);
     }
 
+    /**
+     * Stops the roller motor
+     */
     private void stopRoller() {
         roller.stopMotor();
     }
 
+    /**
+     * Gets the {@link SparkMaxConfig} for the roller motor
+     * 
+     * @return The {@link SparkMaxConfig} for the roller motor
+     */
     private SparkBaseConfig rollerConfig() {
         SparkMaxConfig configuration = new SparkMaxConfig();
 
@@ -44,6 +66,11 @@ public class Roller extends SubsystemBase {
         return configuration;
     }
 
+    /**
+     * Gets the {@link Roller} subsystem instance
+     * 
+     * @return The {@link Roller} subsystem instance
+     */
     public static Roller system() {
         if (system == null)
             system = new Roller();

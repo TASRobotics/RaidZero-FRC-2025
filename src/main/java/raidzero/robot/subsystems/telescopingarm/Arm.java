@@ -26,7 +26,7 @@ public class Arm extends SubsystemBase {
     private CANcoder jointCANcoder;
 
     /**
-     * Constructor for the {@link Arm} subsystem
+     * Constructs an {@link Arm} subsystem instance
      */
     private Arm() {
         telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID);
@@ -43,11 +43,11 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Creates a {@link Command} to move the arm to the specified x and y setpoints
+     * Moves the arm to the desired x and y setpoints
      * 
-     * @param x the x setpoint in meters
-     * @param y the y setpoint in meters
-     * @return the command to be scheudled and run
+     * @param x The x setpoint in meters
+     * @param y The y setpoint in meters
+     * @return A {@link Command} that moves the arm to the desired setpoints
      */
     public Command moveArm(double x, double y) {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(x, y);
@@ -57,6 +57,11 @@ public class Arm extends SubsystemBase {
             .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
     }
 
+    /**
+     * Moves the arm to the intake position without delay
+     * 
+     * @return A {@link Command} that moves the arm to the intake position
+     */
     public Command goToIntakePos() {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(
             Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]
@@ -71,6 +76,13 @@ public class Arm extends SubsystemBase {
         });
     }
 
+    /**
+     * Moves the arm to the specified joint and telescope setpoints
+     * 
+     * @param jointSetpoint The target joint position in rotations
+     * @param telescopeSetpoint The target telescope position in percentage of full range of motion
+     * @return The command to be scheduled and run
+     */
     public Command moveArmWithRotations(double jointSetpoint, double telescopeSetpoint) {
         return run(() -> moveJoint(jointSetpoint))
             .alongWith(
@@ -81,13 +93,19 @@ public class Arm extends SubsystemBase {
     /**
      * Runs just the telescope to the supplied setpoint
      * 
-     * @param setpoint the target setpoint in percentage of full range of motion
-     * @return the command to be scheduled and run
+     * @param setpoint The target setpoint in percentage of full range of motion
+     * @return A {@link Command} that moves the telescope to the desired setpoint
      */
     public Command runTelescope(double setpoint) {
         return run(() -> moveTelescope(setpoint));
     }
 
+    /**
+     * Runs just the joint to the supplied setpoint
+     * 
+     * @param setpoint The target setpoint in rotations
+     * @return A {@link Command} that moves the joint to the desired setpoint
+     */
     public Command runJoint(double setpoint) {
         return run(() -> moveJoint(setpoint));
     }
@@ -95,18 +113,28 @@ public class Arm extends SubsystemBase {
     /**
      * Zeroes the the relative encoder position in the telescope motor
      * 
-     * @return the command to zero the position
+     * @return The command to zero the position
      */
     public Command zeroTelescopePosition() {
         return new InstantCommand(() -> telescope.setPosition(0));
     }
 
+    /**
+     * Moves the telescope to the specified setpoint
+     * 
+     * @param setpoint The target setpoint in percentage of full range of motion
+     */
     private void moveTelescope(double setpoint) {
         final MotionMagicVoltage request = new MotionMagicVoltage(0);
         telescope.setControl(request.withPosition(setpoint));
         SmartDashboard.putNumber("Telescope Setpoint", setpoint);
     }
 
+    /**
+     * Moves the joint to the specified setpoint
+     * 
+     * @param setpoint The target setpoint in rotations
+     */
     private void moveJoint(double setpoint) {
         final MotionMagicVoltage request = new MotionMagicVoltage(0);
         joint.setControl(request.withPosition(setpoint));
@@ -119,9 +147,6 @@ public class Arm extends SubsystemBase {
      * @param x the x setpoint in meters
      * @param y the y setpoint in meters
      * @return target motor position in rotations
-     * @throws IllegalStateException if the calculated target height is higher than
-     *                               the maximum height or lower than the minimum
-     *                               height
      */
     private double calculateTelescopeHeight(double x, double y) {
         double height = Math.sqrt(x * x + y * y);
@@ -196,7 +221,7 @@ public class Arm extends SubsystemBase {
     /**
      * Gets the {@link TalonFXConfiguration} for the telescope
      * 
-     * @return the {@link TalonFXConfiguration} for the telescope
+     * @return The {@link TalonFXConfiguration} for the telescope
      */
     private TalonFXConfiguration telescopeConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
@@ -228,7 +253,7 @@ public class Arm extends SubsystemBase {
     /**
      * Gets the {@link TalonFXConfiguration} for the arm joint
      * 
-     * @return the {@link TalonFXConfiguration} for the arm joint
+     * @return The {@link TalonFXConfiguration} for the arm joint
      */
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
@@ -268,7 +293,7 @@ public class Arm extends SubsystemBase {
     /**
      * Gets the {@link CANcoderConfiguration} for the joint CANCoder
      * 
-     * @return the {@link CANcoderConfiguration} for the joint CANCoder
+     * @return The {@link CANcoderConfiguration} for the joint CANCoder
      */
     private CANcoderConfiguration jointCANCoderConfiguration() {
         CANcoderConfiguration configuration = new CANcoderConfiguration();
@@ -281,9 +306,9 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Gets the singleton instance of the {@link Arm} subsystem
+     * Gets the {@link Arm} subsystem instance
      * 
-     * @return the {@link Arm} subsystem
+     * @return The {@link Arm} subsystem instance
      */
     public static Arm system() {
         if (system == null)
