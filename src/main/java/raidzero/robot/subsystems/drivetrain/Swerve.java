@@ -297,7 +297,23 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                     (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.LEFT_REEF_WAYPOINTS : Constants.Swerve.RIGHT_REEF_WAYPOINTS
                 ),
                 new PathConstraints(
-                    1.0,
+                    2.0,
+                    3.0,
+                    Units.degreesToRadians(540),
+                    Units.degreesToRadians(720)
+                )
+            ).finallyDo((interrupted) -> this.stop())
+        );
+    }
+
+    public Command pathToStation() {
+        return defer(
+            () -> AutoBuilder.pathfindToPose(
+                this.getState().Pose.nearest(
+                    Constants.Swerve.STATION_WAYPOINTS
+                ),
+                new PathConstraints(
+                    2.0,
                     3.0,
                     Units.degreesToRadians(540),
                     Units.degreesToRadians(720)
