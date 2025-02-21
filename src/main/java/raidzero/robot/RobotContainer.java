@@ -10,6 +10,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -50,6 +51,7 @@ public class RobotContainer {
         SmartDashboard.putData("AutoChooser", autoChooser);
 
         configureBindings();
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     private void configureBindings() {
@@ -75,7 +77,14 @@ public class RobotContainer {
         joystick.leftTrigger().onTrue(intake.extake(0.1));
 
         // reset the field-centric heading on left bumper press
-        joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
+        // joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
+
+        joystick.leftBumper().whileTrue(
+            swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
+        );
+        joystick.rightBumper().whileTrue(
+            swerve.pathToReef(Constants.Swerve.REEFS.RIGHT)
+        );
 
         swerve.registerTelemetry(logger::telemeterize);
     }
