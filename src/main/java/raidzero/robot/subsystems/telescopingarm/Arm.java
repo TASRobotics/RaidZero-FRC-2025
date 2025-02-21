@@ -206,13 +206,6 @@ public class Arm extends SubsystemBase {
         stopArm();
     }
 
-    public Command stopAllCommand() {
-        return run(() -> stopAll());
-    }
-
-    /**
-     * Runs periodically in the subsystem
-     */
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator pos", getTelescopePosition());
