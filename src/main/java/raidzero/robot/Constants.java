@@ -36,7 +36,7 @@ public class Constants {
             public static final double ACCELERATION = 7.5;
             public static final double JERK = 0.0;
 
-            public static final double TOP_SOFT_LIMIT = 1.0; // 100% range of motion
+            // public static final double TOP_SOFT_LIMIT = 1.0; // 100% range of motion
             public static final double BOTTOM_SOFT_LIMIT = 0.0; // 0% range of motion
 
             public static final double GROUND_OFFSET_M = 0.9;
@@ -57,10 +57,10 @@ public class Constants {
             // TODO: tune
             public static final double KS = 0.02;
             public static final double KG = 0.03;
-            public static final double KV = 1.2;
-            public static final double KA = 0.1;
+            public static final double KV = 1.0;
+            public static final double KA = 0.01;
 
-            public static final double KP = 300.0; //100.0;
+            public static final double KP = 100.0; //100.0;
             public static final double KI = 0.0; //0.0;
             public static final double KD = 0.0; //0.0;
 
@@ -76,8 +76,8 @@ public class Constants {
         }
 
         public class Intake {
-            public static final int MOTOR_ID = 12;
-            public static final int FOLLOW_ID = 13;
+            public static final int MOTOR_ID = 13;
+            public static final int FOLLOW_ID = 12;
 
             public static final double ROLLER_SPEED = 0.35; // 35%
 
@@ -86,8 +86,8 @@ public class Constants {
 
         public class Positions {
             // TODO: tune
-            public static final double[] L4_SCORING_POS_M = { 0.0, 0.0 };
-            public static final double[] L3_SCORING_POS_M = { -0.13, 1.55 };
+            public static final double[] L4_SCORING_POS_M = { -0.1, 2.7 };
+            public static final double[] L3_SCORING_POS_M = { -0.10, 1.55 };
             public static final double[] L2_SCORING_POS_M = { -0.0, 0.2 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 

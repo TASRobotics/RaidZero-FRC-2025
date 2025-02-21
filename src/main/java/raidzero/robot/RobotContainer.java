@@ -30,7 +30,6 @@ public class RobotContainer {
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -67,17 +66,16 @@ public class RobotContainer {
         );
 
         arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]), 0.0));
+        intake.setDefaultCommand(intake.stopRollerCommand());
         
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
-
-        joystick.a().whileTrue(swerve.applyRequest(() -> brake));
 
         joystick.b().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
         joystick.x().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]));
         joystick.a().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L4_SCORING_POS_M[1]));
         joystick.y().whileTrue(arm.moveArmWithRotations(0.25, 0.0).alongWith(algaeIntake.moveJoint(0.0)));
 
-        joystick.rightTrigger().onTrue(intake.runIntake(0.1));
+        joystick.rightTrigger().whileTrue(intake.runIntake(0.1));
         joystick.leftTrigger().onTrue(intake.extake(0.1));
 
         // reset the field-centric heading on left bumper press

@@ -29,12 +29,6 @@ public class Joint extends SubsystemBase {
         return Commands.run(() -> joint.setControl(request.withPosition(setpoint)), this);
     }
 
-    private boolean jointCurrentSpike(double currentThreshold) {
-        if (joint.getStatorCurrent().getValueAsDouble() > currentThreshold)
-            return true;
-        return false;
-    }
-
     private void stopJoint() {
         joint.stopMotor();
     }

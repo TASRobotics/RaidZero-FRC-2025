@@ -1,7 +1,6 @@
 package raidzero.robot.subsystems.telescopingarm;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -57,7 +56,7 @@ public class Arm extends SubsystemBase {
 
         // return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this);
         return Commands.run(() -> moveTelescope(telescopeSetpoint), this)
-            .alongWith(Commands.waitSeconds(0.3).andThen(() -> moveJoint(jointSetpoint)));
+            .alongWith(Commands.waitSeconds(0.0).andThen(() -> moveJoint(jointSetpoint)));
     }
 
     public Command goToIntakePos() {
@@ -247,8 +246,8 @@ public class Arm extends SubsystemBase {
 
         configuration.Slot0.GravityType = Constants.TelescopingArm.Telescope.GRAVITY_TYPE_VALUE;
 
-        configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.TelescopingArm.Telescope.TOP_SOFT_LIMIT;
+        // configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        // configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.TelescopingArm.Telescope.TOP_SOFT_LIMIT;
 
         return configuration;
     }
@@ -261,9 +260,9 @@ public class Arm extends SubsystemBase {
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
-        configuration.Feedback.SensorToMechanismRatio = 1.0/Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
-        configuration.Feedback.RotorToSensorRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR*Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
-
+        configuration.Feedback.SensorToMechanismRatio = 1.0 / Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
+        configuration.Feedback.RotorToSensorRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR *
+            Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
 
         configuration.Slot0 = new Slot0Configs()
             .withKS(Constants.TelescopingArm.Joint.KS)
