@@ -13,7 +13,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import raidzero.robot.subsystems.algaeintake.Joint;
@@ -31,7 +30,6 @@ public class RobotContainer {
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -52,10 +50,6 @@ public class RobotContainer {
         SmartDashboard.putData("AutoChooser", autoChooser);
 
         configureBindings();
-
-        // * Set positions for things here in the future
-        arm.resetJointPosition();
-        // arm.setJointPosition(0.25);
     }
 
     private void configureBindings() {
@@ -68,15 +62,14 @@ public class RobotContainer {
         );
 
         arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]), 0.0));
+        intake.setDefaultCommand(intake.stopRollerCommand());
         
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
-
-        joystick.a().whileTrue(swerve.applyRequest(() -> brake));
 
         joystick.b().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
         joystick.x().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]));
         joystick.a().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L4_SCORING_POS_M[1]));
-        joystick.y().whileTrue(arm.moveArmWithRotations(0.25, 0.0).alongWith(algaeIntake.moveJoint(0.0)));
+        joystick.y().whileTrue(arm.moveArmWithRotations(0.23, 0.0).alongWith(algaeIntake.moveJoint(0.0)));
 
         joystick.rightTrigger().onTrue(intake.runIntake(0.1));
         joystick.leftTrigger().onTrue(intake.extake(0.1));

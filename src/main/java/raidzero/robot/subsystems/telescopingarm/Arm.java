@@ -1,10 +1,5 @@
 package raidzero.robot.subsystems.telescopingarm;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
-import javax.sql.rowset.JoinRowSet;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -12,6 +7,8 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
@@ -20,9 +17,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import raidzero.robot.Constants;
-import raidzero.robot.Telemetry;
 
 public class Arm extends SubsystemBase {
     private static Arm system;
@@ -60,12 +56,16 @@ public class Arm extends SubsystemBase {
 
         // return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this);
         return Commands.run(() -> moveTelescope(telescopeSetpoint), this)
-            .alongWith(Commands.waitSeconds(0.3).andThen(() -> moveJoint(jointSetpoint)));
+            .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
     }
 
     public Command goToIntakePos() {
-        double telescopeSetpoint = -1 * calculateTelescopeHeight(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]);
-        double jointSetpoint = calculateJointAngle(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]);
+        double telescopeSetpoint = -1 * calculateTelescopeHeight(
+            Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]
+        );
+        double jointSetpoint = calculateJointAngle(
+            Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]
+        );
 
         return Commands.run(() -> {
             moveTelescope(telescopeSetpoint);
@@ -75,7 +75,9 @@ public class Arm extends SubsystemBase {
 
     public Command moveArmWithRotations(double jointSetpoint, double telescopeSetpoint) {
         return Commands.run(() -> moveJoint(jointSetpoint), this)
-            .alongWith(Commands.waitSeconds(0.3).andThen(() -> moveTelescope(telescopeSetpoint)));
+            .alongWith(
+                Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
+                .andThen(() -> moveTelescope(telescopeSetpoint)));
     }
 
     /**
@@ -141,7 +143,7 @@ public class Arm extends SubsystemBase {
      */
     private double calculateTelescopeHeight(double x, double y) {
         double height = Math.sqrt(x * x + y * y);
-        height -= Constants.TelescopingArm.Telescope.GROUND_OFFSET;
+        height -= Constants.TelescopingArm.Telescope.GROUND_OFFSET_M;
 
         return height / Constants.TelescopingArm.Telescope.MAX_HEIGHT_M;
     }
@@ -155,20 +157,6 @@ public class Arm extends SubsystemBase {
      */
     public double calculateJointAngle(double x, double y) {
         return (Math.atan2(y, x)) * 180 / Math.PI / 360.0;
-    }
-
-    /**
-     * Checks if the arm encoder position is within the defined tolerance in
-     * {@link Constants.TelescopingArm.Telescope}
-     * 
-     * @param telescopeSetpoint the desired telescope position in rotations
-     * @param armJointSetpoint  the desired arm joint angle in rotations
-     * @return true if both the telescope and the arm are within the defined
-     *         tolerance of their setpoints
-     */
-    private boolean armWithinSetpoint(double telescopeSetpoint, double armJointSetpoint) {
-        return Math.abs(getTelescopePosition() - telescopeSetpoint) < Constants.TelescopingArm.Telescope.POSITION_TOLERANCE_ROTATIONS &&
-            Math.abs(getJointPosition() - armJointSetpoint) < Constants.TelescopingArm.Joint.POSITION_TOLERANCE_ROTATIONS;
     }
 
     /**
@@ -187,14 +175,6 @@ public class Arm extends SubsystemBase {
      */
     public double getJointPosition() {
         return joint.getPosition().getValueAsDouble();
-    }
-
-    public void setJointPosition(double position) {
-        joint.setPosition(position);
-    }
-
-    public void resetJointPosition() {
-        joint.setPosition((jointCANcoder.getPosition().getValueAsDouble() * Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO));
     }
 
     /**
@@ -260,8 +240,8 @@ public class Arm extends SubsystemBase {
 
         configuration.Slot0.GravityType = Constants.TelescopingArm.Telescope.GRAVITY_TYPE_VALUE;
 
-        configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.TelescopingArm.Telescope.FORWARD_SOFT_LIMIT_PERCENT;
+        // configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        // configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.TelescopingArm.Telescope.TOP_SOFT_LIMIT;
 
         return configuration;
     }
@@ -274,7 +254,9 @@ public class Arm extends SubsystemBase {
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
-        configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR;
+        configuration.Feedback.SensorToMechanismRatio = 1.0 / Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
+        configuration.Feedback.RotorToSensorRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR *
+            Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
 
         configuration.Slot0 = new Slot0Configs()
             .withKS(Constants.TelescopingArm.Joint.KS)
@@ -296,6 +278,11 @@ public class Arm extends SubsystemBase {
         configuration.CurrentLimits.SupplyCurrentLimit = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LIMIT;
         configuration.CurrentLimits.SupplyCurrentLowerTime = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LOWER_TIME;
 
+        configuration.Feedback.FeedbackRemoteSensorID = Constants.TelescopingArm.Joint.CANCODER_ID;
+        configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
+
+        configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
         return configuration;
     }
 
@@ -307,6 +294,7 @@ public class Arm extends SubsystemBase {
     private CANcoderConfiguration jointCANCoderConfiguration() {
         CANcoderConfiguration configuration = new CANcoderConfiguration();
 
+        configuration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = Constants.TelescopingArm.Joint.CANCODER_DISCONTINUITY_POINT;
         configuration.MagnetSensor.MagnetOffset = Constants.TelescopingArm.Joint.CANCODER_OFFSET;
         configuration.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
 

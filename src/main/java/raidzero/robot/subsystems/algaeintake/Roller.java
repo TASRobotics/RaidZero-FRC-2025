@@ -12,13 +12,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import raidzero.robot.Constants;
+
 public class Roller extends SubsystemBase {
     private static Roller system;
 
     private SparkMax roller;
 
     private Roller() {
-        roller = new SparkMax(Constants.Roller.MOTOR_ID, MotorType.kBrushless);
+        roller = new SparkMax(Constants.AlgaeIntake.Roller.MOTOR_ID, MotorType.kBrushless);
         roller.configure(rollerConfig(), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 
