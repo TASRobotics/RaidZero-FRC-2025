@@ -1,13 +1,9 @@
 package raidzero.robot.subsystems.telescopingarm;
 
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.ctre.phoenix6.configs.TalonFXSConfiguration;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
@@ -23,23 +19,24 @@ import raidzero.robot.Constants;
 public class Intake extends SubsystemBase {
     private static Intake system;
 
-    private SparkMax roller, rollerFollow;
+    private TalonFXS roller, follow;
 
-    private LaserCan limit;
+    private LaserCan laserCan;
 
     private Intake() {
-        roller = new SparkMax(Constants.TelescopingArm.Intake.MOTOR_ID, MotorType.kBrushless);
-        roller.configure(rollerConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID);
+        roller.getConfigurator().apply(rollerConfiguration());
 
-        rollerFollow = new SparkMax(Constants.TelescopingArm.Intake.FOLLOW_ID, MotorType.kBrushless);
-        rollerFollow.configure(rollerFollowConfiguration(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        follow = new TalonFXS(Constants.TelescopingArm.Intake.FOLLOW_ID);
+        follow.setControl(new Follower(Constants.TelescopingArm.Intake.MOTOR_ID, true));
+        follow.getConfigurator().apply(followConfiguration());
 
-        limit = new LaserCan(0);
+        laserCan = new LaserCan(0);
 
         try {
-            limit.setRangingMode(RangingMode.SHORT);
-            limit.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
-            limit.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
+            laserCan.setRangingMode(RangingMode.SHORT);
+            laserCan.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
+            laserCan.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
         } catch (Exception e) {
             System.out.println("LaserCan Config Error");
         }
@@ -53,8 +50,12 @@ public class Intake extends SubsystemBase {
      */
     public Command runIntake(double speed) {
         return Commands.run(() -> runRoller(speed), this)
-            .until(() -> limit.getMeasurement().distance_mm <= 40)
+            .until(() -> laserCan.getMeasurement().distance_mm <= 50)
             .andThen(Commands.run(() -> runRoller(-0.1), this).withTimeout(0.1).andThen(() -> stopRoller()));
+    }
+
+    public Command stopRollerCommand() {
+        return Commands.run(() -> stopRoller(), this);
     }
 
     public Command extake(double speed) {
@@ -83,7 +84,7 @@ public class Intake extends SubsystemBase {
      * @return The distance in mm, -1 if the LaserCAN cannot be found
      */
     public int getLimitDistance() {
-        Measurement measurement = limit.getMeasurement();
+        Measurement measurement = laserCan.getMeasurement();
 
         return measurement != null ? measurement.distance_mm : -1;
     }
@@ -93,24 +94,23 @@ public class Intake extends SubsystemBase {
      * 
      * @return the {@link SparkBaseConfig} for the roller motor
      */
-    private SparkBaseConfig rollerConfiguration() {
-        SparkMaxConfig configuration = new SparkMaxConfig();
+    private TalonFXSConfiguration rollerConfiguration() {
+        TalonFXSConfiguration configuration = new TalonFXSConfiguration();
 
-        configuration.idleMode(IdleMode.kBrake);
+        configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
 
         return configuration;
     }
 
     /**
-     * Gets the {@link SparkBaseConfig} for the roller follow motor
+     * Gets the {@link SparkBaseConfig} for the roller motor
      * 
-     * @return the {@link SparkBaseConfig} for the roller follow motor
+     * @return the {@link SparkBaseConfig} for the roller motor
      */
-    private SparkBaseConfig rollerFollowConfiguration() {
-        SparkMaxConfig configuration = new SparkMaxConfig();
+    private TalonFXSConfiguration followConfiguration() {
+        TalonFXSConfiguration configuration = new TalonFXSConfiguration();
 
-        configuration.follow(Constants.TelescopingArm.Intake.MOTOR_ID, true);
-        configuration.idleMode(IdleMode.kBrake);
+        configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
 
         return configuration;
     }
