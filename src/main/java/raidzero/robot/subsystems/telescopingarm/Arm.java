@@ -54,7 +54,6 @@ public class Arm extends SubsystemBase {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(x, y);
         double jointSetpoint = calculateJointAngle(x, y);
 
-        // return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this);
         return run(() -> moveTelescope(telescopeSetpoint))
             .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
     }
@@ -101,22 +100,6 @@ public class Arm extends SubsystemBase {
      */
     public Command zeroTelescopePosition() {
         return new InstantCommand(() -> telescope.setPosition(0));
-    }
-
-    /**
-     * Uses Motion Magic to move the telescope and arm joint to the target position
-     * 
-     * @param telescopeSetpoint the target telescope position in rotations
-     * @param jointAngle     the target arm joint angle in rotations
-     */
-    private void moveTo(double telescopeSetpoint, double jointAngle) {
-        final MotionMagicVoltage telescopeRequest = new MotionMagicVoltage(0);
-        telescope.setControl(telescopeRequest.withPosition(telescopeSetpoint));
-        SmartDashboard.putNumber("Telescope Setpoint", telescopeSetpoint);
-
-        final MotionMagicVoltage armRequest = new MotionMagicVoltage(0);
-        joint.setControl(armRequest.withPosition(jointAngle));
-        SmartDashboard.putNumber("Joint Setpoint", jointAngle);
     }
 
     private void moveTelescope(double setpoint) {
@@ -239,9 +222,6 @@ public class Arm extends SubsystemBase {
         configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
 
         configuration.Slot0.GravityType = Constants.TelescopingArm.Telescope.GRAVITY_TYPE_VALUE;
-
-        // configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        // configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.TelescopingArm.Telescope.TOP_SOFT_LIMIT;
 
         return configuration;
     }

@@ -66,9 +66,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     private StructArrayPublisher<SwerveModuleState> modulePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("ModuleStates", SwerveModuleState.struct).publish();
     private StructPublisher <Pose2d> botpose = NetworkTableInstance.getDefault().getStructTopic("botPoseNT", Pose2d.struct).publish();
 
-    private final StructPublisher<Pose2d> botPosePublisher =
-        NetworkTableInstance.getDefault().getStructTopic("RobotPose",Pose2d.struct).publish();
-
     private final Field2d field = new Field2d();
 
     private static Swerve system;
@@ -262,27 +259,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return this.sysIdRoutineToApply.dynamic(direction);
-    }
-
-    /**
-     * Moves towards a desired coral station using Limelight TX and TY values
-     * 
-     * @return The command to move towards the station
-     */
-    public Command goToStation() {
-        SwerveRequest.RobotCentric swerveRequest = new SwerveRequest.RobotCentric();
-
-        return run(
-            () -> this.setControl(
-                swerveRequest
-                    .withVelocityX(LimelightHelpers.getTY("limelight-bl") * 0.07)
-                    .withRotationalRate(LimelightHelpers.getTX("limelight-bl") * -0.07)
-            )
-        ).until(() -> {
-            return LimelightHelpers.getTX("limelight-bl") < 0.08 && LimelightHelpers.getTY("limelight-bl") < 0.08;
-        }).andThen(
-            this.stop()
-        );
     }
 
     /**
