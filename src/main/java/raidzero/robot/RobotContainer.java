@@ -72,10 +72,7 @@ public class RobotContainer {
 
         //* Driver controls
         joystick.leftBumper().whileTrue(intake.extake(0.1));
-        joystick.rightBumper().onTrue(
-            arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1])
-            .alongWith(intake.runIntake(0.1))
-        );
+        joystick.rightBumper().onTrue(intake.runIntake(0.1));
 
         joystick.x().whileTrue(
             swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
@@ -94,10 +91,7 @@ public class RobotContainer {
         operator.button(9).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L4_SCORING_POS_M[1]));
 
         operator.button(10).whileTrue(intake.extake(0.1));
-        operator.button(11).onTrue(
-            arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1])
-            .alongWith(intake.runIntake(0.1))
-        );
+        operator.button(11).onTrue(intake.runIntake(0.1));
         operator.button(12).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]));
 
         swerve.registerTelemetry(logger::telemeterize);
