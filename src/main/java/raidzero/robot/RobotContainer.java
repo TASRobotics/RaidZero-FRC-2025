@@ -51,6 +51,7 @@ public class RobotContainer {
         SmartDashboard.putData("AutoChooser", autoChooser);
 
         configureBindings();
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     private void configureBindings() {
@@ -80,13 +81,9 @@ public class RobotContainer {
 
         joystick.leftBumper().whileTrue(
             swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
-                .withTimeout(0.01)
-                .andThen(swerve.pathToReef(Constants.Swerve.REEFS.LEFT))
         );
         joystick.rightBumper().whileTrue(
             swerve.pathToReef(Constants.Swerve.REEFS.RIGHT)
-                .withTimeout(0.01)
-                .andThen(swerve.pathToReef(Constants.Swerve.REEFS.RIGHT))
         );
 
         swerve.registerTelemetry(logger::telemeterize);

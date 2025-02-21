@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -285,17 +286,15 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /**
-     * Returns a {@link Command} that moves the robot to the specified reef
+     * Uses PathPlanner's {@link AutoBuilder#pathfindToPose} to move to the desired pose
      * 
-     * @param reef The left or right reef
-     * @return The command to move to the reef
+     * @param pose The desired pose
+     * @return A {@link DeferredCommand} that moves the robot to the desired pose
      */
-    public Command pathToReef(Constants.Swerve.REEFS reef) {
+    public Command goToPose(Pose2d pose) {
         return defer(
             () -> AutoBuilder.pathfindToPose(
-                this.getState().Pose.nearest(
-                    (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.LEFT_REEF_WAYPOINTS : Constants.Swerve.RIGHT_REEF_WAYPOINTS
-                ),
+                pose,
                 new PathConstraints(
                     2.0,
                     3.0,
@@ -306,20 +305,32 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         );
     }
 
+    /**
+     * Moves the robot to the nearest left or right reef
+     * 
+     * @param reef Desired left or right reef from {@link Constants.Swerve.REEFS}
+     * @return A {@link DeferredCommand} that moves the robot to the nearest left or right reef
+     */
+    public Command pathToReef(Constants.Swerve.REEFS reef) {
+        return defer(() -> {
+            Pose2d target = this.getState().Pose.nearest(
+                (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.LEFT_REEF_WAYPOINTS : Constants.Swerve.RIGHT_REEF_WAYPOINTS
+            );
+            return goToPose(target).withTimeout(0.01).andThen(goToPose(target));
+        });
+    }
+
+    /**
+     * Moves the robot to the nearest coral station
+     * 
+     * @return A {@link DeferredCommand} that moves the robot to the nearest coral station
+     */
     public Command pathToStation() {
-        return defer(
-            () -> AutoBuilder.pathfindToPose(
-                this.getState().Pose.nearest(
-                    Constants.Swerve.STATION_WAYPOINTS
-                ),
-                new PathConstraints(
-                    2.0,
-                    3.0,
-                    Units.degreesToRadians(540),
-                    Units.degreesToRadians(720)
-                )
-            ).finallyDo((interrupted) -> this.stop())
-        );
+        return defer(() -> {
+            Pose2d target = this.getState().Pose.nearest(Constants.Swerve.STATION_WAYPOINTS);
+
+            return goToPose(target).withTimeout(0.01).andThen(goToPose(target));
+        });
     }
 
     /**
