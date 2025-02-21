@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 5.261,
+        "x": 5.253,
         "y": 3.035
       },
       "prevControl": {
-        "x": 6.19168476419966,
+        "x": 6.18368476419966,
         "y": 2.3540163183790885
       },
       "nextControl": null,
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Reef appr",
-      "minWaypointRelativePos": 0.75,
+      "minWaypointRelativePos": 0.8,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
@@ -47,8 +47,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.5,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

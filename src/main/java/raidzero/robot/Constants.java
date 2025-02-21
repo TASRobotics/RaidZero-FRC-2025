@@ -138,7 +138,7 @@ public class Constants {
             public static final double[] L2_SCORING_POS_M = { -0.0, 0.2 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static final double[] INTAKE_POS_M = { 0.53, 0.815 };
+            public static final double[] INTAKE_POS_M = { 0.53, 0.805 };
 
             public static final double[] HOME_POS_M = { 0.0, 0.0 };
         }
