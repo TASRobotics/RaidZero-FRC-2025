@@ -10,13 +10,14 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import raidzero.robot.subsystems.algaeintake.Joint;
+import raidzero.robot.subsystems.algaeintake.AlgaeJoint;
 import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
@@ -31,20 +32,23 @@ public class RobotContainer {
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController joystick = new CommandXboxController(0);
+    private final CommandGenericHID operator = new CommandGenericHID(1);
 
     public final Swerve swerve = Swerve.system();
     public final Arm arm = Arm.system();
-    public final Intake intake = Intake.system();
+    public final CoralIntake coralIntake = CoralIntake.system();
     public final Limelight limes = Limelight.system();
-    public final Joint algaeIntake = Joint.system();
+    public final AlgaeJoint algaeIntake = AlgaeJoint.system();
 
     public final SendableChooser<Command> autoChooser;
 
+    /**
+     * Constructs a {@link RobotContainer} instance
+     */
     public RobotContainer() {
         registerPathplannerCommands();
 
@@ -52,12 +56,12 @@ public class RobotContainer {
         SmartDashboard.putData("AutoChooser", autoChooser);
 
         configureBindings();
-
-        // * Set positions for things here in the future
-        arm.resetJointPosition();
-        // arm.setJointPosition(0.25);
+        PathfindingCommand.warmupCommand().schedule();
     }
 
+    /**
+     * Configures button bindings for the robot
+     */
     private void configureBindings() {
         swerve.setDefaultCommand(
             swerve.applyRequest(
@@ -67,41 +71,59 @@ public class RobotContainer {
             )
         );
 
-        arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]), 0.0));
-        
+        arm.setDefaultCommand(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        coralIntake.setDefaultCommand(coralIntake.stopRoller());
+
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
 
-        joystick.a().whileTrue(swerve.applyRequest(() -> brake));
+        // * Driver controls
+        joystick.leftBumper().whileTrue(coralIntake.extake());
+        joystick.rightBumper().onTrue(coralIntake.intake());
 
-        joystick.b().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
-        joystick.x().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]));
-        joystick.a().whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L4_SCORING_POS_M[1]));
-        joystick.y().whileTrue(arm.moveArmWithRotations(0.25, 0.0).alongWith(algaeIntake.moveJoint(0.0)));
+        joystick.x().whileTrue(
+            swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
+        );
 
-        joystick.rightTrigger().onTrue(intake.runIntake(0.1));
-        joystick.leftTrigger().onTrue(intake.extake(0.1));
+        joystick.y().whileTrue(
+            swerve.pathToReef(Constants.Swerve.REEFS.RIGHT)
+        );
 
-        // reset the field-centric heading on left bumper press
-        joystick.leftBumper().onTrue(swerve.runOnce(() -> swerve.seedFieldCentric()));
+        joystick.povLeft().whileTrue(
+            swerve.pathToStation()
+        );
+
+        // * Operator controls
+        operator.button(Constants.Bindings.L3).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M));
+        operator.button(Constants.Bindings.L4).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
+
+        operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
+        operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
+        operator.button(Constants.Bindings.CORAL_SCOOCH).onTrue(coralIntake.scoochCoral());
 
         swerve.registerTelemetry(logger::telemeterize);
     }
 
+    /**
+     * Registers PathPlanner commands
+     */
     private void registerPathplannerCommands() {
-        NamedCommands.registerCommand("ArmIntakeCoral", arm.goToIntakePos());
-        NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
-        NamedCommands.registerCommand("ArmVertical", arm.moveArmWithRotations(0.25, 0.0));
+        NamedCommands.registerCommand("ArmIntakeCoral", arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M));
+        NamedCommands.registerCommand("ArmL4", arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
 
         NamedCommands.registerCommand(
-            "ExtakeCoral", intake.extake(0.15).until(
-                () -> intake.getLimitDistance() >= 40
-            ).withTimeout(1.0).andThen(() -> intake.stopRoller())
+            "ExtakeCoral", coralIntake.extake().until(
+                () -> coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM
+            ).withTimeout(1.0).andThen(() -> coralIntake.stopRoller())
         );
-        NamedCommands.registerCommand("IntakeCoral", intake.runIntake(0.12).withTimeout(0.8).andThen(() -> intake.stopRoller()));
-
-        NamedCommands.registerCommand("GoToStation", swerve.goToStation());
+        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().withTimeout(0.8).andThen(() -> coralIntake.stopRoller()));
     }
 
+    /**
+     * Returns the selected autonomous command
+     * 
+     * @return A {@link Command} representing the selected autonomous command
+     */
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
