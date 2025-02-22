@@ -3,36 +3,36 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.949572118037725,
-        "y": 5.190207214565642
+        "x": 4.988014788612429,
+        "y": 2.883643723695211
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.958500000000001,
-        "y": 6.94025
+        "x": 4.51607692749134,
+        "y": 1.66086289328706
       },
       "isLocked": false,
-      "linkedName": "Auton2-1End"
+      "linkedName": "Auton5-1End"
     },
     {
       "anchor": {
-        "x": 1.068225018677404,
-        "y": 6.949371634186422
+        "x": 1.04924,
+        "y": 1.031
       },
       "prevControl": {
-        "x": 2.184,
-        "y": 5.4777499999999995
+        "x": 2.7732038891945425,
+        "y": 2.384998074383802
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Auton2-2End"
+      "linkedName": "StationPickupA5"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7406474820143881,
+      "name": "station appr",
+      "minWaypointRelativePos": 0.8461970839389538,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
@@ -56,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.5
+    "rotation": 53.24436865430491
   },
   "reversed": false,
-  "folder": "Auton2",
+  "folder": "Auton5",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

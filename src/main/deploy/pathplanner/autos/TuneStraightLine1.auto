@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "StraightLine1"
+            "name": "ArmL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtakeCoral"
           }
         }
       ]
