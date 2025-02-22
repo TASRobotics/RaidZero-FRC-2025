@@ -107,9 +107,14 @@ public class RobotContainer {
      * Registers PathPlanner commands
      */
     private void registerPathplannerCommands() {
-        NamedCommands.registerCommand("ArmIntakeCoral", arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        NamedCommands.registerCommand("ArmIntakeCoral", arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M).withTimeout(1.0));
         NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M));
-        NamedCommands.registerCommand("ArmL4", arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
+        NamedCommands.registerCommand(
+            "ArmL4",
+            arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
+            .andThen(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M))
+            .withTimeout(2.5)
+        );
 
         NamedCommands.registerCommand(
             "ExtakeCoral", coralIntake.extake().until(
