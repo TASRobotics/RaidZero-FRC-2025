@@ -51,10 +51,10 @@ public class Intake extends SubsystemBase {
      * @param speed The speed as a percentage
      * @return The command to be scheduled and run
      */
-    public Command runIntake(double speed) {
-        return run(() -> runRoller(speed))
+    public Command intake(double speed) {
+        return run(() -> run(speed))
             .until(() -> laserCan.getMeasurement().distance_mm <= 50)
-            .andThen(run(() -> runRoller(-0.1)).withTimeout(0.1).andThen(() -> stopRoller()));
+            .andThen(run(() -> run(-0.1)).withTimeout(0.1).andThen(() -> stopRoller()));
     }
 
     /**
@@ -73,7 +73,7 @@ public class Intake extends SubsystemBase {
      * @return A {@link Command} to extake at the specified speed
      */
     public Command extake(double speed) {
-        return run(() -> runRoller(speed)).withTimeout(1.0).andThen(() -> stopRoller());
+        return run(() -> run(speed)).withTimeout(1.0).andThen(() -> stopRoller());
     }
 
     /**
@@ -81,7 +81,7 @@ public class Intake extends SubsystemBase {
      * 
      * @param speed The speed to run at as a percentage
      */
-    private void runRoller(double speed) {
+    private void run(double speed) {
         roller.set(speed);
     }
 

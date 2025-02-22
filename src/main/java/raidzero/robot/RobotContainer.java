@@ -78,7 +78,7 @@ public class RobotContainer {
 
         //* Driver controls
         joystick.leftBumper().whileTrue(intake.extake(0.1));
-        joystick.rightBumper().onTrue(intake.runIntake(0.1));
+        joystick.rightBumper().onTrue(intake.intake(0.1));
 
         joystick.x().whileTrue(
             swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
@@ -97,7 +97,7 @@ public class RobotContainer {
         operator.button(9).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
 
         operator.button(10).whileTrue(intake.extake(0.1));
-        operator.button(11).onTrue(intake.runIntake(0.1));
+        operator.button(11).onTrue(intake.intake(0.1));
         operator.button(12).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
 
         swerve.registerTelemetry(logger::telemeterize);
@@ -116,7 +116,7 @@ public class RobotContainer {
                 () -> intake.getLimitDistance() >= 40
             ).withTimeout(1.0).andThen(() -> intake.stopRoller())
         );
-        NamedCommands.registerCommand("IntakeCoral", intake.runIntake(0.12).withTimeout(0.8).andThen(() -> intake.stopRoller()));
+        NamedCommands.registerCommand("IntakeCoral", intake.intake(0.12).withTimeout(0.8).andThen(() -> intake.stopRoller()));
     }
 
     /**

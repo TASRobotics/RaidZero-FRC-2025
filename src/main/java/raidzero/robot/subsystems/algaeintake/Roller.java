@@ -32,8 +32,8 @@ public class Roller extends SubsystemBase {
      * @param speed The desired speed
      * @return A {@link Command} that runs the roller at the desired speed
      */
-    public Command runRoller(double speed) {
-        return run(() -> moveRoller(speed)).withTimeout(2).andThen(() -> stopRoller());
+    public Command intake(double speed) {
+        return run(() -> run(speed)).withTimeout(2).andThen(() -> stop());
     }
 
     /**
@@ -41,14 +41,14 @@ public class Roller extends SubsystemBase {
      * 
      * @param speed The desired speed
      */
-    private void moveRoller(double speed) {
+    private void run(double speed) {
         roller.set(speed);
     }
 
     /**
      * Stops the roller motor
      */
-    private void stopRoller() {
+    private void stop() {
         roller.stopMotor();
     }
 

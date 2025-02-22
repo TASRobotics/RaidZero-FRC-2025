@@ -33,14 +33,13 @@ public class Joint extends SubsystemBase {
      * @return A {@link Command} that moves the joint to the desired setpoint
      */
     public Command moveJoint(double setpoint) {
-        final MotionMagicVoltage request = new MotionMagicVoltage(0);
-        return run(() -> joint.setControl(request.withPosition(setpoint)));
+        return run(() -> joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint)));
     }
 
     /**
      * Stops the joint motor
      */
-    public void stopJoint() {
+    public void stop() {
         joint.stopMotor();
     }
 
