@@ -29,7 +29,11 @@ public class RobotContainer {
                                                                                       // max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+    private final SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric()
+        .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+        .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+
+    private final SwerveRequest.RobotCentric robotCentricDrive = new SwerveRequest.RobotCentric()
         .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
@@ -65,20 +69,31 @@ public class RobotContainer {
     private void configureBindings() {
         swerve.setDefaultCommand(
             swerve.applyRequest(
-                () -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed)
+                () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed)
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )
         );
 
-        arm.setDefaultCommand(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
         coralIntake.setDefaultCommand(coralIntake.stopRoller());
 
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
 
         // * Driver controls
+        joystick.a().whileTrue(
+            swerve.applyRequest(
+                () -> robotCentricDrive.withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.3)
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
+            )
+        );
+
         joystick.leftBumper().whileTrue(coralIntake.extake());
         joystick.rightBumper().onTrue(coralIntake.intake());
+
+        joystick.b().whileTrue(
+            swerve.pathToStation()
+        );
 
         joystick.x().whileTrue(
             swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
@@ -86,10 +101,6 @@ public class RobotContainer {
 
         joystick.y().whileTrue(
             swerve.pathToReef(Constants.Swerve.REEFS.RIGHT)
-        );
-
-        joystick.povLeft().whileTrue(
-            swerve.pathToStation()
         );
 
         // * Operator controls
