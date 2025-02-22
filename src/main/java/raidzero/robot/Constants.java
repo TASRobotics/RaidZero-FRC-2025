@@ -56,8 +56,8 @@ public class Constants {
 
         public static final int L1 = 6;
         public static final int L2 = 7;
-        public static final int L4 = 8;
-        public static final int L3 = 9;
+        public static final int L3 = 8;
+        public static final int L4 = 4;
 
         public static final int CORAL_INTAKE = 10;
         public static final int CORAL_EXTAKE = 11;
@@ -148,7 +148,7 @@ public class Constants {
 
         public class Positions {
             public static final double[] L4_SCORING_POS_M = { -0.1, 2.7 };
-            public static final double[] L3_SCORING_POS_M = { -0.10, 1.55 };
+            public static final double[] L3_SCORING_POS_M = { -0.15, 1.55 };
             public static final double[] L2_SCORING_POS_M = { -0.0, 0.2 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
