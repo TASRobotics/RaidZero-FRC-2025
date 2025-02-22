@@ -76,8 +76,11 @@ public class Arm extends SubsystemBase {
      * @param setpoint The target setpoint in percentage of full range of motion
      * @return A {@link Command} that moves the telescope to the desired setpoint
      */
-    public Command runTelescope(double setpoint) {
-        return run(() -> moveTelescope(setpoint));
+    public Command moveTelescope(double setpoint) {
+        return run(() -> {
+            telescope.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+            SmartDashboard.putNumber("Telescope Setpoint", setpoint);
+        });
     }
 
     /**
@@ -86,8 +89,11 @@ public class Arm extends SubsystemBase {
      * @param setpoint The target setpoint in rotations
      * @return A {@link Command} that moves the joint to the desired setpoint
      */
-    public Command runJoint(double setpoint) {
-        return run(() -> moveJoint(setpoint));
+    public Command moveJoint(double setpoint) {
+        return run(() -> {
+            joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+            SmartDashboard.putNumber("Joint Setpoint", setpoint);
+        });
     }
 
     /**
@@ -97,28 +103,6 @@ public class Arm extends SubsystemBase {
      */
     public Command zeroTelescopePosition() {
         return new InstantCommand(() -> telescope.setPosition(0));
-    }
-
-    /**
-     * Moves the telescope to the specified setpoint
-     * 
-     * @param setpoint The target setpoint in percentage of full range of motion
-     */
-    private void moveTelescope(double setpoint) {
-        final MotionMagicVoltage request = new MotionMagicVoltage(0);
-        telescope.setControl(request.withPosition(setpoint));
-        SmartDashboard.putNumber("Telescope Setpoint", setpoint);
-    }
-
-    /**
-     * Moves the joint to the specified setpoint
-     * 
-     * @param setpoint The target setpoint in rotations
-     */
-    private void moveJoint(double setpoint) {
-        final MotionMagicVoltage request = new MotionMagicVoltage(0);
-        joint.setControl(request.withPosition(setpoint));
-        SmartDashboard.putNumber("Joint Setpoint", setpoint);
     }
 
     /**
