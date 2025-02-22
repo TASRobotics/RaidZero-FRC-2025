@@ -33,14 +33,11 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import raidzero.robot.subsystems.drivetrain.TunerConstants.TunerSwerveDrivetrain;
 import raidzero.robot.Constants;
-import raidzero.robot.wrappers.LimelightHelpers;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -63,11 +60,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     private final SwerveRequest.SysIdSwerveRotation rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
     private final SwerveRequest.ApplyRobotSpeeds pathplannerSpeeds = new SwerveRequest.ApplyRobotSpeeds();
 
-    private StructArrayPublisher<SwerveModuleState> modulePublisher = NetworkTableInstance.getDefault().getStructArrayTopic("ModuleStates", SwerveModuleState.struct).publish();
-    private StructPublisher <Pose2d> botpose = NetworkTableInstance.getDefault().getStructTopic("botPoseNT", Pose2d.struct).publish();
-
-    private final StructPublisher<Pose2d> botPosePublisher =
-        NetworkTableInstance.getDefault().getStructTopic("RobotPose",Pose2d.struct).publish();
+    private StructArrayPublisher<SwerveModuleState> modulePublisher = NetworkTableInstance.getDefault()
+        .getStructArrayTopic("ModuleStates", SwerveModuleState.struct).publish();
+    private StructPublisher<Pose2d> botpose = NetworkTableInstance.getDefault().getStructTopic("botPoseNT", Pose2d.struct).publish();
 
     private final Field2d field = new Field2d();
 
@@ -265,27 +260,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /**
-     * Moves towards a desired coral station using Limelight TX and TY values
-     * 
-     * @return The command to move towards the station
-     */
-    public Command goToStation() {
-        SwerveRequest.RobotCentric swerveRequest = new SwerveRequest.RobotCentric();
-
-        return Commands.run(
-            () -> this.setControl(
-                swerveRequest
-                    .withVelocityX(LimelightHelpers.getTY("limelight-bl") * 0.07)
-                    .withRotationalRate(LimelightHelpers.getTX("limelight-bl") * -0.07)
-            )
-        ).until(() -> {
-            return LimelightHelpers.getTX("limelight-bl") < 0.08 && LimelightHelpers.getTY("limelight-bl") < 0.08;
-        }).andThen(
-            this.stop()
-        );
-    }
-
-    /**
      * Uses PathPlanner's {@link AutoBuilder#pathfindToPose} to move to the desired pose
      * 
      * @param pose The desired pose
@@ -366,7 +340,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     public Command stop() {
         SwerveRequest.RobotCentric swerveRequest = new SwerveRequest.RobotCentric();
 
-        return Commands.runOnce(
+        return runOnce(
             () -> this.setControl(
                 swerveRequest.withVelocityX(0.0).withVelocityY(0.0).withRotationalRate(0.0)
             )
@@ -440,6 +414,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         }
     }
 
+    /**
+     * Configures the AutoBuilder for the Swerve subsystem
+     */
     private void configureAutoBuilder() {
         try {
             AutoBuilder.configure(
@@ -465,9 +442,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /**
-     * Gets the singleton instance of the Swerve subsystem.
+     * Gets the {@link Swerve} subsystem instance
      * 
-     * @return the Swerve subsystem
+     * @return The {@link Swerve} subsystem instance
      */
     public static Swerve system() {
         if (system == null) {

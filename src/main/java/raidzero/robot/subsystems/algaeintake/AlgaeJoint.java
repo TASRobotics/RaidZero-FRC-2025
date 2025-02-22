@@ -8,31 +8,46 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import raidzero.robot.Constants;
 
-public class Joint extends SubsystemBase {
-    private static Joint system;
-
+public class AlgaeJoint extends SubsystemBase {
     private TalonFX joint;
 
-    private Joint() {
+    private static AlgaeJoint system;
+
+    /**
+     * Constructs a {@link AlgaeJoint} subsystem instance
+     */
+    private AlgaeJoint() {
         joint = new TalonFX(Constants.AlgaeIntake.Joint.MOTOR_ID);
         joint.getConfigurator().apply(jointConfiguration());
         joint.setNeutralMode(NeutralModeValue.Brake);
     }
 
+    /**
+     * Moves the joint to the desired setpoint
+     * 
+     * @param setpoint The desired setpoint
+     * @return A {@link Command} that moves the joint to the desired setpoint
+     */
     public Command moveJoint(double setpoint) {
-        final MotionMagicVoltage request = new MotionMagicVoltage(0);
-        return Commands.run(() -> joint.setControl(request.withPosition(setpoint)), this);
+        return run(() -> joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint)));
     }
 
-    private void stopJoint() {
+    /**
+     * Stops the joint motor
+     */
+    public void stop() {
         joint.stopMotor();
     }
 
+    /**
+     * Gets the {@link TalonFXConfiguration} for the joint motor
+     * 
+     * @return The {@link TalonFXConfiguration} for the joint motor
+     */
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
@@ -60,9 +75,16 @@ public class Joint extends SubsystemBase {
         return configuration;
     }
 
-    public static Joint system() {
-        if (system == null)
-            system = new Joint();
+    /**
+     * Gets the {@link AlgaeJoint} subsystem instance
+     * 
+     * @return The {@link AlgaeJoint} subsystem instance
+     */
+    public static AlgaeJoint system() {
+        if (system == null) {
+            system = new AlgaeJoint();
+        }
+
         return system;
     }
 }

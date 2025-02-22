@@ -17,17 +17,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import raidzero.robot.Constants;
 
 public class Arm extends SubsystemBase {
-    private static Arm system;
-
     private TalonFX telescope, joint;
     private CANcoder jointCANcoder;
 
+    private double[] currentPose;
+
+    private static Arm system;
+
     /**
-     * Constructor for the {@link Arm} subsystem
+     * Constructs an {@link Arm} subsystem instance
      */
     private Arm() {
         telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID);
@@ -41,94 +42,65 @@ public class Arm extends SubsystemBase {
         jointCANcoder = new CANcoder(Constants.TelescopingArm.Joint.CANCODER_ID);
         jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
 
+        currentPose = new double[] { 0.0, 0.0 };
     }
 
     /**
-     * Creates a {@link Command} to move the arm to the specified x and y setpoints
+     * Moves the arm to the desired x and y setpoints
      * 
-     * @param x the x setpoint in meters
-     * @param y the y setpoint in meters
-     * @return the command to be scheudled and run
+     * @param x The x setpoint in meters
+     * @param y The y setpoint in meters
+     * @return A {@link Command} that moves the arm to the desired setpoints
      */
-    public Command moveArm(double x, double y) {
-        double telescopeSetpoint = -1 * calculateTelescopeHeight(x, y);
-        double jointSetpoint = calculateJointAngle(x, y);
+    public Command moveArm(double[] desiredPosition) {
+        double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
+        double jointSetpoint = calculateJointAngle(desiredPosition);
 
-        // return Commands.run(() -> moveTo(telescopeSetpoint, jointSetpoint), this);
-        return Commands.run(() -> moveTelescope(telescopeSetpoint), this)
-            .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
-    }
+        if (currentPose[1] > desiredPosition[1]) {
+            currentPose[1] = desiredPosition[1];
 
-    public Command goToIntakePos() {
-        double telescopeSetpoint = -1 * calculateTelescopeHeight(
-            Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]
-        );
-        double jointSetpoint = calculateJointAngle(
-            Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]
-        );
+            return run(() -> moveJoint(jointSetpoint))
+                .alongWith(
+                    Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
+                        .andThen(() -> moveTelescope(telescopeSetpoint))
+                );
+        } else {
+            currentPose[1] = desiredPosition[1];
 
-        return Commands.run(() -> {
-            moveTelescope(telescopeSetpoint);
-            moveJoint(jointSetpoint);
-        }, this);
-    }
-
-    public Command moveArmWithRotations(double jointSetpoint, double telescopeSetpoint) {
-        return Commands.run(() -> moveJoint(jointSetpoint), this)
-            .alongWith(
-                Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
-                .andThen(() -> moveTelescope(telescopeSetpoint)));
+            return run(() -> moveTelescope(telescopeSetpoint))
+                .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
+        }
     }
 
     /**
      * Runs just the telescope to the supplied setpoint
      * 
-     * @param setpoint the target setpoint in percentage of full range of motion
-     * @return the command to be scheduled and run
+     * @param setpoint The target setpoint in percentage of full range of motion
+     * @return A {@link Command} that moves the telescope to the desired setpoint
      */
-    public Command runTelescope(double setpoint) {
-        return Commands.run(() -> moveTelescope(setpoint), this);
+    public void moveTelescope(double setpoint) {
+        telescope.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+        SmartDashboard.putNumber("Telescope Setpoint", setpoint);
     }
 
-    public Command runJoint(double setpoint) {
-        return Commands.run(() -> moveJoint(setpoint), this);
+    /**
+     * Runs just the joint to the supplied setpoint
+     * 
+     * @param setpoint The target setpoint in rotations
+     * @return A {@link Command} that moves the joint to the desired setpoint
+     */
+    public void moveJoint(double setpoint) {
+        joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+        SmartDashboard.putNumber("Joint Setpoint", setpoint);
     }
 
     /**
      * Zeroes the the relative encoder position in the telescope motor
      * 
-     * @return the command to zero the position
+     * @return The command to zero the position
      */
     public Command zeroTelescopePosition() {
         return new InstantCommand(() -> telescope.setPosition(0));
-    }
-
-    /**
-     * Uses Motion Magic to move the telescope and arm joint to the target position
-     * 
-     * @param telescopeSetpoint the target telescope position in rotations
-     * @param jointAngle     the target arm joint angle in rotations
-     */
-    private void moveTo(double telescopeSetpoint, double jointAngle) {
-        final MotionMagicVoltage telescopeRequest = new MotionMagicVoltage(0);
-        telescope.setControl(telescopeRequest.withPosition(telescopeSetpoint));
-        SmartDashboard.putNumber("Telescope Setpoint", telescopeSetpoint);
-
-        final MotionMagicVoltage armRequest = new MotionMagicVoltage(0);
-        joint.setControl(armRequest.withPosition(jointAngle));
-        SmartDashboard.putNumber("Joint Setpoint", jointAngle);
-    }
-
-    private void moveTelescope(double setpoint) {
-        final MotionMagicVoltage request = new MotionMagicVoltage(0);
-        telescope.setControl(request.withPosition(setpoint));
-        SmartDashboard.putNumber("Telescope Setpoint", setpoint);
-    }
-
-    private void moveJoint(double setpoint) {
-        final MotionMagicVoltage request = new MotionMagicVoltage(0);
-        joint.setControl(request.withPosition(setpoint));
-        SmartDashboard.putNumber("Joint Setpoint", setpoint);
     }
 
     /**
@@ -137,13 +109,9 @@ public class Arm extends SubsystemBase {
      * @param x the x setpoint in meters
      * @param y the y setpoint in meters
      * @return target motor position in rotations
-     * @throws IllegalStateException if the calculated target height is higher than
-     *                               the maximum height or lower than the minimum
-     *                               height
      */
-    private double calculateTelescopeHeight(double x, double y) {
-        double height = Math.sqrt(x * x + y * y);
-        height -= Constants.TelescopingArm.Telescope.GROUND_OFFSET_M;
+    private double calculateTelescopeHeight(double[] position) {
+        double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2)) - Constants.TelescopingArm.Telescope.GROUND_OFFSET_M;
 
         return height / Constants.TelescopingArm.Telescope.MAX_HEIGHT_M;
     }
@@ -155,8 +123,8 @@ public class Arm extends SubsystemBase {
      * @param y the y setpoint in meters
      * @return the target arm position in rotations
      */
-    public double calculateJointAngle(double x, double y) {
-        return (Math.atan2(y, x)) * 180 / Math.PI / 360.0;
+    public double calculateJointAngle(double[] position) {
+        return (Math.atan2(position[1], position[0])) * 180 / Math.PI / 360.0;
     }
 
     /**
@@ -199,13 +167,6 @@ public class Arm extends SubsystemBase {
         stopArm();
     }
 
-    public Command stopAllCommand() {
-        return Commands.run(() -> stopAll(), this);
-    }
-
-    /**
-     * Runs periodically in the subsystem
-     */
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator pos", getTelescopePosition());
@@ -214,7 +175,7 @@ public class Arm extends SubsystemBase {
     /**
      * Gets the {@link TalonFXConfiguration} for the telescope
      * 
-     * @return the {@link TalonFXConfiguration} for the telescope
+     * @return The {@link TalonFXConfiguration} for the telescope
      */
     private TalonFXConfiguration telescopeConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
@@ -240,16 +201,13 @@ public class Arm extends SubsystemBase {
 
         configuration.Slot0.GravityType = Constants.TelescopingArm.Telescope.GRAVITY_TYPE_VALUE;
 
-        // configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        // configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.TelescopingArm.Telescope.TOP_SOFT_LIMIT;
-
         return configuration;
     }
 
     /**
      * Gets the {@link TalonFXConfiguration} for the arm joint
      * 
-     * @return the {@link TalonFXConfiguration} for the arm joint
+     * @return The {@link TalonFXConfiguration} for the arm joint
      */
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
@@ -289,7 +247,7 @@ public class Arm extends SubsystemBase {
     /**
      * Gets the {@link CANcoderConfiguration} for the joint CANCoder
      * 
-     * @return the {@link CANcoderConfiguration} for the joint CANCoder
+     * @return The {@link CANcoderConfiguration} for the joint CANCoder
      */
     private CANcoderConfiguration jointCANCoderConfiguration() {
         CANcoderConfiguration configuration = new CANcoderConfiguration();
@@ -302,13 +260,15 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Gets the singleton instance of the {@link Arm} subsystem
+     * Gets the {@link Arm} subsystem instance
      * 
-     * @return the {@link Arm} subsystem
+     * @return The {@link Arm} subsystem instance
      */
     public static Arm system() {
-        if (system == null)
+        if (system == null) {
             system = new Arm();
+        }
+
         return system;
     }
 }
