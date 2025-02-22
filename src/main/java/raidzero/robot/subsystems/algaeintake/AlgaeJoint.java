@@ -12,15 +12,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import raidzero.robot.Constants;
 
-public class Joint extends SubsystemBase {
-    private static Joint system;
+public class AlgaeJoint extends SubsystemBase {
+    private static AlgaeJoint system;
 
     private TalonFX joint;
 
     /**
-     * Constructs a {@link Joint} subsystem instance
+     * Constructs a {@link AlgaeJoint} subsystem instance
      */
-    private Joint() {
+    private AlgaeJoint() {
         joint = new TalonFX(Constants.AlgaeIntake.Joint.MOTOR_ID);
         joint.getConfigurator().apply(jointConfiguration());
         joint.setNeutralMode(NeutralModeValue.Brake);
@@ -76,13 +76,13 @@ public class Joint extends SubsystemBase {
     }
 
     /**
-     * Gets the {@link Joint} subsystem instance
+     * Gets the {@link AlgaeJoint} subsystem instance
      * 
-     * @return The {@link Joint} subsystem instance
+     * @return The {@link AlgaeJoint} subsystem instance
      */
-    public static Joint system() {
+    public static AlgaeJoint system() {
         if (system == null) {
-            system = new Joint();
+            system = new AlgaeJoint();
         }
 
         return system;

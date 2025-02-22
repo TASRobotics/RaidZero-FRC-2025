@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import raidzero.robot.subsystems.algaeintake.Joint;
+import raidzero.robot.subsystems.algaeintake.AlgaeJoint;
 import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
@@ -42,7 +42,7 @@ public class RobotContainer {
     public final Arm arm = Arm.system();
     public final Intake intake = Intake.system();
     public final Limelight limes = Limelight.system();
-    public final Joint algaeIntake = Joint.system();
+    public final AlgaeJoint algaeIntake = AlgaeJoint.system();
 
     public final SendableChooser<Command> autoChooser;
 

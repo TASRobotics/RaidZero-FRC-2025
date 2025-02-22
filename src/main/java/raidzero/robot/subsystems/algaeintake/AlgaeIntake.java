@@ -13,15 +13,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import raidzero.robot.Constants;
 
-public class Roller extends SubsystemBase {
-    private static Roller system;
+public class AlgaeIntake extends SubsystemBase {
+    private static AlgaeIntake system;
 
     private SparkMax roller;
 
     /**
-     * Constructs a {@link Roller} subsystem instance
+     * Constructs a {@link AlgaeIntake} subsystem instance
      */
-    private Roller() {
+    private AlgaeIntake() {
         roller = new SparkMax(Constants.AlgaeIntake.Roller.MOTOR_ID, MotorType.kBrushless);
         roller.configure(rollerConfig(), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     }
@@ -66,13 +66,13 @@ public class Roller extends SubsystemBase {
     }
 
     /**
-     * Gets the {@link Roller} subsystem instance
+     * Gets the {@link AlgaeIntake} subsystem instance
      * 
-     * @return The {@link Roller} subsystem instance
+     * @return The {@link AlgaeIntake} subsystem instance
      */
-    public static Roller system() {
+    public static AlgaeIntake system() {
         if (system == null) {
-            system = new Roller();
+            system = new AlgaeIntake();
         }
 
         return system;
