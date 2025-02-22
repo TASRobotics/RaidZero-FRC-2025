@@ -17,11 +17,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
 public class CoralIntake extends SubsystemBase {
-    private static CoralIntake system;
-
     private TalonFXS roller, follow;
-
+    
     private LaserCan bottomLaser, topLaser;
+    
+    private static CoralIntake system;
 
     /**
      * Constructs a {@link CoralIntake} subsystem instance

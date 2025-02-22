@@ -14,15 +14,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
 public class AlgaeIntake extends SubsystemBase {
-    private static AlgaeIntake system;
-
     private SparkMax roller;
+
+    private static AlgaeIntake system;
 
     /**
      * Constructs a {@link AlgaeIntake} subsystem instance
      */
     private AlgaeIntake() {
-        roller = new SparkMax(Constants.AlgaeIntake.Roller.MOTOR_ID, MotorType.kBrushless);
+        roller = new SparkMax(Constants.AlgaeIntake.Intake.MOTOR_ID, MotorType.kBrushless);
         roller.configure(rollerConfig(), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 

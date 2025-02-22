@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
 public class AlgaeJoint extends SubsystemBase {
-    private static AlgaeJoint system;
-
     private TalonFX joint;
+
+    private static AlgaeJoint system;
 
     /**
      * Constructs a {@link AlgaeJoint} subsystem instance

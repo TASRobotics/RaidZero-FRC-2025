@@ -20,12 +20,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
 public class Arm extends SubsystemBase {
-    private static Arm system;
-
     private TalonFX telescope, joint;
     private CANcoder jointCANcoder;
 
     private double[] currentPose;
+
+    private static Arm system;
 
     /**
      * Constructs an {@link Arm} subsystem instance
