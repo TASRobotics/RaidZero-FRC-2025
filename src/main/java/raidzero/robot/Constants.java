@@ -61,7 +61,7 @@ public class Constants {
 
         public static final int CORAL_EXTAKE = 10;
         public static final int CORAL_INTAKE = 11;
-        public static final int ARM_HOME = 12;
+        public static final int CORAL_SCOOCH = 12;
     }
 
     public class Swerve {

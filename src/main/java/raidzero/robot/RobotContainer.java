@@ -98,7 +98,7 @@ public class RobotContainer {
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
-        operator.button(Constants.Bindings.ARM_HOME).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        operator.button(Constants.Bindings.CORAL_SCOOCH).onTrue(coralIntake.scoochCoral());
 
         swerve.registerTelemetry(logger::telemeterize);
     }

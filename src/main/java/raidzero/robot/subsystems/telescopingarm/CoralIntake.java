@@ -68,6 +68,11 @@ public class CoralIntake extends SubsystemBase {
             );
     }
 
+    public Command scoochCoral() {
+        return run(() -> roller.set(-Constants.TelescopingArm.Intake.INTAKE_SPEED))
+            .until(() -> topLaser.getMeasurement().distance_mm <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM);
+    }
+
     /**
      * Creates a {@link Command} to stop the intake
      * 
