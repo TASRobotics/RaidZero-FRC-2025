@@ -71,7 +71,7 @@ public class RobotContainer {
             )
         );
 
-        arm.setDefaultCommand(arm.moveArmWithRotations(arm.calculateJointAngle(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]), 0.0));
+        arm.setDefaultCommand(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]));
         intake.setDefaultCommand(intake.stopRollerCommand());
         
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
@@ -107,9 +107,8 @@ public class RobotContainer {
      * Registers PathPlanner commands
      */
     private void registerPathplannerCommands() {
-        NamedCommands.registerCommand("ArmIntakeCoral", arm.goToIntakePos());
+        NamedCommands.registerCommand("ArmIntakeCoral", arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]));
         NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M[0], Constants.TelescopingArm.Positions.L3_SCORING_POS_M[1]));
-        NamedCommands.registerCommand("ArmVertical", arm.moveArmWithRotations(0.25, 0.0));
 
         NamedCommands.registerCommand(
             "ExtakeCoral", intake.extake(0.15).until(

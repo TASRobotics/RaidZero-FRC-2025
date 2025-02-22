@@ -24,6 +24,8 @@ public class Arm extends SubsystemBase {
 
     private TalonFX telescope, joint;
     private CANcoder jointCANcoder;
+    
+    private double currentY;
 
     /**
      * Constructs an {@link Arm} subsystem instance
@@ -39,7 +41,6 @@ public class Arm extends SubsystemBase {
 
         jointCANcoder = new CANcoder(Constants.TelescopingArm.Joint.CANCODER_ID);
         jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
-
     }
 
     /**
@@ -53,41 +54,20 @@ public class Arm extends SubsystemBase {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(x, y);
         double jointSetpoint = calculateJointAngle(x, y);
 
-        return run(() -> moveTelescope(telescopeSetpoint))
-            .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
-    }
+        if (currentY > y) {
+            currentY = y;
 
-    /**
-     * Moves the arm to the intake position without delay
-     * 
-     * @return A {@link Command} that moves the arm to the intake position
-     */
-    public Command goToIntakePos() {
-        double telescopeSetpoint = -1 * calculateTelescopeHeight(
-            Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]
-        );
-        double jointSetpoint = calculateJointAngle(
-            Constants.TelescopingArm.Positions.INTAKE_POS_M[0], Constants.TelescopingArm.Positions.INTAKE_POS_M[1]
-        );
+            return run(() -> moveJoint(jointSetpoint))
+                .alongWith(
+                    Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
+                        .andThen(() -> moveTelescope(telescopeSetpoint))
+                );
+        } else {
+            currentY = y;
 
-        return run(() -> {
-            moveTelescope(telescopeSetpoint);
-            moveJoint(jointSetpoint);
-        });
-    }
-
-    /**
-     * Moves the arm to the specified joint and telescope setpoints
-     * 
-     * @param jointSetpoint The target joint position in rotations
-     * @param telescopeSetpoint The target telescope position in percentage of full range of motion
-     * @return The command to be scheduled and run
-     */
-    public Command moveArmWithRotations(double jointSetpoint, double telescopeSetpoint) {
-        return run(() -> moveJoint(jointSetpoint))
-            .alongWith(
-                Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
-                .andThen(() -> moveTelescope(telescopeSetpoint)));
+            return run(() -> moveTelescope(telescopeSetpoint))
+                .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
+        }
     }
 
     /**
