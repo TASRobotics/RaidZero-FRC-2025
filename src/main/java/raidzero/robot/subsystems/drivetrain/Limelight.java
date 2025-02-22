@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.wrappers.LimelightHelpers;
@@ -34,13 +35,24 @@ public class Limelight extends SubsystemBase {
     private LimelightHelpers.PoseEstimate limeFL, limeFR, limeBL, limeBR;
     private LimelightHelpers.PoseEstimate limeFLPrev, limeFRPrev, limeBLPrev, limeBRPrev;
 
+    private Notifier notifier;
+
     private Swerve swerve = Swerve.system();
     private static Limelight instance = null;
 
+    /**
+     * Constructs a {@link Limelight} subsytem instance
+     */
     private Limelight() {
         this.startThread();
     }
 
+    /**
+     * Sets the stream mode of the limelight
+     * 
+     * @param limelightName The name of the limelight
+     * @param mode {@link STREAM_MODE} of the limelight
+     */
     public void setStreamMode(String limelightName, STREAM_MODE mode) {
         if (mode == STREAM_MODE.STANDARD) {
             LimelightHelpers.setStreamMode_Standard(limelightName);
@@ -83,20 +95,13 @@ public class Limelight extends SubsystemBase {
      * Starts the Limelight odometry thread
      */
     private void startThread() {
-        new Thread(() -> {
-            while (true) {
-                loop();
-
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        notifier = new Notifier(this::loop);
+        notifier.startPeriodic(0.02);
     }
 
-    // @Override
+    /**
+     * The main loop of the Limelight odometry thread
+     */
     private void loop() {
         if (swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble() > 720) {
             ignoreAllLimes = true;
@@ -104,6 +109,16 @@ public class Limelight extends SubsystemBase {
             ignoreAllLimes = false;
         }
 
+        updateFrontLeft();
+        updateFrontRight();
+        updateBackLeft();
+        updateBackRight();
+    }
+
+    /**
+     * Updates the odometry for the front left limelight
+     */
+    private void updateFrontLeft() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-fl",
             swerve.getState().Pose.getRotation().getDegrees(),
@@ -142,7 +157,12 @@ public class Limelight extends SubsystemBase {
 
             limeFLPrev = limeFL;
         }
+    }
 
+    /**
+     * Updates the odometry for the front right limelight
+     */
+    private void updateFrontRight() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-fr",
             swerve.getState().Pose.getRotation().getDegrees(),
@@ -181,7 +201,12 @@ public class Limelight extends SubsystemBase {
 
             limeFRPrev = limeFR;
         }
+    }
 
+    /**
+     * Updates the odometry for the back left limelight
+     */
+    private void updateBackLeft() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-bl",
             swerve.getState().Pose.getRotation().getDegrees(),
@@ -220,7 +245,12 @@ public class Limelight extends SubsystemBase {
 
             limeBLPrev = limeBL;
         }
+    }
 
+    /**
+     * Updates the odometry for the back right limelight
+     */
+    private void updateBackRight() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-br",
             swerve.getState().Pose.getRotation().getDegrees(),
@@ -275,9 +305,9 @@ public class Limelight extends SubsystemBase {
     }
 
     /**
-     * Gets the Limelight instance
+     * Gets the {@link Limelight} subsystem instance
      * 
-     * @return The {@link Limelight} instance
+     * @return The {@link Limelight} subsystem instance
      */
     public static Limelight system() {
         if (instance == null) {
