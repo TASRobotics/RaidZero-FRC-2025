@@ -96,9 +96,9 @@ public class RobotContainer {
         operator.button(Constants.Bindings.L4).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M));
         operator.button(Constants.Bindings.L3).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
 
-        operator.button(Constants.Bindings.EXTAKE).whileTrue(coralIntake.extake());
-        operator.button(Constants.Bindings.INTAKE).onTrue(coralIntake.intake());
-        operator.button(Constants.Bindings.INTAKE_POS).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
+        operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
+        operator.button(Constants.Bindings.ARM_HOME).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
 
         swerve.registerTelemetry(logger::telemeterize);
     }

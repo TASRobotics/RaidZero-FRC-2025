@@ -47,14 +47,21 @@ public class Constants {
     }
 
     public class Bindings {
+        public static final int CLIMB_UP = 1;
+        public static final int CLIMB_DEPLOY = 2;
+        public static final int CLIMB_DOWN = 3;
+
+        public static final int ALGAE_INTAKE = 4;
+        public static final int ALGAE_EXTAKE = 5;
+
+        public static final int L1 = 6;
+        public static final int L2 = 7;
         public static final int L4 = 8;
         public static final int L3 = 9;
-        public static final int L2 = 0;
-        public static final int L1 = 0;
 
-        public static final int INTAKE = 10;
-        public static final int EXTAKE = 11;
-        public static final int INTAKE_POS = 12;
+        public static final int CORAL_INTAKE = 10;
+        public static final int CORAL_EXTAKE = 11;
+        public static final int ARM_HOME = 12;
     }
 
     public class Swerve {
