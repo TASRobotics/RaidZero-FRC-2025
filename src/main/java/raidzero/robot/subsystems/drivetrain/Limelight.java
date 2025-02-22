@@ -109,6 +109,16 @@ public class Limelight extends SubsystemBase {
             ignoreAllLimes = false;
         }
 
+        updateFrontLeft();
+        updateFrontRight();
+        updateBackLeft();
+        updateBackRight();
+    }
+
+    /**
+     * Updates the odometry for the front left limelight
+     */
+    private void updateFrontLeft() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-fl",
             swerve.getState().Pose.getRotation().getDegrees(),
@@ -147,7 +157,12 @@ public class Limelight extends SubsystemBase {
 
             limeFLPrev = limeFL;
         }
+    }
 
+    /**
+     * Updates the odometry for the front right limelight
+     */
+    private void updateFrontRight() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-fr",
             swerve.getState().Pose.getRotation().getDegrees(),
@@ -186,7 +201,12 @@ public class Limelight extends SubsystemBase {
 
             limeFRPrev = limeFR;
         }
+    }
 
+    /**
+     * Updates the odometry for the back left limelight
+     */
+    private void updateBackLeft() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-bl",
             swerve.getState().Pose.getRotation().getDegrees(),
@@ -225,7 +245,12 @@ public class Limelight extends SubsystemBase {
 
             limeBLPrev = limeBL;
         }
+    }
 
+    /**
+     * Updates the odometry for the back right limelight
+     */
+    private void updateBackRight() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-br",
             swerve.getState().Pose.getRotation().getDegrees(),
