@@ -25,7 +25,7 @@ public class Arm extends SubsystemBase {
     private TalonFX telescope, joint;
     private CANcoder jointCANcoder;
     
-    private double currentY;
+    private double[] currentPose;
 
     /**
      * Constructs an {@link Arm} subsystem instance
@@ -50,12 +50,12 @@ public class Arm extends SubsystemBase {
      * @param y The y setpoint in meters
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
-    public Command moveArm(double x, double y) {
-        double telescopeSetpoint = -1 * calculateTelescopeHeight(x, y);
-        double jointSetpoint = calculateJointAngle(x, y);
+    public Command moveArm(double[] desiredPosition) {
+        double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
+        double jointSetpoint = calculateJointAngle(desiredPosition);
 
-        if (currentY > y) {
-            currentY = y;
+        if (currentPose[1] > desiredPosition[1]) {
+            currentPose[1] = desiredPosition[1];
 
             return run(() -> moveJoint(jointSetpoint))
                 .alongWith(
@@ -63,7 +63,7 @@ public class Arm extends SubsystemBase {
                         .andThen(() -> moveTelescope(telescopeSetpoint))
                 );
         } else {
-            currentY = y;
+            currentPose[1] = desiredPosition[1];
 
             return run(() -> moveTelescope(telescopeSetpoint))
                 .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
@@ -128,9 +128,8 @@ public class Arm extends SubsystemBase {
      * @param y the y setpoint in meters
      * @return target motor position in rotations
      */
-    private double calculateTelescopeHeight(double x, double y) {
-        double height = Math.sqrt(x * x + y * y);
-        height -= Constants.TelescopingArm.Telescope.GROUND_OFFSET_M;
+    private double calculateTelescopeHeight(double[] position) {
+        double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2)) - Constants.TelescopingArm.Telescope.GROUND_OFFSET_M;
 
         return height / Constants.TelescopingArm.Telescope.MAX_HEIGHT_M;
     }
@@ -142,8 +141,8 @@ public class Arm extends SubsystemBase {
      * @param y the y setpoint in meters
      * @return the target arm position in rotations
      */
-    public double calculateJointAngle(double x, double y) {
-        return (Math.atan2(y, x)) * 180 / Math.PI / 360.0;
+    public double calculateJointAngle(double[] position) {
+        return (Math.atan2(position[1], position[0])) * 180 / Math.PI / 360.0;
     }
 
     /**
