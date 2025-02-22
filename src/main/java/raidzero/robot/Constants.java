@@ -113,7 +113,13 @@ public class Constants {
             public static final int MOTOR_ID = 12;
             public static final int FOLLOW_ID = 13;
 
-            public static final double ROLLER_SPEED = 0.35; // 35%
+            public static final double INTAKE_SPEED = 0.1;
+            public static final double INTAKE_LOWER_SPEED = 0.05;
+
+            public static final double EXTAKE_SPEED = 0.1;
+            public static final double EXTAKE_TIMEOUT_S = 1.0;
+
+            public static final double LASERCAN_DISTANCE_THRESHOLD_MM = 50;
 
             public static final int CURRENT_LIMIT = 25; // subject to change
         }
@@ -165,5 +171,16 @@ public class Constants {
 
             public static final double ROLLER_SPEED = 0.2; // 20 %
         }
+    }
+
+    public class Bindings {
+        public static final int L4 = 8;
+        public static final int L3 = 9;
+        public static final int L2 = 0;
+        public static final int L1 = 0;
+
+        public static final int INTAKE = 10;
+        public static final int EXTAKE = 11;
+        public static final int INTAKE_POS = 12;
     }
 }

@@ -16,17 +16,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import raidzero.robot.Constants;
 
-public class Intake extends SubsystemBase {
-    private static Intake system;
+public class CoralIntake extends SubsystemBase {
+    private static CoralIntake system;
 
     private TalonFXS roller, follow;
 
     private LaserCan bottomLaser, topLaser;
 
     /**
-     * Constructs a {@link Intake} subsystem instance
+     * Constructs a {@link CoralIntake} subsystem instance
      */
-    private Intake() {
+    private CoralIntake() {
         roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID);
         roller.getConfigurator().apply(rollerConfiguration());
 
@@ -59,10 +59,13 @@ public class Intake extends SubsystemBase {
      * @param speed The speed as a percentage
      * @return The command to be scheduled and run
      */
-    public Command intake(double speed) {
-        return run(() -> run(speed))
-            .until(() -> topLaser.getMeasurement().distance_mm <= 50)
-            .andThen(run(() -> run(0.05)).until(() -> bottomLaser.getMeasurement().distance_mm <= 50));
+    public Command intake() {
+        return run(() -> roller.set(Constants.TelescopingArm.Intake.INTAKE_SPEED))
+            .until(() -> topLaser.getMeasurement().distance_mm <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM)
+            .andThen(
+                run(() -> roller.set(Constants.TelescopingArm.Intake.INTAKE_SPEED))
+                    .until(() -> bottomLaser.getMeasurement().distance_mm <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM)
+            );
     }
 
     /**
@@ -80,17 +83,9 @@ public class Intake extends SubsystemBase {
      * @param speed The desired speed [0, 1.0]
      * @return A {@link Command} to extake at the specified speed
      */
-    public Command extake(double speed) {
-        return run(() -> run(speed)).withTimeout(1.0).andThen(() -> stopRoller());
-    }
-
-    /**
-     * Runs the roller at the specified speed
-     * 
-     * @param speed The speed to run at as a percentage
-     */
-    private void run(double speed) {
-        roller.set(speed);
+    public Command extake() {
+        return run(() -> roller.set(Constants.TelescopingArm.Intake.EXTAKE_SPEED))
+            .withTimeout(Constants.TelescopingArm.Intake.EXTAKE_TIMEOUT_S);
     }
 
     /**
@@ -98,7 +93,7 @@ public class Intake extends SubsystemBase {
      * 
      * @return The distance in mm, -1 if the LaserCAN cannot be found
      */
-    public int getLimitDistance() {
+    public int getBottomLaserDistance() {
         Measurement measurement = bottomLaser.getMeasurement();
 
         return measurement != null ? measurement.distance_mm : -1;
@@ -132,13 +127,13 @@ public class Intake extends SubsystemBase {
     }
 
     /**
-     * Gets the {@link Intake} subsystem instance
+     * Gets the {@link CoralIntake} subsystem instance
      * 
-     * @return The {@link Intake} subsystem instance
+     * @return The {@link CoralIntake} subsystem instance
      */
-    public static Intake system() {
+    public static CoralIntake system() {
         if (system == null) {
-            system = new Intake();
+            system = new CoralIntake();
         }
 
         return system;

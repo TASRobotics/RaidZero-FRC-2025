@@ -40,7 +40,7 @@ public class RobotContainer {
 
     public final Swerve swerve = Swerve.system();
     public final Arm arm = Arm.system();
-    public final Intake intake = Intake.system();
+    public final CoralIntake coralIntake = CoralIntake.system();
     public final Limelight limes = Limelight.system();
     public final AlgaeJoint algaeIntake = AlgaeJoint.system();
 
@@ -72,13 +72,13 @@ public class RobotContainer {
         );
 
         arm.setDefaultCommand(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
-        intake.setDefaultCommand(intake.stopRoller());
-        
+        coralIntake.setDefaultCommand(coralIntake.stopRoller());
+
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
 
         // * Driver controls
-        joystick.leftBumper().whileTrue(intake.extake(0.1));
-        joystick.rightBumper().onTrue(intake.intake(0.1));
+        joystick.leftBumper().whileTrue(coralIntake.extake());
+        joystick.rightBumper().onTrue(coralIntake.intake());
 
         joystick.x().whileTrue(
             swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
@@ -93,12 +93,12 @@ public class RobotContainer {
         );
 
         // * Operator controls
-        operator.button(8).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M));
-        operator.button(9).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
+        operator.button(Constants.Bindings.L4).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M));
+        operator.button(Constants.Bindings.L3).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
 
-        operator.button(10).whileTrue(intake.extake(0.1));
-        operator.button(11).onTrue(intake.intake(0.1));
-        operator.button(12).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        operator.button(Constants.Bindings.EXTAKE).whileTrue(coralIntake.extake());
+        operator.button(Constants.Bindings.INTAKE).onTrue(coralIntake.intake());
+        operator.button(Constants.Bindings.INTAKE_POS).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
 
         swerve.registerTelemetry(logger::telemeterize);
     }
@@ -112,11 +112,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("ArmL4", arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
 
         NamedCommands.registerCommand(
-            "ExtakeCoral", intake.extake(0.15).until(
-                () -> intake.getLimitDistance() >= 40
-            ).withTimeout(1.0).andThen(() -> intake.stopRoller())
+            "ExtakeCoral", coralIntake.extake().until(
+                () -> coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM
+            ).withTimeout(1.0).andThen(() -> coralIntake.stopRoller())
         );
-        NamedCommands.registerCommand("IntakeCoral", intake.intake(0.12).withTimeout(0.8).andThen(() -> intake.stopRoller()));
+        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().withTimeout(0.8).andThen(() -> coralIntake.stopRoller()));
     }
 
     /**
