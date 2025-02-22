@@ -18,9 +18,9 @@ import raidzero.robot.Constants;
 
 public class CoralIntake extends SubsystemBase {
     private TalonFXS roller, follow;
-    
+
     private LaserCan bottomLaser, topLaser;
-    
+
     private static CoralIntake system;
 
     /**
