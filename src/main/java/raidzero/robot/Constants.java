@@ -17,28 +17,34 @@ public class Constants {
             LEFT, RIGHT
         }
 
-        public static final List<Pose2d> STATION_WAYPOINTS = new ArrayList<Pose2d>(List.of(
-            new Pose2d(1.10, 0.98, Rotation2d.fromDegrees(55)), // 12 Station
-            new Pose2d(1.10, 7.07, Rotation2d.fromDegrees(-55)) // 13 Station
-        ));
+        public static final List<Pose2d> STATION_WAYPOINTS = new ArrayList<Pose2d>(
+            List.of(
+                new Pose2d(1.10, 0.98, Rotation2d.fromDegrees(55)), // 12 Station
+                new Pose2d(1.10, 7.07, Rotation2d.fromDegrees(-55)) // 13 Station
+            )
+        );
 
-        public static final List<Pose2d> LEFT_REEF_WAYPOINTS = new ArrayList<Pose2d>(List.of(
-            new Pose2d(3.70, 3.16, Rotation2d.fromDegrees(60)), // 17 Left
-            new Pose2d(3.30, 3.85, Rotation2d.fromDegrees(0)), // 18 Left
-            new Pose2d(4.05, 5.1, Rotation2d.fromDegrees(300)), // 19 Left
-            new Pose2d(5.2619, 4.99953, Rotation2d.fromDegrees(240)), // 20 Left
-            new Pose2d(5.70, 3.88, Rotation2d.fromDegrees(180)), // 21 Left
-            new Pose2d(4.9494, 2.88847, Rotation2d.fromDegrees(120)) // 22 Left
-        ));
+        public static final List<Pose2d> LEFT_REEF_WAYPOINTS = new ArrayList<Pose2d>(
+            List.of(
+                new Pose2d(3.70, 3.16, Rotation2d.fromDegrees(60)), // 17 Left
+                new Pose2d(3.30, 3.85, Rotation2d.fromDegrees(0)), // 18 Left
+                new Pose2d(4.05, 5.1, Rotation2d.fromDegrees(300)), // 19 Left
+                new Pose2d(5.2619, 4.99953, Rotation2d.fromDegrees(240)), // 20 Left
+                new Pose2d(5.70, 3.88, Rotation2d.fromDegrees(180)), // 21 Left
+                new Pose2d(4.9494, 2.88847, Rotation2d.fromDegrees(120)) // 22 Left
+            )
+        );
 
-        public static final List<Pose2d> RIGHT_REEF_WAYPOINTS = new ArrayList<Pose2d>(List.of(
-            new Pose2d(4.05, 2.95, Rotation2d.fromDegrees(60)), // 17 Right
-            new Pose2d(3.30, 4.15, Rotation2d.fromDegrees(0)),  // 18 Right
-            new Pose2d(3.70, 4.89, Rotation2d.fromDegrees(300)), // 19 Right
-            new Pose2d(4.9419, 5.16453, Rotation2d.fromDegrees(240)), // 20 Right
-            new Pose2d(5.70, 4.20, Rotation2d.fromDegrees(180)), // 21 Right
-            new Pose2d(5.2619, 3.05047, Rotation2d.fromDegrees(120))  // 22 Right
-        ));
+        public static final List<Pose2d> RIGHT_REEF_WAYPOINTS = new ArrayList<Pose2d>(
+            List.of(
+                new Pose2d(4.05, 2.95, Rotation2d.fromDegrees(60)), // 17 Right
+                new Pose2d(3.30, 4.15, Rotation2d.fromDegrees(0)), // 18 Right
+                new Pose2d(3.70, 4.89, Rotation2d.fromDegrees(300)), // 19 Right
+                new Pose2d(4.9419, 5.16453, Rotation2d.fromDegrees(240)), // 20 Right
+                new Pose2d(5.70, 4.20, Rotation2d.fromDegrees(180)), // 21 Right
+                new Pose2d(5.2619, 3.05047, Rotation2d.fromDegrees(120)) // 22 Right
+            )
+        );
     }
 
     public class TelescopingArm {
@@ -55,10 +61,10 @@ public class Constants {
             public static final double KI = 0.0;
             public static final double KD = 0.0;
 
-            public static final double KS = 0.035; //0.045;
-            public static final double KV = 0.7; //0.3;
-            public static final double KG = 0.05; //0.06;
-            public static final double KA = 0.035; //0.01;
+            public static final double KS = 0.035; // 0.045;
+            public static final double KV = 0.7; // 0.3;
+            public static final double KG = 0.05; // 0.06;
+            public static final double KA = 0.035; // 0.01;
 
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Elevator_Static;
 
@@ -77,8 +83,8 @@ public class Constants {
             public static final int MOTOR_ID = 11;
             public static final int CANCODER_ID = 11;
 
-            public static final double CANCODER_GEAR_RATIO = 28.0/80;
-            public static final double CANCODER_OFFSET = -(.3596  - (0.25 / CANCODER_GEAR_RATIO));
+            public static final double CANCODER_GEAR_RATIO = 28.0 / 80;
+            public static final double CANCODER_OFFSET = -(.3596 - (0.25 / CANCODER_GEAR_RATIO));
             public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
 
             public static final double CONVERSION_FACTOR = (120 / 12) * 15.0;
@@ -88,13 +94,13 @@ public class Constants {
             public static final double KV = 1.0;
             public static final double KA = 0.01;
 
-            public static final double KP = 100.0; //100.0;
-            public static final double KI = 0.0; //0.0;
-            public static final double KD = 0.0; //0.0;
+            public static final double KP = 100.0; // 100.0;
+            public static final double KI = 0.0; // 0.0;
+            public static final double KD = 0.0; // 0.0;
 
             public static final double CRUISE_VELOCITY = 0.2;
             public static final double ACCELERATION = 0.8;
-            public static final double JERK = 0.0; //0.0;
+            public static final double JERK = 0.0; // 0.0;
 
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Arm_Cosine;
 

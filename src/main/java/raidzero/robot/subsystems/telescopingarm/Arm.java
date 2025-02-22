@@ -24,7 +24,7 @@ public class Arm extends SubsystemBase {
 
     private TalonFX telescope, joint;
     private CANcoder jointCANcoder;
-    
+
     private double[] currentPose;
 
     /**

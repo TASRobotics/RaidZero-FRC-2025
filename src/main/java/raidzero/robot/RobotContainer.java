@@ -73,10 +73,10 @@ public class RobotContainer {
 
         arm.setDefaultCommand(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
         intake.setDefaultCommand(intake.stopRollerCommand());
-        
+
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
 
-        //* Driver controls
+        // * Driver controls
         joystick.leftBumper().whileTrue(intake.extake(0.1));
         joystick.rightBumper().onTrue(intake.intake(0.1));
 
@@ -92,7 +92,7 @@ public class RobotContainer {
             swerve.pathToStation()
         );
 
-        //* Operator controls
+        // * Operator controls
         operator.button(8).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M));
         operator.button(9).whileTrue(arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
 
