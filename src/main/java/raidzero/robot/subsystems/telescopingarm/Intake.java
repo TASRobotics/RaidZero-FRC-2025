@@ -112,7 +112,7 @@ public class Intake extends SubsystemBase {
         TalonFXSConfiguration configuration = new TalonFXSConfiguration();
 
         configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
-        configuration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         return configuration;
     }
