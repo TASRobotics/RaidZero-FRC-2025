@@ -41,6 +41,8 @@ public class Arm extends SubsystemBase {
 
         jointCANcoder = new CANcoder(Constants.TelescopingArm.Joint.CANCODER_ID);
         jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
+
+        currentPose = new double[] { 0.0, 0.0 };
     }
 
     /**
@@ -76,11 +78,9 @@ public class Arm extends SubsystemBase {
      * @param setpoint The target setpoint in percentage of full range of motion
      * @return A {@link Command} that moves the telescope to the desired setpoint
      */
-    public Command moveTelescope(double setpoint) {
-        return run(() -> {
-            telescope.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
-            SmartDashboard.putNumber("Telescope Setpoint", setpoint);
-        });
+    public void moveTelescope(double setpoint) {
+        telescope.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+        SmartDashboard.putNumber("Telescope Setpoint", setpoint);
     }
 
     /**
@@ -89,11 +89,9 @@ public class Arm extends SubsystemBase {
      * @param setpoint The target setpoint in rotations
      * @return A {@link Command} that moves the joint to the desired setpoint
      */
-    public Command moveJoint(double setpoint) {
-        return run(() -> {
-            joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
-            SmartDashboard.putNumber("Joint Setpoint", setpoint);
-        });
+    public void moveJoint(double setpoint) {
+        joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+        SmartDashboard.putNumber("Joint Setpoint", setpoint);
     }
 
     /**

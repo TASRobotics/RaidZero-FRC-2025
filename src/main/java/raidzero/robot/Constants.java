@@ -136,7 +136,7 @@ public class Constants {
             public static final double KD = 0.0; // 0.0;
 
             public static final double CRUISE_VELOCITY = 0.2;
-            public static final double ACCELERATION = 0.8;
+            public static final double ACCELERATION = 0.7;
             public static final double JERK = 0.0; // 0.0;
 
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Arm_Cosine;
@@ -178,7 +178,7 @@ public class Constants {
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Elevator_Static;
 
             public static final double CRUISE_VELOCITY = 1.5;
-            public static final double ACCELERATION = 5.5;
+            public static final double ACCELERATION = 5.0;
             public static final double JERK = 0.0;
 
             // public static final double TOP_SOFT_LIMIT = 1.0; // 100% range of motion
