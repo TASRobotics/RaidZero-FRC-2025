@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.wrappers.LimelightHelpers;
@@ -33,6 +34,8 @@ public class Limelight extends SubsystemBase {
 
     private LimelightHelpers.PoseEstimate limeFL, limeFR, limeBL, limeBR;
     private LimelightHelpers.PoseEstimate limeFLPrev, limeFRPrev, limeBLPrev, limeBRPrev;
+
+    private Notifier notifier;
 
     private Swerve swerve = Swerve.system();
     private static Limelight instance = null;
@@ -92,17 +95,8 @@ public class Limelight extends SubsystemBase {
      * Starts the Limelight odometry thread
      */
     private void startThread() {
-        new Thread(() -> {
-            while (true) {
-                loop();
-
-                try {
-                    Thread.sleep(20);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        notifier = new Notifier(this::loop);
+        notifier.startPeriodic(0.02);
     }
 
     /**
