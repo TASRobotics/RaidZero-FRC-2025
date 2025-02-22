@@ -108,6 +108,17 @@ public class CoralIntake extends SubsystemBase {
      * 
      * @return The distance in mm, -1 if the LaserCAN cannot be found
      */
+    public int getTopLaserDistance() {
+        Measurement measurement = topLaser.getMeasurement();
+
+        return measurement != null ? measurement.distance_mm : -1;
+    }
+
+    /**
+     * Gets the distance from the LaserCAN
+     * 
+     * @return The distance in mm, -1 if the LaserCAN cannot be found
+     */
     public int getBottomLaserDistance() {
         Measurement measurement = bottomLaser.getMeasurement();
 
