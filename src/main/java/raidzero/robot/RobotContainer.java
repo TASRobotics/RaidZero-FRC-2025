@@ -91,16 +91,16 @@ public class RobotContainer {
         joystick.leftBumper().whileTrue(coralIntake.extake());
         joystick.rightBumper().onTrue(coralIntake.intake());
 
+        joystick.b().whileTrue(
+            swerve.pathToStation()
+        );
+
         joystick.x().whileTrue(
             swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
         );
 
         joystick.y().whileTrue(
             swerve.pathToReef(Constants.Swerve.REEFS.RIGHT)
-        );
-
-        joystick.povLeft().whileTrue(
-            swerve.pathToStation()
         );
 
         // * Operator controls
