@@ -57,10 +57,10 @@ public class Constants {
         public static final int L1 = 6;
         public static final int L2 = 7;
         public static final int L3 = 8;
-        public static final int L4 = 4;
+        public static final int L4 = 9;
 
-        public static final int CORAL_INTAKE = 10;
-        public static final int CORAL_EXTAKE = 11;
+        public static final int CORAL_EXTAKE = 10;
+        public static final int CORAL_INTAKE = 11;
         public static final int ARM_HOME = 12;
     }
 
