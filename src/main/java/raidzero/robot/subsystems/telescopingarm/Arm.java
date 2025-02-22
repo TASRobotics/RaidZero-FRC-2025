@@ -267,8 +267,10 @@ public class Arm extends SubsystemBase {
      * @return The {@link Arm} subsystem instance
      */
     public static Arm system() {
-        if (system == null)
+        if (system == null) {
             system = new Arm();
+        }
+
         return system;
     }
 }

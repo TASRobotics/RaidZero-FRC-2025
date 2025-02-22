@@ -81,8 +81,10 @@ public class Joint extends SubsystemBase {
      * @return The {@link Joint} subsystem instance
      */
     public static Joint system() {
-        if (system == null)
+        if (system == null) {
             system = new Joint();
+        }
+
         return system;
     }
 }

@@ -136,8 +136,10 @@ public class Intake extends SubsystemBase {
      * @return The {@link Intake} subsystem instance
      */
     public static Intake system() {
-        if (system == null)
+        if (system == null) {
             system = new Intake();
+        }
+
         return system;
     }
 }

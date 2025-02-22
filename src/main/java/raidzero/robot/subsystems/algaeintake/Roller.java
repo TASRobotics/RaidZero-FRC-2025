@@ -71,8 +71,10 @@ public class Roller extends SubsystemBase {
      * @return The {@link Roller} subsystem instance
      */
     public static Roller system() {
-        if (system == null)
+        if (system == null) {
             system = new Roller();
+        }
+
         return system;
     }
 }
