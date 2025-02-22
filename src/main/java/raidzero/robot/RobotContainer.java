@@ -72,8 +72,8 @@ public class RobotContainer {
         );
 
         arm.setDefaultCommand(arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
-        intake.setDefaultCommand(intake.stopRollerCommand());
-
+        intake.setDefaultCommand(intake.stopRoller());
+        
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
 
         // * Driver controls

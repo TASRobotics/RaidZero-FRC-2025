@@ -21,7 +21,7 @@ public class Intake extends SubsystemBase {
 
     private TalonFXS roller, follow;
 
-    private LaserCan laserCan;
+    private LaserCan bottomLaser, topLaser;
 
     /**
      * Constructs a {@link Intake} subsystem instance
@@ -34,12 +34,20 @@ public class Intake extends SubsystemBase {
         follow.setControl(new Follower(Constants.TelescopingArm.Intake.MOTOR_ID, true));
         follow.getConfigurator().apply(followConfiguration());
 
-        laserCan = new LaserCan(0);
-
+        bottomLaser = new LaserCan(0);
         try {
-            laserCan.setRangingMode(RangingMode.SHORT);
-            laserCan.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
-            laserCan.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
+            bottomLaser.setRangingMode(RangingMode.SHORT);
+            bottomLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
+            bottomLaser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
+        } catch (Exception e) {
+            System.out.println("LaserCan Config Error");
+        }
+
+        topLaser = new LaserCan(1);
+        try {
+            topLaser.setRangingMode(RangingMode.SHORT);
+            topLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
+            topLaser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
         } catch (Exception e) {
             System.out.println("LaserCan Config Error");
         }
@@ -53,8 +61,8 @@ public class Intake extends SubsystemBase {
      */
     public Command intake(double speed) {
         return run(() -> run(speed))
-            .until(() -> laserCan.getMeasurement().distance_mm <= 50)
-            .andThen(run(() -> run(-0.1)).withTimeout(0.1).andThen(() -> stopRoller()));
+            .until(() -> topLaser.getMeasurement().distance_mm <= 50)
+            .andThen(run(() -> run(0.05)).until(() -> bottomLaser.getMeasurement().distance_mm <= 50));
     }
 
     /**
@@ -62,8 +70,8 @@ public class Intake extends SubsystemBase {
      * 
      * @return A {@link Command} to stop the intake
      */
-    public Command stopRollerCommand() {
-        return run(() -> stopRoller());
+    public Command stopRoller() {
+        return run(() -> roller.stopMotor());
     }
 
     /**
@@ -86,19 +94,12 @@ public class Intake extends SubsystemBase {
     }
 
     /**
-     * Stops the roller motor
-     */
-    public void stopRoller() {
-        roller.stopMotor();
-    }
-
-    /**
      * Gets the distance from the LaserCAN
      * 
      * @return The distance in mm, -1 if the LaserCAN cannot be found
      */
     public int getLimitDistance() {
-        Measurement measurement = laserCan.getMeasurement();
+        Measurement measurement = bottomLaser.getMeasurement();
 
         return measurement != null ? measurement.distance_mm : -1;
     }
