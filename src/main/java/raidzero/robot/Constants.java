@@ -79,7 +79,7 @@ public class Constants {
         public static final List<Pose2d> LEFT_REEF_WAYPOINTS = new ArrayList<Pose2d>(
             List.of(
                 new Pose2d(3.70, 3.16, Rotation2d.fromDegrees(60)), // 17 Left
-                new Pose2d(3.30, 3.85, Rotation2d.fromDegrees(0)), // 18 Left
+                new Pose2d(3.30, 4.15, Rotation2d.fromDegrees(0)), // 18 Left
                 new Pose2d(4.05, 5.1, Rotation2d.fromDegrees(300)), // 19 Left
                 new Pose2d(5.2619, 4.99953, Rotation2d.fromDegrees(240)), // 20 Left
                 new Pose2d(5.70, 3.88, Rotation2d.fromDegrees(180)), // 21 Left
