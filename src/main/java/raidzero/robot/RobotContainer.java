@@ -14,6 +14,7 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -71,6 +72,8 @@ public class RobotContainer {
 
         configureBindings();
         PathfindingCommand.warmupCommand().schedule();
+
+        climbJoint.setPosition(0.25);
     }
 
     /**
@@ -85,12 +88,12 @@ public class RobotContainer {
             )
         );
 
-        // arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
         coralIntake.setDefaultCommand(coralIntake.stopRoller());
 
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
 
-        climbJoint.setDefaultCommand(climbJoint.moveJoint(0.0));
+        climbJoint.setDefaultCommand(climbJoint.moveJoint(0.25));
         climbWinch.setDefaultCommand(climbWinch.stopMotor());
 
         // * Driver controls
@@ -126,11 +129,16 @@ public class RobotContainer {
 
         operator.button(Constants.Bindings.CLIMB_DEPLOY)
             .onTrue(
-                arm.vertical().andThen(Commands.waitSeconds(0.2))
-                    .andThen(climbJoint.moveJoint(-0.25).until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean()))
+                arm.vertical().alongWith(
+                    Commands.waitSeconds(0.2)
+                        .andThen(
+                            climbJoint.moveJoint(0.0).until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
+                                .andThen(() -> climbJoint.stop()).alongWith(new InstantCommand(() -> climbJoint.setDeployedState()))
+                        )
+                )
             );
-        operator.button(Constants.Bindings.CLIMB_UP).onTrue(climbWinch.runWinch(-0.1));
-        operator.button(Constants.Bindings.CLIMB_DOWN).onTrue(climbWinch.runWinch(0.1));
+        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.runWinch(0.1).onlyIf(climbJoint.isDeployed()));
+        operator.button(Constants.Bindings.CLIMB_DOWN).whileTrue(climbWinch.runWinch(-0.1).onlyIf(climbJoint.isDeployed()));
 
         swerve.registerTelemetry(logger::telemeterize);
     }

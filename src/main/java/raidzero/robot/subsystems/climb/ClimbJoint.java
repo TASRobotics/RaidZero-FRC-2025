@@ -1,5 +1,7 @@
 package raidzero.robot.subsystems.climb;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -16,6 +18,8 @@ public class ClimbJoint extends SubsystemBase {
     private static ClimbJoint system;
 
     private TalonFX joint;
+
+    boolean isDeployed = false;
 
     /**
      * Constructs a {@link ClimbJoint} subsystem instance
@@ -41,6 +45,18 @@ public class ClimbJoint extends SubsystemBase {
      */
     public void stop() {
         joint.stopMotor();
+    }
+
+    public void setPosition(double setptiont) {
+        joint.setPosition(setptiont);
+    }
+
+    public BooleanSupplier isDeployed() {
+        return () -> isDeployed;
+    }
+
+    public void setDeployedState() {
+        isDeployed = true;
     }
 
     /**
