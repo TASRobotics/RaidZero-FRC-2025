@@ -136,7 +136,7 @@ public class Constants {
             public static final double KD = 0.0;
 
             public static final double CRUISE_VELOCITY = 0.2;
-            public static final double ACCELERATION = 0.7;
+            public static final double ACCELERATION = 0.6;
             public static final double JERK = 0.0;
 
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Arm_Cosine;
@@ -152,7 +152,7 @@ public class Constants {
             public static final double[] L2_SCORING_POS_M = { -0.0, 0.2 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static final double[] INTAKE_POS_M = { 0.5, 0.78 };
+            public static final double[] INTAKE_POS_M = { 0.5, 0.80 };
 
             public static final double[] HOME_POS_M = { 0.0, 0.0 };
         }
