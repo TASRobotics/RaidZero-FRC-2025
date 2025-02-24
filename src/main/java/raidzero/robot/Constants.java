@@ -188,6 +188,9 @@ public class Constants {
             public static final double MAX_HEIGHT_M = 1.95;
         }
     }
+    public class Lights {
+        public static final int CAN_ID = 1;
+    }
 
     public static final double STICK_DEADBAND = 0.2;
 }
