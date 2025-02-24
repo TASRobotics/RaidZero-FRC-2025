@@ -75,6 +75,33 @@ public class Arm extends SubsystemBase {
     }
 
     /**
+     * Moves the arm to the desired x and y setpoints with a delay
+     * 
+     * @Note THis method should only be used when lowering the arm
+     * 
+     * @param x The x setpoint in meters
+     * @param y The y setpoint in meters
+     * @return A {@link Command} that moves the arm to the desired setpoints
+     */
+    public Command moveArmWithDelay(double[] desiredPosition) {
+        double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
+        double jointSetpoint = calculateJointAngle(desiredPosition);
+
+        return run(() -> moveJoint(jointSetpoint))
+            .alongWith(
+                Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
+                    .andThen(() -> moveTelescope(telescopeSetpoint))
+            );
+    }
+
+    public Command vertical() {
+        return run(() -> {
+            moveJoint(0.25);
+            moveTelescope(0.0);
+        });
+    }
+
+    /**
      * Runs just the telescope to the supplied setpoint
      * 
      * @param setpoint The target setpoint in percentage of full range of motion

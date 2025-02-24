@@ -3,6 +3,7 @@ package raidzero.robot.subsystems.drivetrain;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -19,6 +20,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -305,6 +307,36 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
             return goToPose(target).withTimeout(0.01).andThen(goToPose(target));
         });
+    }
+
+    /**
+     * Returns a {@link BooleanSupplier} that checks if the robot is not in a No Arm Zone
+     * 
+     * @return A {@link BooleanSupplier} that checks if the robot is not in a No Arm Zone
+     */
+    public BooleanSupplier isNotInNaz() {
+        return () -> {
+            Translation2d currTranslation = this.getState().Pose.getTranslation();
+
+            return currTranslation.getDistance(
+                this.getState().Pose.nearest(Constants.Swerve.STATION_WAYPOINTS).getTranslation()
+            ) > 1.25 &&
+                (currTranslation.getX() < 7.525 ||
+                currTranslation.getX() > 10.025);
+        };
+    }
+
+    /**
+     * Returns a {@link BooleanSupplier} that checks if the robot is not in a climb zone
+     * 
+     * @return A {@link BooleanSupplier} that checks if the robot is not in a climb zone
+     */
+    public BooleanSupplier isNotInClimbZone() {
+        return () -> {
+            Translation2d currTranslation = this.getState().Pose.getTranslation();
+
+            return currTranslation.getX() > 7.525 && currTranslation.getX() < 10.025;
+        };
     }
 
     /**

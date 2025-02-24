@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
@@ -101,6 +102,27 @@ public class CoralIntake extends SubsystemBase {
     }
 
     /**
+     * Creates a {@link Command} to run the roller at the specified speed
+     * 
+     * @param setpoint The speed to run the roller at [-1, 1]
+     * @return A {@link Command} to run the roller at the specified speed
+     */
+    public Command run(double speed) {
+        return run(() -> roller.set(speed));
+    }
+
+    /**
+     * Gets the distance from the LaserCAN
+     * 
+     * @return The distance in mm, -1 if the LaserCAN cannot be found
+     */
+    public int getTopLaserDistance() {
+        Measurement measurement = topLaser.getMeasurement();
+
+        return measurement != null ? measurement.distance_mm : -1;
+    }
+
+    /**
      * Gets the distance from the LaserCAN
      * 
      * @return The distance in mm, -1 if the LaserCAN cannot be found
@@ -122,6 +144,8 @@ public class CoralIntake extends SubsystemBase {
         configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
         configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
+        configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
         return configuration;
     }
 
@@ -134,6 +158,8 @@ public class CoralIntake extends SubsystemBase {
         TalonFXSConfiguration configuration = new TalonFXSConfiguration();
 
         configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
+
+        configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         return configuration;
     }
