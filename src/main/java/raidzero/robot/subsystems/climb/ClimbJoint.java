@@ -47,14 +47,27 @@ public class ClimbJoint extends SubsystemBase {
         joint.stopMotor();
     }
 
+    /**
+     * Sets the position of the joint
+     * 
+     * @param setptiont The desired position of the joint
+     */
     public void setPosition(double setptiont) {
         joint.setPosition(setptiont);
     }
 
+    /**
+     * Returns a {@link BooleanSupplier} that checks if the joint is deployed
+     * 
+     * @return A {@link BooleanSupplier} that checks if the joint is deployed
+     */
     public BooleanSupplier isDeployed() {
         return () -> isDeployed;
     }
 
+    /**
+     * Sets the joint to the deployed state to true
+     */
     public void setDeployedState() {
         isDeployed = true;
     }
