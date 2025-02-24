@@ -92,6 +92,13 @@ public class Arm extends SubsystemBase {
             );
     }
 
+    public Command vertical() {
+        return run(() -> {
+            moveJoint(0.25);
+            moveTelescope(0.0);
+        });
+    }
+
     /**
      * Runs just the telescope to the supplied setpoint
      * 

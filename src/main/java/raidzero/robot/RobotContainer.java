@@ -13,11 +13,15 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import raidzero.robot.subsystems.algaeintake.AlgaeJoint;
+import raidzero.robot.subsystems.climb.ClimbJoint;
+import raidzero.robot.subsystems.climb.Winch;
 import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
@@ -43,10 +47,16 @@ public class RobotContainer {
     private final CommandGenericHID operator = new CommandGenericHID(1);
 
     public final Swerve swerve = Swerve.system();
+
     public final Arm arm = Arm.system();
     public final CoralIntake coralIntake = CoralIntake.system();
+
     public final Limelight limes = Limelight.system();
+
     public final AlgaeJoint algaeIntake = AlgaeJoint.system();
+
+    public final ClimbJoint climbJoint = ClimbJoint.system();
+    public final Winch climbWinch = Winch.system();
 
     public final SendableChooser<Command> autoChooser;
 
@@ -75,10 +85,13 @@ public class RobotContainer {
             )
         );
 
-        arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        // arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
         coralIntake.setDefaultCommand(coralIntake.stopRoller());
 
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
+
+        climbJoint.setDefaultCommand(climbJoint.moveJoint(0.0));
+        climbWinch.setDefaultCommand(climbWinch.stopMotor());
 
         // * Driver controls
         joystick.a().whileTrue(
@@ -110,6 +123,14 @@ public class RobotContainer {
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
         operator.button(Constants.Bindings.CORAL_SCOOCH).onTrue(coralIntake.scoochCoral());
+
+        operator.button(Constants.Bindings.CLIMB_DEPLOY)
+            .onTrue(
+                arm.vertical().andThen(Commands.waitSeconds(0.2))
+                    .andThen(climbJoint.moveJoint(-0.25).until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean()))
+            );
+        operator.button(Constants.Bindings.CLIMB_UP).onTrue(climbWinch.runWinch(-0.1));
+        operator.button(Constants.Bindings.CLIMB_DOWN).onTrue(climbWinch.runWinch(0.1));
 
         swerve.registerTelemetry(logger::telemeterize);
     }
