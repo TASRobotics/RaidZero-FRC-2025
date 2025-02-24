@@ -89,7 +89,7 @@ public class RobotContainer {
         );
 
         arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
-        coralIntake.setDefaultCommand(coralIntake.stopRoller());
+        coralIntake.setDefaultCommand(coralIntake.stop());
 
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
 
@@ -178,9 +178,9 @@ public class RobotContainer {
                     return coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
                         coralIntake.getTopLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
                 }
-            ).withTimeout(1.0).andThen(() -> coralIntake.stopRoller())
+            ).withTimeout(1.0).andThen(() -> coralIntake.stop())
         );
-        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stopRoller()).withTimeout(0.8));
+        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stop()).withTimeout(0.8));
     }
 
     /**

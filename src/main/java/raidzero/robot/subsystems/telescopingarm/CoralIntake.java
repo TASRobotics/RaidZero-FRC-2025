@@ -79,7 +79,7 @@ public class CoralIntake extends SubsystemBase {
      * 
      * @return A {@link Command} to stop the intake
      */
-    public Command stopRoller() {
+    public Command stop() {
         return run(() -> roller.stopMotor());
     }
 
