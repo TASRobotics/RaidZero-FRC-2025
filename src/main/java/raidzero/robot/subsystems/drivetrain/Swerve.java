@@ -20,6 +20,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -324,6 +325,17 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                 currTranslation.getX() < 10.025;
         };
     }
+
+    /**
+     * Returns a {@link BooleanSupplier} that checks if the robot is not in a climb zone
+     * 
+     * @return A {@link BooleanSupplier} that checks if the robot is not in a climb zone
+     */
+    public BooleanSupplier isNotInClimbZone() {
+        return () -> {
+            Translation2d currTranslation = this.getState().Pose.getTranslation();
+
+            return currTranslation.getX() > 7.525 && currTranslation.getX() < 10.025;
         };
     }
 
