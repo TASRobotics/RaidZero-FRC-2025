@@ -15,11 +15,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
 public class ClimbJoint extends SubsystemBase {
-    private static ClimbJoint system;
-
     private TalonFX joint;
-
+    
     boolean isDeployed = false;
+    
+    private static ClimbJoint system;
 
     /**
      * Constructs a {@link ClimbJoint} subsystem instance

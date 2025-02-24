@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 
 public class Winch extends SubsystemBase {
-    private static Winch system;
-
     private TalonFX winch;
+
+    private static Winch system;
 
     /**
      * Constructs a {@link Winch} subsystem instance
