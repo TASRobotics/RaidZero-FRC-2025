@@ -91,7 +91,7 @@ public class RobotContainer {
         arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
         coralIntake.setDefaultCommand(coralIntake.stop());
 
-        algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
+        algaeIntake.setDefaultCommand(algaeIntake.moveJoint(Constants.AlgaeIntake.Joint.HOME_POSITION));
 
         climbJoint.setDefaultCommand(climbJoint.moveJoint(Constants.Climb.Joint.HOME_POS));
         climbWinch.setDefaultCommand(climbWinch.stop());
