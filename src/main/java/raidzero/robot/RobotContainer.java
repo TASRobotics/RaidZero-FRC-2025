@@ -73,7 +73,7 @@ public class RobotContainer {
         configureBindings();
         PathfindingCommand.warmupCommand().schedule();
 
-        climbJoint.setPosition(0.25);
+        climbJoint.setPosition(Constants.Climb.Joint.HOME_POS);
     }
 
     /**
@@ -89,11 +89,11 @@ public class RobotContainer {
         );
 
         arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
-        coralIntake.setDefaultCommand(coralIntake.stopRoller());
+        coralIntake.setDefaultCommand(coralIntake.stop());
 
-        algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
+        algaeIntake.setDefaultCommand(algaeIntake.moveJoint(Constants.AlgaeIntake.Joint.HOME_POSITION));
 
-        climbJoint.setDefaultCommand(climbJoint.moveJoint(0.25));
+        climbJoint.setDefaultCommand(climbJoint.moveJoint(Constants.Climb.Joint.HOME_POS));
         climbWinch.setDefaultCommand(climbWinch.stop());
 
         // * Driver controls
@@ -124,7 +124,7 @@ public class RobotContainer {
             arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .onlyIf(swerve.isNotInNaz())
         );
-        operator.button(Constants.Bindings.L4) .whileTrue(
+        operator.button(Constants.Bindings.L4).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
                 .onlyIf(swerve.isNotInNaz())
         );
@@ -138,13 +138,16 @@ public class RobotContainer {
                 arm.vertical().alongWith(
                     Commands.waitSeconds(0.2)
                         .andThen(
-                            climbJoint.moveJoint(0.0).until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
+                            climbJoint.moveJoint(Constants.Climb.Joint.DEPLOYED_POS)
+                                .until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
                                 .andThen(() -> climbJoint.stop()).alongWith(new InstantCommand(() -> climbJoint.setDeployedState()))
                         )
                 )
             );
-        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(0.25).onlyIf(climbJoint.isDeployed()));
-        operator.button(Constants.Bindings.CLIMB_DOWN).whileTrue(climbWinch.run(-0.25).onlyIf(climbJoint.isDeployed()));
+        operator.button(Constants.Bindings.CLIMB_UP)
+            .whileTrue(climbWinch.run(Constants.Climb.Winch.WINCH_SPEED).onlyIf(climbJoint.isDeployed()));
+        operator.button(Constants.Bindings.CLIMB_DOWN)
+            .whileTrue(climbWinch.run(-Constants.Climb.Winch.WINCH_SPEED).onlyIf(climbJoint.isDeployed()));
 
         swerve.registerTelemetry(logger::telemeterize);
     }
@@ -176,9 +179,9 @@ public class RobotContainer {
                     return coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
                         coralIntake.getTopLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
                 }
-            ).withTimeout(1.0).andThen(() -> coralIntake.stopRoller())
+            ).withTimeout(1.0).andThen(() -> coralIntake.stop())
         );
-        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stopRoller()).withTimeout(0.8));
+        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stop()).withTimeout(0.8));
     }
 
     /**

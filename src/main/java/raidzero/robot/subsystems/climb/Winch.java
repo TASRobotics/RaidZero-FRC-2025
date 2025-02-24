@@ -61,6 +61,7 @@ public class Winch extends SubsystemBase {
         if (system == null) {
             system = new Winch();
         }
+
         return system;
     }
 }

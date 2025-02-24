@@ -75,7 +75,7 @@ public class Arm extends SubsystemBase {
     /**
      * Moves the arm to the desired x and y setpoints with a delay
      * 
-     * @Note THis method should only be used when lowering the arm
+     * @Note This method should only be used when lowering the arm
      * 
      * @param x The x setpoint in meters
      * @param y The y setpoint in meters
@@ -92,6 +92,11 @@ public class Arm extends SubsystemBase {
             );
     }
 
+    /**
+     * Moves the arm to a vertical position
+     * 
+     * @return A {@link Command} that moves the arm to a vertical position
+     */
     public Command vertical() {
         return run(() -> {
             moveJoint(0.25);
@@ -124,7 +129,7 @@ public class Arm extends SubsystemBase {
     /**
      * Zeroes the the relative encoder position in the telescope motor
      * 
-     * @return The command to zero the position
+     * @return A {@link Command} that zeroes the telescope motor position
      */
     public Command zeroTelescopePosition() {
         return new InstantCommand(() -> telescope.setPosition(0));
@@ -133,9 +138,9 @@ public class Arm extends SubsystemBase {
     /**
      * Calculates the target telescope position given the x and y setpoints
      * 
-     * @param x the x setpoint in meters
-     * @param y the y setpoint in meters
-     * @return target motor position in rotations
+     * @param x The x setpoint in meters
+     * @param y The y setpoint in meters
+     * @return Target motor position in rotations
      */
     private double calculateTelescopeHeight(double[] position) {
         double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2)) - Constants.TelescopingArm.Telescope.GROUND_OFFSET_M;
@@ -146,9 +151,9 @@ public class Arm extends SubsystemBase {
     /**
      * Calculates the target arm position given the x and y setpoints
      * 
-     * @param x the x setpoint in meters
-     * @param y the y setpoint in meters
-     * @return the target arm position in rotations
+     * @param x The x setpoint in meters
+     * @param y The y setpoint in meters
+     * @return The target arm position in rotations
      */
     public double calculateJointAngle(double[] position) {
         return (Math.atan2(position[1], position[0])) * 180 / Math.PI / 360.0;
@@ -157,7 +162,7 @@ public class Arm extends SubsystemBase {
     /**
      * Gets the telescope motor's encoder position
      * 
-     * @return telescope motor encoder position in rotations
+     * @return The telescope motor encoder position in rotations
      */
     public double getTelescopePosition() {
         return telescope.getPosition().getValueAsDouble();
@@ -166,7 +171,7 @@ public class Arm extends SubsystemBase {
     /**
      * Gets the arm motor's encoder position
      * 
-     * @return arm motor encoder position in rotations
+     * @return The arm motor encoder position in rotations
      */
     public double getJointPosition() {
         return joint.getPosition().getValueAsDouble();

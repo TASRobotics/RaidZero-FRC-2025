@@ -15,7 +15,7 @@ public class Constants {
             public static final double CONVERSION_FACTOR = (54 / 30) * 9;
 
             public static final double INTAKE_POSITION = 0.0;
-            public static final double HOME_POSITION = 0.0;
+            public static final double HOME_POSITION = 0.3;
 
             public static final double KS = 0.025390625;
             public static final double KG = 0.02734375;
@@ -78,6 +78,9 @@ public class Constants {
             public static final double KI = 0.0;
             public static final double KD = 0.0;
 
+            public static final double HOME_POS = 0.25;
+            public static final double DEPLOYED_POS = 0.0;
+
             public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
             public static final double CURRENT_LIMIT = 20.0;
@@ -93,6 +96,8 @@ public class Constants {
 
         public class Winch {
             public static final int MOTOR_ID = 16;
+
+            public static final double WINCH_SPEED = 0.25;
         }
     }
 
