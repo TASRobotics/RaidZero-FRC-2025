@@ -106,11 +106,11 @@ public class RobotContainer {
         // * Operator controls
         operator.button(Constants.Bindings.L3).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
-                .onlyIf(swerve.isNotAtStation())
+                .onlyIf(swerve.isInNaz())
         );
         operator.button(Constants.Bindings.L4) .whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
-                .onlyIf(swerve.isNotAtStation())
+                .onlyIf(swerve.isInNaz())
         );
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
