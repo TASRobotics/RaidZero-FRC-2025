@@ -3,6 +3,7 @@ package raidzero.robot.subsystems.drivetrain;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -305,6 +306,19 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
             return goToPose(target).withTimeout(0.01).andThen(goToPose(target));
         });
+    }
+
+    /**
+     * Returns a {@link BooleanSupplier} that checks if the robot is not at a station
+     * 
+     * @return A {@link BooleanSupplier} that checks if the robot is not at a station
+     */
+    public BooleanSupplier isNotAtStation() {
+        return () -> {
+            return this.getState().Pose.getTranslation().getDistance(
+                this.getState().Pose.nearest(Constants.Swerve.STATION_WAYPOINTS).getTranslation()
+            ) > 1.25;
+        };
     }
 
     /**
