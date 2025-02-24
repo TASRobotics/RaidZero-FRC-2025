@@ -124,20 +124,20 @@ public class Constants {
             public static final double CANCODER_OFFSET = -(.3596 - (0.25 / CANCODER_GEAR_RATIO));
             public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
 
-            public static final double CONVERSION_FACTOR = (120 / 12) * 15.0;
+            public static final double CONVERSION_FACTOR = (120 / 12) * 20.0;
 
             public static final double KS = 0.02;
             public static final double KG = 0.03;
             public static final double KV = 1.0;
             public static final double KA = 0.01;
 
-            public static final double KP = 100.0; // 100.0;
-            public static final double KI = 0.0; // 0.0;
-            public static final double KD = 0.0; // 0.0;
+            public static final double KP = 150.0;
+            public static final double KI = 0.0;
+            public static final double KD = 0.0;
 
             public static final double CRUISE_VELOCITY = 0.2;
             public static final double ACCELERATION = 0.7;
-            public static final double JERK = 0.0; // 0.0;
+            public static final double JERK = 0.0;
 
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Arm_Cosine;
 
