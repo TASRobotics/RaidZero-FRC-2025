@@ -1,7 +1,5 @@
 package raidzero.robot.subsystems.climb;
 
-import java.lang.constant.Constable;
-
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
