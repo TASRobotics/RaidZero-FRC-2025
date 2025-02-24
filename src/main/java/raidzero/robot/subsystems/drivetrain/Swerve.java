@@ -310,19 +310,19 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /**
-     * Returns a {@link BooleanSupplier} that checks if the robot is in a No Arm Zone
+     * Returns a {@link BooleanSupplier} that checks if the robot is not in a No Arm Zone
      * 
-     * @return A {@link BooleanSupplier} that checks if the robot is in a No Arm Zone
+     * @return A {@link BooleanSupplier} that checks if the robot is not in a No Arm Zone
      */
-    public BooleanSupplier isInNaz() {
+    public BooleanSupplier isNotInNaz() {
         return () -> {
             Translation2d currTranslation = this.getState().Pose.getTranslation();
 
             return currTranslation.getDistance(
                 this.getState().Pose.nearest(Constants.Swerve.STATION_WAYPOINTS).getTranslation()
-            ) < 1.25 &&
-                currTranslation.getX() > 7.525 &&
-                currTranslation.getX() < 10.025;
+            ) > 1.25 &&
+                currTranslation.getX() < 7.525 &&
+                currTranslation.getX() > 10.025;
         };
     }
 
