@@ -124,7 +124,7 @@ public class RobotContainer {
             arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .onlyIf(swerve.isNotInNaz())
         );
-        operator.button(Constants.Bindings.L4) .whileTrue(
+        operator.button(Constants.Bindings.L4).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
                 .onlyIf(swerve.isNotInNaz())
         );
