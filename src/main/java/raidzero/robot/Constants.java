@@ -64,6 +64,38 @@ public class Constants {
         public static final int CORAL_SCOOCH = 12;
     }
 
+    public class Climb {
+        public class Joint {
+            public static final int MOTOR_ID = 17;
+            public static final double SENSOR_TO_MECHANISM_RATIO = 80.0 / 10.0;
+
+            public static final double KS = 0.02;
+            public static final double KG = 0.04;
+            public static final double KV = 1.2;
+            public static final double KA = 0.1;
+
+            public static final double KP = 15.0;
+            public static final double KI = 0.0;
+            public static final double KD = 0.0;
+
+            public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
+
+            public static final double CURRENT_LIMIT = 20.0;
+            public static final double SUPPLY_CURRENT_LIMIT = 20.0;
+            public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
+
+            public static final double FORWARD_SOFT_LIMIT = 0.5;
+            public static final double REVERSE_SOFT_LIMIT = -0.0;
+
+            public static final double MOTION_MAGIC_CRUISE_VELOCITY = 0.2;
+            public static final double MOTION_MAGIC_ACCELERATION = 1.0;
+        }
+
+        public class Winch {
+            public static final int MOTOR_ID = 16;
+        }
+    }
+
     public class Swerve {
         public static enum REEFS {
             LEFT, RIGHT
@@ -186,38 +218,6 @@ public class Constants {
 
             public static final double GROUND_OFFSET_M = 0.9;
             public static final double MAX_HEIGHT_M = 1.95;
-        }
-    }
-
-    public class Climb {
-        public class Joint {
-            public static final int MOTOR_ID = 17;
-            public static final double SENSOR_TO_MECHANISM_RATIO = 80.0 / 10.0;
-
-            public static final double KS = 0.02;
-            public static final double KG = 0.04;
-            public static final double KV = 1.2;
-            public static final double KA = 0.1;
-
-            public static final double KP = 15.0;
-            public static final double KI = 0.0;
-            public static final double KD = 0.0;
-
-            public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
-
-            public static final double CURRENT_LIMIT = 20.0;
-            public static final double SUPPLY_CURRENT_LIMIT = 20.0;
-            public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
-
-            public static final double FORWARD_SOFT_LIMIT = 0.5;
-            public static final double REVERSE_SOFT_LIMIT = -0.0;
-
-            public static final double MOTION_MAGIC_CRUISE_VELOCITY = 0.2;
-            public static final double MOTION_MAGIC_ACCELERATION = 1.0;
-        }
-
-        public class Winch {
-            public static final int MOTOR_ID = 16;
         }
     }
 
