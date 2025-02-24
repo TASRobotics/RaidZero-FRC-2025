@@ -137,7 +137,7 @@ public class Constants {
             public static final int MOTOR_ID = 12;
             public static final int FOLLOW_ID = 13;
 
-            public static final double INTAKE_SPEED = 0.1;
+            public static final double INTAKE_SPEED = 0.08;
             public static final double INTAKE_LOWER_SPEED = 0.05;
 
             public static final double EXTAKE_SPEED = 0.1;
