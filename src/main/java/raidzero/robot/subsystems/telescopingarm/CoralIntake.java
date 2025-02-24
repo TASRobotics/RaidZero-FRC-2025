@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
@@ -136,6 +137,8 @@ public class CoralIntake extends SubsystemBase {
         configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
         configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
+        configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
         return configuration;
     }
 
@@ -148,6 +151,8 @@ public class CoralIntake extends SubsystemBase {
         TalonFXSConfiguration configuration = new TalonFXSConfiguration();
 
         configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
+
+        configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         return configuration;
     }
