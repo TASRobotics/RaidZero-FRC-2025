@@ -143,8 +143,8 @@ public class RobotContainer {
                         )
                 )
             );
-        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(0.1).onlyIf(climbJoint.isDeployed()));
-        operator.button(Constants.Bindings.CLIMB_DOWN).whileTrue(climbWinch.run(-0.1).onlyIf(climbJoint.isDeployed()));
+        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(0.25).onlyIf(climbJoint.isDeployed()));
+        operator.button(Constants.Bindings.CLIMB_DOWN).whileTrue(climbWinch.run(-0.25).onlyIf(climbJoint.isDeployed()));
 
         swerve.registerTelemetry(logger::telemeterize);
     }
