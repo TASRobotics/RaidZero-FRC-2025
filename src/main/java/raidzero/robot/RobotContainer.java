@@ -73,7 +73,7 @@ public class RobotContainer {
         configureBindings();
         PathfindingCommand.warmupCommand().schedule();
 
-        climbJoint.setPosition(0.25);
+        climbJoint.setPosition(Constants.Climb.Joint.HOME_POS);
     }
 
     /**
@@ -93,7 +93,7 @@ public class RobotContainer {
 
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(0.3));
 
-        climbJoint.setDefaultCommand(climbJoint.moveJoint(0.25));
+        climbJoint.setDefaultCommand(climbJoint.moveJoint(Constants.Climb.Joint.HOME_POS));
         climbWinch.setDefaultCommand(climbWinch.stop());
 
         // * Driver controls
@@ -138,7 +138,8 @@ public class RobotContainer {
                 arm.vertical().alongWith(
                     Commands.waitSeconds(0.2)
                         .andThen(
-                            climbJoint.moveJoint(0.0).until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
+                            climbJoint.moveJoint(Constants.Climb.Joint.DEPLOYED_POS)
+                                .until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
                                 .andThen(() -> climbJoint.stop()).alongWith(new InstantCommand(() -> climbJoint.setDeployedState()))
                         )
                 )

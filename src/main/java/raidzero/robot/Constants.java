@@ -78,6 +78,9 @@ public class Constants {
             public static final double KI = 0.0;
             public static final double KD = 0.0;
 
+            public static final double HOME_POS = 0.25;
+            public static final double DEPLOYED_POS = 0.0;
+
             public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
             public static final double CURRENT_LIMIT = 20.0;
