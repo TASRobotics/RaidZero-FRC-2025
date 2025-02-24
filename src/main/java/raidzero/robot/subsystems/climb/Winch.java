@@ -30,7 +30,7 @@ public class Winch extends SubsystemBase {
      * @param speed The speed to run the winch at
      * @return A {@link Command} that runs the winch at the specified speed
      */
-    public Command runWinch(double speed) {
+    public Command run(double speed) {
         return run(() -> winch.set(speed));
     }
 
@@ -39,7 +39,7 @@ public class Winch extends SubsystemBase {
      * 
      * @return A {@link Command} that stops the winch motor
      */
-    public Command stopMotor() {
+    public Command stop() {
         return run(() -> winch.stopMotor());
     }
 
