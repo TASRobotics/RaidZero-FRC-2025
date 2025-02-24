@@ -124,16 +124,32 @@ public class RobotContainer {
      * Registers PathPlanner commands
      */
     private void registerPathplannerCommands() {
-        NamedCommands.registerCommand("ArmIntakeCoral", arm.moveArm(Constants.TelescopingArm.Positions.INTAKE_POS_M));
-        NamedCommands.registerCommand("ArmL3", arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M));
-        NamedCommands.registerCommand("ArmL4", arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
+        NamedCommands.registerCommand(
+            "ArmIntakeCoral",
+            arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M)
+                .withTimeout(0.75)
+        );
+        NamedCommands.registerCommand(
+            "ArmL3",
+            arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
+                .withTimeout(0.75)
+        );
+        NamedCommands.registerCommand(
+            "ArmL4",
+            arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
+                .withTimeout(0.75)
+        );
 
         NamedCommands.registerCommand(
-            "ExtakeCoral", coralIntake.extake().until(
-                () -> coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM
+            "ExtakeCoral",
+            coralIntake.run(0.1).until(
+                () -> {
+                    return coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
+                        coralIntake.getTopLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+                }
             ).withTimeout(1.0).andThen(() -> coralIntake.stopRoller())
         );
-        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().withTimeout(0.8).andThen(() -> coralIntake.stopRoller()));
+        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stopRoller()).withTimeout(0.8));
     }
 
     /**

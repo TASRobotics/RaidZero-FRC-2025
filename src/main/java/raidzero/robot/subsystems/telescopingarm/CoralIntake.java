@@ -94,6 +94,27 @@ public class CoralIntake extends SubsystemBase {
     }
 
     /**
+     * Creates a {@link Command} to run the roller at the specified speed
+     * 
+     * @param setpoint The speed to run the roller at [-1, 1]
+     * @return A {@link Command} to run the roller at the specified speed
+     */
+    public Command run(double speed) {
+        return run(() -> roller.set(speed));
+    }
+
+    /**
+     * Gets the distance from the LaserCAN
+     * 
+     * @return The distance in mm, -1 if the LaserCAN cannot be found
+     */
+    public int getTopLaserDistance() {
+        Measurement measurement = topLaser.getMeasurement();
+
+        return measurement != null ? measurement.distance_mm : -1;
+    }
+
+    /**
      * Gets the distance from the LaserCAN
      * 
      * @return The distance in mm, -1 if the LaserCAN cannot be found
