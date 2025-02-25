@@ -291,9 +291,18 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     public Command pathToReef(Constants.Swerve.REEFS reef) {
         return defer(() -> {
-            Pose2d target = this.getState().Pose.nearest(
-                (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.LEFT_REEF_WAYPOINTS : Constants.Swerve.RIGHT_REEF_WAYPOINTS
-            );
+            Pose2d target = null;
+
+            if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+                target = this.getState().Pose.nearest(
+                    (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.RIGHT_REEF_WAYPOINTS : Constants.Swerve.LEFT_REEF_WAYPOINTS
+                );
+            } else {
+                target = this.getState().Pose.nearest(
+                    (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.LEFT_REEF_WAYPOINTS : Constants.Swerve.RIGHT_REEF_WAYPOINTS
+                );
+            }
+
             return goToPose(target).withTimeout(0.01).andThen(goToPose(target));
         });
     }
@@ -324,7 +333,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                 this.getState().Pose.nearest(Constants.Swerve.STATION_WAYPOINTS).getTranslation()
             ) > 1.25 &&
                 (currTranslation.getX() < 7.525 ||
-                currTranslation.getX() > 10.025);
+                    currTranslation.getX() > 10.025);
         };
     }
 
