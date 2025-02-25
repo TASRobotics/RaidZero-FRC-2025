@@ -333,7 +333,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                 this.getState().Pose.nearest(Constants.Swerve.STATION_WAYPOINTS).getTranslation()
             ) > 1.25 &&
                 (currTranslation.getX() < 7.525 ||
-                currTranslation.getX() > 10.025);
+                    currTranslation.getX() > 10.025);
         };
     }
 
