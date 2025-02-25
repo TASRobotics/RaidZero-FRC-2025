@@ -4,24 +4,14 @@
 
 package raidzero.robot;
 
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import raidzero.robot.subsystems.drivetrain.TunerConstants;
-import raidzero.robot.subsystems.drivetrain.TunerConstants.TunerSwerveDrivetrain;
 import raidzero.robot.subsystems.lighting.ArmStrip;
 import raidzero.robot.subsystems.telescopingarm.Arm;
 import raidzero.robot.subsystems.telescopingarm.CoralIntake;
-import raidzero.robot.subsystems.drivetrain.*;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix6.controls.CoastOut;
-import com.ctre.phoenix6.controls.ControlRequest;
-import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.StaticBrake;
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.SwerveDriveBrake;
-import com.ctre.phoenix6.swerve.SwerveModule;
 
 import au.grapplerobotics.CanBridge;
 
