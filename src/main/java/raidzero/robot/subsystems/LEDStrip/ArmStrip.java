@@ -1,5 +1,5 @@
 
-package raidzero.robot.subsystems.lighting;
+package raidzero.robot.subsystems.LEDStrip;
 
 import raidzero.robot.Constants;
 import raidzero.robot.subsystems.climb.ClimbJoint;
