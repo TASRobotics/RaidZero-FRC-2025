@@ -20,7 +20,7 @@ public class ArmStrip implements Subsystem {
      * Constructs a {@link ArmStrip} subsystem.
      */
     private ArmStrip() {
-        this.candle = new CANdle(Constants.Lights.CAN_ID, Constants.DRIVETRAIN_CANBUS);
+        this.candle = new CANdle(Constants.CANdle.CAN_ID, Constants.CANIVORE_NAME);
         this.arm = Arm.system();
 
         this.candle.configAllSettings(candleConfig());
@@ -31,7 +31,8 @@ public class ArmStrip implements Subsystem {
      */
     public void disabledLEDs() {
         if (ClimbJoint.system().getPosition() < 0.1) {
-            if (arm.getJointPosition() >= 0.1675 && arm.getJointPosition() <= 0.1726) {
+            if (arm.getJointPosition() >= Constants.CANdle.ARM_JOINT_LOWER_BOUND &&
+                arm.getJointPosition() <= Constants.CANdle.ARM_JOINT_UPPER_BOUND) {
                 candle.setLEDs(0, 255, 0);
             } else {
                 candle.setLEDs(255, 0, 0);

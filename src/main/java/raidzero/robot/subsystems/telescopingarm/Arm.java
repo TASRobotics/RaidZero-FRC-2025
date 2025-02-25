@@ -139,13 +139,14 @@ public class Arm extends SubsystemBase {
             joint.setNeutralMode(NeutralModeValue.Brake);
         }
     }
+
     /**
      * Checks if the arm joint should be in coast mode
      * 
      * @return True if the arm joint should be in coast mode, false otherwise
      */
     private boolean shouldBeInCoast() {
-        return (ClimbJoint.system().getPosition() < 0.125);
+        return (ClimbJoint.system().getPosition() < Constants.CANdle.CLIMB_JOINT_THRESHOLD);
     }
 
     /**

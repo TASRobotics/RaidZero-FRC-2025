@@ -64,6 +64,15 @@ public class Constants {
         public static final int CORAL_SCOOCH = 12;
     }
 
+    public class CANdle {
+        public static final int CAN_ID = 1;
+
+        public static final double CLIMB_JOINT_THRESHOLD = 0.125;
+
+        public static final double ARM_JOINT_LOWER_BOUND = 0.1675;
+        public static final double ARM_JOINT_UPPER_BOUND = 0.1726;
+    }
+
     public class Climb {
         public class Joint {
             public static final int MOTOR_ID = 17;
@@ -225,11 +234,8 @@ public class Constants {
             public static final double MAX_HEIGHT_M = 1.95;
         }
     }
-    public class Lights {
-        public static final int CAN_ID = 1;
-    }
 
-    public static final String DRIVETRAIN_CANBUS = "CANdoAttitude";
+    public static final String CANIVORE_NAME = "CANdoAttitude";
 
     public static final double STICK_DEADBAND = 0.2;
 }
