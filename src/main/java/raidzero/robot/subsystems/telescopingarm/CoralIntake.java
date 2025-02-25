@@ -53,6 +53,13 @@ public class CoralIntake extends SubsystemBase {
             System.out.println("LaserCan Config Error");
         }
     }
+    /**
+     * Gets the roller motor controller for disabled init to check for position
+     * @return The Roller motor
+     */
+    public TalonFXS getRoller() {
+        return roller;
+    }
 
     /**
      * Creates a {@link Command} to run the intake at the specified speed

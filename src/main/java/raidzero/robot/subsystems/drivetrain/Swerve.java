@@ -68,6 +68,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     private final Field2d field = new Field2d();
 
+    private boolean waypointsTransformed = false;
+
     private static Swerve system;
 
     /*
@@ -438,8 +440,10 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      * <li>Transforms the waypoints for the red alliance if needed
      * </ul>
      */
-    private void initializeOtf() {
-        if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+    public void initializeOtf() {
+        if ((DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) && !waypointsTransformed) {
+            waypointsTransformed = true;
+
             transformWaypointsForAlliance(Constants.Swerve.STATION_WAYPOINTS);
             transformWaypointsForAlliance(Constants.Swerve.LEFT_REEF_WAYPOINTS);
             transformWaypointsForAlliance(Constants.Swerve.RIGHT_REEF_WAYPOINTS);

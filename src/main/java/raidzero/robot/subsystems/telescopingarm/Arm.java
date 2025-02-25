@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
+import raidzero.robot.subsystems.climb.ClimbJoint;
 
 public class Arm extends SubsystemBase {
     private TalonFX telescope, joint;
@@ -124,6 +125,28 @@ public class Arm extends SubsystemBase {
     public void moveJoint(double setpoint) {
         joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
         SmartDashboard.putNumber("Joint Setpoint", setpoint);
+    }
+
+    /**
+     * Updates the coast mode of the joint motor based on climb joint position
+     * 
+     * @Note This should only be called during disabled.
+     */
+    public void updateCoastMode() {
+        if (shouldBeInCoast()) {
+            joint.setNeutralMode(NeutralModeValue.Coast);
+        } else {
+            joint.setNeutralMode(NeutralModeValue.Brake);
+        }
+    }
+
+    /**
+     * Checks if the arm joint should be in coast mode
+     * 
+     * @return True if the arm joint should be in coast mode, false otherwise
+     */
+    private boolean shouldBeInCoast() {
+        return (ClimbJoint.system().getPosition() < Constants.CANdle.CLIMB_JOINT_THRESHOLD);
     }
 
     /**

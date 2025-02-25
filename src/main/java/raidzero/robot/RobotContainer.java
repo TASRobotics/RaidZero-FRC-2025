@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import raidzero.robot.subsystems.LEDStrip.ArmStrip;
 import raidzero.robot.subsystems.algaeintake.AlgaeJoint;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 import raidzero.robot.subsystems.climb.Winch;
@@ -55,6 +55,7 @@ public class RobotContainer {
     public final Limelight limes = Limelight.system();
 
     public final AlgaeJoint algaeIntake = AlgaeJoint.system();
+    public final ArmStrip armStrip = ArmStrip.system();
 
     public final ClimbJoint climbJoint = ClimbJoint.system();
     public final Winch climbWinch = Winch.system();
