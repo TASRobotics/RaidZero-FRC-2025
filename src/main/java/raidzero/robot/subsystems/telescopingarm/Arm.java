@@ -128,21 +128,23 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Checks if the rotor of the 4th swerve module is angled at 0 degrees (forward), if so, changes telescope to coast mode
-     * @return whether coast mode is enabled.  DO NOT CALL THIS WHEN ENABLED!!
+     * Updates the coast mode of the joint motor based on climb joint position
+     * 
+     * @Note This should only be called during disabled.
      */
     public void updateCoastMode() {
-        if (checkCoastMode()) {
+        if (shouldBeInCoast()) {
             joint.setNeutralMode(NeutralModeValue.Coast);
         } else {
             joint.setNeutralMode(NeutralModeValue.Brake);
         }
     }
     /**
-     * Checks if the rotor of the 4th swerve module is angled at 0 degrees (forward), if so, changes telescope to coast mode
-     * @return whether coast mode is enabled
+     * Checks if the arm joint should be in coast mode
+     * 
+     * @return True if the arm joint should be in coast mode, false otherwise
      */
-    private boolean checkCoastMode() {
+    private boolean shouldBeInCoast() {
         return (ClimbJoint.system().getPosition() < 0.125);
     }
 

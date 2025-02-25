@@ -11,37 +11,50 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class ArmStrip implements Subsystem {
 
-    private static ArmStrip system;
-    
     private CANdle candle;
     private Arm arm;
 
+    private static ArmStrip system;
+
+    /**
+     * Constructs a {@link ArmStrip} subsystem.
+     */
     private ArmStrip() {
-        this.candle = new CANdle(Constants.Lights.CAN_ID,Constants.DRIVETRAIN_CANBUS);
+        this.candle = new CANdle(Constants.Lights.CAN_ID, Constants.DRIVETRAIN_CANBUS);
         this.arm = Arm.system();
-        configureCandle();
+
+        this.candle.configAllSettings(candleConfig());
     }
 
-    private void configureCandle() {
-        CANdleConfiguration config = new CANdleConfiguration();
-        candle.configAllSettings(config);
-    }
-
+    /**
+     * Sets the LEDs to the correct color based on the state of the robot.
+     */
     public void disabledLEDs() {
-        
-        if (ClimbJoint.system().getPosition()<0.1){
-            if (arm.getJointPosition() >= 0.1675 && arm.getJointPosition() <=0.1726) {
-                candle.setLEDs(0, 255, 0); // Green
+        if (ClimbJoint.system().getPosition() < 0.1) {
+            if (arm.getJointPosition() >= 0.1675 && arm.getJointPosition() <= 0.1726) {
+                candle.setLEDs(0, 255, 0);
             } else {
-                candle.setLEDs(255, 0, 0); // Red
+                candle.setLEDs(255, 0, 0);
             }
         } else {
-            candle.setLEDs(0, 0, 255); // Blue
+            candle.setLEDs(0, 0, 255);
         }
-        
-        
     }
 
+    /**
+     * Gets a {@link CANdleConfiguration} for the CANdle LED strip
+     * 
+     * @return A {@link CANdleConfiguration} for the CANdle LED strip
+     */
+    private CANdleConfiguration candleConfig() {
+        return new CANdleConfiguration();
+    }
+
+    /**
+     * Gets the {@link ArmStrip} subsystem instance
+     * 
+     * @return The {@link ArmStrip} subsystem instance
+     */
     public static ArmStrip system() {
         if (system == null) {
             system = new ArmStrip();
@@ -49,4 +62,3 @@ public class ArmStrip implements Subsystem {
         return system;
     }
 }
-
