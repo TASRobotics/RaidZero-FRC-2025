@@ -35,14 +35,14 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
-    ArmStrip.system().disabledLEDs();
-    Arm.system().updateCoastMode();
-  }
+		ArmStrip.system().disabledLEDs();
+		Arm.system().updateCoastMode();
+	}
 
 	@Override
 	public void disabledExit() {
-    CoralIntake.system().getRoller().setControl(new StaticBrake()); 
-  }
+		CoralIntake.system().getRoller().setControl(new StaticBrake());
+	}
 
 	@Override
 	public void autonomousInit() {
