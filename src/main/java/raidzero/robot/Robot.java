@@ -13,6 +13,7 @@ import raidzero.robot.subsystems.telescopingarm.CoralIntake;
 
 import com.ctre.phoenix6.controls.StaticBrake;
 
+import raidzero.robot.subsystems.drivetrain.Swerve;
 import au.grapplerobotics.CanBridge;
 
 public class Robot extends TimedRobot {
@@ -37,6 +38,8 @@ public class Robot extends TimedRobot {
 	public void disabledPeriodic() {
 		ArmStrip.system().disabledLEDs();
 		Arm.system().updateCoastMode();
+
+		Swerve.system().initializeOtf();
 	}
 
 	@Override
