@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
+import raidzero.robot.subsystems.climb.ClimbJoint;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
 
@@ -139,7 +140,7 @@ public class Arm extends SubsystemBase {
      * @return whether coast mode is enabled
      */
     private boolean checkCoastMode() {
-        return Math.abs(CoralIntake.system().getRoller().getPosition().getValueAsDouble())%1 < 0.05;
+        return (ClimbJoint.system().getPosition() < 0.125);
     }
 
     /**

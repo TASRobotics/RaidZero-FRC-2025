@@ -224,5 +224,7 @@ public class Constants {
         public static final int CAN_ID = 1;
     }
 
+    public static final String DRIVETRAIN_CANBUS = "CANdoAttitude";
+
     public static final double STICK_DEADBAND = 0.2;
 }

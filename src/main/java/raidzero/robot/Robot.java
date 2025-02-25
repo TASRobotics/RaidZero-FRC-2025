@@ -42,7 +42,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    CoralIntake.system().getRoller().setControl(new CoastOut());   
   }
 
   @Override
