@@ -55,6 +55,15 @@ public class ClimbJoint extends SubsystemBase {
     public void setPosition(double setptiont) {
         joint.setPosition(setptiont);
     }
+    /**
+     * Gets the position of the feedback sensor of the joint
+     * 
+     * @return The position of the feedback sensor
+     */
+    public double getPosition() {
+        return joint.getPosition().getValueAsDouble();
+    }
+    
 
     /**
      * Returns a {@link BooleanSupplier} that checks if the joint is deployed

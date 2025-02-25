@@ -26,6 +26,7 @@ import raidzero.robot.subsystems.climb.Winch;
 import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
+import raidzero.robot.subsystems.lighting.ArmStrip;
 import raidzero.robot.subsystems.telescopingarm.*;
 
 public class RobotContainer {
@@ -55,6 +56,7 @@ public class RobotContainer {
     public final Limelight limes = Limelight.system();
 
     public final AlgaeJoint algaeIntake = AlgaeJoint.system();
+    public final ArmStrip armStrip = ArmStrip.system();
 
     public final ClimbJoint climbJoint = ClimbJoint.system();
     public final Winch climbWinch = Winch.system();

@@ -18,6 +18,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
+import raidzero.robot.subsystems.climb.ClimbJoint;
+import raidzero.robot.subsystems.drivetrain.Swerve;
+import raidzero.robot.subsystems.drivetrain.TunerConstants;
 
 public class Arm extends SubsystemBase {
     private TalonFX telescope, joint;
@@ -124,6 +127,25 @@ public class Arm extends SubsystemBase {
     public void moveJoint(double setpoint) {
         joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
         SmartDashboard.putNumber("Joint Setpoint", setpoint);
+    }
+
+    /**
+     * Checks if the rotor of the 4th swerve module is angled at 0 degrees (forward), if so, changes telescope to coast mode
+     * @return whether coast mode is enabled.  DO NOT CALL THIS WHEN ENABLED!!
+     */
+    public void updateCoastMode() {
+        if (checkCoastMode()) {
+            joint.setNeutralMode(NeutralModeValue.Coast);
+        } else {
+            joint.setNeutralMode(NeutralModeValue.Brake);
+        }
+    }
+    /**
+     * Checks if the rotor of the 4th swerve module is angled at 0 degrees (forward), if so, changes telescope to coast mode
+     * @return whether coast mode is enabled
+     */
+    private boolean checkCoastMode() {
+        return (ClimbJoint.system().getPosition() < 0.125);
     }
 
     /**
