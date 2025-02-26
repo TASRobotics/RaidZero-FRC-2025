@@ -79,7 +79,7 @@ public class Constants {
             public static final double SENSOR_TO_MECHANISM_RATIO = 80.0 / 10.0;
 
             public static final double KS = 0.02;
-            public static final double KG = 0.04;
+            public static final double KG = 0.08;
             public static final double KV = 1.2;
             public static final double KA = 0.1;
 

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.hal.ConstantsJNI;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
@@ -54,7 +55,8 @@ public class RobotContainer {
 
     public final Limelight limes = Limelight.system();
 
-    public final AlgaeJoint algaeIntake = AlgaeJoint.system();
+    // public final AlgaeJoint algaeIntake = AlgaeJoint.system();
+
     public final ArmStrip armStrip = ArmStrip.system();
 
     public final ClimbJoint climbJoint = ClimbJoint.system();
@@ -92,7 +94,7 @@ public class RobotContainer {
         arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
         coralIntake.setDefaultCommand(coralIntake.stop());
 
-        algaeIntake.setDefaultCommand(algaeIntake.moveJoint(Constants.AlgaeIntake.Joint.HOME_POSITION));
+        // algaeIntake.setDefaultCommand(algaeIntake.moveJoint(Constants.AlgaeIntake.Joint.HOME_POSITION));
 
         climbJoint.setDefaultCommand(climbJoint.run(Constants.Climb.Joint.HOME_POS));
         climbWinch.setDefaultCommand(climbWinch.stop());
@@ -142,25 +144,24 @@ public class RobotContainer {
 
         operator.button(Constants.Bindings.CLIMB_DEPLOY)
             .onTrue(
-                arm.vertical().alongWith(
-                    Commands.waitSeconds(0.2)
-                        .andThen(
-                            climbJoint.run(Constants.Climb.Joint.DEPLOYED_POS)
-                                .until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
-                                .andThen(() -> climbJoint.stop()).alongWith(new InstantCommand(() -> climbJoint.setDeployedState()))
-                        )
-                )
+                Commands.waitSeconds(0.2)
+                    .andThen(
+                        climbJoint.run(Constants.Climb.Joint.DEPLOYED_POS)
+                            .until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
+                            .andThen(() -> climbJoint.stop()).alongWith(
+                                new InstantCommand(
+                                    () -> climbJoint.setDeployedState()
+                                )
+                            )
+                    )
             );
+        operator.button(Constants.Bindings.CLIMB_DEPLOY).onTrue(arm.vertical());
 
         // operator.button(Constants.Bindings.CLIMB_UP)
         // .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
-        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(
-            Commands.parallel(
-                climbJoint.pullIn(),
-                climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(() -> climbJoint.getVelocity() >= 0)
-            )
-        );
+        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED));
+        operator.button(Constants.Bindings.CLIMB_UP).onTrue(climbJoint.pullIn());
 
         operator.button(Constants.Bindings.CLIMB_DOWN)
             .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
