@@ -42,6 +42,8 @@ public class ClimbJoint extends SubsystemBase {
 
     /**
      * Stops the joint motor
+     * 
+     * @return A {@link Command} that stops the motor
      */
     public Command stop() {
         return run(() -> joint.stopMotor());
@@ -68,7 +70,7 @@ public class ClimbJoint extends SubsystemBase {
     /**
      * Gets the velocity of the feedback sensor of the joint
      * 
-     * @return the feedback velocity in mechanism rotations per second
+     * @return The feedback velocity in mechanism rotations per second
      */
     public double getVelocity() {
         return joint.getVelocity().getValueAsDouble();
