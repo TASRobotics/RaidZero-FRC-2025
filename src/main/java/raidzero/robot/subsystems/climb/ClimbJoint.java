@@ -65,6 +65,11 @@ public class ClimbJoint extends SubsystemBase {
         return joint.getPosition().getValueAsDouble();
     }
 
+    /**
+     * Gets the velocity of the feedback sensor of the joint
+     * 
+     * @return the feedback velocity in mechanism rotations per second
+     */
     public double getVelocity() {
         return joint.getVelocity().getValueAsDouble();
     }
