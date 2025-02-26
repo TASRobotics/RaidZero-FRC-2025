@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import raidzero.robot.Constants.Climb;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
 import raidzero.robot.subsystems.algaeintake.AlgaeJoint;
 import raidzero.robot.subsystems.climb.ClimbJoint;
@@ -94,7 +95,7 @@ public class RobotContainer {
 
         algaeIntake.setDefaultCommand(algaeIntake.moveJoint(Constants.AlgaeIntake.Joint.HOME_POSITION));
 
-        climbJoint.setDefaultCommand(climbJoint.moveJoint(Constants.Climb.Joint.HOME_POS));
+        climbJoint.setDefaultCommand(climbJoint.run(Constants.Climb.Joint.HOME_POS));
         climbWinch.setDefaultCommand(climbWinch.stop());
 
         // * Driver controls
@@ -139,16 +140,26 @@ public class RobotContainer {
                 arm.vertical().alongWith(
                     Commands.waitSeconds(0.2)
                         .andThen(
-                            climbJoint.moveJoint(Constants.Climb.Joint.DEPLOYED_POS)
+                            climbJoint.run(Constants.Climb.Joint.DEPLOYED_POS)
                                 .until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
                                 .andThen(() -> climbJoint.stop()).alongWith(new InstantCommand(() -> climbJoint.setDeployedState()))
                         )
                 )
             );
-        operator.button(Constants.Bindings.CLIMB_UP)
-            .whileTrue(climbWinch.run(Constants.Climb.Winch.WINCH_SPEED).onlyIf(climbJoint.isDeployed()));
+
+        // operator.button(Constants.Bindings.CLIMB_UP)
+        //     .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
+
+        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(
+            Commands.parallel(
+                climbJoint.run(0.25).onlyIf(() -> climbJoint.getPosition() < 0.25),
+                climbJoint.stop().onlyIf(() -> climbJoint.getPosition() > 0.25),
+                climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(() -> climbJoint.getVelocity() >= 0)
+            )
+        );
+
         operator.button(Constants.Bindings.CLIMB_DOWN)
-            .whileTrue(climbWinch.run(-Constants.Climb.Winch.WINCH_SPEED).onlyIf(climbJoint.isDeployed()));
+            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
         swerve.registerTelemetry(logger::telemeterize);
     }

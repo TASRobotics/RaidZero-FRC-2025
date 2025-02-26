@@ -106,7 +106,7 @@ public class Constants {
         public class Winch {
             public static final int MOTOR_ID = 16;
 
-            public static final double WINCH_SPEED = 0.25;
+            public static final double SPEED = 0.25;
         }
     }
 

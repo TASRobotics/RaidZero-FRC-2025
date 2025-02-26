@@ -16,9 +16,9 @@ import raidzero.robot.Constants;
 
 public class ClimbJoint extends SubsystemBase {
     private TalonFX joint;
-    
+
     boolean isDeployed = false;
-    
+
     private static ClimbJoint system;
 
     /**
@@ -36,15 +36,15 @@ public class ClimbJoint extends SubsystemBase {
      * @param setpoint The desired setpoint
      * @return A {@link Command} that moves the joint to the desired setpoint
      */
-    public Command moveJoint(double setpoint) {
+    public Command run(double setpoint) {
         return run(() -> joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint)));
     }
 
     /**
      * Stops the joint motor
      */
-    public void stop() {
-        joint.stopMotor();
+    public Command stop() {
+        return run(() -> joint.stopMotor());
     }
 
     /**
@@ -55,6 +55,7 @@ public class ClimbJoint extends SubsystemBase {
     public void setPosition(double setptiont) {
         joint.setPosition(setptiont);
     }
+
     /**
      * Gets the position of the feedback sensor of the joint
      * 
@@ -63,7 +64,10 @@ public class ClimbJoint extends SubsystemBase {
     public double getPosition() {
         return joint.getPosition().getValueAsDouble();
     }
-    
+
+    public double getVelocity() {
+        return joint.getVelocity().getValueAsDouble();
+    }
 
     /**
      * Returns a {@link BooleanSupplier} that checks if the joint is deployed
