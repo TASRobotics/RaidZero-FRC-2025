@@ -121,6 +121,12 @@ public class RobotContainer {
             swerve.pathToReef(Constants.Swerve.REEFS.RIGHT)
         );
 
+        joystick.povRight().whileTrue(
+            swerve.applyRequest(
+                () -> new SwerveRequest.SwerveDriveBrake()
+            )
+        );
+
         // * Operator controls
         operator.button(Constants.Bindings.L3).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
