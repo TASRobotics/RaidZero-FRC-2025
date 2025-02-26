@@ -40,6 +40,12 @@ public class ClimbJoint extends SubsystemBase {
         return run(() -> joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint)));
     }
 
+    public Command pullIn() {
+        return run(() -> joint.setControl(new MotionMagicVoltage(0).withPosition(0.25)))
+            .until(() -> this.getPosition() >= 0.25)
+            .andThen(() -> joint.stopMotor());
+    }
+
     /**
      * Stops the joint motor
      * 

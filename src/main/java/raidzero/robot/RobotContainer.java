@@ -147,12 +147,11 @@ public class RobotContainer {
             );
 
         // operator.button(Constants.Bindings.CLIMB_UP)
-        //     .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
+        // .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
         operator.button(Constants.Bindings.CLIMB_UP).whileTrue(
             Commands.parallel(
-                climbJoint.run(0.25).onlyIf(() -> climbJoint.getPosition() < 0.25),
-                climbJoint.stop().onlyIf(() -> climbJoint.getPosition() > 0.25),
+                climbJoint.pullIn(),
                 climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(() -> climbJoint.getVelocity() >= 0)
             )
         );
