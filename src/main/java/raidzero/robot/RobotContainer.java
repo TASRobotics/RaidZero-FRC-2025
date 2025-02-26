@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import raidzero.robot.Constants.Climb;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
 import raidzero.robot.subsystems.algaeintake.AlgaeJoint;
 import raidzero.robot.subsystems.climb.ClimbJoint;
