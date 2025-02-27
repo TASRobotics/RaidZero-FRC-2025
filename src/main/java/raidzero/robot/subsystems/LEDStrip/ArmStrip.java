@@ -12,6 +12,7 @@ import com.ctre.phoenix.led.StrobeAnimation;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class ArmStrip implements Subsystem {
@@ -20,11 +21,15 @@ public class ArmStrip implements Subsystem {
     private Arm arm;
 
     private boolean armIsLegal = false;
-    private boolean test = false;
-    private boolean rainbow = false;
+
+    private boolean strobeOrange = false;
+    private Timer strobeTimer = new Timer();
+    private double strobeInterval = 0.5;
+
+    private boolean animationApplied = false;
 
     private Notifier notifier;
-    
+
     private static ArmStrip system;
 
     /**
@@ -49,24 +54,31 @@ public class ArmStrip implements Subsystem {
 
         if (DriverStation.isDisabled()) {
             if (!armIsLegal && ClimbJoint.system().getPosition() > 0.1) {
-                    candle.setLEDs(255, 0, 0);
-                    candle.clearAnimation(0);
-                    test = false;
+                candle.setLEDs(255, 0, 0);
+                candle.clearAnimation(0);
+                animationApplied = false;
             } else if (ClimbJoint.system().getPosition() < 0.1 && !armIsLegal && !ClimbJoint.system().isDeployed().getAsBoolean()) {
-                if (!test) {
+                if (!animationApplied) {
                     candle.animate(new StrobeAnimation(255, 0, 0, 0, 0.05, -1));
-                    test = true;
+                    animationApplied = true;
                 }
             } else if (armIsLegal) {
-                    candle.setLEDs(0, 255, 0);
-                    candle.clearAnimation(0);
-                    test = false;
+                candle.setLEDs(0, 255, 0);
+                candle.clearAnimation(0);
+                animationApplied = false;
             }
         } else if (DriverStation.isAutonomousEnabled()) {
-            if (!test) {
-                candle.animate(new StrobeAnimation(255, 165, 0, 0, 0.0001, 33), 0);
-                candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.0001, 28, 33), 1);
-                test = true;
+            if (strobeTimer.hasElapsed(strobeInterval)) {
+                if (strobeOrange) {
+                    candle.animate(new StrobeAnimation(255, 165, 0, 0, 0.0001, 33), 0);
+                    candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.0001, 28, 33), 1);
+                } else {
+                    candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.0001, 33), 0);
+                    candle.animate(new StrobeAnimation(255, 165, 0, 0, 0.0001, 28, 33), 1);
+                }
+
+                strobeOrange = !strobeOrange;
+                strobeTimer.reset();
             }
         } else if (DriverStation.isAutonomous() && !DriverStation.isAutonomousEnabled()) {
             candle.clearAnimation(0);
@@ -78,29 +90,25 @@ public class ArmStrip implements Subsystem {
             if (ClimbJoint.system().isDeployed().getAsBoolean()) {
                 candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.05, -1));
             } else {
-                if (!rainbow) {
+                if (!animationApplied) {
                     candle.clearAnimation(0);
                     candle.clearAnimation(1);
                     candle.animate(new RainbowAnimation(255, 0.75, -1));
-                    rainbow = true;
+                    animationApplied = true;
                 }
             }
-        } else if (DriverStation.isTestEnabled()) {
-            candle.clearAnimation(0);
-            candle.clearAnimation(1);
         }
     }
 
     /**
      * Clears CAndle animaitons
      */
-    public void clearAnimation() {
-        test = false;
-        rainbow = false;
+    public void resetAnimation() {
+        animationApplied = false;
         candle.clearAnimation(0);
         candle.clearAnimation(1);
     }
-    
+
     /**
      * Plays the match end animation
      */
@@ -128,6 +136,7 @@ public class ArmStrip implements Subsystem {
         if (system == null) {
             system = new ArmStrip();
         }
+
         return system;
     }
 }
