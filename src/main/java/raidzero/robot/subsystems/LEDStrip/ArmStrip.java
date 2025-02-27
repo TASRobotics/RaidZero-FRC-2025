@@ -4,6 +4,7 @@ package raidzero.robot.subsystems.LEDStrip;
 import raidzero.robot.Constants;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 import raidzero.robot.subsystems.telescopingarm.Arm;
+
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.RainbowAnimation;
@@ -19,8 +20,8 @@ public class ArmStrip implements Subsystem {
     private Arm arm;
 
     private boolean armIsLegal = false;
-
-    private int alternateLed = 0;
+    private boolean test = false;
+    private boolean rainbow = false;
 
     private Notifier notifier;
     
@@ -40,48 +41,73 @@ public class ArmStrip implements Subsystem {
     }
 
     /**
-     * Sets the LEDs to the correct color based on the state of the robot.
+     * The main loop of the CANdle LED strip
      */
-    public void disabledLEDs() {
-        if (ClimbJoint.system().getPosition() < 0.1) {
-            if (arm.getJointPosition() >= Constants.CANdle.ARM_JOINT_LOWER_BOUND &&
-                arm.getJointPosition() <= Constants.CANdle.ARM_JOINT_UPPER_BOUND) {
-                candle.setLEDs(0, 255, 0);
-            } else {
-                candle.setLEDs(255, 0, 0);
-            }
-        } else {
-            candle.setLEDs(0, 0, 255);
-        }
-    }
-
     public void loop() {
         armIsLegal = arm.getJointPosition() >= Constants.CANdle.ARM_JOINT_LOWER_BOUND &&
             arm.getJointPosition() <= Constants.CANdle.ARM_JOINT_UPPER_BOUND;
 
         if (DriverStation.isDisabled()) {
-            if (!armIsLegal) {
-                candle.setLEDs(255, 0, 0);
-            } else if (ClimbJoint.system().getPosition() < 0.1 && !armIsLegal) {
-                candle.animate(new StrobeAnimation(255, 0, 0, 0, 0.5, -1));
+            if (!armIsLegal && ClimbJoint.system().getPosition() > 0.1) {
+                    candle.setLEDs(255, 0, 0);
+                    candle.clearAnimation(0);
+                    test = false;
+            } else if (ClimbJoint.system().getPosition() < 0.1 && !armIsLegal && !ClimbJoint.system().isDeployed().getAsBoolean()) {
+                if (!test) {
+                    candle.animate(new StrobeAnimation(255, 0, 0, 0, 0.05, -1));
+                    test = true;
+                }
             } else if (armIsLegal) {
-                candle.setLEDs(0, 255, 0);
+                    candle.setLEDs(0, 255, 0);
+                    candle.clearAnimation(0);
+                    test = false;
             }
         } else if (DriverStation.isAutonomousEnabled()) {
-            if (alternateLed == 0) {
-                candle.setLEDs(255, 165, 0);
-                alternateLed = 1;
-            } else {
-                candle.setLEDs(0, 255, 0);
-                alternateLed = 0;
+            if (!test) {
+                candle.animate(new StrobeAnimation(255, 165, 0, 0, 0.0001, 33), 0);
+                candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.0001, 28, 33), 1);
+                test = true;
             }
+        } else if (DriverStation.isAutonomous() && !DriverStation.isAutonomousEnabled()) {
+            candle.clearAnimation(0);
+            candle.clearAnimation(1);
+        } else if (DriverStation.isTeleop() && !DriverStation.isTeleopEnabled()) {
+            candle.clearAnimation(0);
+            candle.clearAnimation(1);
         } else if (DriverStation.isTeleopEnabled()) {
             if (ClimbJoint.system().isDeployed().getAsBoolean()) {
-                candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.5, -1));
+                candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.05, -1));
             } else {
-                candle.animate(new RainbowAnimation(255, 0.5, -1));
+                if (!rainbow) {
+                    candle.clearAnimation(0);
+                    candle.clearAnimation(1);
+                    candle.animate(new RainbowAnimation(255, 0.75, -1));
+                    rainbow = true;
+                }
             }
+        } else if (DriverStation.isTestEnabled()) {
+            candle.clearAnimation(0);
+            candle.clearAnimation(1);
         }
+    }
+
+    /**
+     * Clears CAndle animaitons
+     */
+    public void clearAnimation() {
+        test = false;
+        rainbow = false;
+        candle.clearAnimation(0);
+        candle.clearAnimation(1);
+    }
+    
+    /**
+     * Plays the match end animation
+     */
+    public void endAnimation() {
+        candle.clearAnimation(0);
+        candle.clearAnimation(1);
+        candle.animate(new RainbowAnimation(255, 0.75, -1));
     }
 
     /**

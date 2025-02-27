@@ -60,7 +60,9 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {}
 
 	@Override
-	public void autonomousExit() {}
+	public void autonomousExit() {
+		ArmStrip.system().clearAnimation();
+	}
 
 	@Override
 	public void teleopInit() {
@@ -73,7 +75,9 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {}
 
 	@Override
-	public void teleopExit() {}
+	public void teleopExit() {
+		ArmStrip.system().endAnimation();
+	}
 
 	@Override
 	public void testInit() {
