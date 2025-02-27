@@ -40,6 +40,10 @@ public class ClimbJoint extends SubsystemBase {
         return run(() -> joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint)));
     }
 
+    /**
+     * Retracts the joint and stops the motor once vertical
+     * @return A {@link Command} that retracts the joint
+     */
     public Command retract() {
         return run(() -> {
             if (this.getPosition() <= 0.25) {
