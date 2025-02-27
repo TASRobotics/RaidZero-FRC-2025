@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
-		ArmStrip.system().disabledLEDs();
+		// ArmStrip.system().disabledLEDs();
 		Arm.system().updateCoastMode();
 
 		Swerve.system().initializeOtf();
