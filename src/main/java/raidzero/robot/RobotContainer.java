@@ -129,6 +129,10 @@ public class RobotContainer {
         );
 
         // * Operator controls
+        operator.button(Constants.Bindings.L2).whileTrue(
+            arm.moveArm(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
+                .onlyIf(swerve.isNotInNaz())
+        );
         operator.button(Constants.Bindings.L3).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .onlyIf(swerve.isNotInNaz())
