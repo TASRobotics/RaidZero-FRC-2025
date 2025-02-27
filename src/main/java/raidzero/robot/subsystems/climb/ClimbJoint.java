@@ -17,7 +17,7 @@ import raidzero.robot.Constants;
 public class ClimbJoint extends SubsystemBase {
     private TalonFX joint;
 
-    boolean isDeployed = false;
+    private boolean isDeployed = false;
 
     private static ClimbJoint system;
 
