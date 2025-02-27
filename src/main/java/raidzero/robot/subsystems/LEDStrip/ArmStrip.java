@@ -24,9 +24,9 @@ public class ArmStrip implements Subsystem {
 
     private boolean strobeOrange = false;
     private Timer strobeTimer = new Timer();
-    private double strobeInterval = 0.5;
+    private double strobeInterval = 0.25;
 
-    private boolean animationApplied = false;
+    private boolean animationApplied, animation2Applied = false;
 
     private Notifier notifier;
 
@@ -43,6 +43,7 @@ public class ArmStrip implements Subsystem {
 
         this.notifier = new Notifier(this::loop);
         notifier.startPeriodic(0.2);
+        strobeTimer.start();
     }
 
     /**
@@ -57,24 +58,33 @@ public class ArmStrip implements Subsystem {
                 candle.setLEDs(255, 0, 0);
                 candle.clearAnimation(0);
                 animationApplied = false;
+                animation2Applied = false;
             } else if (ClimbJoint.system().getPosition() < 0.1 && !armIsLegal && !ClimbJoint.system().isDeployed().getAsBoolean()) {
                 if (!animationApplied) {
-                    candle.animate(new StrobeAnimation(255, 0, 0, 0, 0.05, -1));
+                    candle.animate(new StrobeAnimation(255, 0, 0, 0, 0.001, -1));
                     animationApplied = true;
+                    animation2Applied = false;
+                }
+            } else if (armIsLegal && ClimbJoint.system().getPosition() < 0.1) {
+                if (!animation2Applied) {
+                    candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.001, -1));
+                    animation2Applied = true;
+                    animationApplied = false;
                 }
             } else if (armIsLegal) {
                 candle.setLEDs(0, 255, 0);
                 candle.clearAnimation(0);
                 animationApplied = false;
+                animation2Applied = false;
             }
         } else if (DriverStation.isAutonomousEnabled()) {
             if (strobeTimer.hasElapsed(strobeInterval)) {
                 if (strobeOrange) {
-                    candle.animate(new StrobeAnimation(255, 165, 0, 0, 0.0001, 33), 0);
-                    candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.0001, 28, 33), 1);
+                    candle.setLEDs(255, 165, 0, 0, 0, 33);
+                    candle.setLEDs(0, 255, 0, 0, 38, 33);
                 } else {
-                    candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.0001, 33), 0);
-                    candle.animate(new StrobeAnimation(255, 165, 0, 0, 0.0001, 28, 33), 1);
+                    candle.setLEDs(0, 255, 0, 0, 0, 33);
+                    candle.setLEDs(255, 165, 0, 0, 38, 33);
                 }
 
                 strobeOrange = !strobeOrange;
@@ -105,6 +115,7 @@ public class ArmStrip implements Subsystem {
      */
     public void resetAnimation() {
         animationApplied = false;
+        animation2Applied = false;
         candle.clearAnimation(0);
         candle.clearAnimation(1);
     }
