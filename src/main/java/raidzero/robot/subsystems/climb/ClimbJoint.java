@@ -40,7 +40,7 @@ public class ClimbJoint extends SubsystemBase {
         return run(() -> joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint)));
     }
 
-    public Command pullIn() {
+    public Command retract() {
         return run(() -> {
             if (this.getPosition() <= 0.25) {
                 joint.setControl(new MotionMagicVoltage(0).withPosition(0.25));
