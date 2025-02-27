@@ -89,7 +89,9 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {}
 
 	@Override
-	public void testExit() {}
+	public void testExit() {
+		ArmStrip.system().resetAnimation();
+	}
 
 	@Override
 	public void simulationPeriodic() {}

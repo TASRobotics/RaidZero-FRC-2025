@@ -4,6 +4,7 @@ package raidzero.robot.subsystems.LEDStrip;
 import raidzero.robot.Constants;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 import raidzero.robot.subsystems.telescopingarm.Arm;
+import raidzero.robot.subsystems.telescopingarm.CoralIntake;
 
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
@@ -22,11 +23,11 @@ public class ArmStrip implements Subsystem {
 
     private boolean armIsLegal = false;
 
-    private boolean strobeOrange = false;
+    private boolean strobeAlternate = false;
     private Timer strobeTimer = new Timer();
     private double strobeInterval = 0.25;
 
-    private boolean animationApplied, animation2Applied = false;
+    private boolean animationApplied, animation2Applied, animation3Applied = false;
 
     private Notifier notifier;
 
@@ -59,35 +60,39 @@ public class ArmStrip implements Subsystem {
                 candle.clearAnimation(0);
                 animationApplied = false;
                 animation2Applied = false;
+                animation3Applied = false;
             } else if (ClimbJoint.system().getPosition() < 0.1 && !armIsLegal && !ClimbJoint.system().isDeployed().getAsBoolean()) {
                 if (!animationApplied) {
                     candle.animate(new StrobeAnimation(255, 0, 0, 0, 0.001, -1));
                     animationApplied = true;
                     animation2Applied = false;
+                    animation3Applied = false;
                 }
             } else if (armIsLegal && ClimbJoint.system().getPosition() < 0.1) {
                 if (!animation2Applied) {
                     candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.001, -1));
                     animation2Applied = true;
                     animationApplied = false;
+                    animation3Applied = false;
                 }
             } else if (armIsLegal) {
                 candle.setLEDs(0, 255, 0);
                 candle.clearAnimation(0);
                 animationApplied = false;
                 animation2Applied = false;
+                animation3Applied = false;
             }
         } else if (DriverStation.isAutonomousEnabled()) {
             if (strobeTimer.hasElapsed(strobeInterval)) {
-                if (strobeOrange) {
+                if (strobeAlternate) {
                     candle.setLEDs(255, 165, 0, 0, 0, 33);
                     candle.setLEDs(0, 255, 0, 0, 38, 33);
                 } else {
                     candle.setLEDs(0, 255, 0, 0, 0, 33);
-                    candle.setLEDs(255, 165, 0, 0, 38, 33);
+                    candle.setLEDs(255, 165, 0, 0, 33, 38);
                 }
 
-                strobeOrange = !strobeOrange;
+                strobeAlternate = !strobeAlternate;
                 strobeTimer.reset();
             }
         } else if (DriverStation.isAutonomous() && !DriverStation.isAutonomousEnabled()) {
@@ -99,13 +104,53 @@ public class ArmStrip implements Subsystem {
         } else if (DriverStation.isTeleopEnabled()) {
             if (ClimbJoint.system().isDeployed().getAsBoolean()) {
                 candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.05, -1));
-            } else {
+            } /*else if (Arm.system().getCurrentPosition()[1] > 1.0) {
                 if (!animationApplied) {
                     candle.clearAnimation(0);
                     candle.clearAnimation(1);
-                    candle.animate(new RainbowAnimation(255, 0.75, -1));
+                    candle.animate(new StrobeAnimation(152, 76, 252, 0, 0.05, -1));
                     animationApplied = true;
+                    animation2Applied = false;
+                    animation3Applied = false;
                 }
+            } */else if (CoralIntake.system().getTopLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
+                CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM) {
+                if (!animation2Applied) {
+                    candle.clearAnimation(0);
+                    candle.clearAnimation(1);
+                    candle.animate(new StrobeAnimation(252, 250, 76, 0, 0.2, -1));
+                    animationApplied = false;
+                    animation2Applied = true;
+                    animation3Applied = false;
+                }
+            } else if (CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
+                CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM) {
+                if (!animation3Applied) {
+                    candle.clearAnimation(0);
+                    candle.clearAnimation(1);
+                    candle.animate(new StrobeAnimation(255, 120, 250, 0, 0.01, -1));
+                    animationApplied = false;
+                    animation2Applied = false;
+                    animation3Applied = true;
+                }
+            } else {
+                if (strobeTimer.hasElapsed(strobeInterval)) {
+                    if (strobeAlternate) {
+                        candle.setLEDs(255, 120, 250, 0, 0, 33);
+                        candle.setLEDs(0, 0, 0, 0, 38, 33);
+                    } else {
+                        candle.setLEDs(0, 0, 0, 0, 0, 33);
+                        candle.setLEDs(255, 120, 250, 0, 33, 38);
+                    }
+
+                    strobeAlternate = !strobeAlternate;
+                    strobeTimer.reset();
+                }
+            }
+        } else if (DriverStation.isTestEnabled()) {
+            if (!animationApplied) {
+                candle.animate(new StrobeAnimation(255, 165, 0, 0, 0.05, -1));
+                animationApplied = true;
             }
         }
     }
