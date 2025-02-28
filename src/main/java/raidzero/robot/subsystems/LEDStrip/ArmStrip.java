@@ -108,16 +108,7 @@ public class ArmStrip implements Subsystem {
         } else if (DriverStation.isTeleopEnabled()) {
             if (ClimbJoint.system().isDeployed().getAsBoolean()) {
                 candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.05, -1));
-            } /*else if (Arm.system().getCurrentPosition()[1] > 1.0) {
-                if (!animationApplied) {
-                    candle.clearAnimation(0);
-                    candle.clearAnimation(1);
-                    candle.animate(new StrobeAnimation(152, 76, 252, 0, 0.05, -1));
-                    animationApplied = true;
-                    animation2Applied = false;
-                    animation3Applied = false;
-                }
-            } */else if (CoralIntake.system().getTopLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
+            } else if (CoralIntake.system().getTopLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
                 CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM) {
                 if (!animation2Applied) {
                     candle.clearAnimation(0);
