@@ -117,8 +117,8 @@ public class Constants {
 
         public static final List<Pose2d> STATION_WAYPOINTS = new ArrayList<Pose2d>(
             List.of(
-                new Pose2d(1.09365, 1.03, Rotation2d.fromDegrees(55)), // 12 Station
-                new Pose2d(1.0492, 7.01, Rotation2d.fromDegrees(-55)) // 13 Station
+                new Pose2d(1.151, 1.03, Rotation2d.fromDegrees(55)), // 12 Station
+                new Pose2d(1.1383, 7.01, Rotation2d.fromDegrees(-55)) // 13 Station 1.0873
             )
         );
 
