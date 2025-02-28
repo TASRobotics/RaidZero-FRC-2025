@@ -2,7 +2,6 @@
 package raidzero.robot.subsystems.LEDStrip;
 
 import raidzero.robot.Constants;
-import raidzero.robot.Constants.Climb;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 import raidzero.robot.subsystems.telescopingarm.Arm;
 import raidzero.robot.subsystems.telescopingarm.CoralIntake;
