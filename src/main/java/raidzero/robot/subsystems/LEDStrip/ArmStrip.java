@@ -2,6 +2,7 @@
 package raidzero.robot.subsystems.LEDStrip;
 
 import raidzero.robot.Constants;
+import raidzero.robot.Constants.Climb;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 import raidzero.robot.subsystems.telescopingarm.Arm;
 import raidzero.robot.subsystems.telescopingarm.CoralIntake;
@@ -55,25 +56,29 @@ public class ArmStrip implements Subsystem {
             arm.getJointPosition() <= Constants.CANdle.ARM_JOINT_UPPER_BOUND;
 
         if (DriverStation.isDisabled()) {
-            if (!armIsLegal && ClimbJoint.system().getPosition() > 0.1) {
+            if (!armIsLegal) {
                 candle.setLEDs(255, 0, 0);
                 candle.clearAnimation(0);
                 animationApplied = false;
                 animation2Applied = false;
                 animation3Applied = false;
-            } else if (ClimbJoint.system().getPosition() < 0.1 && !armIsLegal && !ClimbJoint.system().isDeployed().getAsBoolean()) {
-                if (!animationApplied) {
-                    candle.animate(new StrobeAnimation(255, 0, 0, 0, 0.001, -1));
-                    animationApplied = true;
-                    animation2Applied = false;
-                    animation3Applied = false;
-                }
-            } else if (armIsLegal && ClimbJoint.system().getPosition() < 0.1) {
+            } else if (armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
                 if (!animation2Applied) {
+                    candle.clearAnimation(0);
+                    candle.clearAnimation(1);
                     candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.001, -1));
                     animation2Applied = true;
                     animationApplied = false;
                     animation3Applied = false;
+                }
+            } else if (ClimbJoint.system().isDeployed().getAsBoolean()) {
+                if (!animation3Applied) {
+                    candle.clearAnimation(0);
+                    candle.clearAnimation(1);
+                    candle.animate(new RainbowAnimation(255, 0.75, -1));
+                    animationApplied = false;
+                    animation2Applied = false;
+                    animation3Applied = true;
                 }
             } else if (armIsLegal) {
                 candle.setLEDs(0, 255, 0);
@@ -118,7 +123,7 @@ public class ArmStrip implements Subsystem {
                 if (!animation2Applied) {
                     candle.clearAnimation(0);
                     candle.clearAnimation(1);
-                    candle.animate(new StrobeAnimation(252, 250, 76, 0, 0.2, -1));
+                    candle.animate(new StrobeAnimation(250, 160, 10, 0, 0.2, -1));
                     animationApplied = false;
                     animation2Applied = true;
                     animation3Applied = false;
@@ -128,19 +133,27 @@ public class ArmStrip implements Subsystem {
                 if (!animation3Applied) {
                     candle.clearAnimation(0);
                     candle.clearAnimation(1);
-                    candle.animate(new StrobeAnimation(255, 120, 250, 0, 0.01, -1));
+                    candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.01, -1));
                     animationApplied = false;
                     animation2Applied = false;
                     animation3Applied = true;
                 }
             } else {
+                if (animationApplied || animation2Applied || animation3Applied) {
+                    candle.clearAnimation(0);
+                    candle.clearAnimation(1);
+                    animationApplied = false;
+                    animation2Applied = false;
+                    animation3Applied = false;
+                }
+
                 if (strobeTimer.hasElapsed(strobeInterval)) {
                     if (strobeAlternate) {
-                        candle.setLEDs(255, 120, 250, 0, 0, 33);
+                        candle.setLEDs(255, 10, 250, 0, 0, 33);
                         candle.setLEDs(0, 0, 0, 0, 38, 33);
                     } else {
                         candle.setLEDs(0, 0, 0, 0, 0, 33);
-                        candle.setLEDs(255, 120, 250, 0, 33, 38);
+                        candle.setLEDs(255, 10, 250, 0, 33, 38);
                     }
 
                     strobeAlternate = !strobeAlternate;
