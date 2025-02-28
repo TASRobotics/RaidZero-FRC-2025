@@ -274,8 +274,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
             () -> AutoBuilder.pathfindToPose(
                 pose,
                 new PathConstraints(
-                    2.0,
-                    3.0,
+                    3.5,
+                    4.0,
                     Units.degreesToRadians(540),
                     Units.degreesToRadians(720)
                 )
