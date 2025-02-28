@@ -55,12 +55,15 @@ public class ArmStrip implements Subsystem {
             arm.getJointPosition() <= Constants.CANdle.ARM_JOINT_UPPER_BOUND;
 
         if (DriverStation.isDisabled()) {
-            if (!armIsLegal) {
-                candle.setLEDs(255, 0, 0);
-                candle.clearAnimation(0);
-                animationApplied = false;
-                animation2Applied = false;
-                animation3Applied = false;
+            if (ClimbJoint.system().isDeployed().getAsBoolean()) {
+                if (!animation3Applied) {
+                    candle.clearAnimation(0);
+                    candle.clearAnimation(1);
+                    candle.animate(new RainbowAnimation(255, 0.75, -1));
+                    animationApplied = false;
+                    animation2Applied = false;
+                    animation3Applied = true;
+                }
             } else if (armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
                 if (!animation2Applied) {
                     candle.clearAnimation(0);
@@ -70,15 +73,12 @@ public class ArmStrip implements Subsystem {
                     animationApplied = false;
                     animation3Applied = false;
                 }
-            } else if (ClimbJoint.system().isDeployed().getAsBoolean()) {
-                if (!animation3Applied) {
-                    candle.clearAnimation(0);
-                    candle.clearAnimation(1);
-                    candle.animate(new RainbowAnimation(255, 0.75, -1));
-                    animationApplied = false;
-                    animation2Applied = false;
-                    animation3Applied = true;
-                }
+            } else if (!armIsLegal) {
+                candle.setLEDs(255, 0, 0);
+                candle.clearAnimation(0);
+                animationApplied = false;
+                animation2Applied = false;
+                animation3Applied = false;
             } else if (armIsLegal) {
                 candle.setLEDs(0, 255, 0);
                 candle.clearAnimation(0);
