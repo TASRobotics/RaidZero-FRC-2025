@@ -321,11 +321,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /**
-     * Returns a {@link BooleanSupplier} that checks if the robot is not in a No Arm Zone
+     * Returns a {@link BooleanSupplier} that checks if the robot is not able to be deployed
      * 
-     * @return A {@link BooleanSupplier} that checks if the robot is not in a No Arm Zone
+     * @return A {@link BooleanSupplier} that checks if the robot is not able to be deployed
      */
-    public BooleanSupplier isNotInNaz() {
+    public BooleanSupplier isUndeployable() {
         return () -> {
             Translation2d currTranslation = this.getState().Pose.getTranslation();
 

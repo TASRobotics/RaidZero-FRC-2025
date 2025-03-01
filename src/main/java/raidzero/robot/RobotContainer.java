@@ -129,15 +129,15 @@ public class RobotContainer {
         // * Operator controls
         operator.button(Constants.Bindings.L2).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
-                .onlyIf(swerve.isNotInNaz())
+                .onlyIf(swerve.isUndeployable())
         );
         operator.button(Constants.Bindings.L3).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
-                .onlyIf(swerve.isNotInNaz())
+                .onlyIf(swerve.isUndeployable())
         );
         operator.button(Constants.Bindings.L4).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
-                .onlyIf(swerve.isNotInNaz())
+                .onlyIf(swerve.isUndeployable())
         );
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
