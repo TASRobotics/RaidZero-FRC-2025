@@ -322,11 +322,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /**
-     * Returns a {@link BooleanSupplier} that checks if the robot is not able to be deployed
+     * Returns a {@link BooleanSupplier} that checks if the arm is able to be deployed
      * 
-     * @return A {@link BooleanSupplier} that checks if the robot is not able to be deployed
+     * @return A {@link BooleanSupplier} that checks if the arm is able to be deployed
      */
-    public BooleanSupplier isUndeployable() {
+    public BooleanSupplier isArmDeployable() {
         return () -> {
             Translation2d currTranslation = this.getState().Pose.getTranslation();
             ChassisSpeeds currSpeeds = this.getState().Speeds;
@@ -336,7 +336,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
             ) > 1.25 &&
                 (currTranslation.getX() < 7.525 ||
                     currTranslation.getX() > 10.025) &&
-                (Math.sqrt(Math.pow(currSpeeds.vxMetersPerSecond, 2) + Math.pow(currSpeeds.vyMetersPerSecond, 2)) > 1.3);
+                (Math.sqrt(Math.pow(currSpeeds.vxMetersPerSecond, 2) + Math.pow(currSpeeds.vyMetersPerSecond, 2)) < 2.0);
         };
     }
 

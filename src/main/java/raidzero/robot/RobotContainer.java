@@ -83,8 +83,8 @@ public class RobotContainer {
     private void configureBindings() {
         swerve.setDefaultCommand(
             swerve.applyRequest(
-                () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed)
+                () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isArmUp() ? 0.3 : 1.0))
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.67 * (arm.isArmUp() ? 0.3 : 1.0))
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )
         );
@@ -129,15 +129,15 @@ public class RobotContainer {
         // * Operator controls
         operator.button(Constants.Bindings.L2).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
-                .onlyIf(swerve.isUndeployable())
+                .onlyIf(swerve.isArmDeployable())
         );
         operator.button(Constants.Bindings.L3).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
-                .onlyIf(swerve.isUndeployable())
+                .onlyIf(swerve.isArmDeployable())
         );
         operator.button(Constants.Bindings.L4).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
-                .onlyIf(swerve.isUndeployable())
+                .onlyIf(swerve.isArmDeployable())
         );
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
