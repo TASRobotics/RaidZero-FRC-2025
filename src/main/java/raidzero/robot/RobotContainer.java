@@ -200,7 +200,7 @@ public class RobotContainer {
                 }
             ).withTimeout(1.0).andThen(() -> coralIntake.stop())
         );
-        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stop()).withTimeout(0.8));
+        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stop()));
     }
 
     /**
