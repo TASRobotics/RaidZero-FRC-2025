@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1383,
-        "y": 1.02
+        "x": 1.136,
+        "y": 1.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2700825961235367,
-        "y": 1.8184696695867342
+        "x": 2.2677825961235367,
+        "y": 1.7984696695867342
       },
       "isLocked": false,
       "linkedName": "StationPickupA5"
