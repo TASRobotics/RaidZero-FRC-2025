@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "reef appr",
-      "minWaypointRelativePos": 0.7002350563226749,
+      "minWaypointRelativePos": 0.75,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
