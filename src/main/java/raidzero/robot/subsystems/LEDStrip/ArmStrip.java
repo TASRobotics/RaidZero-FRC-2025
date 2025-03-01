@@ -73,6 +73,27 @@ public class ArmStrip implements Subsystem {
                     animationApplied = false;
                     animation3Applied = false;
                 }
+            } else if (!armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
+                if (animationApplied || animation2Applied || animation3Applied) {
+                    candle.clearAnimation(0);
+                    candle.clearAnimation(1);
+                    animationApplied = false;
+                    animation2Applied = false;
+                    animation3Applied = false;
+                }
+
+                if (strobeTimer.hasElapsed(strobeInterval)) {
+                    if (strobeAlternate) {
+                        candle.setLEDs(255, 0, 0, 0, 0, 33);
+                        candle.setLEDs(0, 0, 0, 0, 38, 33);
+                    } else {
+                        candle.setLEDs(0, 0, 0, 0, 0, 33);
+                        candle.setLEDs(255, 0, 0, 0, 33, 38);
+                    }
+
+                    strobeAlternate = !strobeAlternate;
+                    strobeTimer.reset();
+                }
             } else if (!armIsLegal) {
                 candle.setLEDs(255, 0, 0);
                 candle.clearAnimation(0);
