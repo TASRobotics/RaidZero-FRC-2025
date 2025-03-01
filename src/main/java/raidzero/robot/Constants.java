@@ -193,8 +193,8 @@ public class Constants {
         }
 
         public class Positions {
-            public static final double[] L4_SCORING_POS_M = { -0.2, 2.7 };
-            public static final double[] L3_SCORING_POS_M = { -0.2, 1.55 };
+            public static final double[] L4_SCORING_POS_M = { -0.2, 2.72 };
+            public static final double[] L3_SCORING_POS_M = { -0.2, 1.57 };
             public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
