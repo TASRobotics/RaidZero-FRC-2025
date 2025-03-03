@@ -79,7 +79,7 @@ public class Constants {
             public static final double SENSOR_TO_MECHANISM_RATIO = 80.0 / 10.0;
 
             public static final double KS = 0.02;
-            public static final double KG = 0.04;
+            public static final double KG = 0.08;
             public static final double KV = 1.2;
             public static final double KA = 0.1;
 
@@ -106,7 +106,7 @@ public class Constants {
         public class Winch {
             public static final int MOTOR_ID = 16;
 
-            public static final double WINCH_SPEED = 0.25;
+            public static final double SPEED = 0.35;
         }
     }
 
@@ -117,8 +117,8 @@ public class Constants {
 
         public static final List<Pose2d> STATION_WAYPOINTS = new ArrayList<Pose2d>(
             List.of(
-                new Pose2d(1.0746, 1.03, Rotation2d.fromDegrees(55)), // 12 Station
-                new Pose2d(1.0492, 7.01, Rotation2d.fromDegrees(-55)) // 13 Station
+                new Pose2d(1.151, 1.03, Rotation2d.fromDegrees(55)), // 12 Station
+                new Pose2d(1.1383, 7.01, Rotation2d.fromDegrees(-55)) // 13 Station 1.0873
             )
         );
 
@@ -167,7 +167,7 @@ public class Constants {
             public static final int CANCODER_ID = 11;
 
             public static final double CANCODER_GEAR_RATIO = 28.0 / 80;
-            public static final double CANCODER_OFFSET = -(.3596 - (0.25 / CANCODER_GEAR_RATIO));
+            public static final double CANCODER_OFFSET = -(0.363525 - (0.25 / CANCODER_GEAR_RATIO));
             public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
 
             public static final double CONVERSION_FACTOR = (120 / 12) * 20.0;
@@ -193,9 +193,9 @@ public class Constants {
         }
 
         public class Positions {
-            public static final double[] L4_SCORING_POS_M = { -0.1, 2.7 };
-            public static final double[] L3_SCORING_POS_M = { -0.15, 1.55 };
-            public static final double[] L2_SCORING_POS_M = { -0.0, 0.2 };
+            public static final double[] L4_SCORING_POS_M = { -0.2, 2.72 };
+            public static final double[] L3_SCORING_POS_M = { -0.2, 1.57 };
+            public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
             public static final double[] INTAKE_POS_M = { 0.5, 0.80 };

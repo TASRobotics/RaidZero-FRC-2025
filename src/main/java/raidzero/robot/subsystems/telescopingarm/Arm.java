@@ -159,6 +159,15 @@ public class Arm extends SubsystemBase {
     }
 
     /**
+     * Checks if the arm is in a deployed height
+     * 
+     * @return True if the arm is in a deployed height, false otherwise
+     */
+    public boolean isArmUp() {
+        return telescope.getPosition().getValueAsDouble() < -0.15;
+    }
+
+    /**
      * Calculates the target telescope position given the x and y setpoints
      * 
      * @param x The x setpoint in meters

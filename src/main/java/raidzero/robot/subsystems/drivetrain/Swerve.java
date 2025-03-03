@@ -21,6 +21,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -274,8 +275,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
             () -> AutoBuilder.pathfindToPose(
                 pose,
                 new PathConstraints(
-                    2.0,
-                    3.0,
+                    3.5,
+                    4.0,
                     Units.degreesToRadians(540),
                     Units.degreesToRadians(720)
                 )
@@ -321,19 +322,21 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /**
-     * Returns a {@link BooleanSupplier} that checks if the robot is not in a No Arm Zone
+     * Returns a {@link BooleanSupplier} that checks if the arm is able to be deployed
      * 
-     * @return A {@link BooleanSupplier} that checks if the robot is not in a No Arm Zone
+     * @return A {@link BooleanSupplier} that checks if the arm is able to be deployed
      */
-    public BooleanSupplier isNotInNaz() {
+    public BooleanSupplier isArmDeployable() {
         return () -> {
             Translation2d currTranslation = this.getState().Pose.getTranslation();
+            ChassisSpeeds currSpeeds = this.getState().Speeds;
 
             return currTranslation.getDistance(
                 this.getState().Pose.nearest(Constants.Swerve.STATION_WAYPOINTS).getTranslation()
             ) > 1.25 &&
                 (currTranslation.getX() < 7.525 ||
-                    currTranslation.getX() > 10.025);
+                    currTranslation.getX() > 10.025) &&
+                (Math.sqrt(Math.pow(currSpeeds.vxMetersPerSecond, 2) + Math.pow(currSpeeds.vyMetersPerSecond, 2)) < 2.0);
         };
     }
 

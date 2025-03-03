@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
-import raidzero.robot.subsystems.algaeintake.AlgaeJoint;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 import raidzero.robot.subsystems.climb.Winch;
 import raidzero.robot.subsystems.drivetrain.Limelight;
@@ -54,7 +53,8 @@ public class RobotContainer {
 
     public final Limelight limes = Limelight.system();
 
-    public final AlgaeJoint algaeIntake = AlgaeJoint.system();
+    // public final AlgaeJoint algaeIntake = AlgaeJoint.system();
+
     public final ArmStrip armStrip = ArmStrip.system();
 
     public final ClimbJoint climbJoint = ClimbJoint.system();
@@ -83,8 +83,8 @@ public class RobotContainer {
     private void configureBindings() {
         swerve.setDefaultCommand(
             swerve.applyRequest(
-                () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed)
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed)
+                () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isArmUp() ? 0.3 : 1.0))
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.67 * (arm.isArmUp() ? 0.3 : 1.0))
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )
         );
@@ -92,9 +92,9 @@ public class RobotContainer {
         arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
         coralIntake.setDefaultCommand(coralIntake.stop());
 
-        algaeIntake.setDefaultCommand(algaeIntake.moveJoint(Constants.AlgaeIntake.Joint.HOME_POSITION));
+        // algaeIntake.setDefaultCommand(algaeIntake.moveJoint(Constants.AlgaeIntake.Joint.HOME_POSITION));
 
-        climbJoint.setDefaultCommand(climbJoint.moveJoint(Constants.Climb.Joint.HOME_POS));
+        climbJoint.setDefaultCommand(climbJoint.run(Constants.Climb.Joint.HOME_POS));
         climbWinch.setDefaultCommand(climbWinch.stop());
 
         // * Driver controls
@@ -120,14 +120,24 @@ public class RobotContainer {
             swerve.pathToReef(Constants.Swerve.REEFS.RIGHT)
         );
 
+        joystick.povRight().whileTrue(
+            swerve.applyRequest(
+                () -> new SwerveRequest.SwerveDriveBrake()
+            )
+        );
+
         // * Operator controls
+        operator.button(Constants.Bindings.L2).whileTrue(
+            arm.moveArm(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
+                .onlyIf(swerve.isArmDeployable())
+        );
         operator.button(Constants.Bindings.L3).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
-                .onlyIf(swerve.isNotInNaz())
+                .onlyIf(swerve.isArmDeployable())
         );
         operator.button(Constants.Bindings.L4).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
-                .onlyIf(swerve.isNotInNaz())
+                .onlyIf(swerve.isArmDeployable())
         );
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
@@ -136,19 +146,27 @@ public class RobotContainer {
 
         operator.button(Constants.Bindings.CLIMB_DEPLOY)
             .onTrue(
-                arm.vertical().alongWith(
-                    Commands.waitSeconds(0.2)
-                        .andThen(
-                            climbJoint.moveJoint(Constants.Climb.Joint.DEPLOYED_POS)
-                                .until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
-                                .andThen(() -> climbJoint.stop()).alongWith(new InstantCommand(() -> climbJoint.setDeployedState()))
-                        )
-                )
+                Commands.waitSeconds(0.2)
+                    .andThen(
+                        climbJoint.run(Constants.Climb.Joint.DEPLOYED_POS)
+                            .until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
+                            .andThen(() -> climbJoint.stop()).alongWith(
+                                new InstantCommand(
+                                    () -> climbJoint.setDeployedState()
+                                )
+                            )
+                    )
             );
-        operator.button(Constants.Bindings.CLIMB_UP)
-            .whileTrue(climbWinch.run(Constants.Climb.Winch.WINCH_SPEED).onlyIf(climbJoint.isDeployed()));
+        operator.button(Constants.Bindings.CLIMB_DEPLOY).onTrue(arm.vertical());
+
+        // operator.button(Constants.Bindings.CLIMB_UP)
+        // .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
+
+        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED));
+        operator.button(Constants.Bindings.CLIMB_UP).onTrue(climbJoint.retract());
+
         operator.button(Constants.Bindings.CLIMB_DOWN)
-            .whileTrue(climbWinch.run(-Constants.Climb.Winch.WINCH_SPEED).onlyIf(climbJoint.isDeployed()));
+            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
         swerve.registerTelemetry(logger::telemeterize);
     }
@@ -182,7 +200,7 @@ public class RobotContainer {
                 }
             ).withTimeout(1.0).andThen(() -> coralIntake.stop())
         );
-        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stop()).withTimeout(0.8));
+        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stop()));
     }
 
     /**

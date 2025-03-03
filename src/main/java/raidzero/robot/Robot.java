@@ -36,7 +36,6 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
-		ArmStrip.system().disabledLEDs();
 		Arm.system().updateCoastMode();
 
 		Swerve.system().initializeOtf();
@@ -45,35 +44,41 @@ public class Robot extends TimedRobot {
 	@Override
 	public void disabledExit() {
 		CoralIntake.system().getRoller().setControl(new StaticBrake());
+		ArmStrip.system().resetAnimation();
 	}
-
+	
 	@Override
 	public void autonomousInit() {
 		m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
+		
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
 	}
-
+	
 	@Override
 	public void autonomousPeriodic() {}
-
+	
 	@Override
-	public void autonomousExit() {}
-
+	public void autonomousExit() {
+		ArmStrip.system().resetAnimation();
+	}
+	
 	@Override
 	public void teleopInit() {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
 	}
-
+	
 	@Override
 	public void teleopPeriodic() {}
-
+	
 	@Override
-	public void teleopExit() {}
+	public void teleopExit() {
+		ArmStrip.system().resetAnimation();
+		ArmStrip.system().endAnimation();
+	}
 
 	@Override
 	public void testInit() {
@@ -84,7 +89,9 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {}
 
 	@Override
-	public void testExit() {}
+	public void testExit() {
+		ArmStrip.system().resetAnimation();
+	}
 
 	@Override
 	public void simulationPeriodic() {}

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.04924,
-        "y": 1.031
+        "x": 1.136,
+        "y": 1.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1810225961235368,
-        "y": 1.829469669586734
+        "x": 2.2677825961235367,
+        "y": 1.7984696695867342
       },
       "isLocked": false,
       "linkedName": "StationPickupA5"
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "reef appr",
-      "minWaypointRelativePos": 0.7002350563226749,
+      "minWaypointRelativePos": 0.75,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
