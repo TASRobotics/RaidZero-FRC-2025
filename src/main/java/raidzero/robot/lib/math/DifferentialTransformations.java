@@ -54,11 +54,11 @@ public class DifferentialTransformations {
         double correctedAtheta = correctedVelocities[1] * accelRatio;
         return new double[]{correctedAr, correctedAtheta};
     }
-}
-public void printCorrectedVelocitiesAndAccelerations(double x, double y, double kP) {
-    double[] correctedVelocities = calculateCorrectedVelocities(x, y, kP);
-    double[] correctedAccelerations = calculateCorrectedAccelerations(x, y, kP);
-    
-    System.out.println("Corrected Velocities: vr = " + correctedVelocities[0] + ", vtheta = " + correctedVelocities[1]);
-    System.out.println("Corrected Accelerations: ar = " + correctedAccelerations[0] + ", atheta = " + correctedAccelerations[1]);
+    public void printCorrectedVelocitiesAndAccelerations(double x, double y, double kP) {
+        double[] correctedVelocities = calculateCorrectedVelocities(x, y, kP);
+        double[] correctedAccelerations = calculateCorrectedAccelerations(x, y, kP);
+        
+        System.out.println("Corrected Velocities: vr = " + correctedVelocities[0] + ", vtheta = " + correctedVelocities[1]);
+        System.out.println("Corrected Accelerations: ar = " + correctedAccelerations[0] + ", atheta = " + correctedAccelerations[1]);
+    }
 }
