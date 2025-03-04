@@ -89,7 +89,7 @@ public class RobotContainer {
             )
         );
 
-        arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        arm.setDefaultCommand(arm.run(Constants.TelescopingArm.Positions.INTAKE_POS_M));
         coralIntake.setDefaultCommand(coralIntake.stop());
 
         // algaeIntake.setDefaultCommand(algaeIntake.moveJoint(Constants.AlgaeIntake.Joint.HOME_POSITION));
@@ -128,15 +128,15 @@ public class RobotContainer {
 
         // * Operator controls
         operator.button(Constants.Bindings.L2).whileTrue(
-            arm.moveArm(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
+            arm.run(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
         operator.button(Constants.Bindings.L3).whileTrue(
-            arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
+            arm.run(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
         operator.button(Constants.Bindings.L4).whileTrue(
-            arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
+            arm.run(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
 
@@ -177,17 +177,17 @@ public class RobotContainer {
     private void registerPathplannerCommands() {
         NamedCommands.registerCommand(
             "ArmIntakeCoral",
-            arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M)
+            arm.run(Constants.TelescopingArm.Positions.INTAKE_POS_M)
                 .withTimeout(0.75)
         );
         NamedCommands.registerCommand(
             "ArmL3",
-            arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
+            arm.run(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .withTimeout(0.75)
         );
         NamedCommands.registerCommand(
             "ArmL4",
-            arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
+            arm.run(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
                 .withTimeout(0.75)
         );
 

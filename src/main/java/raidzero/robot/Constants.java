@@ -190,17 +190,20 @@ public class Constants {
             public static final double STATOR_CURRENT_LIMT = 30.0;
             public static final double SUPPLY_CURRENT_LIMIT = 30.0;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
+
+            public static final double DELAY_TELESCOPE_THRESHOLD_ROT = 0.25;
         }
 
         public class Positions {
-            public static final double[] L4_SCORING_POS_M = { -0.2, 2.72 };
-            public static final double[] L3_SCORING_POS_M = { -0.2, 1.57 };
-            public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
-            public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
+            public static final double[] L4_SCORING_POS_M = { -0.2 - Telescope.BUMPER_TO_JOINT_M, 2.72 - Telescope.GROUND_TO_JOINT_M };
+            public static final double[] L3_SCORING_POS_M = { -0.2 - Telescope.BUMPER_TO_JOINT_M, 1.57 - Telescope.GROUND_TO_JOINT_M };
+            public static final double[] L2_SCORING_POS_M = { -0.2 - Telescope.BUMPER_TO_JOINT_M, 0.9 - Telescope.GROUND_TO_JOINT_M };
+            public static final double[] L1_SCORING_POS_M = { 0.0 - Telescope.BUMPER_TO_JOINT_M, 0.0 - Telescope.GROUND_TO_JOINT_M };
 
-            public static final double[] INTAKE_POS_M = { 0.5, 0.80 };
+            public static final double[] INTAKE_POS_M = { 0.5 - Telescope.BUMPER_TO_JOINT_M, 0.80 - Telescope.GROUND_TO_JOINT_M };
+            public static final double[] HOME_POS_M = { 0.0 - Telescope.BUMPER_TO_JOINT_M, 0.0 - Telescope.GROUND_TO_JOINT_M };
 
-            public static final double[] HOME_POS_M = { 0.0, 0.0 };
+            public static final double DELAY_ENABLE_Y_THRESHOLD_M = 0.9;
         }
 
         public class Telescope {
@@ -227,11 +230,11 @@ public class Constants {
             public static final double ACCELERATION = 5.0;
             public static final double JERK = 0.0;
 
-            // public static final double TOP_SOFT_LIMIT = 1.0; // 100% range of motion
-            public static final double BOTTOM_SOFT_LIMIT = 0.0; // 0% range of motion
+            public static final double GROUND_TO_JOINT_M = 0.125;
+            public static final double BUMPER_TO_JOINT_M = 0.184;
 
-            public static final double GROUND_OFFSET_M = 0.9;
             public static final double MAX_HEIGHT_M = 1.95;
+            public static final double MIN_HEIGHT_M = 0.87;
         }
     }
 

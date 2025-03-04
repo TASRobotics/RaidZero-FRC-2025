@@ -24,8 +24,6 @@ public class Arm extends SubsystemBase {
     private TalonFX telescope, joint;
     private CANcoder jointCANcoder;
 
-    private double[] currentPose;
-
     private static Arm system;
 
     /**
@@ -42,8 +40,6 @@ public class Arm extends SubsystemBase {
 
         jointCANcoder = new CANcoder(Constants.TelescopingArm.Joint.CANCODER_ID);
         jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
-
-        currentPose = new double[] { 0.0, 0.0 };
     }
 
     /**
@@ -53,45 +49,54 @@ public class Arm extends SubsystemBase {
      * @param y The y setpoint in meters
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
-    public Command moveArm(double[] desiredPosition) {
+    public Command run(double[] desiredPosition) {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
 
-        if (currentPose[1] > desiredPosition[1]) {
-            currentPose[1] = desiredPosition[1];
-
+        if (desiredPosition[1] < Constants.TelescopingArm.Positions.DELAY_ENABLE_Y_THRESHOLD_M) {
             return run(() -> moveJoint(jointSetpoint))
                 .alongWith(
-                    Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
+                    Commands.waitUntil(
+                        () -> joint.getPosition().getValueAsDouble() < Constants.TelescopingArm.Joint.DELAY_TELESCOPE_THRESHOLD_ROT
+                    )
                         .andThen(() -> moveTelescope(telescopeSetpoint))
                 );
         } else {
-            currentPose[1] = desiredPosition[1];
-
             return run(() -> moveTelescope(telescopeSetpoint))
                 .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
         }
     }
 
-    /**
-     * Moves the arm to the desired x and y setpoints with a delay
-     * 
-     * @Note This method should only be used when lowering the arm
-     * 
-     * @param x The x setpoint in meters
-     * @param y The y setpoint in meters
-     * @return A {@link Command} that moves the arm to the desired setpoints
-     */
-    public Command moveArmWithDelay(double[] desiredPosition) {
-        double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
-        double jointSetpoint = calculateJointAngle(desiredPosition);
-
-        return run(() -> moveJoint(jointSetpoint))
-            .alongWith(
-                Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
-                    .andThen(() -> moveTelescope(telescopeSetpoint))
-            );
+    public Command grandSlam() {
+        return defer(() -> null);
     }
+
+    public double[] mathThing() {
+        double[] position = {-1.0, -1.0};
+        
+        
+        return position;
+    }
+
+    // /**
+    // * Moves the arm to the desired x and y setpoints with a delay
+    // *
+    // * @Note This method should only be used when lowering the arm
+    // *
+    // * @param x The x setpoint in meters
+    // * @param y The y setpoint in meters
+    // * @return A {@link Command} that moves the arm to the desired setpoints
+    // */
+    // public Command moveArmWithDelay(double[] desiredPosition) {
+    // double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
+    // double jointSetpoint = calculateJointAngle(desiredPosition);
+
+    // return run(() -> moveJoint(jointSetpoint))
+    // .alongWith(
+    // Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
+    // .andThen(() -> moveTelescope(telescopeSetpoint))
+    // );
+    // }
 
     /**
      * Moves the arm to a vertical position
@@ -175,7 +180,7 @@ public class Arm extends SubsystemBase {
      * @return Target motor position in rotations
      */
     private double calculateTelescopeHeight(double[] position) {
-        double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2)) - Constants.TelescopingArm.Telescope.GROUND_OFFSET_M;
+        double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2));
 
         return height / Constants.TelescopingArm.Telescope.MAX_HEIGHT_M;
     }
@@ -259,7 +264,7 @@ public class Arm extends SubsystemBase {
             .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
 
         configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
-        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = 0.0;
+        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = Constants.TelescopingArm.Telescope.MIN_HEIGHT_M;
 
         configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
 

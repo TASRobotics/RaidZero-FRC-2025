@@ -25,7 +25,7 @@ public class DifferentialTransformations {
         double theta = Math.atan2(y, x);
         double vr = fixedSpeed * Math.cos(theta);
         double vtheta = fixedSpeed * Math.sin(theta);
-        return new double[]{vr, vtheta};
+        return new double[] { vr, vtheta };
     }
 
     public double[] calculateDirection(double x, double y) {
@@ -37,7 +37,7 @@ public class DifferentialTransformations {
         double directionX = closestX - x;
         double directionY = closestY - y;
         double magnitude = Math.sqrt(directionX * directionX + directionY * directionY);
-        return new double[]{fixedSpeed * directionX / magnitude, fixedSpeed * directionY / magnitude};
+        return new double[] { fixedSpeed * directionX / magnitude, fixedSpeed * directionY / magnitude };
     }
 
     public double[] calculateCorrectedVelocities(double x, double y, double kP) {
@@ -45,19 +45,20 @@ public class DifferentialTransformations {
         double[] direction = calculateDirection(x, y);
         double correctedVr = velocities[0] + kP * direction[0];
         double correctedVtheta = velocities[1] + kP * direction[1];
-        return new double[]{correctedVr, correctedVtheta};
+        return new double[] { correctedVr, correctedVtheta };
     }
 
     public double[] calculateCorrectedAccelerations(double x, double y, double kP) {
         double[] correctedVelocities = calculateCorrectedVelocities(x, y, kP);
         double correctedAr = correctedVelocities[0] * accelRatio;
         double correctedAtheta = correctedVelocities[1] * accelRatio;
-        return new double[]{correctedAr, correctedAtheta};
+        return new double[] { correctedAr, correctedAtheta };
     }
+
     public void printCorrectedVelocitiesAndAccelerations(double x, double y, double kP) {
         double[] correctedVelocities = calculateCorrectedVelocities(x, y, kP);
         double[] correctedAccelerations = calculateCorrectedAccelerations(x, y, kP);
-        
+
         System.out.println("Corrected Velocities: vr = " + correctedVelocities[0] + ", vtheta = " + correctedVelocities[1]);
         System.out.println("Corrected Accelerations: ar = " + correctedAccelerations[0] + ", atheta = " + correctedAccelerations[1]);
     }
