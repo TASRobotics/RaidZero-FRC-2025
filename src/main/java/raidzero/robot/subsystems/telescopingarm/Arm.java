@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -49,7 +50,7 @@ public class Arm extends SubsystemBase {
      * @param y The y setpoint in meters
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
-    public Command run(double[] desiredPosition) {
+    public Command moveTo(double[] desiredPosition) {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
 
@@ -67,14 +68,38 @@ public class Arm extends SubsystemBase {
         }
     }
 
-    public Command grandSlam() {
-        return defer(() -> null);
+    public Command run(double[] desiredPosition) {
+        return run(() -> {
+            moveTelescope(calculateTelescopeHeight(desiredPosition));
+            moveJoint(calculateJointAngle(desiredPosition));
+        });
     }
 
-    public double[] mathThing() {
-        double[] position = {-1.0, -1.0};
-        
-        
+    public Command grandSlam(double[] currentPosition, double[] desiredPosition) {
+        return defer(() -> {
+            double[] positions = shitBruhIDontEvenKnow(currentPosition, desiredPosition);
+
+            return run(positions);
+        });
+    }
+
+    public double[] shitBruhIDontEvenKnow(double[] currentPose, double[] desiredPose) {
+        double[] position = null;
+
+        double currentJointAngle = calculateJointAngle(currentPose);
+        double desiredJointAngle = calculateJointAngle(desiredPose);
+
+        double dTheta = desiredJointAngle - currentJointAngle;
+
+        double currentTelescopeHeight = calculateTelescopeHeight(currentPose);
+        double desiredTelescopeHeight = calculateTelescopeHeight(desiredPose);
+
+        double dRadius = desiredTelescopeHeight - currentTelescopeHeight;
+
+        // Equation:
+        // [[velX] = [[ cos(theta) -r*sin(theta) ] * [[dRadius/dt]
+        // [velY]] [ sin(theta) r*cos(theta) ]] [dTheta/dt]]
+
         return position;
     }
 
