@@ -15,7 +15,7 @@ import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import raidzero.robot.Constants;
+import raidzero.robot.Constants.TelescopingArm.Intake;
 
 public class CoralIntake extends SubsystemBase {
     private TalonFXS roller, follow;
@@ -28,11 +28,11 @@ public class CoralIntake extends SubsystemBase {
      * Constructs a {@link CoralIntake} subsystem instance
      */
     private CoralIntake() {
-        roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID);
+        roller = new TalonFXS(Intake.MOTOR_ID);
         roller.getConfigurator().apply(rollerConfiguration());
 
-        follow = new TalonFXS(Constants.TelescopingArm.Intake.FOLLOW_ID);
-        follow.setControl(new Follower(Constants.TelescopingArm.Intake.MOTOR_ID, true));
+        follow = new TalonFXS(Intake.FOLLOW_ID);
+        follow.setControl(new Follower(Intake.MOTOR_ID, true));
         follow.getConfigurator().apply(followConfiguration());
 
         bottomLaser = new LaserCan(0);
@@ -53,6 +53,7 @@ public class CoralIntake extends SubsystemBase {
             System.out.println("LaserCan Config Error");
         }
     }
+
     /**
      * Gets the roller motor controller for disabled init to check for position
      * @return The Roller motor
@@ -68,17 +69,22 @@ public class CoralIntake extends SubsystemBase {
      * @return The command to be scheduled and run
      */
     public Command intake() {
-        return run(() -> roller.set(Constants.TelescopingArm.Intake.INTAKE_SPEED))
-            .until(() -> getBottomLaserDistance() <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM)
+        return run(() -> roller.set(Intake.INTAKE_SPEED))
+            .until(() -> getBottomLaserDistance() <= Intake.LASERCAN_DISTANCE_THRESHOLD_MM)
             .andThen(
-                run(() -> roller.set(-Constants.TelescopingArm.Intake.INTAKE_SPEED))
+                run(() -> roller.set(-Intake.INTAKE_SPEED))
                     .withTimeout(0.1)
             );
     }
 
+    /**
+     * Creates a {@link Command} to run the "scooch" routine on the coral in the intake
+     * 
+     * @return the command to be scheduled and run
+     */
     public Command scoochCoral() {
-        return run(() -> roller.set(-Constants.TelescopingArm.Intake.INTAKE_SPEED))
-            .until(() -> getTopLaserDistance() <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM);
+        return run(() -> roller.set(-Intake.INTAKE_SPEED))
+            .until(() -> getTopLaserDistance() <= Intake.LASERCAN_DISTANCE_THRESHOLD_MM);
     }
 
     /**
@@ -97,8 +103,8 @@ public class CoralIntake extends SubsystemBase {
      * @return A {@link Command} to extake at the specified speed
      */
     public Command extake() {
-        return run(() -> roller.set(Constants.TelescopingArm.Intake.EXTAKE_SPEED))
-            .withTimeout(Constants.TelescopingArm.Intake.EXTAKE_TIMEOUT_S);
+        return run(() -> roller.set(Intake.EXTAKE_SPEED))
+            .withTimeout(Intake.EXTAKE_TIMEOUT_S);
     }
 
     /**

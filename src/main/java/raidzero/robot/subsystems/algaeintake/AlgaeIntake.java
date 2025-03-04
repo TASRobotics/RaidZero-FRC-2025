@@ -11,7 +11,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import raidzero.robot.Constants;
+import raidzero.robot.Constants.AlgaeIntake.Intake;
 
 public class AlgaeIntake extends SubsystemBase {
     private SparkMax roller;
@@ -22,7 +22,7 @@ public class AlgaeIntake extends SubsystemBase {
      * Constructs a {@link AlgaeIntake} subsystem instance
      */
     private AlgaeIntake() {
-        roller = new SparkMax(Constants.AlgaeIntake.Intake.MOTOR_ID, MotorType.kBrushless);
+        roller = new SparkMax(Intake.MOTOR_ID, MotorType.kBrushless);
         roller.configure(rollerConfig(), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 

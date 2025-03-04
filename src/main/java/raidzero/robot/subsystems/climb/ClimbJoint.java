@@ -12,7 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import raidzero.robot.Constants;
+import raidzero.robot.Constants.Climb.Joint;
 
 public class ClimbJoint extends SubsystemBase {
     private TalonFX joint;
@@ -25,7 +25,7 @@ public class ClimbJoint extends SubsystemBase {
      * Constructs a {@link ClimbJoint} subsystem instance
      */
     private ClimbJoint() {
-        joint = new TalonFX(Constants.Climb.Joint.MOTOR_ID);
+        joint = new TalonFX(Joint.MOTOR_ID);
         joint.getConfigurator().apply(jointConfiguration());
         joint.setNeutralMode(NeutralModeValue.Brake);
     }
@@ -114,30 +114,30 @@ public class ClimbJoint extends SubsystemBase {
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
-        configuration.Feedback.SensorToMechanismRatio = Constants.Climb.Joint.SENSOR_TO_MECHANISM_RATIO;
+        configuration.Feedback.SensorToMechanismRatio = Joint.SENSOR_TO_MECHANISM_RATIO;
 
         configuration.Slot0 = new Slot0Configs()
-            .withKS(Constants.Climb.Joint.KS)
-            .withKV(Constants.Climb.Joint.KV)
-            .withKA(Constants.Climb.Joint.KA)
-            .withKG(Constants.Climb.Joint.KG)
-            .withKP(Constants.Climb.Joint.KP)
-            .withKI(Constants.Climb.Joint.KI)
-            .withKD(Constants.Climb.Joint.KD)
+            .withKS(Joint.KS)
+            .withKV(Joint.KV)
+            .withKA(Joint.KA)
+            .withKG(Joint.KG)
+            .withKP(Joint.KP)
+            .withKI(Joint.KI)
+            .withKD(Joint.KD)
             .withGravityType(GravityTypeValue.Arm_Cosine);
 
-        configuration.CurrentLimits.StatorCurrentLimit = Constants.Climb.Joint.CURRENT_LIMIT;
-        configuration.CurrentLimits.SupplyCurrentLimit = Constants.Climb.Joint.SUPPLY_CURRENT_LIMIT;
-        configuration.CurrentLimits.SupplyCurrentLowerTime = Constants.Climb.Joint.SUPPLY_CURRENT_LOWER_TIME;
+        configuration.CurrentLimits.StatorCurrentLimit = Joint.CURRENT_LIMIT;
+        configuration.CurrentLimits.SupplyCurrentLimit = Joint.SUPPLY_CURRENT_LIMIT;
+        configuration.CurrentLimits.SupplyCurrentLowerTime = Joint.SUPPLY_CURRENT_LOWER_TIME;
 
-        configuration.MotionMagic.MotionMagicCruiseVelocity = Constants.Climb.Joint.MOTION_MAGIC_CRUISE_VELOCITY;
-        configuration.MotionMagic.MotionMagicAcceleration = Constants.Climb.Joint.MOTION_MAGIC_ACCELERATION;
+        configuration.MotionMagic.MotionMagicCruiseVelocity = Joint.MOTION_MAGIC_CRUISE_VELOCITY;
+        configuration.MotionMagic.MotionMagicAcceleration = Joint.MOTION_MAGIC_ACCELERATION;
 
         configuration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.Climb.Joint.FORWARD_SOFT_LIMIT;
+        configuration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Joint.FORWARD_SOFT_LIMIT;
 
         configuration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Constants.Climb.Joint.REVERSE_SOFT_LIMIT;
+        configuration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Joint.REVERSE_SOFT_LIMIT;
 
         return configuration;
     }

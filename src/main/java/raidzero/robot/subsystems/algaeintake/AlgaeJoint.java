@@ -10,7 +10,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import raidzero.robot.Constants;
+import raidzero.robot.Constants.AlgaeIntake.Joint;
 
 public class AlgaeJoint extends SubsystemBase {
     private TalonFX joint;
@@ -21,7 +21,7 @@ public class AlgaeJoint extends SubsystemBase {
      * Constructs a {@link AlgaeJoint} subsystem instance
      */
     private AlgaeJoint() {
-        joint = new TalonFX(Constants.AlgaeIntake.Joint.MOTOR_ID);
+        joint = new TalonFX(Joint.MOTOR_ID);
         joint.getConfigurator().apply(jointConfiguration());
         joint.setNeutralMode(NeutralModeValue.Brake);
     }
@@ -51,26 +51,26 @@ public class AlgaeJoint extends SubsystemBase {
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
-        configuration.Feedback.SensorToMechanismRatio = Constants.AlgaeIntake.Joint.CONVERSION_FACTOR;
+        configuration.Feedback.SensorToMechanismRatio = Joint.CONVERSION_FACTOR;
 
         configuration.Slot0 = new Slot0Configs()
-            .withKS(Constants.AlgaeIntake.Joint.KS) // inc until moves
-            .withKV(Constants.AlgaeIntake.Joint.KV) // min volt required to get to one rotation per sec w/ conversion factor
-            .withKA(Constants.AlgaeIntake.Joint.KA) // achieve smooth acceleration w/o overshoot
-            .withKG(Constants.AlgaeIntake.Joint.KG) // to move up
-            .withKP(Constants.AlgaeIntake.Joint.KP)
-            .withKI(Constants.AlgaeIntake.Joint.KI)
-            .withKD(Constants.AlgaeIntake.Joint.KD)
+            .withKS(Joint.KS) // inc until moves
+            .withKV(Joint.KV) // min volt required to get to one rotation per sec w/ conversion factor
+            .withKA(Joint.KA) // achieve smooth acceleration w/o overshoot
+            .withKG(Joint.KG) // to move up
+            .withKP(Joint.KP)
+            .withKI(Joint.KI)
+            .withKD(Joint.KD)
             .withGravityType(GravityTypeValue.Arm_Cosine);
 
-        configuration.Slot0.GravityType = Constants.AlgaeIntake.Joint.GRAVITY_TYPE;
+        configuration.Slot0.GravityType = Joint.GRAVITY_TYPE;
 
-        configuration.CurrentLimits.StatorCurrentLimit = Constants.AlgaeIntake.Joint.CURRENT_LIMIT;
-        configuration.CurrentLimits.SupplyCurrentLimit = Constants.AlgaeIntake.Joint.SUPPLY_CURRENT_LIMIT;
-        configuration.CurrentLimits.SupplyCurrentLowerTime = Constants.AlgaeIntake.Joint.SUPPLY_CURRENT_LOWER_TIME;
+        configuration.CurrentLimits.StatorCurrentLimit = Joint.CURRENT_LIMIT;
+        configuration.CurrentLimits.SupplyCurrentLimit = Joint.SUPPLY_CURRENT_LIMIT;
+        configuration.CurrentLimits.SupplyCurrentLowerTime = Joint.SUPPLY_CURRENT_LOWER_TIME;
 
-        configuration.MotionMagic.MotionMagicCruiseVelocity = Constants.AlgaeIntake.Joint.MOTION_MAGIC_CRUISE_VELOCITY;
-        configuration.MotionMagic.MotionMagicAcceleration = Constants.AlgaeIntake.Joint.MOTION_MAGIC_ACCELERATION;
+        configuration.MotionMagic.MotionMagicCruiseVelocity = Joint.MOTION_MAGIC_CRUISE_VELOCITY;
+        configuration.MotionMagic.MotionMagicAcceleration = Joint.MOTION_MAGIC_ACCELERATION;
 
         return configuration;
     }
