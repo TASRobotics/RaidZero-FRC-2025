@@ -77,13 +77,13 @@ public class Arm extends SubsystemBase {
 
     public Command grandSlam(double[] currentPosition, double[] desiredPosition) {
         return defer(() -> {
-            double[] positions = shitBruhIDontEvenKnow(currentPosition, desiredPosition);
+            double[] positions = calculateDifferentialTransformation(currentPosition, desiredPosition);
 
             return run(positions);
         });
     }
 
-    public double[] shitBruhIDontEvenKnow(double[] currentPose, double[] desiredPose) {
+    public double[] calculateDifferentialTransformation(double[] currentPose, double[] desiredPose) {
         double[] position = null;
 
         double currentJointAngle = calculateJointAngle(currentPose);
