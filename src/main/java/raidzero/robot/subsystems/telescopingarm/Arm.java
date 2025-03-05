@@ -73,6 +73,16 @@ public class Arm extends SubsystemBase {
         }
     }
 
+    public Command moveArmSimple(double[] desiredPosition) {
+        double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
+        double jointSetpoint = calculateJointAngle(desiredPosition);
+
+        return run(() -> {
+            moveTelescope(telescopeSetpoint);
+            moveJoint(jointSetpoint);
+        });
+    }
+
     /**
      * Moves the arm to the desired x and y setpoints with a delay
      * 
@@ -135,8 +145,10 @@ public class Arm extends SubsystemBase {
     public void updateCoastMode() {
         if (shouldBeInCoast()) {
             joint.setNeutralMode(NeutralModeValue.Coast);
+            // telescope.setNeutralMode(NeutralModeValue.Coast);
         } else {
             joint.setNeutralMode(NeutralModeValue.Brake);
+            // telescope.setNeutralMode(NeutralModeValue.Brake);
         }
     }
 
@@ -174,7 +186,7 @@ public class Arm extends SubsystemBase {
      * @param y The y setpoint in meters
      * @return Target motor position in rotations
      */
-    private double calculateTelescopeHeight(double[] position) {
+    public double calculateTelescopeHeight(double[] position) {
         double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2)) - Constants.TelescopingArm.Telescope.GROUND_OFFSET_M;
 
         return height / Constants.TelescopingArm.Telescope.MAX_HEIGHT_M;
