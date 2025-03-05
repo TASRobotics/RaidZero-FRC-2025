@@ -89,6 +89,7 @@ public class RobotContainer {
             )
         );
 
+        // arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
         arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
         coralIntake.setDefaultCommand(coralIntake.stop());
 
@@ -135,10 +136,21 @@ public class RobotContainer {
             arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
-        operator.button(Constants.Bindings.L4).whileTrue(
+
+        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE).negate()).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
+        operator.button(Constants.Bindings.ALGAE_INTAKE).and(operator.button(Constants.Bindings.ALGAE_INTAKE))
+            .whileTrue(arm.moveArmSimple(Constants.TelescopingArm.Positions.L4_CHECK_POSITION).onlyIf(() -> arm.isArmUp()));
+        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_EXTAKE))
+            .onTrue(
+                arm.moveArmSimple(Constants.TelescopingArm.Positions.L4_GRAND_SLAM).onlyIf(() -> arm.isArmUp())
+                    .until(
+                        () -> arm.getJointPosition() >= arm.calculateJointAngle(Constants.TelescopingArm.Positions.L4_GRAND_SLAM) &&
+                            arm.getTelescopePosition() <= arm.calculateTelescopeHeight(Constants.TelescopingArm.Positions.L4_GRAND_SLAM)
+                    ).withTimeout(1.0)
+            );
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
