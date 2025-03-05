@@ -167,7 +167,7 @@ public class Constants {
             public static final int CANCODER_ID = 11;
 
             public static final double CANCODER_GEAR_RATIO = 28.0 / 80;
-            public static final double CANCODER_OFFSET = -(0.363525 - (0.25 / CANCODER_GEAR_RATIO));
+            public static final double CANCODER_OFFSET = -(0.358643 - (0.25 / CANCODER_GEAR_RATIO));
             public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
 
             public static final double CONVERSION_FACTOR = (120 / 12) * 20.0;
@@ -195,13 +195,15 @@ public class Constants {
         }
 
         public class Positions {
-            public static final double[] L4_SCORING_POS_M = { -0.2 - Telescope.BUMPER_TO_JOINT_M, 2.72 - Telescope.GROUND_TO_JOINT_M };
-            public static final double[] L3_SCORING_POS_M = { -0.2 - Telescope.BUMPER_TO_JOINT_M, 1.57 - Telescope.GROUND_TO_JOINT_M };
+            public static final double[] L4_SCORING_POS_M = { -0.2 - Telescope.BUMPER_TO_JOINT_M, 1.8 - Telescope.GROUND_TO_JOINT_M };
+            public static final double[] L3_SCORING_POS_M = { -0.2 - Telescope.BUMPER_TO_JOINT_M, 1.37 - Telescope.GROUND_TO_JOINT_M };
             public static final double[] L2_SCORING_POS_M = { -0.2 - Telescope.BUMPER_TO_JOINT_M, 0.9 - Telescope.GROUND_TO_JOINT_M };
             public static final double[] L1_SCORING_POS_M = { 0.0 - Telescope.BUMPER_TO_JOINT_M, 0.0 - Telescope.GROUND_TO_JOINT_M };
 
             public static final double[] INTAKE_POS_M = { 0.5 - Telescope.BUMPER_TO_JOINT_M, 0.80 - Telescope.GROUND_TO_JOINT_M };
             public static final double[] HOME_POS_M = { 0.0 - Telescope.BUMPER_TO_JOINT_M, 0.0 - Telescope.GROUND_TO_JOINT_M };
+
+            public static final double[] L4_SLAM_POS_M = { -0.3 - Telescope.BUMPER_TO_JOINT_M, 1.7 - Telescope.GROUND_TO_JOINT_M };
 
             public static final double DELAY_ENABLE_Y_THRESHOLD_M = 0.9;
         }
@@ -209,7 +211,7 @@ public class Constants {
         public class Telescope {
             public static final int MOTOR_ID = 10;
 
-            public static final double CONVERSION_FACTOR = 52.643555;
+            public static final double CONVERSION_FACTOR = 54.1;
 
             public static final double STATOR_CURRENT_LIMIT = 40.0;
             public static final double SUPPLY_CURRENT_LIMIT = 40.0;
@@ -233,8 +235,8 @@ public class Constants {
             public static final double GROUND_TO_JOINT_M = 0.125;
             public static final double BUMPER_TO_JOINT_M = 0.184;
 
-            public static final double MAX_HEIGHT_M = 1.95;
-            public static final double MIN_HEIGHT_M = 0.87;
+            public static final double MAX_HEIGHT_M = 1.952;
+            public static final double MIN_HEIGHT_M = 0.870;
         }
     }
 

@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -76,12 +77,19 @@ public class Arm extends SubsystemBase {
         });
     }
 
+    public Command runWithVelocity(double telescopeVelociy, double jointVelocity) {
+        return run(() -> {
+            telescope.setControl(new MotionMagicVelocityVoltage(0).withVelocity(telescopeVelociy));
+            joint.setControl(new MotionMagicVelocityVoltage(0).withVelocity(jointVelocity));
+        });
+    }
+
     public Command grandSlam(double[] currentPosition, double[] desiredPosition) {
         return defer(() -> {
             double[] positions = calculateDifferentialTransformation(currentPosition, desiredPosition);
-
             return run(positions);
         });
+        //! .until(within setoint)
     }
 
     public double[] calculateDifferentialTransformation(double[] currentPose, double[] desiredPose) {

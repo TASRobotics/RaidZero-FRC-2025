@@ -83,8 +83,8 @@ public class RobotContainer {
     private void configureBindings() {
         swerve.setDefaultCommand(
             swerve.applyRequest(
-                () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isArmUp() ? 0.3 : 1.0))
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.67 * (arm.isArmUp() ? 0.3 : 1.0))
+                () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed)
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )
         );
@@ -127,10 +127,6 @@ public class RobotContainer {
         );
 
         // * Operator controls
-        operator.button(Constants.Bindings.L2).whileTrue(
-            arm.moveTo(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
-                .onlyIf(swerve.isArmDeployable())
-        );
         operator.button(Constants.Bindings.L3).whileTrue(
             arm.moveTo(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
@@ -200,7 +196,7 @@ public class RobotContainer {
                 }
             ).withTimeout(1.0).andThen(() -> coralIntake.stop())
         );
-        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stop()));
+        NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stop()).withTimeout(0.8));
     }
 
     /**
