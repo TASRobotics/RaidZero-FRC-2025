@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "station appr",
-      "minWaypointRelativePos": 0.89,
+      "minWaypointRelativePos": 0.9391976289970931,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,

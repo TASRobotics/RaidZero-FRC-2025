@@ -49,8 +49,7 @@ public class Arm extends SubsystemBase {
     /**
      * Moves the arm to the desired x and y setpoints
      * 
-     * @param x The x setpoint in meters
-     * @param y The y setpoint in meters
+     * @param desiredPosition The desired x and y setpoints
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
     public Command moveArm(double[] desiredPosition) {
@@ -73,6 +72,12 @@ public class Arm extends SubsystemBase {
         }
     }
 
+    /**
+     * Moves the arm to the desired x and y setpoints without delay
+     * 
+     * @param desiredPosition The desired x and y setpoints
+     * @return A {@link Command} that moves the arm to the desired setpoints
+     */
     public Command moveArmSimple(double[] desiredPosition) {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
@@ -88,8 +93,7 @@ public class Arm extends SubsystemBase {
      * 
      * @Note This method should only be used when lowering the arm
      * 
-     * @param x The x setpoint in meters
-     * @param y The y setpoint in meters
+     * @param desiredPosition The desired x and y setpoints
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
     public Command moveArmWithDelay(double[] desiredPosition) {
