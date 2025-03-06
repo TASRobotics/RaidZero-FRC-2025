@@ -169,7 +169,7 @@ public class RobotContainer {
                             )
                     )
             );
-        operator.button(Constants.Bindings.CLIMB_DEPLOY).onTrue(arm.vertical());
+        operator.button(Constants.Bindings.CLIMB_DEPLOY).onTrue(arm.climbPos());
 
         // operator.button(Constants.Bindings.CLIMB_UP)
         // .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
