@@ -112,9 +112,9 @@ public class Arm extends SubsystemBase {
      * 
      * @return A {@link Command} that moves the arm to a vertical position
      */
-    public Command vertical() {
+    public Command climbPos() {
         return run(() -> {
-            moveJoint(0.25);
+            moveJoint(0.3);
             moveTelescope(0.0);
         });
     }
