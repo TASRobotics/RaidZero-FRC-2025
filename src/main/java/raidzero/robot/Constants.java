@@ -176,7 +176,7 @@ public class Constants {
             public static final double KV = 1.0;
             public static final double KA = 0.01;
 
-            public static final double KP = 150.0;
+            public static final double KP = 160.0;
             public static final double KI = 0.0;
             public static final double KD = 0.0;
 
@@ -215,7 +215,7 @@ public class Constants {
             public static final double SUPPLY_CURRENT_LIMIT = 40.0;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
 
-            public static final double KP = 100.0;
+            public static final double KP = 110.0;
             public static final double KI = 0.0;
             public static final double KD = 0.0;
 
