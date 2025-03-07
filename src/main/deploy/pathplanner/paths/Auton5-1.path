@@ -11,20 +11,20 @@
         "x": 6.512181703904395,
         "y": 2.5655592913990377
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.988014788612429,
-        "y": 2.883643723695211
+        "x": 4.941,
+        "y": 2.88
       },
       "prevControl": {
-        "x": 5.489041754350871,
-        "y": 2.8037233613984482
+        "x": 5.4420269657384415,
+        "y": 2.800079637703237
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Auton5-1End"
     }
   ],
@@ -32,7 +32,7 @@
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.575053370276163,
+      "minWaypointRelativePos": 0.647058823529412,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
