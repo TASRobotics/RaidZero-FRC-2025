@@ -12,6 +12,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 import raidzero.robot.subsystems.climb.ClimbJoint;
+import raidzero.robot.subsystems.drivetrain.Swerve;
 
 public class Arm extends SubsystemBase {
     private TalonFX telescope, joint;
@@ -105,6 +108,34 @@ public class Arm extends SubsystemBase {
                 Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
                     .andThen(() -> moveTelescope(telescopeSetpoint))
             );
+    }
+
+    /**
+     * Moves the arm to the intake position
+     * 
+     * @return A {@link Command} that moves the arm to the intake position
+     */
+    public Command moveToIntake() {
+        if ((DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue)) {
+            return defer(() -> moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE_NTWC));
+        } else {
+            return defer(() -> moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+
+        }
+    }
+
+    /**
+     * Moves the arm to the L4 scoring position
+     * 
+     * @return A {@link Command} that moves the arm to the L4 scoring position
+     */
+    public Command moveToL4() {
+        if ((DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue)) {
+            return defer(() -> moveArmWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE_NTWC));
+        } else {
+            return defer(() -> moveArmWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
+
+        }
     }
 
     /**
