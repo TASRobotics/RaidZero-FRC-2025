@@ -53,6 +53,7 @@ public class CoralIntake extends SubsystemBase {
             System.out.println("LaserCan Config Error");
         }
     }
+
     /**
      * Gets the roller motor controller for disabled init to check for position
      * @return The Roller motor
