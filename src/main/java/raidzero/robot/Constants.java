@@ -129,7 +129,7 @@ public class Constants {
                 new Pose2d(4.05, 5.1, Rotation2d.fromDegrees(300)), // 19 Left
                 new Pose2d(5.2619, 4.99953, Rotation2d.fromDegrees(240)), // 20 Left
                 new Pose2d(5.70, 3.85, Rotation2d.fromDegrees(180)), // 21 Left
-                new Pose2d(4.9494, 2.88847, Rotation2d.fromDegrees(120)) // 22 Left
+                new Pose2d(4.9113, 2.93927, Rotation2d.fromDegrees(120)) // 22 Left
             )
         );
 
