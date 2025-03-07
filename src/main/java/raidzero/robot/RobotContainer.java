@@ -93,7 +93,7 @@ public class RobotContainer {
         );
 
         // arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
-        arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        arm.setDefaultCommand(arm.moveToIntake());
         coralIntake.setDefaultCommand(coralIntake.stop());
 
         // algaeIntake.setDefaultCommand(algaeIntake.moveJoint(Constants.AlgaeIntake.Joint.HOME_POSITION));
@@ -130,6 +130,10 @@ public class RobotContainer {
             )
         );
 
+        joystick.povDown().whileTrue(
+            arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE_NTWC)
+        );
+
         // * Operator controls
         operator.button(Constants.Bindings.L2).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
@@ -141,7 +145,7 @@ public class RobotContainer {
         );
 
         operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE).negate()).whileTrue(
-            arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
+            arm.moveToL4()
                 .onlyIf(swerve.isArmDeployable())
         );
         operator.button(Constants.Bindings.ALGAE_INTAKE).and(operator.button(Constants.Bindings.ALGAE_INTAKE))
@@ -196,6 +200,11 @@ public class RobotContainer {
                 .withTimeout(0.75)
         );
         NamedCommands.registerCommand(
+            "ArmIntakeCoralBLUE",
+            arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE_NTWC)
+                .withTimeout(0.75)
+        );
+        NamedCommands.registerCommand(
             "ArmL3",
             arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .withTimeout(0.75)
@@ -203,6 +212,11 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "ArmL4",
             arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
+                .withTimeout(0.75)
+        );
+        NamedCommands.registerCommand(
+            "ArmL4BLUE",
+            arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE_NTWC)
                 .withTimeout(0.75)
         );
 
