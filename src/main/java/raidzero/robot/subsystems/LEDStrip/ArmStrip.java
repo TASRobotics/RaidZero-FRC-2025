@@ -122,11 +122,11 @@ public class ArmStrip implements Subsystem {
         } else if (DriverStation.isAutonomousEnabled()) {
             if (strobeTimer.hasElapsed(strobeInterval)) {
                 if (strobeAlternate) {
-                    candle.setLEDs(255, 165, 0, 0, 0, 33);
-                    candle.setLEDs(0, 255, 0, 0, 38, 33);
+                    candle.setLEDs(255, 165, 0, 0, 0, 25);
+                    candle.setLEDs(0, 255, 0, 0, 33, 25);
                 } else {
-                    candle.setLEDs(0, 255, 0, 0, 0, 33);
-                    candle.setLEDs(255, 165, 0, 0, 33, 38);
+                    candle.setLEDs(0, 255, 0, 0, 0, 25);
+                    candle.setLEDs(255, 165, 0, 0, 33, 25);
                 }
 
                 strobeAlternate = !strobeAlternate;
