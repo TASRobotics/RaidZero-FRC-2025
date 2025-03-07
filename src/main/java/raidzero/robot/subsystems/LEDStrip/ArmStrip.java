@@ -3,13 +3,16 @@ package raidzero.robot.subsystems.LEDStrip;
 
 import raidzero.robot.Constants;
 import raidzero.robot.subsystems.climb.ClimbJoint;
+import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.telescopingarm.Arm;
 import raidzero.robot.subsystems.telescopingarm.CoralIntake;
 
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.ColorFlowAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
+import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
@@ -21,7 +24,7 @@ public class ArmStrip implements Subsystem {
     private CANdle candle;
     private Arm arm;
 
-    private boolean armIsLegal = false;
+    private boolean armIsLegal, coralTooDown, coralTooUp, coralIsIn = false;
 
     private boolean strobeAlternate = false;
     private Timer strobeTimer = new Timer();
@@ -54,6 +57,15 @@ public class ArmStrip implements Subsystem {
         armIsLegal = arm.getJointPosition() >= Constants.CANdle.ARM_JOINT_LOWER_BOUND &&
             arm.getJointPosition() <= Constants.CANdle.ARM_JOINT_UPPER_BOUND;
 
+        coralTooDown = CoralIntake.system().getTopLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
+            CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+
+        coralTooUp = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
+            CoralIntake.system().getBottomLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+
+        coralIsIn = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
+        CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+
         if (DriverStation.isDisabled()) {
             if (ClimbJoint.system().isDeployed().getAsBoolean()) {
                 if (!animation3Applied) {
@@ -84,11 +96,11 @@ public class ArmStrip implements Subsystem {
 
                 if (strobeTimer.hasElapsed(strobeInterval)) {
                     if (strobeAlternate) {
-                        candle.setLEDs(255, 0, 0, 0, 0, 33);
-                        candle.setLEDs(0, 0, 0, 0, 38, 33);
+                        candle.setLEDs(255, 0, 0, 0, 8, 25);
+                        candle.setLEDs(0, 0, 0, 0, 33, 25);
                     } else {
-                        candle.setLEDs(0, 0, 0, 0, 0, 33);
-                        candle.setLEDs(255, 0, 0, 0, 33, 38);
+                        candle.setLEDs(0, 0, 0, 0, 8, 25);
+                        candle.setLEDs(255, 0, 0, 0, 33, 25);
                     }
 
                     strobeAlternate = !strobeAlternate;
@@ -129,27 +141,27 @@ public class ArmStrip implements Subsystem {
         } else if (DriverStation.isTeleopEnabled()) {
             if (ClimbJoint.system().isDeployed().getAsBoolean()) {
                 candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.05, -1));
-            } else if (CoralIntake.system().getTopLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
-                CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM) {
+            } else if (coralTooDown) {
                 if (!animation2Applied) {
                     candle.clearAnimation(0);
                     candle.clearAnimation(1);
-                    candle.animate(new StrobeAnimation(250, 160, 10, 0, 0.2, -1));
+                    candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Backward, 8), 0);
+                    candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Forward, 33), 1);
                     animationApplied = false;
                     animation2Applied = true;
                     animation3Applied = false;
                 }
-            } else if (CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
-                CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM) {
-                if (!animation3Applied) {
+            } else if (coralTooUp) {
+                if (!animation2Applied) {
                     candle.clearAnimation(0);
                     candle.clearAnimation(1);
-                    candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.01, -1));
+                    candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Forward, 8), 0);
+                    candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Backward, 33), 1);
                     animationApplied = false;
-                    animation2Applied = false;
-                    animation3Applied = true;
+                    animation2Applied = true;
+                    animation3Applied = false;
                 }
-            } else {
+            } else if (coralIsIn && !Swerve.system().isArmDeployable().getAsBoolean()) {
                 if (animationApplied || animation2Applied || animation3Applied) {
                     candle.clearAnimation(0);
                     candle.clearAnimation(1);
@@ -160,11 +172,74 @@ public class ArmStrip implements Subsystem {
 
                 if (strobeTimer.hasElapsed(strobeInterval)) {
                     if (strobeAlternate) {
-                        candle.setLEDs(255, 10, 250, 0, 0, 33);
-                        candle.setLEDs(0, 0, 0, 0, 38, 33);
+                        candle.setLEDs(0, 255, 0, 0, 8, 25);
+                        candle.setLEDs(255, 0, 0, 0, 33, 25);
                     } else {
-                        candle.setLEDs(0, 0, 0, 0, 0, 33);
-                        candle.setLEDs(255, 10, 250, 0, 33, 38);
+                        candle.setLEDs(255, 0, 0, 0, 8, 25);
+                        candle.setLEDs(0, 255, 0, 0, 33, 25);
+                    }
+
+                    strobeAlternate = !strobeAlternate;
+                    strobeTimer.reset();
+                }
+            } else if (!Swerve.system().isArmDeployable().getAsBoolean()) {
+                if (animationApplied || animation2Applied || animation3Applied) {
+                    candle.clearAnimation(0);
+                    candle.clearAnimation(1);
+                    animationApplied = false;
+                    animation2Applied = false;
+                    animation3Applied = false;
+                }
+
+                if (strobeTimer.hasElapsed(strobeInterval)) {
+                    if (strobeAlternate) {
+                        candle.setLEDs(255, 10, 250, 0, 8, 25);
+                        candle.setLEDs(255, 0, 0, 0, 33, 25);
+                    } else {
+                        candle.setLEDs(255, 0, 0, 0, 8, 25);
+                        candle.setLEDs(255, 10, 250, 0, 33, 25);
+                    }
+
+                    strobeAlternate = !strobeAlternate;
+                    strobeTimer.reset();
+                }
+            } else if (coralIsIn && Swerve.system().isArmDeployable().getAsBoolean()) {
+                if (animationApplied || animation2Applied || animation3Applied) {
+                    candle.clearAnimation(0);
+                    candle.clearAnimation(1);
+                    animationApplied = false;
+                    animation2Applied = false;
+                    animation3Applied = false;
+                }
+
+                if (strobeTimer.hasElapsed(strobeInterval)) {
+                    if (strobeAlternate) {
+                        candle.setLEDs(255, 10, 250, 0, 8, 25);
+                        candle.setLEDs(0, 255, 0, 0, 33, 25);
+                    } else {
+                        candle.setLEDs(0, 255, 0, 0, 8, 25);
+                        candle.setLEDs(255, 10, 250, 0, 33, 25);
+                    }
+
+                    strobeAlternate = !strobeAlternate;
+                    strobeTimer.reset();
+                }
+            } else if (Swerve.system().isArmDeployable().getAsBoolean()) {
+                if (animationApplied || animation2Applied || animation3Applied) {
+                    candle.clearAnimation(0);
+                    candle.clearAnimation(1);
+                    animationApplied = false;
+                    animation2Applied = false;
+                    animation3Applied = false;
+                }
+
+                if (strobeTimer.hasElapsed(strobeInterval)) {
+                    if (strobeAlternate) {
+                        candle.setLEDs(255, 10, 250, 0, 8, 25);
+                        candle.setLEDs(0, 0, 0, 0, 33, 25);
+                    } else {
+                        candle.setLEDs(0, 0, 0, 0, 8, 25);
+                        candle.setLEDs(255, 10, 250, 0, 33, 25);
                     }
 
                     strobeAlternate = !strobeAlternate;
