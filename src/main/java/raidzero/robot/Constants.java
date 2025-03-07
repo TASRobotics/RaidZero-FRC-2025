@@ -193,6 +193,7 @@ public class Constants {
 
         public class Positions {
             public static final double[] L4_SCORING_POS_M = { -0.25, 2.72 };
+            public static final double[] L4_SCORING_POS_M_BLUE_NTWC = { -0.15, 2.72 };
             public static final double[] L4_CHECK_POSITION = { -0.25, 2.62 };
             public static final double[] L4_GRAND_SLAM = { -0.2, 1.57 };
 
@@ -200,7 +201,8 @@ public class Constants {
             public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static final double[] INTAKE_POS_M = { 0.5, 0.88 };
+            public static final double[] INTAKE_POS_M = { 0.5, 0.845 }; // 0.845
+            public static final double[] INTAKE_POS_M_BLUE_NTWC = { 0.5, 0.83 };
 
             public static final double[] HOME_POS_M = { 0.0, 0.0 };
 
