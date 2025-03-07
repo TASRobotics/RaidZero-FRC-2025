@@ -207,6 +207,20 @@ public class RobotContainer {
         );
 
         NamedCommands.registerCommand(
+            "Slam",
+            arm.moveArmSimple(Constants.TelescopingArm.Positions.L4_GRAND_SLAM).onlyIf(() -> arm.isArmUp())
+                .until(
+                    () -> arm.getJointPosition() >= arm.calculateJointAngle(Constants.TelescopingArm.Positions.L4_GRAND_SLAM) &&
+                        arm.getTelescopePosition() <= arm.calculateTelescopeHeight(Constants.TelescopingArm.Positions.L4_GRAND_SLAM)
+                )
+                .withTimeout(0.5)
+                .andThen(
+                    arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M)
+                        .withTimeout(0.75)
+                )
+        );
+
+        NamedCommands.registerCommand(
             "ExtakeCoral",
             coralIntake.run(0.1).until(
                 () -> {
