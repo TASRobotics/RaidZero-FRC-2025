@@ -62,6 +62,11 @@ public class Constants {
         public static final int CORAL_EXTAKE = 10;
         public static final int CORAL_INTAKE = 11;
         public static final int CORAL_SCOOCH = 12;
+
+        public static final int TOP_RIGHT = 13;
+        public static final int BOTTOM_RIGHT = 14;
+        public static final int BOTTOM_LEFT = 15;
+        public static final int TOP_LEFT = 16;
     }
 
     public class CANdle {
