@@ -135,6 +135,10 @@ public class RobotContainer {
         );
 
         // * Operator controls
+        operator.button(Constants.Bindings.TOP_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(0.01), arm));
+        operator.button(Constants.Bindings.BOTTOM_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(-0.01), arm));
+        operator.button(Constants.Bindings.TOP_RIGHT).onTrue(new InstantCommand(() -> arm.removeIntakeOffset(), arm));
+
         operator.button(Constants.Bindings.L2).whileTrue(
             arm.moveArm(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
