@@ -152,8 +152,9 @@ public class RobotContainer {
             arm.moveToL4()
                 .onlyIf(swerve.isArmDeployable())
         );
-        operator.button(Constants.Bindings.ALGAE_INTAKE).and(operator.button(Constants.Bindings.ALGAE_INTAKE))
+        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE))
             .whileTrue(arm.moveArmSimple(Constants.TelescopingArm.Positions.L4_CHECK_POSITION).onlyIf(() -> arm.isArmUp()));
+
         operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_EXTAKE))
             .onTrue(
                 arm.moveArmSimple(Constants.TelescopingArm.Positions.L4_GRAND_SLAM).onlyIf(() -> arm.isArmUp())
