@@ -16,15 +16,15 @@
     },
     {
       "anchor": {
-        "x": 4.941,
-        "y": 2.88
+        "x": 4.95,
+        "y": 2.865
       },
       "prevControl": {
-        "x": 5.4420269657384415,
-        "y": 2.800079637703237
+        "x": 5.451026965738442,
+        "y": 2.7850796377032374
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": "Auton5-1End"
     }
   ],
