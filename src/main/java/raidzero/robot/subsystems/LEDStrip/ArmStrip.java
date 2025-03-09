@@ -54,6 +54,29 @@ public class ArmStrip implements Subsystem {
      * The main loop of the CANdle LED strip
      */
     public void loop() {
+        updateStates();
+
+        if (DriverStation.isDisabled()) {
+            loopDisabled();
+        } else if (DriverStation.isAutonomousEnabled()) {
+            loopAutonomous();
+        } else if (DriverStation.isAutonomous() && !DriverStation.isAutonomousEnabled()) {
+            candle.clearAnimation(0);
+            candle.clearAnimation(1);
+        } else if (DriverStation.isTeleop() && !DriverStation.isTeleopEnabled()) {
+            candle.clearAnimation(0);
+            candle.clearAnimation(1);
+        } else if (DriverStation.isTeleopEnabled()) {
+            loopTeleop();
+        } else if (DriverStation.isTestEnabled()) {
+            loopTest();
+        }
+    }
+
+    /**
+     * Updates the state variables for the CANdle LED strip
+     */
+    private void updateStates() {
         armIsLegal = arm.getJointPosition() >= Constants.CANdle.ARM_JOINT_LOWER_BOUND &&
             arm.getJointPosition() <= Constants.CANdle.ARM_JOINT_UPPER_BOUND;
 
@@ -65,192 +88,204 @@ public class ArmStrip implements Subsystem {
 
         coralIsIn = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
             CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+    }
 
-        if (DriverStation.isDisabled()) {
-            if (ClimbJoint.system().isDeployed().getAsBoolean()) {
-                if (!animation3Applied) {
-                    candle.clearAnimation(0);
-                    candle.clearAnimation(1);
-                    candle.animate(new RainbowAnimation(255, 0.75, -1));
-                    animationApplied = false;
-                    animation2Applied = false;
-                    animation3Applied = true;
-                }
-            } else if (armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
-                if (!animation2Applied) {
-                    candle.clearAnimation(0);
-                    candle.clearAnimation(1);
-                    candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.001, -1));
-                    animation2Applied = true;
-                    animationApplied = false;
-                    animation3Applied = false;
-                }
-            } else if (!armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
-                if (animationApplied || animation2Applied || animation3Applied) {
-                    candle.clearAnimation(0);
-                    candle.clearAnimation(1);
-                    animationApplied = false;
-                    animation2Applied = false;
-                    animation3Applied = false;
-                }
-
-                if (strobeTimer.hasElapsed(strobeInterval)) {
-                    if (strobeAlternate) {
-                        candle.setLEDs(255, 0, 0, 0, 8, 25);
-                        candle.setLEDs(0, 0, 0, 0, 33, 25);
-                    } else {
-                        candle.setLEDs(0, 0, 0, 0, 8, 25);
-                        candle.setLEDs(255, 0, 0, 0, 33, 25);
-                    }
-
-                    strobeAlternate = !strobeAlternate;
-                    strobeTimer.reset();
-                }
-            } else if (!armIsLegal) {
-                candle.setLEDs(255, 0, 0);
+    /**
+     * The disabled loop of the CANdle LED strip
+     */
+    private void loopDisabled() {
+        if (ClimbJoint.system().isDeployed().getAsBoolean()) {
+            if (!animation3Applied) {
                 candle.clearAnimation(0);
+                candle.clearAnimation(1);
+                candle.animate(new RainbowAnimation(255, 0.75, -1));
                 animationApplied = false;
                 animation2Applied = false;
-                animation3Applied = false;
-            } else if (armIsLegal) {
-                candle.setLEDs(0, 255, 0);
+                animation3Applied = true;
+            }
+        } else if (armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
+            if (!animation2Applied) {
                 candle.clearAnimation(0);
+                candle.clearAnimation(1);
+                candle.animate(new StrobeAnimation(0, 255, 0, 0, 0.001, -1));
+                animation2Applied = true;
+                animationApplied = false;
+                animation3Applied = false;
+            }
+        } else if (!armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
+            if (animationApplied || animation2Applied || animation3Applied) {
+                candle.clearAnimation(0);
+                candle.clearAnimation(1);
                 animationApplied = false;
                 animation2Applied = false;
                 animation3Applied = false;
             }
-        } else if (DriverStation.isAutonomousEnabled()) {
+
             if (strobeTimer.hasElapsed(strobeInterval)) {
                 if (strobeAlternate) {
-                    candle.setLEDs(255, 165, 0, 0, 0, 25);
-                    candle.setLEDs(0, 255, 0, 0, 33, 25);
+                    candle.setLEDs(255, 0, 0, 0, 8, 25);
+                    candle.setLEDs(0, 0, 0, 0, 33, 25);
                 } else {
-                    candle.setLEDs(0, 255, 0, 0, 0, 25);
-                    candle.setLEDs(255, 165, 0, 0, 33, 25);
+                    candle.setLEDs(0, 0, 0, 0, 8, 25);
+                    candle.setLEDs(255, 0, 0, 0, 33, 25);
                 }
 
                 strobeAlternate = !strobeAlternate;
                 strobeTimer.reset();
             }
-        } else if (DriverStation.isAutonomous() && !DriverStation.isAutonomousEnabled()) {
+        } else if (!armIsLegal) {
+            candle.setLEDs(255, 0, 0);
             candle.clearAnimation(0);
-            candle.clearAnimation(1);
-        } else if (DriverStation.isTeleop() && !DriverStation.isTeleopEnabled()) {
+            animationApplied = false;
+            animation2Applied = false;
+            animation3Applied = false;
+        } else if (armIsLegal) {
+            candle.setLEDs(0, 255, 0);
             candle.clearAnimation(0);
-            candle.clearAnimation(1);
-        } else if (DriverStation.isTeleopEnabled()) {
-            if (ClimbJoint.system().isDeployed().getAsBoolean()) {
-                candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.05, -1));
-            } else if (coralTooDown) {
-                if (!animation2Applied) {
-                    candle.clearAnimation(0);
-                    candle.clearAnimation(1);
-                    candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Backward, 8), 0);
-                    candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Forward, 33), 1);
-                    animationApplied = false;
-                    animation2Applied = true;
-                    animation3Applied = false;
-                }
-            } else if (coralTooUp) {
-                if (!animation2Applied) {
-                    candle.clearAnimation(0);
-                    candle.clearAnimation(1);
-                    candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Forward, 8), 0);
-                    candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Backward, 33), 1);
-                    animationApplied = false;
-                    animation2Applied = true;
-                    animation3Applied = false;
-                }
-            } else if (coralIsIn && !Swerve.system().isArmDeployable().getAsBoolean()) {
-                if (animationApplied || animation2Applied || animation3Applied) {
-                    candle.clearAnimation(0);
-                    candle.clearAnimation(1);
-                    animationApplied = false;
-                    animation2Applied = false;
-                    animation3Applied = false;
-                }
+            animationApplied = false;
+            animation2Applied = false;
+            animation3Applied = false;
+        }
+    }
 
-                if (strobeTimer.hasElapsed(strobeInterval)) {
-                    if (strobeAlternate) {
-                        candle.setLEDs(0, 255, 0, 0, 8, 25);
-                        candle.setLEDs(255, 0, 0, 0, 33, 25);
-                    } else {
-                        candle.setLEDs(255, 0, 0, 0, 8, 25);
-                        candle.setLEDs(0, 255, 0, 0, 33, 25);
-                    }
-
-                    strobeAlternate = !strobeAlternate;
-                    strobeTimer.reset();
-                }
-            } else if (!Swerve.system().isArmDeployable().getAsBoolean()) {
-                if (animationApplied || animation2Applied || animation3Applied) {
-                    candle.clearAnimation(0);
-                    candle.clearAnimation(1);
-                    animationApplied = false;
-                    animation2Applied = false;
-                    animation3Applied = false;
-                }
-
-                if (strobeTimer.hasElapsed(strobeInterval)) {
-                    if (strobeAlternate) {
-                        candle.setLEDs(255, 10, 250, 0, 8, 25);
-                        candle.setLEDs(255, 0, 0, 0, 33, 25);
-                    } else {
-                        candle.setLEDs(255, 0, 0, 0, 8, 25);
-                        candle.setLEDs(255, 10, 250, 0, 33, 25);
-                    }
-
-                    strobeAlternate = !strobeAlternate;
-                    strobeTimer.reset();
-                }
-            } else if (coralIsIn && Swerve.system().isArmDeployable().getAsBoolean()) {
-                if (animationApplied || animation2Applied || animation3Applied) {
-                    candle.clearAnimation(0);
-                    candle.clearAnimation(1);
-                    animationApplied = false;
-                    animation2Applied = false;
-                    animation3Applied = false;
-                }
-
-                if (strobeTimer.hasElapsed(strobeInterval)) {
-                    if (strobeAlternate) {
-                        candle.setLEDs(255, 10, 250, 0, 8, 25);
-                        candle.setLEDs(0, 255, 0, 0, 33, 25);
-                    } else {
-                        candle.setLEDs(0, 255, 0, 0, 8, 25);
-                        candle.setLEDs(255, 10, 250, 0, 33, 25);
-                    }
-
-                    strobeAlternate = !strobeAlternate;
-                    strobeTimer.reset();
-                }
-            } else if (Swerve.system().isArmDeployable().getAsBoolean()) {
-                if (animationApplied || animation2Applied || animation3Applied) {
-                    candle.clearAnimation(0);
-                    candle.clearAnimation(1);
-                    animationApplied = false;
-                    animation2Applied = false;
-                    animation3Applied = false;
-                }
-
-                if (strobeTimer.hasElapsed(strobeInterval)) {
-                    if (strobeAlternate) {
-                        candle.setLEDs(255, 10, 250, 0, 8, 25);
-                        candle.setLEDs(0, 0, 0, 0, 33, 25);
-                    } else {
-                        candle.setLEDs(0, 0, 0, 0, 8, 25);
-                        candle.setLEDs(255, 10, 250, 0, 33, 25);
-                    }
-
-                    strobeAlternate = !strobeAlternate;
-                    strobeTimer.reset();
-                }
+    /**
+     * The autonomous loop of the CANdle LED strip
+     */
+    private void loopAutonomous() {
+        if (strobeTimer.hasElapsed(strobeInterval)) {
+            if (strobeAlternate) {
+                candle.setLEDs(255, 165, 0, 0, 0, 25);
+                candle.setLEDs(0, 255, 0, 0, 33, 25);
+            } else {
+                candle.setLEDs(0, 255, 0, 0, 0, 25);
+                candle.setLEDs(255, 165, 0, 0, 33, 25);
             }
-        } else if (DriverStation.isTestEnabled()) {
-            if (!animationApplied) {
-                candle.animate(new StrobeAnimation(255, 165, 0, 0, 0.05, -1));
-                animationApplied = true;
+
+            strobeAlternate = !strobeAlternate;
+            strobeTimer.reset();
+        }
+    }
+
+    /**
+     * The teleop loop of the CANdle LED strip
+     */
+    private void loopTeleop() {
+        if (ClimbJoint.system().isDeployed().getAsBoolean()) {
+            candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.05, -1));
+        } else if (coralTooDown) {
+            if (!animation2Applied) {
+                candle.clearAnimation(0);
+                candle.clearAnimation(1);
+                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Backward, 8), 0);
+                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Forward, 33), 1);
+                animationApplied = false;
+                animation2Applied = true;
+                animation3Applied = false;
             }
+        } else if (coralTooUp) {
+            if (!animation2Applied) {
+                candle.clearAnimation(0);
+                candle.clearAnimation(1);
+                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Forward, 8), 0);
+                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Backward, 33), 1);
+                animationApplied = false;
+                animation2Applied = true;
+                animation3Applied = false;
+            }
+        } else if (coralIsIn && !Swerve.system().isArmDeployable().getAsBoolean()) {
+            if (animationApplied || animation2Applied || animation3Applied) {
+                candle.clearAnimation(0);
+                candle.clearAnimation(1);
+                animationApplied = false;
+                animation2Applied = false;
+                animation3Applied = false;
+            }
+
+            if (strobeTimer.hasElapsed(strobeInterval)) {
+                if (strobeAlternate) {
+                    candle.setLEDs(0, 255, 0, 0, 8, 25);
+                    candle.setLEDs(255, 0, 0, 0, 33, 25);
+                } else {
+                    candle.setLEDs(255, 0, 0, 0, 8, 25);
+                    candle.setLEDs(0, 255, 0, 0, 33, 25);
+                }
+
+                strobeAlternate = !strobeAlternate;
+                strobeTimer.reset();
+            }
+        } else if (!Swerve.system().isArmDeployable().getAsBoolean()) {
+            if (animationApplied || animation2Applied || animation3Applied) {
+                candle.clearAnimation(0);
+                candle.clearAnimation(1);
+                animationApplied = false;
+                animation2Applied = false;
+                animation3Applied = false;
+            }
+
+            if (strobeTimer.hasElapsed(strobeInterval)) {
+                if (strobeAlternate) {
+                    candle.setLEDs(255, 10, 250, 0, 8, 25);
+                    candle.setLEDs(255, 0, 0, 0, 33, 25);
+                } else {
+                    candle.setLEDs(255, 0, 0, 0, 8, 25);
+                    candle.setLEDs(255, 10, 250, 0, 33, 25);
+                }
+
+                strobeAlternate = !strobeAlternate;
+                strobeTimer.reset();
+            }
+        } else if (coralIsIn && Swerve.system().isArmDeployable().getAsBoolean()) {
+            if (animationApplied || animation2Applied || animation3Applied) {
+                candle.clearAnimation(0);
+                candle.clearAnimation(1);
+                animationApplied = false;
+                animation2Applied = false;
+                animation3Applied = false;
+            }
+
+            if (strobeTimer.hasElapsed(strobeInterval)) {
+                if (strobeAlternate) {
+                    candle.setLEDs(255, 10, 250, 0, 8, 25);
+                    candle.setLEDs(0, 255, 0, 0, 33, 25);
+                } else {
+                    candle.setLEDs(0, 255, 0, 0, 8, 25);
+                    candle.setLEDs(255, 10, 250, 0, 33, 25);
+                }
+
+                strobeAlternate = !strobeAlternate;
+                strobeTimer.reset();
+            }
+        } else if (Swerve.system().isArmDeployable().getAsBoolean()) {
+            if (animationApplied || animation2Applied || animation3Applied) {
+                candle.clearAnimation(0);
+                candle.clearAnimation(1);
+                animationApplied = false;
+                animation2Applied = false;
+                animation3Applied = false;
+            }
+
+            if (strobeTimer.hasElapsed(strobeInterval)) {
+                if (strobeAlternate) {
+                    candle.setLEDs(255, 10, 250, 0, 8, 25);
+                    candle.setLEDs(0, 0, 0, 0, 33, 25);
+                } else {
+                    candle.setLEDs(0, 0, 0, 0, 8, 25);
+                    candle.setLEDs(255, 10, 250, 0, 33, 25);
+                }
+
+                strobeAlternate = !strobeAlternate;
+                strobeTimer.reset();
+            }
+        }
+    }
+
+    /**
+     * The test loop of the CANdle LED strip
+     */
+    private void loopTest() {
+        if (!animationApplied) {
+            candle.animate(new StrobeAnimation(255, 165, 0, 0, 0.05, -1));
+            animationApplied = true;
         }
     }
 
