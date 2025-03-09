@@ -206,7 +206,7 @@ public class Constants {
             public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static final double[] INTAKE_POS_M = { 0.5, 0.84 }; // 0.845
+            public static final double[] INTAKE_POS_M = { 0.5, 0.835 }; // 0.845
             public static final double[] INTAKE_POS_M_BLUE_NTWC = { 0.5, 0.81 };
 
             public static final double[] HOME_POS_M = { 0.0, 0.0 };
