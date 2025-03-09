@@ -86,8 +86,8 @@ public class RobotContainer {
     private void configureBindings() {
         swerve.setDefaultCommand(
             swerve.applyRequest(
-                () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isArmUp() ? 0.3 : 1.0))
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.67 * (arm.isArmUp() ? 0.3 : 1.0))
+                () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )
         );
@@ -131,7 +131,7 @@ public class RobotContainer {
         );
 
         joystick.povDown().whileTrue(
-            arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
+            arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
         );
 
         // * Operator controls
@@ -140,11 +140,11 @@ public class RobotContainer {
         operator.button(Constants.Bindings.TOP_RIGHT).onTrue(new InstantCommand(() -> arm.removeIntakeOffset(), arm));
 
         operator.button(Constants.Bindings.L2).whileTrue(
-            arm.moveArm(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
+            arm.moveTo(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
         operator.button(Constants.Bindings.L3).whileTrue(
-            arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
+            arm.moveTo(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
 
@@ -153,11 +153,11 @@ public class RobotContainer {
                 .onlyIf(swerve.isArmDeployable())
         );
         operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE))
-            .whileTrue(arm.moveArmSimple(Constants.TelescopingArm.Positions.L4_CHECK_POSITION).onlyIf(() -> arm.isArmUp()));
+            .whileTrue(arm.moveWithoutDelay(Constants.TelescopingArm.Positions.L4_CHECK_POSITION).onlyIf(() -> arm.isUp()));
 
         operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_EXTAKE))
             .onTrue(
-                arm.moveArmSimple(Constants.TelescopingArm.Positions.L4_GRAND_SLAM).onlyIf(() -> arm.isArmUp())
+                arm.moveWithoutDelay(Constants.TelescopingArm.Positions.L4_GRAND_SLAM).onlyIf(() -> arm.isUp())
                     .until(
                         () -> arm.getJointPosition() >= arm.calculateJointAngle(Constants.TelescopingArm.Positions.L4_GRAND_SLAM) &&
                             arm.getTelescopePosition() <= arm.calculateTelescopeHeight(Constants.TelescopingArm.Positions.L4_GRAND_SLAM)
@@ -201,40 +201,40 @@ public class RobotContainer {
     private void registerPathplannerCommands() {
         NamedCommands.registerCommand(
             "ArmIntakeCoral",
-            arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M)
+            arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M)
                 .withTimeout(0.75)
         );
         NamedCommands.registerCommand(
             "ArmIntakeCoralBLUE",
-            arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
+            arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
                 .withTimeout(0.75)
         );
         NamedCommands.registerCommand(
             "ArmL3",
-            arm.moveArm(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
+            arm.moveTo(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .withTimeout(0.75)
         );
         NamedCommands.registerCommand(
             "ArmL4",
-            arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
+            arm.moveTo(Constants.TelescopingArm.Positions.L4_SCORING_POS_M)
                 .withTimeout(0.75)
         );
         NamedCommands.registerCommand(
             "ArmL4BLUE",
-            arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE)
+            arm.moveTo(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE)
                 .withTimeout(0.75)
         );
 
         NamedCommands.registerCommand(
             "Slam",
-            arm.moveArmSimple(Constants.TelescopingArm.Positions.L4_GRAND_SLAM).onlyIf(() -> arm.isArmUp())
+            arm.moveWithoutDelay(Constants.TelescopingArm.Positions.L4_GRAND_SLAM).onlyIf(() -> arm.isUp())
                 .until(
                     () -> arm.getJointPosition() >= arm.calculateJointAngle(Constants.TelescopingArm.Positions.L4_GRAND_SLAM) &&
                         arm.getTelescopePosition() <= arm.calculateTelescopeHeight(Constants.TelescopingArm.Positions.L4_GRAND_SLAM)
                 )
                 .withTimeout(0.5)
                 .andThen(
-                    arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M)
+                    arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M)
                         .withTimeout(0.75)
                 )
         );

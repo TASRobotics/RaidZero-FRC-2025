@@ -56,7 +56,7 @@ public class Arm extends SubsystemBase {
      * @param desiredPosition The desired x and y setpoints
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
-    public Command moveArm(double[] desiredPosition) {
+    public Command moveTo(double[] desiredPosition) {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
 
@@ -84,7 +84,7 @@ public class Arm extends SubsystemBase {
      * @param desiredPosition The desired x and y setpoints
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
-    public Command moveArmSimple(double[] desiredPosition) {
+    public Command moveWithoutDelay(double[] desiredPosition) {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
 
@@ -104,7 +104,7 @@ public class Arm extends SubsystemBase {
      * @param desiredPosition The desired x and y setpoints
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
-    public Command moveArmWithDelay(double[] desiredPosition) {
+    public Command moveWithDelay(double[] desiredPosition) {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
 
@@ -142,14 +142,14 @@ public class Arm extends SubsystemBase {
         if ((DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue)) {
 
             return defer(
-                () -> moveArmWithDelay(
+                () -> moveWithDelay(
                     new double[] { Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE[0],
                         Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE[1] + intakePosYOffset }
                 )
             );
         } else {
             return defer(
-                () -> moveArmWithDelay(
+                () -> moveWithDelay(
                     new double[] { Constants.TelescopingArm.Positions.INTAKE_POS_M[0],
                         Constants.TelescopingArm.Positions.INTAKE_POS_M[1] + intakePosYOffset }
                 )
@@ -165,9 +165,9 @@ public class Arm extends SubsystemBase {
      */
     public Command moveToL4() {
         if ((DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue)) {
-            return defer(() -> moveArmWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE));
+            return defer(() -> moveWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE));
         } else {
-            return defer(() -> moveArmWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
+            return defer(() -> moveWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
 
         }
     }
@@ -244,7 +244,7 @@ public class Arm extends SubsystemBase {
      * 
      * @return True if the arm is in a deployed height, false otherwise
      */
-    public boolean isArmUp() {
+    public boolean isUp() {
         return telescope.getPosition().getValueAsDouble() < -0.15;
     }
 
@@ -300,7 +300,7 @@ public class Arm extends SubsystemBase {
     /**
      * Stops the arm motor
      */
-    public void stopArm() {
+    public void stopJoint() {
         joint.stopMotor();
     }
 
@@ -309,7 +309,7 @@ public class Arm extends SubsystemBase {
      */
     public void stopAll() {
         stopTelescope();
-        stopArm();
+        stopJoint();
     }
 
     @Override
