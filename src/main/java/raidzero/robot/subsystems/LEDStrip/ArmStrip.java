@@ -56,7 +56,9 @@ public class ArmStrip implements Subsystem {
     public void loop() {
         updateStates();
 
-        if (DriverStation.isDisabled()) {
+        if (DriverStation.isEStopped()) {
+            loopEstopped();
+        } else if (DriverStation.isDisabled()) {
             loopDisabled();
         } else if (DriverStation.isAutonomousEnabled()) {
             loopAutonomous();
@@ -88,6 +90,28 @@ public class ArmStrip implements Subsystem {
 
         coralIsIn = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
             CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+    }
+
+    /**
+     * The E-stopped loop of the CANdle LED strip
+     */
+    private void loopEstopped() {
+        if (animationApplied || animation2Applied || animation3Applied) {
+            candle.clearAnimation(0);
+            candle.clearAnimation(1);
+            animationApplied = false;
+            animation2Applied = false;
+            animation3Applied = false;
+        }
+
+        if (!animationApplied) {
+            candle.clearAnimation(0);
+            candle.clearAnimation(1);
+            candle.animate(new StrobeAnimation(25, 0, 0, 0, 0.001, -1));
+            animationApplied = true;
+            animation2Applied = false;
+            animation3Applied = false;
+        }
     }
 
     /**
