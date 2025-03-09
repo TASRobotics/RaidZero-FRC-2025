@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopExit() {
 		ArmStrip.system().resetAnimation();
-		ArmStrip.system().endAnimation();
+		ArmStrip.system().matchEndAnimation();
 	}
 
 	@Override

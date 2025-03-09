@@ -267,7 +267,7 @@ public class ArmStrip implements Subsystem {
     /**
      * Plays the match end animation
      */
-    public void endAnimation() {
+    public void matchEndAnimation() {
         candle.clearAnimation(0);
         candle.clearAnimation(1);
         candle.animate(new RainbowAnimation(255, 0.75, -1));
