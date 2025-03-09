@@ -42,7 +42,7 @@ public class Constants {
             public static final int MOTOR_ID = 15;
             public static final double CONVERSION_FACTOR = 45.0;
 
-            public static final double INTAKE_SPEED = 0.2; // 20 %
+            public static final double INTAKE_SPEED = 0.2;
         }
     }
 
@@ -163,7 +163,7 @@ public class Constants {
 
             public static final double LASERCAN_DISTANCE_THRESHOLD_MM = 50.0;
 
-            public static final int CURRENT_LIMIT = 25; // subject to change
+            public static final int CURRENT_LIMIT = 25;
         }
 
         public class Joint {
@@ -206,7 +206,7 @@ public class Constants {
             public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static final double[] INTAKE_POS_M = { 0.5, 0.835 }; // 0.845
+            public static final double[] INTAKE_POS_M = { 0.5, 0.835 };
             public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.81 };
 
             public static final double[] HOME_POS_M = { 0.0, 0.0 };
@@ -225,10 +225,10 @@ public class Constants {
             public static final double KI = 0.0;
             public static final double KD = 0.0;
 
-            public static final double KS = 0.035; // 0.045;
-            public static final double KV = 0.7; // 0.3;
-            public static final double KG = 0.05; // 0.06;
-            public static final double KA = 0.035; // 0.01;
+            public static final double KS = 0.035;
+            public static final double KV = 0.7;
+            public static final double KG = 0.05;
+            public static final double KA = 0.035;
 
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Elevator_Static;
 
