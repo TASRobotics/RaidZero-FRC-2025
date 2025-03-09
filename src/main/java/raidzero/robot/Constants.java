@@ -12,7 +12,7 @@ public class Constants {
     public class AlgaeIntake {
         public class Joint {
             public static final int MOTOR_ID = 14;
-            public static final double CONVERSION_FACTOR = (54 / 30) * 9;
+            public static final double CONVERSION_FACTOR = (54.0 / 30.0) * 9.0;
 
             public static final double INTAKE_POSITION = 0.0;
             public static final double HOME_POSITION = 0.3;
@@ -40,7 +40,7 @@ public class Constants {
 
         public class Intake {
             public static final int MOTOR_ID = 15;
-            public static final double CONVERSION_FACTOR = 45;
+            public static final double CONVERSION_FACTOR = 45.0;
 
             public static final double INTAKE_SPEED = 0.2; // 20 %
         }
@@ -161,7 +161,7 @@ public class Constants {
             public static final double EXTAKE_SPEED = 0.1;
             public static final double EXTAKE_TIMEOUT_S = 1.0;
 
-            public static final double LASERCAN_DISTANCE_THRESHOLD_MM = 50;
+            public static final double LASERCAN_DISTANCE_THRESHOLD_MM = 50.0;
 
             public static final int CURRENT_LIMIT = 25; // subject to change
         }
@@ -170,11 +170,11 @@ public class Constants {
             public static final int MOTOR_ID = 11;
             public static final int CANCODER_ID = 11;
 
-            public static final double CANCODER_GEAR_RATIO = 28.0 / 80;
+            public static final double CANCODER_GEAR_RATIO = 28.0 / 80.0;
             public static final double CANCODER_OFFSET = -(0.358643 - (0.25 / CANCODER_GEAR_RATIO));
             public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
 
-            public static final double CONVERSION_FACTOR = (120 / 12) * 20.0;
+            public static final double CONVERSION_FACTOR = (120.0 / 12.0) * 20.0;
 
             public static final double KS = 0.02;
             public static final double KG = 0.03;
