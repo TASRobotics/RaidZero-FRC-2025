@@ -210,7 +210,6 @@ public class Constants {
             public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.81 };
 
             public static final double[] HOME_POS_M = { 0.0, 0.0 };
-
         }
 
         public class Telescope {

@@ -48,36 +48,36 @@ public class Robot extends TimedRobot {
 		CoralIntake.system().getRoller().setControl(new StaticBrake());
 		ArmStrip.system().resetAnimation();
 	}
-	
+
 	@Override
 	public void autonomousInit() {
 		m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-		
+
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
 	}
-	
+
 	@Override
 	public void autonomousPeriodic() {}
-	
+
 	@Override
 	public void autonomousExit() {
 		ArmStrip.system().resetAnimation();
 	}
-	
+
 	@Override
 	public void teleopInit() {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
 	}
-	
+
 	@Override
 	public void teleopPeriodic() {
 		SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
 	}
-	
+
 	@Override
 	public void teleopExit() {
 		ArmStrip.system().resetAnimation();
