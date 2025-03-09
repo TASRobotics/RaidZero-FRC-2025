@@ -143,8 +143,8 @@ public class Arm extends SubsystemBase {
 
             return defer(
                 () -> moveArmWithDelay(
-                    new double[] { Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE_NTWC[0],
-                        Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE_NTWC[1] + intakePosYOffset }
+                    new double[] { Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE[0],
+                        Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE[1] + intakePosYOffset }
                 )
             );
         } else {
@@ -165,7 +165,7 @@ public class Arm extends SubsystemBase {
      */
     public Command moveToL4() {
         if ((DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue)) {
-            return defer(() -> moveArmWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE_NTWC));
+            return defer(() -> moveArmWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE));
         } else {
             return defer(() -> moveArmWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
 

@@ -131,7 +131,7 @@ public class RobotContainer {
         );
 
         joystick.povDown().whileTrue(
-            arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE_NTWC)
+            arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
         );
 
         // * Operator controls
@@ -206,7 +206,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand(
             "ArmIntakeCoralBLUE",
-            arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE_NTWC)
+            arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
                 .withTimeout(0.75)
         );
         NamedCommands.registerCommand(
@@ -221,7 +221,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand(
             "ArmL4BLUE",
-            arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE_NTWC)
+            arm.moveArm(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE)
                 .withTimeout(0.75)
         );
 
