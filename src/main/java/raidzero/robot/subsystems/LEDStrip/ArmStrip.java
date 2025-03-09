@@ -97,11 +97,7 @@ public class ArmStrip implements Subsystem {
      */
     private void loopEstopped() {
         if (animationApplied || animation2Applied || animation3Applied) {
-            candle.clearAnimation(0);
-            candle.clearAnimation(1);
-            animationApplied = false;
-            animation2Applied = false;
-            animation3Applied = false;
+            resetAnimation();
         }
 
         if (!animationApplied) {
@@ -218,11 +214,7 @@ public class ArmStrip implements Subsystem {
             }
         } else if (coralIsIn && !Swerve.system().isArmDeployable().getAsBoolean()) {
             if (animationApplied || animation2Applied || animation3Applied) {
-                candle.clearAnimation(0);
-                candle.clearAnimation(1);
-                animationApplied = false;
-                animation2Applied = false;
-                animation3Applied = false;
+                resetAnimation();
             }
 
             if (strobeTimer.hasElapsed(strobeInterval)) {
@@ -239,11 +231,7 @@ public class ArmStrip implements Subsystem {
             }
         } else if (!Swerve.system().isArmDeployable().getAsBoolean()) {
             if (animationApplied || animation2Applied || animation3Applied) {
-                candle.clearAnimation(0);
-                candle.clearAnimation(1);
-                animationApplied = false;
-                animation2Applied = false;
-                animation3Applied = false;
+                resetAnimation();
             }
 
             if (strobeTimer.hasElapsed(strobeInterval)) {
@@ -260,11 +248,7 @@ public class ArmStrip implements Subsystem {
             }
         } else if (coralIsIn && Swerve.system().isArmDeployable().getAsBoolean()) {
             if (animationApplied || animation2Applied || animation3Applied) {
-                candle.clearAnimation(0);
-                candle.clearAnimation(1);
-                animationApplied = false;
-                animation2Applied = false;
-                animation3Applied = false;
+                resetAnimation();
             }
 
             if (strobeTimer.hasElapsed(strobeInterval)) {
@@ -281,11 +265,7 @@ public class ArmStrip implements Subsystem {
             }
         } else if (Swerve.system().isArmDeployable().getAsBoolean()) {
             if (animationApplied || animation2Applied || animation3Applied) {
-                candle.clearAnimation(0);
-                candle.clearAnimation(1);
-                animationApplied = false;
-                animation2Applied = false;
-                animation3Applied = false;
+                resetAnimation();
             }
 
             if (strobeTimer.hasElapsed(strobeInterval)) {
@@ -317,10 +297,11 @@ public class ArmStrip implements Subsystem {
      * Clears CAndle animaitons
      */
     public void resetAnimation() {
-        animationApplied = false;
-        animation2Applied = false;
         candle.clearAnimation(0);
         candle.clearAnimation(1);
+        animationApplied = false;
+        animation2Applied = false;
+        animation3Applied = false;
     }
 
     /**
