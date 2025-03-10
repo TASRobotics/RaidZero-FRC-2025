@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Copy of Auton5-1"
+                  "pathName": "Left-1"
                 }
               },
               {
@@ -21,13 +21,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.82
+                        "waitTime": 0.85
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "ArmL4BLUE"
+                        "name": "ArmL4"
                       }
                     }
                   ]
@@ -65,7 +65,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Copy of Auton5-2"
+                        "pathName": "Left-2"
                       }
                     }
                   ]
@@ -74,7 +74,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmIntakeCoralBLUE"
+                  "name": "ArmIntakeCoral"
                 }
               }
             ]
@@ -93,7 +93,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Copy of Auton5-3"
+                  "pathName": "Left-3"
                 }
               },
               {
@@ -103,13 +103,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.05
+                        "waitTime": 0.95
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "ArmL4BLUE"
+                        "name": "ArmL4"
                       }
                     }
                   ]
@@ -147,7 +147,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Copy of Auton5-4"
+                        "pathName": "Left-4"
                       }
                     }
                   ]
@@ -156,7 +156,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmIntakeCoralBLUE"
+                  "name": "ArmIntakeCoral"
                 }
               }
             ]
@@ -175,7 +175,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Copy of Auton5-5"
+                  "pathName": "Left-5"
                 }
               },
               {
@@ -185,13 +185,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.05
+                        "waitTime": 0.95
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "ArmL4BLUE"
+                        "name": "ArmL4"
                       }
                     }
                   ]

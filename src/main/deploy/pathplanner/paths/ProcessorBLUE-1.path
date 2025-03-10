@@ -3,40 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.941,
-        "y": 5.17
+        "x": 7.568493824274356,
+        "y": 2.4226146429384166
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.878207236842105,
-        "y": 6.15139802631579
+        "x": 6.512181703904395,
+        "y": 2.5655592913990377
       },
-      "isLocked": false,
-      "linkedName": "Auton6-1End"
+      "isLocked": true,
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.17635,
-        "y": 7.075
+        "x": 4.992,
+        "y": 2.88
       },
       "prevControl": {
-        "x": 2.8865131578947363,
-        "y": 5.391282894736841
+        "x": 5.493026965738442,
+        "y": 2.800079637703237
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "StationPickupA6"
+      "linkedName": "ProcessorB-ReefE"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "station appr",
-      "minWaypointRelativePos": 0.9425133689839575,
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.647058823529412,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
-        "maxAcceleration": 5.0,
+        "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -56,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.244
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "Auton6",
+  "folder": "ProcessorBLUE",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

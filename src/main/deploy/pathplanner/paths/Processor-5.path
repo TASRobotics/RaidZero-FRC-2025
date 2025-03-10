@@ -3,36 +3,36 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0836,
-        "y": 1.031
+        "x": 1.17635,
+        "y": 0.9746
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9619805956828973,
-        "y": 1.7432665338309516
+        "x": 2.308132596123537,
+        "y": 1.773069669586734
       },
-      "isLocked": false,
-      "linkedName": "StationPickup"
+      "isLocked": true,
+      "linkedName": "Station-Processor"
     },
     {
       "anchor": {
-        "x": 3.99,
-        "y": 2.881
+        "x": 3.73,
+        "y": 3.02
       },
       "prevControl": {
-        "x": 3.2901577410401233,
-        "y": 2.217562782669617
+        "x": 2.9610293262395833,
+        "y": 2.504248924299277
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Auton1-5End"
+      "linkedName": "Processor-ReefC"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "Reef appr",
-      "minWaypointRelativePos": 0.8,
+      "name": "reef appr",
+      "minWaypointRelativePos": 0.838878542877907,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
@@ -56,10 +56,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.57141384085656
+    "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "Auton1",
+  "folder": "Processor",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 53.24436865430491

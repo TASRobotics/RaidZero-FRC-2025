@@ -3,40 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.068225018677404,
-        "y": 6.949371634186422
+        "x": 1.17635,
+        "y": 7.075
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8681044829631182,
-        "y": 6.401166277043564
+        "x": 2.3092105263157894,
+        "y": 6.15139802631579
       },
       "isLocked": false,
-      "linkedName": "Auton2-2End"
+      "linkedName": "Station-Left"
     },
     {
       "anchor": {
-        "x": 3.735975679867152,
-        "y": 5.005769219642782
+        "x": 3.704971589432794,
+        "y": 4.996
       },
       "prevControl": {
-        "x": 2.828442197724295,
-        "y": 5.639083951785638
+        "x": 3.0308388157894735,
+        "y": 5.7280427631578945
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Auton2-5End"
+      "linkedName": "Left-ReefL"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.80251798561152,
+      "name": "reef appr",
+      "minWaypointRelativePos": 0.838878542877907,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
-        "maxAcceleration": 5.0,
+        "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -59,10 +59,10 @@
     "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "Auton2",
+  "folder": "Left",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -53.5
+    "rotation": -53.244
   },
   "useDefaultConstraints": true
 }
