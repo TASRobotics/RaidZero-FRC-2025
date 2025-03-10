@@ -15,7 +15,7 @@
 - Names should not be long!
     - Names with multiple words should be connected with `-` (Eg, `vision-odometry`)
 - Competition branches should be branched off of and PR'ed into main only
-- Competition branches are named after their event code (Eg, `BVCI` or `ISDE1`)
+- Competition branches are named after their event code (Eg, `BCVI` or `ISDE1`)
 
 ## Pull requests
 
