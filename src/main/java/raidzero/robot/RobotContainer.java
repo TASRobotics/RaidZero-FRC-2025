@@ -131,7 +131,7 @@ public class RobotContainer {
         );
 
         joystick.povDown().whileTrue(
-            arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
+            arm.moveTo(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
         );
 
         // * Operator controls
@@ -201,12 +201,12 @@ public class RobotContainer {
     private void registerPathplannerCommands() {
         NamedCommands.registerCommand(
             "ArmIntakeCoral",
-            arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M)
+            arm.moveTo(Constants.TelescopingArm.Positions.INTAKE_POS_M)
                 .withTimeout(0.75)
         );
         NamedCommands.registerCommand(
             "ArmIntakeCoralBLUE",
-            arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
+            arm.moveTo(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
                 .withTimeout(0.75)
         );
         NamedCommands.registerCommand(
@@ -234,7 +234,7 @@ public class RobotContainer {
                 )
                 .withTimeout(0.5)
                 .andThen(
-                    arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M)
+                    arm.moveTo(Constants.TelescopingArm.Positions.INTAKE_POS_M)
                         .withTimeout(0.75)
                 )
         );

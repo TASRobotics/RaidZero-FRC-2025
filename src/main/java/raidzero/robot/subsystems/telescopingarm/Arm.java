@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
+import raidzero.robot.Telemetry;
+import raidzero.robot.Constants.TelescopingArm.Telescope;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 
 public class Arm extends SubsystemBase {
@@ -50,6 +53,19 @@ public class Arm extends SubsystemBase {
         intakePosYOffset = 0.0;
     }
 
+    public Command moveTheArmInAStraightLineUsingDifferentialTransformations(double[] desiredPosition) {
+        
+        
+        return null;
+    }
+
+    public Command moveWithVelocities(double jointVelocity, double telescopeVelocity) {
+        return run(() -> {
+            joint.setControl(new MotionMagicVelocityVoltage(jointVelocity));
+            telescope.setControl(new MotionMagicVelocityVoltage(telescopeVelocity));
+        });
+    }
+
     /**
      * Moves the arm to the desired x and y setpoints
      * 
@@ -57,6 +73,9 @@ public class Arm extends SubsystemBase {
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
     public Command moveTo(double[] desiredPosition) {
+        desiredPosition[0] -= Telescope.BUMPER_TO_JOINT_M;
+        desiredPosition[1] -= Telescope.GROUND_TO_JOINT_M;
+
         double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
 
@@ -85,6 +104,9 @@ public class Arm extends SubsystemBase {
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
     public Command moveWithoutDelay(double[] desiredPosition) {
+        desiredPosition[0] -= Telescope.BUMPER_TO_JOINT_M;
+        desiredPosition[1] -= Telescope.GROUND_TO_JOINT_M;
+
         double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
 
@@ -94,27 +116,6 @@ public class Arm extends SubsystemBase {
             moveTelescope(telescopeSetpoint);
             moveJoint(jointSetpoint);
         });
-    }
-
-    /**
-     * Moves the arm to the desired x and y setpoints with a delay
-     * 
-     * @Note This method should only be used when lowering the arm
-     * 
-     * @param desiredPosition The desired x and y setpoints
-     * @return A {@link Command} that moves the arm to the desired setpoints
-     */
-    public Command moveWithDelay(double[] desiredPosition) {
-        double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
-        double jointSetpoint = calculateJointAngle(desiredPosition);
-
-        currentPose = desiredPosition;
-
-        return run(() -> moveJoint(jointSetpoint))
-            .alongWith(
-                Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
-                    .andThen(() -> moveTelescope(telescopeSetpoint))
-            );
     }
 
     /**
@@ -140,16 +141,15 @@ public class Arm extends SubsystemBase {
      */
     public Command moveToIntake() {
         if ((DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue)) {
-
             return defer(
-                () -> moveWithDelay(
+                () -> moveTo(
                     new double[] { Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE[0],
                         Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE[1] + intakePosYOffset }
                 )
             );
         } else {
             return defer(
-                () -> moveWithDelay(
+                () -> moveTo(
                     new double[] { Constants.TelescopingArm.Positions.INTAKE_POS_M[0],
                         Constants.TelescopingArm.Positions.INTAKE_POS_M[1] + intakePosYOffset }
                 )
@@ -165,10 +165,9 @@ public class Arm extends SubsystemBase {
      */
     public Command moveToL4() {
         if ((DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue)) {
-            return defer(() -> moveWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE));
+            return defer(() -> moveTo(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE));
         } else {
-            return defer(() -> moveWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
-
+            return defer(() -> moveTo(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
         }
     }
 
@@ -214,10 +213,8 @@ public class Arm extends SubsystemBase {
     public void updateCoastMode() {
         if (shouldBeInCoast()) {
             joint.setNeutralMode(NeutralModeValue.Coast);
-            // telescope.setNeutralMode(NeutralModeValue.Coast);
         } else {
             joint.setNeutralMode(NeutralModeValue.Brake);
-            // telescope.setNeutralMode(NeutralModeValue.Brake);
         }
     }
 
@@ -256,7 +253,7 @@ public class Arm extends SubsystemBase {
      * @return Target motor position in rotations
      */
     public double calculateTelescopeHeight(double[] position) {
-        double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2)) - Constants.TelescopingArm.Telescope.GROUND_OFFSET_M;
+        double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2));
 
         return height / Constants.TelescopingArm.Telescope.MAX_HEIGHT_M;
     }
@@ -312,10 +309,24 @@ public class Arm extends SubsystemBase {
         stopJoint();
     }
 
+    /**
+     * Calculates the current x and y septoint in meters from the joint angle and telescope extension.
+     * 
+     * @return the calculated setpoint in meters
+     */
+    public double[] calculateCurrentPosition() {
+        double r = (this.getTelescopePosition() * Telescope.CONVERSION_FACTOR);
+        double theta = this.getJointPosition() * (2.0 * Math.PI);
+
+        return new double[] { r * Math.cos(theta), r * Math.sin(theta) };
+    }
+
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Elevator pos", getTelescopePosition());
         SmartDashboard.putNumber("Intake Y Offset", Math.round(intakePosYOffset * 100) / 100.0);
+
+        SmartDashboard.putNumber("Calculated X", calculateCurrentPosition()[0]);
+        SmartDashboard.putNumber("Calculated Y", calculateCurrentPosition()[1]);
     }
 
     /**
@@ -341,7 +352,7 @@ public class Arm extends SubsystemBase {
             .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
 
         configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
-        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = 0.0;
+        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = Constants.TelescopingArm.Telescope.MIN_HEIGHT_M;
 
         configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
 

@@ -215,7 +215,7 @@ public class Constants {
         public class Telescope {
             public static final int MOTOR_ID = 10;
 
-            public static final double CONVERSION_FACTOR = 52.643555;
+            public static final double CONVERSION_FACTOR = 54.1;
 
             public static final double STATOR_CURRENT_LIMIT = 40.0;
             public static final double SUPPLY_CURRENT_LIMIT = 40.0;
@@ -236,11 +236,11 @@ public class Constants {
             public static final double ACCELERATION = 5.0;
             public static final double JERK = 0.0;
 
-            // public static final double TOP_SOFT_LIMIT = 1.0; // 100% range of motion
-            public static final double BOTTOM_SOFT_LIMIT = 0.0; // 0% range of motion
+            public static final double GROUND_TO_JOINT_M = 0.125;
+            public static final double BUMPER_TO_JOINT_M = 0.184;
 
-            public static final double GROUND_OFFSET_M = 0.9;
-            public static final double MAX_HEIGHT_M = 1.95;
+            public static final double MAX_HEIGHT_M = 1.952;
+            public static final double MIN_HEIGHT_M = 0.870;
         }
     }
 
