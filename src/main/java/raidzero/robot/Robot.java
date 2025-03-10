@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
 import raidzero.robot.subsystems.telescopingarm.Arm;
 import raidzero.robot.subsystems.telescopingarm.CoralIntake;
+import raidzero.robot.wrappers.Elastic;
 
 import com.ctre.phoenix6.controls.StaticBrake;
 
@@ -56,6 +57,8 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
+
+		Elastic.selectTab("Autonomous");
 	}
 
 	@Override
@@ -71,6 +74,8 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+
+		Elastic.selectTab("Teleoperated");
 	}
 
 	@Override
