@@ -381,14 +381,12 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     /**
      * Stops the swerve
      * 
-     * @return The command to stop the swerve
+     * @return A {@link Command} to stop the swerve
      */
     public Command stop() {
-        SwerveRequest.RobotCentric swerveRequest = new SwerveRequest.RobotCentric();
-
         return runOnce(
             () -> this.setControl(
-                swerveRequest.withVelocityX(0.0).withVelocityY(0.0).withRotationalRate(0.0)
+                (new SwerveRequest.RobotCentric()).withVelocityX(0.0).withVelocityY(0.0).withRotationalRate(0.0)
             )
         );
     }

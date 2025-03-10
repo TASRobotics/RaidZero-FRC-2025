@@ -11,16 +11,35 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton2-1"
+                  "pathName": "ProcessorBLUE-1"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "ArmL3"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.82
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ArmL4BLUE"
+                      }
+                    }
+                  ]
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
           }
         },
         {
@@ -34,18 +53,37 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Auton2-2"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.85
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "ProcessorBLUE-2"
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmIntakeCoral"
+                  "name": "ArmIntakeCoralBLUE"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
           }
         },
         {
@@ -55,7 +93,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton2-3"
+                  "pathName": "ProcessorBLUE-3"
                 }
               },
               {
@@ -65,19 +103,25 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 1.05
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "ArmL3"
+                        "name": "ArmL4BLUE"
                       }
                     }
                   ]
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
           }
         },
         {
@@ -91,18 +135,37 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Auton2-4"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.85
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "ProcessorBLUE-4"
+                      }
+                    }
+                  ]
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ArmIntakeCoral"
+                  "name": "ArmIntakeCoralBLUE"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeCoral"
           }
         },
         {
@@ -112,7 +175,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton2-5"
+                  "pathName": "ProcessorBLUE-5"
                 }
               },
               {
@@ -122,19 +185,25 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 1.05
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "ArmL3"
+                        "name": "ArmL4BLUE"
                       }
                     }
                   ]
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.23
           }
         },
         {

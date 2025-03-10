@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.988014788612429,
-        "y": 2.883643723695211
+        "x": 4.95,
+        "y": 2.865
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.51607692749134,
-        "y": 1.66086289328706
+        "x": 4.478062138878911,
+        "y": 1.6422191695918489
       },
-      "isLocked": false,
-      "linkedName": "Auton5-1End"
+      "isLocked": true,
+      "linkedName": "Processor-ReefE"
     },
     {
       "anchor": {
-        "x": 1.132,
-        "y": 1.0
+        "x": 1.17635,
+        "y": 0.9746
       },
       "prevControl": {
-        "x": 2.8559638891945425,
-        "y": 2.353998074383803
+        "x": 2.9003138891945426,
+        "y": 2.328598074383803
       },
       "nextControl": null,
-      "isLocked": false,
-      "linkedName": "StationPickupA5"
+      "isLocked": true,
+      "linkedName": "Station-Processor"
     }
   ],
   "rotationTargets": [],
@@ -59,7 +59,7 @@
     "rotation": 53.24436865430491
   },
   "reversed": false,
-  "folder": "Auton5",
+  "folder": "Processor",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 119.99999999999999

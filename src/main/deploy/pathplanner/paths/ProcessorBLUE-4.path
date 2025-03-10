@@ -3,40 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.136,
-        "y": 1.0
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.7732331842557303,
-        "y": 1.3802707039153415
-      },
-      "isLocked": false,
-      "linkedName": "StationPickupA5"
-    },
-    {
-      "anchor": {
         "x": 4.0043,
         "y": 2.893
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.550127890804175,
+        "y": 2.571762965590656
+      },
+      "isLocked": true,
+      "linkedName": "ProcessorB-ReefD"
+    },
+    {
+      "anchor": {
+        "x": 1.17635,
+        "y": 0.9746
+      },
       "prevControl": {
-        "x": 3.393944293560295,
-        "y": 2.5143878271543993
+        "x": 1.9358612913640805,
+        "y": 1.4773658941922503
       },
       "nextControl": null,
-      "isLocked": false,
-      "linkedName": "Auton5-3End"
+      "isLocked": true,
+      "linkedName": "Station-Processor"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "reef appr",
-      "minWaypointRelativePos": 0.8232421874999997,
+      "name": "station appr",
+      "minWaypointRelativePos": 0.8626850926598838,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
-        "maxAcceleration": 3.0,
+        "maxAcceleration": 5.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -56,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 53.24436865430491
   },
   "reversed": false,
-  "folder": "Auton5",
+  "folder": "ProcessorBLUE",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 53.24436865430491
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }

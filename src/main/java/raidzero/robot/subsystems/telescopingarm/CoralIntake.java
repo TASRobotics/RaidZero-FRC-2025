@@ -53,8 +53,10 @@ public class CoralIntake extends SubsystemBase {
             System.out.println("LaserCan Config Error");
         }
     }
+
     /**
      * Gets the roller motor controller for disabled init to check for position
+     * 
      * @return The Roller motor
      */
     public TalonFXS getRoller() {
@@ -76,6 +78,11 @@ public class CoralIntake extends SubsystemBase {
             );
     }
 
+    /**
+     * Creates a {@link Command} to scooch the coral upwards if too low
+     * 
+     * @return A {@link Command} to scooch the coral upwards
+     */
     public Command scoochCoral() {
         return run(() -> roller.set(-Constants.TelescopingArm.Intake.INTAKE_SPEED))
             .until(() -> getTopLaserDistance() <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM);

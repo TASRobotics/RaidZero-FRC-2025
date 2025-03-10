@@ -3,40 +3,40 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.0043,
-        "y": 2.8877769411856424
+        "x": 7.550420503560317,
+        "y": 4.18490872647302
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.550127890804175,
-        "y": 2.5665399067762986
+        "x": 6.708032502182532,
+        "y": 4.182825799746168
       },
       "isLocked": false,
-      "linkedName": "Auton5-3End"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.136,
-        "y": 1.0
+        "x": 5.730058838559329,
+        "y": 4.18490872647302
       },
       "prevControl": {
-        "x": 1.8955112913640804,
-        "y": 1.5027658941922504
+        "x": 6.475677907042719,
+        "y": 4.18570789575552
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "StationPickupA5"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "station appr",
-      "minWaypointRelativePos": 0.8626850926598838,
+      "name": "reef appr",
+      "minWaypointRelativePos": 0.7871945403343027,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
-        "maxAcceleration": 5.0,
+        "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -47,7 +47,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 2.0,
     "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -56,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 53.24436865430491
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Auton5",
+  "folder": "LEAVE",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

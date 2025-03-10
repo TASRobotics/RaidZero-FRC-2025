@@ -12,7 +12,7 @@ public class Constants {
     public class AlgaeIntake {
         public class Joint {
             public static final int MOTOR_ID = 14;
-            public static final double CONVERSION_FACTOR = (54 / 30) * 9;
+            public static final double CONVERSION_FACTOR = (54.0 / 30.0) * 9.0;
 
             public static final double INTAKE_POSITION = 0.0;
             public static final double HOME_POSITION = 0.3;
@@ -40,9 +40,9 @@ public class Constants {
 
         public class Intake {
             public static final int MOTOR_ID = 15;
-            public static final double CONVERSION_FACTOR = 45;
+            public static final double CONVERSION_FACTOR = 45.0;
 
-            public static final double INTAKE_SPEED = 0.2; // 20 %
+            public static final double INTAKE_SPEED = 0.2;
         }
     }
 
@@ -62,6 +62,11 @@ public class Constants {
         public static final int CORAL_EXTAKE = 10;
         public static final int CORAL_INTAKE = 11;
         public static final int CORAL_SCOOCH = 12;
+
+        public static final int TOP_RIGHT = 13;
+        public static final int BOTTOM_RIGHT = 14;
+        public static final int BOTTOM_LEFT = 15;
+        public static final int TOP_LEFT = 16;
     }
 
     public class CANdle {
@@ -69,8 +74,8 @@ public class Constants {
 
         public static final double CLIMB_JOINT_THRESHOLD = 0.125;
 
-        public static final double ARM_JOINT_LOWER_BOUND = 0.1675;
-        public static final double ARM_JOINT_UPPER_BOUND = 0.1726;
+        public static final double ARM_JOINT_LOWER_BOUND = 0.1754;
+        public static final double ARM_JOINT_UPPER_BOUND = 0.1805;
     }
 
     public class Climb {
@@ -106,7 +111,7 @@ public class Constants {
         public class Winch {
             public static final int MOTOR_ID = 16;
 
-            public static final double SPEED = 0.35;
+            public static final double SPEED = 0.75;
         }
     }
 
@@ -129,7 +134,7 @@ public class Constants {
                 new Pose2d(4.05, 5.1, Rotation2d.fromDegrees(300)), // 19 Left
                 new Pose2d(5.2619, 4.99953, Rotation2d.fromDegrees(240)), // 20 Left
                 new Pose2d(5.70, 3.85, Rotation2d.fromDegrees(180)), // 21 Left
-                new Pose2d(4.9494, 2.88847, Rotation2d.fromDegrees(120)) // 22 Left
+                new Pose2d(4.9113, 2.93927, Rotation2d.fromDegrees(120)) // 22 Left
             )
         );
 
@@ -156,20 +161,20 @@ public class Constants {
             public static final double EXTAKE_SPEED = 0.1;
             public static final double EXTAKE_TIMEOUT_S = 1.0;
 
-            public static final double LASERCAN_DISTANCE_THRESHOLD_MM = 50;
+            public static final double LASERCAN_DISTANCE_THRESHOLD_MM = 50.0;
 
-            public static final int CURRENT_LIMIT = 25; // subject to change
+            public static final int CURRENT_LIMIT = 25;
         }
 
         public class Joint {
             public static final int MOTOR_ID = 11;
             public static final int CANCODER_ID = 11;
 
-            public static final double CANCODER_GEAR_RATIO = 28.0 / 80;
+            public static final double CANCODER_GEAR_RATIO = 28.0 / 80.0;
             public static final double CANCODER_OFFSET = -(0.358643 - (0.25 / CANCODER_GEAR_RATIO));
             public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
 
-            public static final double CONVERSION_FACTOR = (120 / 12) * 20.0;
+            public static final double CONVERSION_FACTOR = (120.0 / 12.0) * 20.0;
 
             public static final double KS = 0.02;
             public static final double KG = 0.03;
@@ -192,7 +197,8 @@ public class Constants {
         }
 
         public class Positions {
-            public static final double[] L4_SCORING_POS_M = { -0.25, 2.72 };
+            public static final double[] L4_SCORING_POS_M = { -0.24, 2.72 };
+            public static final double[] L4_SCORING_POS_M_BLUE = { -0.15, 2.72 };
             public static final double[] L4_CHECK_POSITION = { -0.25, 2.62 };
             public static final double[] L4_GRAND_SLAM = { -0.2, 1.57 };
 
@@ -200,10 +206,10 @@ public class Constants {
             public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static final double[] INTAKE_POS_M = { 0.5, 0.88 };
+            public static final double[] INTAKE_POS_M = { 0.5, 0.835 };
+            public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.81 };
 
             public static final double[] HOME_POS_M = { 0.0, 0.0 };
-
         }
 
         public class Telescope {
@@ -219,10 +225,10 @@ public class Constants {
             public static final double KI = 0.0;
             public static final double KD = 0.0;
 
-            public static final double KS = 0.035; // 0.045;
-            public static final double KV = 0.7; // 0.3;
-            public static final double KG = 0.05; // 0.06;
-            public static final double KA = 0.035; // 0.01;
+            public static final double KS = 0.035;
+            public static final double KV = 0.7;
+            public static final double KG = 0.05;
+            public static final double KA = 0.035;
 
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Elevator_Static;
 

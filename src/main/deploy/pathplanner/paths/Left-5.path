@@ -3,36 +3,36 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0836,
-        "y": 1.031
+        "x": 1.17635,
+        "y": 7.075
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3653428591045715,
-        "y": 1.262619320471568
+        "x": 2.3092105263157894,
+        "y": 6.15139802631579
       },
       "isLocked": false,
-      "linkedName": "StationPickup"
+      "linkedName": "Station-Left"
     },
     {
       "anchor": {
-        "x": 4.953,
-        "y": 2.873
+        "x": 3.704971589432794,
+        "y": 4.996
       },
       "prevControl": {
-        "x": 5.103258881964246,
-        "y": 1.6035452738025873
+        "x": 3.0308388157894735,
+        "y": 5.7280427631578945
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Auton1-3End"
+      "linkedName": "Left-ReefL"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "Reef appr",
-      "minWaypointRelativePos": 0.8,
+      "name": "reef appr",
+      "minWaypointRelativePos": 0.838878542877907,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.2,
@@ -56,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.84570028070979
+    "rotation": -59.99999999999999
   },
   "reversed": false,
-  "folder": "Auton1",
+  "folder": "Left",
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": 53.24436865430491
+    "velocity": 0,
+    "rotation": -53.244
   },
   "useDefaultConstraints": true
 }

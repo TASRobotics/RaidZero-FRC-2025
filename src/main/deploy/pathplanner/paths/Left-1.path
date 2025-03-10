@@ -3,39 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.953,
-        "y": 2.873
+        "x": 7.568493824274356,
+        "y": 5.627
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6422896264304576,
-        "y": 1.5271793849031692
+        "x": 5.9654605263157885,
+        "y": 5.381661184210526
       },
-      "isLocked": false,
-      "linkedName": "Auton1-3End"
+      "isLocked": true,
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.0836,
-        "y": 1.031
+        "x": 4.941,
+        "y": 5.17
       },
       "prevControl": {
-        "x": 1.9292580380721829,
-        "y": 2.2070880419234142
+        "x": 5.399694206208194,
+        "y": 5.252906356202587
       },
       "nextControl": null,
-      "isLocked": false,
-      "linkedName": "StationPickup"
+      "isLocked": true,
+      "linkedName": "Left-ReefJ"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
-      "name": "station appr",
-      "minWaypointRelativePos": 0.8,
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.6016042780748664,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.4,
+        "maxVelocity": 1.2,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -56,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 53.24436865430491
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "Auton1",
+  "folder": "Left",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.84570028070979
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

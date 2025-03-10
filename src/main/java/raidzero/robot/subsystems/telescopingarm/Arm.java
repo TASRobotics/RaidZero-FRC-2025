@@ -12,6 +12,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -25,6 +27,7 @@ public class Arm extends SubsystemBase {
     private CANcoder jointCANcoder;
 
     private double[] currentPose;
+    private double intakePosYOffset;
 
     private static Arm system;
 
@@ -44,6 +47,7 @@ public class Arm extends SubsystemBase {
         jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
 
         currentPose = new double[] { 0.0, 0.0 };
+        intakePosYOffset = 0.0;
     }
 
     /**
@@ -52,9 +56,11 @@ public class Arm extends SubsystemBase {
      * @param desiredPosition The desired x and y setpoints
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
-    public Command moveArm(double[] desiredPosition) {
+    public Command moveTo(double[] desiredPosition) {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
+
+        currentPose = desiredPosition;
 
         if (currentPose[1] > desiredPosition[1]) {
             currentPose[1] = desiredPosition[1];
@@ -78,9 +84,11 @@ public class Arm extends SubsystemBase {
      * @param desiredPosition The desired x and y setpoints
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
-    public Command moveArmSimple(double[] desiredPosition) {
+    public Command moveWithoutDelay(double[] desiredPosition) {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
+
+        currentPose = desiredPosition;
 
         return run(() -> {
             moveTelescope(telescopeSetpoint);
@@ -96,15 +104,72 @@ public class Arm extends SubsystemBase {
      * @param desiredPosition The desired x and y setpoints
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
-    public Command moveArmWithDelay(double[] desiredPosition) {
+    public Command moveWithDelay(double[] desiredPosition) {
         double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
+
+        currentPose = desiredPosition;
 
         return run(() -> moveJoint(jointSetpoint))
             .alongWith(
                 Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
                     .andThen(() -> moveTelescope(telescopeSetpoint))
             );
+    }
+
+    /**
+     * Decreases the intake Y offset by a desired amount
+     * 
+     * @param ammount The desired offset amount
+     */
+    public void decreaseIntakeYOffset(double ammount) {
+        intakePosYOffset += ammount;
+    }
+
+    /**
+     * Removes the intake y offset
+     */
+    public void removeIntakeOffset() {
+        intakePosYOffset = 0;
+    }
+
+    /**
+     * Moves the arm to the intake position
+     * 
+     * @return A {@link Command} that moves the arm to the intake position
+     */
+    public Command moveToIntake() {
+        if ((DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue)) {
+
+            return defer(
+                () -> moveWithDelay(
+                    new double[] { Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE[0],
+                        Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE[1] + intakePosYOffset }
+                )
+            );
+        } else {
+            return defer(
+                () -> moveWithDelay(
+                    new double[] { Constants.TelescopingArm.Positions.INTAKE_POS_M[0],
+                        Constants.TelescopingArm.Positions.INTAKE_POS_M[1] + intakePosYOffset }
+                )
+            );
+
+        }
+    }
+
+    /**
+     * Moves the arm to the L4 scoring position
+     * 
+     * @return A {@link Command} that moves the arm to the L4 scoring position
+     */
+    public Command moveToL4() {
+        if ((DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue)) {
+            return defer(() -> moveWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE));
+        } else {
+            return defer(() -> moveWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
+
+        }
     }
 
     /**
@@ -179,7 +244,7 @@ public class Arm extends SubsystemBase {
      * 
      * @return True if the arm is in a deployed height, false otherwise
      */
-    public boolean isArmUp() {
+    public boolean isUp() {
         return telescope.getPosition().getValueAsDouble() < -0.15;
     }
 
@@ -235,7 +300,7 @@ public class Arm extends SubsystemBase {
     /**
      * Stops the arm motor
      */
-    public void stopArm() {
+    public void stopJoint() {
         joint.stopMotor();
     }
 
@@ -244,12 +309,13 @@ public class Arm extends SubsystemBase {
      */
     public void stopAll() {
         stopTelescope();
-        stopArm();
+        stopJoint();
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator pos", getTelescopePosition());
+        SmartDashboard.putNumber("Intake Y Offset", Math.round(intakePosYOffset * 100) / 100.0);
     }
 
     /**

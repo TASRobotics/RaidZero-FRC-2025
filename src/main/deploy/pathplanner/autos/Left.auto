@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton5-1"
+                  "pathName": "Left-1"
                 }
               },
               {
@@ -65,7 +65,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Auton5-2"
+                        "pathName": "Left-2"
                       }
                     }
                   ]
@@ -93,7 +93,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton5-3"
+                  "pathName": "Left-3"
                 }
               },
               {
@@ -147,7 +147,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Auton5-4"
+                        "pathName": "Left-4"
                       }
                     }
                   ]
@@ -175,7 +175,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Auton5-5"
+                  "pathName": "Left-5"
                 }
               },
               {

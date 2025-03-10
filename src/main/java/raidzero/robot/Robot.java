@@ -4,7 +4,9 @@
 
 package raidzero.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
@@ -46,38 +48,40 @@ public class Robot extends TimedRobot {
 		CoralIntake.system().getRoller().setControl(new StaticBrake());
 		ArmStrip.system().resetAnimation();
 	}
-	
+
 	@Override
 	public void autonomousInit() {
 		m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-		
+
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
 	}
-	
+
 	@Override
 	public void autonomousPeriodic() {}
-	
+
 	@Override
 	public void autonomousExit() {
 		ArmStrip.system().resetAnimation();
 	}
-	
+
 	@Override
 	public void teleopInit() {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
 	}
-	
+
 	@Override
-	public void teleopPeriodic() {}
-	
+	public void teleopPeriodic() {
+		SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
+	}
+
 	@Override
 	public void teleopExit() {
 		ArmStrip.system().resetAnimation();
-		ArmStrip.system().endAnimation();
+		ArmStrip.system().matchEndAnimation();
 	}
 
 	@Override
