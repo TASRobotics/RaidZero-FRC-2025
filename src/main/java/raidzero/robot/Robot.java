@@ -4,7 +4,9 @@
 
 package raidzero.robot;
 
+import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,6 +29,8 @@ public class Robot extends TimedRobot {
 	public Robot() {
 		m_robotContainer = new RobotContainer();
 		CanBridge.runTCP();
+
+		WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
 	}
 
 	@Override
