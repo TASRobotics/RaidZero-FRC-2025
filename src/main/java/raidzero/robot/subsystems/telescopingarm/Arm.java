@@ -1,5 +1,7 @@
 package raidzero.robot.subsystems.telescopingarm;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -53,10 +55,27 @@ public class Arm extends SubsystemBase {
         intakePosYOffset = 0.0;
     }
 
-    public Command moveTheArmInAStraightLineUsingDifferentialTransformations(double[] desiredPosition) {
-        
-        
-        return null;
+    public Command moveTheArmInAStraightLineUsingDifferentialTransformations(double[] desiredPosition, double[] cartesianVelocities) {
+        double r = (this.getTelescopePosition() * Telescope.CONVERSION_FACTOR);
+        double theta = this.getJointPosition() * (2.0 * Math.PI);
+
+        double[][] rotationMatix = new double[][] {
+            { Math.cos(theta), Math.sin(theta) },
+            { -1 * Math.sin(theta), Math.cos(theta) },
+        };
+
+        double[] polarVelocities = matrixMultiplication(rotationMatix, cartesianVelocities);
+
+        double telescopeVelocity = polarVelocities[0] / Telescope.CONVERSION_FACTOR;
+        double jointVelocity = (polarVelocities[1] / r) / (2.0 * Math.PI);
+
+        return defer(() -> this.moveWithVelocities(jointVelocity, telescopeVelocity).until(armWithinSetpoint(desiredPosition)).andThen(moveWithoutDelay(desiredPosition)));
+    }
+
+    private BooleanSupplier armWithinSetpoint(double[] setpoint) {
+        double[] position = calculateCurrentPosition();
+
+        return () -> Math.abs(position[0] - setpoint[0]) < 0.02 && Math.abs(position[1] - setpoint[1]) < 0.02;
     }
 
     public Command moveWithVelocities(double jointVelocity, double telescopeVelocity) {
@@ -64,6 +83,13 @@ public class Arm extends SubsystemBase {
             joint.setControl(new MotionMagicVelocityVoltage(jointVelocity));
             telescope.setControl(new MotionMagicVelocityVoltage(telescopeVelocity));
         });
+    }
+
+    public double[] matrixMultiplication(double[][] a, double[] b) {
+        double[] result = new double[2];
+        result[0] = a[0][0] * b[0] + a[0][1] * b[1];
+        result[1] = a[1][0] * b[0] + a[1][1] * b[1];
+        return result;
     }
 
     /**
