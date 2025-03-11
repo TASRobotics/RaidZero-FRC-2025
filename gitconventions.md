@@ -14,6 +14,8 @@
     - Describe the feature being worked on (Eg, `arm.pid` or `swerve.vision-odometry`)
 - Names should not be long!
     - Names with multiple words should be connected with `-` (Eg, `vision-odometry`)
+- Competition branches should be branched off of and PR'ed into main only
+- Competition branches are named after their event code (Eg, `BCVI` or `ISDE1`)
 
 ## Pull requests
 
@@ -21,7 +23,9 @@
 
 - Descriptive and concise
 - Subsystem: Feature (similar to the branch naming scheme but with colon)
-Eg: `Arm: Add PID`, `Arm: Fix PID`, `Intake: Fix intake velocity`
+    - Eg: `Arm: Add PID`, `Arm: Fix PID`, `Intake: Fix intake velocity`
+- Competition branch PR's should be named in the following way: `[Year] [Eventcode]`
+    - Eg: `2025 BCVI` or `2025 ISDE1`
 
 ### Description
 
@@ -33,6 +37,15 @@ Eg:
 ```
 ```
 - Retune arm PID constants
+```
+- Competition branch PR's should include a brief bullet-point summary of what was changed
+Eg:
+```
+- Update controller bindings
+- Add LED light states for element position
+- Add slew limiter for strafe
+- Adjust auton paths
+- Adjust OTF waypoints
 ```
 
 ### Reviewers
