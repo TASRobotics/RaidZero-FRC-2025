@@ -34,6 +34,8 @@ public class Arm extends SubsystemBase {
     private double[] currentPose;
     private double intakePosYOffset;
 
+    private boolean jointNeutralMode;
+
     private static Arm system;
 
     /**
