@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
 		CanBridge.runTCP();
 
 		WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+		Elastic.selectTab("Setup");
 	}
 
 	@Override
