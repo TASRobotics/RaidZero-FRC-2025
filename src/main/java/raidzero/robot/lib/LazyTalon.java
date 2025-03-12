@@ -1,4 +1,4 @@
-package raidzero.robot.lib.math;
+package raidzero.robot.lib;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 public class LazyTalon {
@@ -46,6 +47,7 @@ public class LazyTalon {
         motorConfiguration.CurrentLimits.SupplyCurrentLowerTime = 0.0;
 
         motor = new TalonFX(motorID);
+        motor.setNeutralMode(NeutralModeValue.Brake);
     }
 
     /**
@@ -113,11 +115,13 @@ public class LazyTalon {
      * @param discontinuityPoint the point at which the sensor's absolute measurement wraps around.
      * @return the current instance of LazyTalon to allow for method chaining.
      */
-    public LazyTalon withCANCoder(int CANCoderID, FeedbackSensorSourceValue sensorType, double magnetOffset, SensorDirectionValue sensorDirection, double discontinuityPoint) {
+    public LazyTalon withCANCoder(int CANCoderID, FeedbackSensorSourceValue sensorType, double magnetOffset, SensorDirectionValue sensorDirection, double discontinuityPoint, double rotorToSensorRatio) {
         withCANCoder(CANCoderID, sensorType, magnetOffset, sensorDirection);
 
         canCoderConfiguration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = discontinuityPoint;
         canCoder.getConfigurator().apply(canCoderConfiguration);
+
+        motorConfiguration.Feedback.RotorToSensorRatio = rotorToSensorRatio;
 
         return this;
     }
@@ -175,6 +179,49 @@ public class LazyTalon {
     }
 
     /**
+     * Configures the hardware limit switch settings for the motor.
+     *
+     * <p>This method updates the forward and reverse limit switch configuration using the provided parameters.
+     *
+     * @param ForwardLimitAutosetPositionEnable  if true, enables automatic setting of the forward limit switch position.
+     * @param ForwardLimitAutosetPositionValue   the position value to be used for the forward limit switch.
+     * @param reverseLimitAutosetPositionEnable  if true, enables automatic setting of the reverse limit switch position.
+     * @param reverseLimitAutosetPositionValue   the position value to be used for the reverse limit switch.
+     * @return this LazyTalon instance with the updated limit switch configuration.
+     */
+    public LazyTalon withLimitSwitch(boolean forwardLimitAutosetPositionEnable, double forwardLimitAutosetPositionValue, boolean reverseLimitAutosetPositionEnable, double reverseLimitAutosetPositionValue) {
+        motorConfiguration.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = forwardLimitAutosetPositionEnable;
+        motorConfiguration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = forwardLimitAutosetPositionValue;
+
+        motorConfiguration.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = reverseLimitAutosetPositionEnable;
+        motorConfiguration.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = reverseLimitAutosetPositionValue;
+
+        return this;
+    }
+
+    /**
+     * Configures the forward and reverse soft limits for the motor.
+     *
+     * <p>This method enables or disables the software limit switches for both the forward and
+     * reverse directions and sets their respective threshold values.
+     *
+     * @param forwardSoftLimitEnable true to enable the forward soft limit; false to disable it.
+     * @param forwardSoftLimit the threshold value for the forward soft limit.
+     * @param reverseSoftLimitEnable true to enable the reverse soft limit; false to disable it.
+     * @param reverseSoftLimit the threshold value for the reverse soft limit.
+     * @return the current instance of LazyTalon with updated soft limit settings.
+     */
+    public LazyTalon withSoftLimits(boolean forwardSoftLimitEnable, double forwardSoftLimit, boolean reverseSoftLimitEnable, double reverseSoftLimit) {
+        motorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitEnable = forwardSoftLimitEnable;
+        motorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = forwardSoftLimit;
+
+        motorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitEnable = reverseSoftLimitEnable;
+        motorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = reverseSoftLimit;
+
+        return this;
+    }
+
+    /**
      * Applies the motor configuration to the motor configurator and returns the current
      * instance of LazyTalon.
      *
@@ -202,6 +249,22 @@ public class LazyTalon {
      */
     public void moveWithVelocity(double velocity) {
         motor.setControl(new MotionMagicVelocityVoltage(velocity));
+    }
+
+    /**
+     * Stops the motor
+     */
+    public void stop() {
+        motor.stopMotor();
+    }
+
+    /**
+     * Sets the neutral mode for the motor.
+     *
+     * @param newNeutralModeValue the neutral mode to be applied to the motor
+     */
+    public void setNeutralMode(NeutralModeValue newNeutralModeValue) {
+        motor.setNeutralMode(newNeutralModeValue);
     }
 
     /**

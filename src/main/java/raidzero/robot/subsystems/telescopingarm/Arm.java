@@ -17,14 +17,17 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import raidzero.robot.Constants;
+
 import raidzero.robot.subsystems.climb.ClimbJoint;
+import raidzero.robot.lib.LazyTalon;
+import raidzero.robot.Constants.TelescopingArm.Telescope;
+import raidzero.robot.Constants.TelescopingArm.Joint;
+import raidzero.robot.Constants.TelescopingArm.Positions;
+import raidzero.robot.Constants.CANdle;
 
 public class Arm extends SubsystemBase {
-    private TalonFX telescope, joint;
-    private CANcoder jointCANcoder;
+    private LazyTalon telescope, joint;
 
     private double[] currentPose;
     private double intakePosYOffset;
@@ -35,16 +38,25 @@ public class Arm extends SubsystemBase {
      * Constructs an {@link Arm} subsystem instance
      */
     private Arm() {
-        telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID);
-        telescope.getConfigurator().apply(telescopeConfiguration());
-        telescope.setNeutralMode(NeutralModeValue.Brake);
+        telescope = new LazyTalon(
+            Telescope.MOTOR_ID, Telescope.CONVERSION_FACTOR,
+            InvertedValue.CounterClockwise_Positive, Telescope.STATOR_CURRENT_LIMIT,
+            Telescope.SUPPLY_CURRENT_LIMIT
+        ).withMotionMagicConfiguration(
+            Telescope.KP, Telescope.KI, Telescope.KD, Telescope.KS, Telescope.KG, Telescope.KV, Telescope.KA, Telescope.GRAVITY_TYPE_VALUE,
+            Telescope.CRUISE_VELOCITY, Telescope.ACCELERATION
+        ).withLimitSwitch(true, 0.0, false, 0.0).build();
 
-        joint = new TalonFX(Constants.TelescopingArm.Joint.MOTOR_ID);
-        joint.getConfigurator().apply((jointConfiguration()));
-        joint.setNeutralMode(NeutralModeValue.Brake);
-
-        jointCANcoder = new CANcoder(Constants.TelescopingArm.Joint.CANCODER_ID);
-        jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
+        joint = new LazyTalon(
+            Joint.MOTOR_ID, 1.0 / Joint.CANCODER_GEAR_RATIO, InvertedValue.Clockwise_Positive, Joint.STATOR_CURRENT_LIMT,
+            Joint.SUPPLY_CURRENT_LIMIT
+        ).withMotionMagicConfiguration(
+            Joint.KP, Joint.KI, Joint.KD, Joint.KS, Joint.KG, Joint.KV, Joint.KA, Joint.GRAVITY_TYPE_VALUE, Joint.CRUISE_VELOCITY,
+            Joint.ACCELERATION
+        ).withCANCoder(
+            Joint.CANCODER_ID, FeedbackSensorSourceValue.SyncCANcoder, Joint.CANCODER_OFFSET, SensorDirectionValue.Clockwise_Positive,
+            Joint.CANCODER_DISCONTINUITY_POINT, Joint.CONVERSION_FACTOR * Joint.CANCODER_GEAR_RATIO
+        ).build();
 
         currentPose = new double[] { 0.0, 0.0 };
         intakePosYOffset = 0.0;
@@ -67,7 +79,7 @@ public class Arm extends SubsystemBase {
 
             return run(() -> moveJoint(jointSetpoint))
                 .alongWith(
-                    Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
+                    Commands.waitUntil(() -> joint.getFeedbackPosition() < 0.25)
                         .andThen(() -> moveTelescope(telescopeSetpoint))
                 );
         } else {
@@ -112,7 +124,7 @@ public class Arm extends SubsystemBase {
 
         return run(() -> moveJoint(jointSetpoint))
             .alongWith(
-                Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
+                Commands.waitUntil(() -> joint.getFeedbackPosition() < 0.25)
                     .andThen(() -> moveTelescope(telescopeSetpoint))
             );
     }
@@ -143,15 +155,15 @@ public class Arm extends SubsystemBase {
 
             return defer(
                 () -> moveWithDelay(
-                    new double[] { Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE[0],
-                        Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE[1] + intakePosYOffset }
+                    new double[] { Positions.INTAKE_POS_M_BLUE[0],
+                        Positions.INTAKE_POS_M_BLUE[1] + intakePosYOffset }
                 )
             );
         } else {
             return defer(
                 () -> moveWithDelay(
-                    new double[] { Constants.TelescopingArm.Positions.INTAKE_POS_M[0],
-                        Constants.TelescopingArm.Positions.INTAKE_POS_M[1] + intakePosYOffset }
+                    new double[] { Positions.INTAKE_POS_M[0],
+                        Positions.INTAKE_POS_M[1] + intakePosYOffset }
                 )
             );
 
@@ -165,9 +177,9 @@ public class Arm extends SubsystemBase {
      */
     public Command moveToL4() {
         if ((DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue)) {
-            return defer(() -> moveWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M_BLUE));
+            return defer(() -> moveWithDelay(Positions.L4_SCORING_POS_M_BLUE));
         } else {
-            return defer(() -> moveWithDelay(Constants.TelescopingArm.Positions.L4_SCORING_POS_M));
+            return defer(() -> moveWithDelay(Positions.L4_SCORING_POS_M));
 
         }
     }
@@ -191,7 +203,7 @@ public class Arm extends SubsystemBase {
      * @return A {@link Command} that moves the telescope to the desired setpoint
      */
     public void moveTelescope(double setpoint) {
-        telescope.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+        telescope.moveTo(setpoint);
         SmartDashboard.putNumber("Telescope Setpoint", setpoint);
     }
 
@@ -202,7 +214,7 @@ public class Arm extends SubsystemBase {
      * @return A {@link Command} that moves the joint to the desired setpoint
      */
     public void moveJoint(double setpoint) {
-        joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+        joint.moveTo(setpoint);
         SmartDashboard.putNumber("Joint Setpoint", setpoint);
     }
 
@@ -214,10 +226,8 @@ public class Arm extends SubsystemBase {
     public void updateCoastMode() {
         if (shouldBeInCoast()) {
             joint.setNeutralMode(NeutralModeValue.Coast);
-            // telescope.setNeutralMode(NeutralModeValue.Coast);
         } else {
             joint.setNeutralMode(NeutralModeValue.Brake);
-            // telescope.setNeutralMode(NeutralModeValue.Brake);
         }
     }
 
@@ -227,16 +237,7 @@ public class Arm extends SubsystemBase {
      * @return True if the arm joint should be in coast mode, false otherwise
      */
     private boolean shouldBeInCoast() {
-        return (ClimbJoint.system().getPosition() < Constants.CANdle.CLIMB_JOINT_THRESHOLD);
-    }
-
-    /**
-     * Zeroes the the relative encoder position in the telescope motor
-     * 
-     * @return A {@link Command} that zeroes the telescope motor position
-     */
-    public Command zeroTelescopePosition() {
-        return new InstantCommand(() -> telescope.setPosition(0));
+        return (ClimbJoint.system().getPosition() < CANdle.CLIMB_JOINT_THRESHOLD);
     }
 
     /**
@@ -245,7 +246,7 @@ public class Arm extends SubsystemBase {
      * @return True if the arm is in a deployed height, false otherwise
      */
     public boolean isUp() {
-        return telescope.getPosition().getValueAsDouble() < -0.15;
+        return telescope.getFeedbackPosition() < -0.15;
     }
 
     /**
@@ -256,9 +257,9 @@ public class Arm extends SubsystemBase {
      * @return Target motor position in rotations
      */
     public double calculateTelescopeHeight(double[] position) {
-        double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2)) - Constants.TelescopingArm.Telescope.GROUND_OFFSET_M;
+        double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2)) - Telescope.GROUND_OFFSET_M;
 
-        return height / Constants.TelescopingArm.Telescope.MAX_HEIGHT_M;
+        return height / Telescope.MAX_HEIGHT_M;
     }
 
     /**
@@ -278,7 +279,7 @@ public class Arm extends SubsystemBase {
      * @return The telescope motor encoder position in rotations
      */
     public double getTelescopePosition() {
-        return telescope.getPosition().getValueAsDouble();
+        return telescope.getFeedbackPosition();
     }
 
     /**
@@ -287,21 +288,21 @@ public class Arm extends SubsystemBase {
      * @return The arm motor encoder position in rotations
      */
     public double getJointPosition() {
-        return joint.getPosition().getValueAsDouble();
+        return joint.getFeedbackPosition();
     }
 
     /**
      * Stops the telescope motor
      */
     public void stopTelescope() {
-        telescope.stopMotor();
+        telescope.stop();
     }
 
     /**
      * Stops the arm motor
      */
     public void stopJoint() {
-        joint.stopMotor();
+        joint.stop();
     }
 
     /**
@@ -316,93 +317,6 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Elevator pos", getTelescopePosition());
         SmartDashboard.putNumber("Intake Y Offset", Math.round(intakePosYOffset * 100) / 100.0);
-    }
-
-    /**
-     * Gets the {@link TalonFXConfiguration} for the telescope
-     * 
-     * @return The {@link TalonFXConfiguration} for the telescope
-     */
-    private TalonFXConfiguration telescopeConfiguration() {
-        TalonFXConfiguration configuration = new TalonFXConfiguration();
-
-        configuration.Slot0 = new Slot0Configs()
-            .withKS(Constants.TelescopingArm.Telescope.KS)
-            .withKV(Constants.TelescopingArm.Telescope.KV)
-            .withKA(Constants.TelescopingArm.Telescope.KA)
-            .withKG(Constants.TelescopingArm.Telescope.KG)
-            .withKP(Constants.TelescopingArm.Telescope.KP)
-            .withKI(Constants.TelescopingArm.Telescope.KI)
-            .withKD(Constants.TelescopingArm.Telescope.KD);
-
-        configuration.MotionMagic = new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(Constants.TelescopingArm.Telescope.CRUISE_VELOCITY)
-            .withMotionMagicAcceleration(Constants.TelescopingArm.Telescope.ACCELERATION)
-            .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
-
-        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
-        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = 0.0;
-
-        configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
-
-        configuration.Slot0.GravityType = Constants.TelescopingArm.Telescope.GRAVITY_TYPE_VALUE;
-
-        return configuration;
-    }
-
-    /**
-     * Gets the {@link TalonFXConfiguration} for the arm joint
-     * 
-     * @return The {@link TalonFXConfiguration} for the arm joint
-     */
-    private TalonFXConfiguration jointConfiguration() {
-        TalonFXConfiguration configuration = new TalonFXConfiguration();
-
-        configuration.Feedback.SensorToMechanismRatio = 1.0 / Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
-        configuration.Feedback.RotorToSensorRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR *
-            Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
-
-        configuration.Slot0 = new Slot0Configs()
-            .withKS(Constants.TelescopingArm.Joint.KS)
-            .withKV(Constants.TelescopingArm.Joint.KV)
-            .withKA(Constants.TelescopingArm.Joint.KA)
-            .withKG(Constants.TelescopingArm.Joint.KG)
-            .withKP(Constants.TelescopingArm.Joint.KP)
-            .withKI(Constants.TelescopingArm.Joint.KI)
-            .withKD(Constants.TelescopingArm.Joint.KD);
-
-        configuration.Slot0.GravityType = Constants.TelescopingArm.Joint.GRAVITY_TYPE_VALUE;
-
-        configuration.MotionMagic = new MotionMagicConfigs()
-            .withMotionMagicCruiseVelocity(Constants.TelescopingArm.Joint.CRUISE_VELOCITY)
-            .withMotionMagicAcceleration(Constants.TelescopingArm.Joint.ACCELERATION)
-            .withMotionMagicJerk(Constants.TelescopingArm.Joint.JERK);
-
-        configuration.CurrentLimits.StatorCurrentLimit = Constants.TelescopingArm.Joint.STATOR_CURRENT_LIMT;
-        configuration.CurrentLimits.SupplyCurrentLimit = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LIMIT;
-        configuration.CurrentLimits.SupplyCurrentLowerTime = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LOWER_TIME;
-
-        configuration.Feedback.FeedbackRemoteSensorID = Constants.TelescopingArm.Joint.CANCODER_ID;
-        configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
-
-        configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-        return configuration;
-    }
-
-    /**
-     * Gets the {@link CANcoderConfiguration} for the joint CANCoder
-     * 
-     * @return The {@link CANcoderConfiguration} for the joint CANCoder
-     */
-    private CANcoderConfiguration jointCANCoderConfiguration() {
-        CANcoderConfiguration configuration = new CANcoderConfiguration();
-
-        configuration.MagnetSensor.AbsoluteSensorDiscontinuityPoint = Constants.TelescopingArm.Joint.CANCODER_DISCONTINUITY_POINT;
-        configuration.MagnetSensor.MagnetOffset = Constants.TelescopingArm.Joint.CANCODER_OFFSET;
-        configuration.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-
-        return configuration;
     }
 
     /**
