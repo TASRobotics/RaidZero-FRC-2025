@@ -5,6 +5,7 @@
 ## Subsystem details
 
 ### Climb
+
 | Device Name | Device Type          | CAN ID | CAN Bus |
 |-------------|----------------------|--------|---------|
 | Climb Joint | TalonFX - Kraken     | 17     | RoboRIO |
@@ -23,7 +24,6 @@
 
 <details>
     <summary>Directions</summary>
-    <br>
     <ul>
         <li>X is left-right direction
             <ul>
@@ -44,11 +44,8 @@
     </ul>
 </details>
 
-<br>
-
 <details>
     <summary>Notes</summary>
-    <br>
     <ul>
         <li>Forward of the bot is the scoring side</li>
         <li>Back of the bot contains the RoboRIO</li>
@@ -58,6 +55,7 @@
 </details>
 
 ### Swerve
+
 | Device Name | Device Type         | CAN ID | CAN Bus                      |
 |-------------|---------------------|--------|------------------------------|
 | RotorFL     | TalonFX - Kraken    | 6      | CANivore - "CANdoAttitude"   |
@@ -74,11 +72,10 @@
 | CANCoderBR  | CANCoder            | 1      | CANivore - "CANdoAttitude"   |
 | Pigeon      | Pigeon2 IMU         | 0      | CANivore - "CANdoAttitude"   |
 
-<br>
-
 ### Telescoping arm
 
 #### Arm
+
 | Device Name                | Device Type       | CAN ID | CAN Bus  |
 |----------------------------|-------------------|--------|---------|
 | Telescopingarm Joint       | TalonFX - Kraken  | 10     | RoboRIO |
@@ -86,6 +83,7 @@
 | Joint CANCoder             | CANCoder          | 11     | RoboRIO |
 
 #### Coral intake
+
 | Device Name        | Device Type                    | CAN ID | CAN Bus |
 |--------------------|--------------------------------|--------|---------|
 | CoralIntake        | TalonFXS - Minion              | 12     | RoboRIO |
@@ -96,6 +94,7 @@
 ## Controls
 
 ### Driver
+
 | Input Type      | Function                       | Tap/Hold |
 |-----------------|--------------------------------|----------|
 | Left Stick X    | Field relative Y speed         | N/A      |
@@ -110,6 +109,7 @@
 | POV Right       | X swerve brake                 | Hold     |
 
 ### Operator
+
 | Button ID  | Function                      | Tap/Hold |
 |------------|-------------------------------|----------|
 | 1          | Retract climb winch           | Hold     |
