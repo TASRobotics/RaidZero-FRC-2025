@@ -1,4 +1,4 @@
-package raidzero.robot.wrappers;
+package raidzero.lib;
 
 import au.grapplerobotics.LaserCan;
 

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import raidzero.robot.Constants;
-import raidzero.robot.wrappers.LazyCan;
+import raidzero.lib.LazyCan;
 
 public class CoralIntake extends SubsystemBase {
     private TalonFXS roller, follow;
