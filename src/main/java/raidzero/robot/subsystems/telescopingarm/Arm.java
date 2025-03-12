@@ -53,6 +53,7 @@ public class Arm extends SubsystemBase {
 
         currentPose = new double[] { 0.0, 0.0 };
         intakePosYOffset = 0.0;
+        jointNeutralMode = true;
     }
 
     public Command moveTheArmInAStraightLineUsingDifferentialTransformations(double[] desiredPosition, double[] cartesianVelocities) {
@@ -237,10 +238,12 @@ public class Arm extends SubsystemBase {
      * @Note This should only be called during disabled.
      */
     public void updateCoastMode() {
-        if (shouldBeInCoast()) {
+        if (shouldBeInCoast() && jointNeutralMode == true) {
             joint.setNeutralMode(NeutralModeValue.Coast);
-        } else {
+            jointNeutralMode = false;
+        } else if (jointNeutralMode == false) {
             joint.setNeutralMode(NeutralModeValue.Brake);
+            jointNeutralMode = true;
         }
     }
 
