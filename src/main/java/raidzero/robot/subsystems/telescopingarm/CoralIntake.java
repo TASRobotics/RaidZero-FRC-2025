@@ -14,12 +14,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import raidzero.robot.Constants;
-import raidzero.robot.wrappers.LazyLaserCan;
+import raidzero.robot.wrappers.LazyCan;
 
 public class CoralIntake extends SubsystemBase {
     private TalonFXS roller, follow;
 
-    private LazyLaserCan bottomLaser, topLaser;
+    private LazyCan bottomLaser, topLaser;
 
     private static CoralIntake system;
 
@@ -34,7 +34,7 @@ public class CoralIntake extends SubsystemBase {
         follow.setControl(new Follower(Constants.TelescopingArm.Intake.MOTOR_ID, true));
         follow.getConfigurator().apply(followConfiguration());
 
-        bottomLaser = new LazyLaserCan(0);
+        bottomLaser = new LazyCan(0);
         try {
             bottomLaser.setRangingMode(RangingMode.SHORT);
             bottomLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
@@ -43,7 +43,7 @@ public class CoralIntake extends SubsystemBase {
             System.out.println("LaserCan Config Error");
         }
 
-        topLaser = new LazyLaserCan(1);
+        topLaser = new LazyCan(1);
         try {
             topLaser.setRangingMode(RangingMode.SHORT);
             topLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));

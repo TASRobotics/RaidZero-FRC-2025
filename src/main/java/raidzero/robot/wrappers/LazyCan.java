@@ -2,14 +2,14 @@ package raidzero.robot.wrappers;
 
 import au.grapplerobotics.LaserCan;
 
-public class LazyLaserCan extends LaserCan {
+public class LazyCan extends LaserCan {
 
     /**
      * Creates a new LaserCAN sensor.
      * 
      * @param canId The CAN ID for the LaserCAN sensor
      */
-    public LazyLaserCan(int canId) {
+    public LazyCan(int canId) {
         super(canId);
     }
 
