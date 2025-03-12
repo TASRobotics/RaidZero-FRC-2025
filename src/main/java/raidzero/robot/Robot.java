@@ -4,7 +4,9 @@
 
 package raidzero.robot;
 
+import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
 import raidzero.robot.subsystems.telescopingarm.Arm;
 import raidzero.robot.subsystems.telescopingarm.CoralIntake;
+import raidzero.robot.wrappers.Elastic;
 
 import com.ctre.phoenix6.controls.StaticBrake;
 
@@ -26,6 +29,9 @@ public class Robot extends TimedRobot {
 	public Robot() {
 		m_robotContainer = new RobotContainer();
 		CanBridge.runTCP();
+
+		WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
+		Elastic.selectTab("Setup");
 	}
 
 	@Override
@@ -56,6 +62,8 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.schedule();
 		}
+
+		Elastic.selectTab("Autonomous");
 	}
 
 	@Override
@@ -71,6 +79,8 @@ public class Robot extends TimedRobot {
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
+
+		Elastic.selectTab("Teleoperated");
 	}
 
 	@Override
