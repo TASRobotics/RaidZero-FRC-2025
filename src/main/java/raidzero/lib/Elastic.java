@@ -3,7 +3,7 @@
 // defined by the Elastic license:
 // https://github.com/Gold872/elastic-dashboard/blob/main/LICENSE
 
-package raidzero.robot.wrappers;
+package raidzero.lib;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;

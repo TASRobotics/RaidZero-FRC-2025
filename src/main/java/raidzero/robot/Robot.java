@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
 import raidzero.robot.subsystems.telescopingarm.Arm;
 import raidzero.robot.subsystems.telescopingarm.CoralIntake;
-import raidzero.robot.wrappers.Elastic;
+import raidzero.lib.Elastic;
 
 import com.ctre.phoenix6.controls.StaticBrake;
 

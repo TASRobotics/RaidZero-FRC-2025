@@ -1,6 +1,6 @@
 //LimelightHelpers v1.10 (REQUIRES LLOS 2024.9.1 OR LATER)
 
-package raidzero.robot.wrappers;
+package raidzero.lib;
 
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.NetworkTable;
