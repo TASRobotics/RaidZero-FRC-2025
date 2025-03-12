@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
-import raidzero.robot.Telemetry;
 import raidzero.robot.Constants.TelescopingArm.Telescope;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 
@@ -69,10 +68,25 @@ public class Arm extends SubsystemBase {
 
         double[] polarVelocities = matrixMultiplication(rotationMatix, cartesianVelocities);
 
-        double telescopeVelocity = polarVelocities[0] / Telescope.CONVERSION_FACTOR;
+        double telescopeVelocity = polarVelocities[0] / (Telescope.MAX_HEIGHT_M - Telescope.MIN_HEIGHT_M);
         double jointVelocity = (polarVelocities[1] / r) / (2.0 * Math.PI);
 
-        return defer(() -> this.moveWithVelocities(jointVelocity, telescopeVelocity).until(armWithinSetpoint(desiredPosition)).andThen(moveWithoutDelay(desiredPosition)));
+        return defer(
+            () -> this.moveWithVelocities(jointVelocity, telescopeVelocity).until(armWithinSetpoint(desiredPosition))
+                .andThen(moveWithoutDelay(desiredPosition))
+        );
+
+        // var telescopeConfig = telescopeConfiguration();
+        // telescopeConfig.MotionMagic.MotionMagicCruiseVelocity = telescopeVelocity;
+        // telescope.getConfigurator().apply(telescopeConfig);
+
+        // var jointConfig = jointConfiguration();
+        // jointConfig.MotionMagic.MotionMagicCruiseVelocity = jointVelocity;
+        // joint.getConfigurator().apply(jointConfig);
+
+        // return defer(
+        //     () -> moveWithoutDelay(desiredPosition)
+        // );
     }
 
     private BooleanSupplier armWithinSetpoint(double[] setpoint) {
@@ -286,7 +300,7 @@ public class Arm extends SubsystemBase {
     public double calculateTelescopeHeight(double[] position) {
         double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2));
 
-        return height / Constants.TelescopingArm.Telescope.MAX_HEIGHT_M;
+        return height / (Telescope.MAX_HEIGHT_M - Telescope.MIN_HEIGHT_M);
     }
 
     /**
