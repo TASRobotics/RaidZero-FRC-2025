@@ -76,7 +76,7 @@
 
 #### Arm
 
-| Device Name                | Device Type       | CAN ID | CAN Bus  |
+| Device Name                | Device Type       | CAN ID | CAN Bus |
 |----------------------------|-------------------|--------|---------|
 | Telescopingarm Joint       | TalonFX - Kraken  | 10     | RoboRIO |
 | Telescopingarm Telescope   | TalonFX - Kraken  | 11     | RoboRIO |
