@@ -7,8 +7,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import au.grapplerobotics.LaserCan;
-import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
 import au.grapplerobotics.interfaces.LaserCanInterface.RegionOfInterest;
 import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
@@ -16,11 +14,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import raidzero.robot.Constants;
+import raidzero.robot.wrappers.LazyLaserCan;
 
 public class CoralIntake extends SubsystemBase {
     private TalonFXS roller, follow;
 
-    private LaserCan bottomLaser, topLaser;
+    private LazyLaserCan bottomLaser, topLaser;
 
     private static CoralIntake system;
 
@@ -35,7 +34,7 @@ public class CoralIntake extends SubsystemBase {
         follow.setControl(new Follower(Constants.TelescopingArm.Intake.MOTOR_ID, true));
         follow.getConfigurator().apply(followConfiguration());
 
-        bottomLaser = new LaserCan(0);
+        bottomLaser = new LazyLaserCan(0);
         try {
             bottomLaser.setRangingMode(RangingMode.SHORT);
             bottomLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
@@ -44,7 +43,7 @@ public class CoralIntake extends SubsystemBase {
             System.out.println("LaserCan Config Error");
         }
 
-        topLaser = new LaserCan(1);
+        topLaser = new LazyLaserCan(1);
         try {
             topLaser.setRangingMode(RangingMode.SHORT);
             topLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
@@ -124,9 +123,7 @@ public class CoralIntake extends SubsystemBase {
      * @return The distance in mm, -1 if the LaserCAN cannot be found
      */
     public int getTopLaserDistance() {
-        Measurement measurement = topLaser.getMeasurement();
-
-        return measurement != null ? measurement.distance_mm : -1;
+        return topLaser.getDistanceMm();
     }
 
     /**
@@ -135,9 +132,7 @@ public class CoralIntake extends SubsystemBase {
      * @return The distance in mm, -1 if the LaserCAN cannot be found
      */
     public int getBottomLaserDistance() {
-        Measurement measurement = bottomLaser.getMeasurement();
-
-        return measurement != null ? measurement.distance_mm : -1;
+        return bottomLaser.getDistanceMm();
     }
 
     /**
