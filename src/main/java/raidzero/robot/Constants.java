@@ -238,6 +238,7 @@ public class Constants {
 
             public static final double MAX_HEIGHT_M = 1.952;
             public static final double MIN_HEIGHT_M = 0.870;
+            public static final double MAX_MINUS_MIN_M = MAX_HEIGHT_M - MIN_HEIGHT_M;
         }
     }
 
