@@ -37,6 +37,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotPeriodic() {
 		CommandScheduler.getInstance().run();
+	
+		SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
 	}
 
 	@Override
@@ -84,9 +86,7 @@ public class Robot extends TimedRobot {
 	}
 
 	@Override
-	public void teleopPeriodic() {
-		SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
-	}
+	public void teleopPeriodic() {}
 
 	@Override
 	public void teleopExit() {
