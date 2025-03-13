@@ -63,7 +63,7 @@ public class Arm extends SubsystemBase {
 
         double[][] rotationMatix = new double[][] {
             { Math.cos(theta), Math.sin(theta) },
-            { -1 * Math.sin(theta), Math.cos(theta) },
+            { -1.0 * Math.sin(theta), Math.cos(theta) },
         };
 
         double[] polarVelocities = matrixMultiplication(rotationMatix, cartesianVelocities);
@@ -302,7 +302,7 @@ public class Arm extends SubsystemBase {
      */
     public double calculateTelescopeHeight(double[] position) {
         double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2));
-        return height / (Telescope.MAX_HEIGHT_M - Telescope.MIN_HEIGHT_M);
+        return (height - Telescope.MIN_HEIGHT_M ) / (Telescope.MAX_HEIGHT_M - Telescope.MIN_HEIGHT_M);
     }
 
     /**
@@ -313,7 +313,7 @@ public class Arm extends SubsystemBase {
      * @return The target arm position in rotations
      */
     public double calculateJointAngle(double[] position) {
-        return (Math.atan2(position[1], position[0])) * 180 / Math.PI / 360.0;
+        return (Math.atan2(position[1], position[0])) /(2.0 * Math.PI);
     }
 
     /**
@@ -328,7 +328,7 @@ public class Arm extends SubsystemBase {
     /**
      * Gets the arm motor's encoder position
      * 
-     * @return The arm motor encoder position in rotations
+     * @return The arm motor encoder position in relative position as a percentage of full extension
      */
     public double getJointPosition() {
         return joint.getPosition().getValueAsDouble();
@@ -362,7 +362,7 @@ public class Arm extends SubsystemBase {
      * @return the calculated setpoint in meters
      */
     public double[] calculateCurrentPosition() {
-        double r = (this.getTelescopePosition() * Telescope.CONVERSION_FACTOR);
+        double r = (this.getTelescopePosition() * (Telescope.MAX_HEIGHT_M - Telescope.MIN_HEIGHT_M) + Telescope.MIN_HEIGHT_M);
         double theta = this.getJointPosition() * (2.0 * Math.PI);
 
         return new double[] { r * Math.cos(theta), r * Math.sin(theta) };
