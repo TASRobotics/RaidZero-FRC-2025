@@ -38,7 +38,7 @@ public class Arm extends SubsystemBase {
         ).withMotionMagicConfiguration(
             Telescope.KP, Telescope.KI, Telescope.KD, Telescope.KS, Telescope.KG, Telescope.KV, Telescope.KA, Telescope.GRAVITY_TYPE_VALUE,
             Telescope.CRUISE_VELOCITY, Telescope.ACCELERATION
-        ).withLimitSwitch(true, 0.0, false, 0.0).build();
+        ).withLimitSwitch(false, true, 0.0, false, false, 0.0).build();
 
         joint = new LazyTalon(
             Joint.MOTOR_ID, 1.0 / Joint.CANCODER_GEAR_RATIO, InvertedValue.Clockwise_Positive, Joint.STATOR_CURRENT_LIMT,
