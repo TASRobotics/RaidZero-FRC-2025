@@ -281,7 +281,7 @@ public class Arm extends SubsystemBase {
      * @return True if the arm is in a deployed height, false otherwise
      */
     public boolean isUp() {
-        return telescope.getPosition().getValueAsDouble() < -0.15;
+        return telescope.getPosition().getValueAsDouble() < 0.15;
     }
 
     /**
@@ -392,6 +392,7 @@ public class Arm extends SubsystemBase {
 
         configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
         configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = 0.0;
+        configuration.HardwareLimitSwitch.ForwardLimitEnable = false;
 
         configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
 
