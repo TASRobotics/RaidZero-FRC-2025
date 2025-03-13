@@ -85,7 +85,7 @@ public class Arm extends SubsystemBase {
         // joint.getConfigurator().apply(jointConfig);
 
         // return defer(
-        //     () -> moveWithoutDelay(desiredPosition)
+        // () -> moveWithoutDelay(desiredPosition)
         // );
     }
 
@@ -116,13 +116,12 @@ public class Arm extends SubsystemBase {
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
     public Command moveTo(double[] desiredPosition) {
-        desiredPosition[0] -= Telescope.BUMPER_TO_JOINT_M;
-        desiredPosition[1] -= Telescope.GROUND_TO_JOINT_M;
-
-        double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
+        double telescopeSetpoint = calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
 
         currentPose = desiredPosition;
+
+        SmartDashboard.putNumber("Telescope Error", telescope.getClosedLoopError().getValueAsDouble());
 
         if (currentPose[1] > desiredPosition[1]) {
             currentPose[1] = desiredPosition[1];
@@ -147,10 +146,7 @@ public class Arm extends SubsystemBase {
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
     public Command moveWithoutDelay(double[] desiredPosition) {
-        desiredPosition[0] -= Telescope.BUMPER_TO_JOINT_M;
-        desiredPosition[1] -= Telescope.GROUND_TO_JOINT_M;
-
-        double telescopeSetpoint = -1 * calculateTelescopeHeight(desiredPosition);
+        double telescopeSetpoint = calculateTelescopeHeight(desiredPosition);
         double jointSetpoint = calculateJointAngle(desiredPosition);
 
         currentPose = desiredPosition;
@@ -199,6 +195,13 @@ public class Arm extends SubsystemBase {
             );
 
         }
+    }
+
+    public Command moveArmManual(double telescope, double joint) {
+        return run(() -> {
+            moveTelescope(telescope);
+            moveJoint(joint);
+        });
     }
 
     /**
@@ -299,7 +302,6 @@ public class Arm extends SubsystemBase {
      */
     public double calculateTelescopeHeight(double[] position) {
         double height = Math.sqrt(Math.pow(position[0], 2) + Math.pow(position[1], 2));
-
         return height / (Telescope.MAX_HEIGHT_M - Telescope.MIN_HEIGHT_M);
     }
 
@@ -397,11 +399,14 @@ public class Arm extends SubsystemBase {
             .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
 
         configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
-        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = Constants.TelescopingArm.Telescope.MIN_HEIGHT_M;
+        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = Constants.TelescopingArm.Telescope.MIN_HEIGHT_M /
+            (Constants.TelescopingArm.Telescope.MAX_HEIGHT_M - Constants.TelescopingArm.Telescope.MIN_HEIGHT_M);
 
         configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
 
         configuration.Slot0.GravityType = Constants.TelescopingArm.Telescope.GRAVITY_TYPE_VALUE;
+
+        configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
         return configuration;
     }

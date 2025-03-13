@@ -197,12 +197,12 @@ public class Constants {
         }
 
         public class Positions {
-            public static final double[] L4_SCORING_POS_M = { -0.24, 2.72 };
+            public static final double[] L4_SCORING_POS_M = { -0.24, 1.75 };
             public static final double[] L4_SCORING_POS_M_BLUE = { -0.15, 2.72 };
-            public static final double[] L4_CHECK_POSITION = { -0.25, 2.62 };
+            public static final double[] L4_CHECK_POSITION = { -0.25, 1.7 };
             public static final double[] L4_GRAND_SLAM = { -0.2, 1.57 };
 
-            public static final double[] L3_SCORING_POS_M = { -0.25, 1.57 };
+            public static final double[] L3_SCORING_POS_M = { -0.25, 1.23 };
             public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
@@ -235,9 +235,6 @@ public class Constants {
             public static final double CRUISE_VELOCITY = 1.5;
             public static final double ACCELERATION = 5.0;
             public static final double JERK = 0.0;
-
-            public static final double GROUND_TO_JOINT_M = 0.125;
-            public static final double BUMPER_TO_JOINT_M = 0.184;
 
             public static final double MAX_HEIGHT_M = 1.952;
             public static final double MIN_HEIGHT_M = 0.870;
