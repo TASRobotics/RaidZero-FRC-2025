@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 public class LazyTalon {
     private TalonFX motor, follower;
     private int motorID;
+
     private TalonFXConfiguration motorConfiguration, followConfiguration;
 
     private CANcoder canCoder;
