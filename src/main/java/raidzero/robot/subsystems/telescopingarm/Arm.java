@@ -62,7 +62,7 @@ public class Arm extends SubsystemBase {
     public Command moveTheArmInAStraightLineUsingDifferentialTransformations(double[] desiredPosition, double[] cartesianVelocities) {
         return run(
             () -> {
-                double r = this.getTelescopePosition() * Telescope.MAX_MINUS_MIN_M + Telescope.MIN_HEIGHT_M;
+                double r = (this.getTelescopePosition() * Telescope.MAX_MINUS_MIN_M) + Telescope.MIN_HEIGHT_M;
                 double theta = this.getJointPosition() * (2.0 * Math.PI);
 
                 SmartDashboard.putNumber("current radius", r);
@@ -75,7 +75,7 @@ public class Arm extends SubsystemBase {
 
                 double[] polarVelocities = matrixMultiplication(rotationMatix, cartesianVelocities);
 
-                double telescopeVelocity = polarVelocities[0] / (Telescope.MAX_HEIGHT_M - Telescope.MIN_HEIGHT_M);
+                double telescopeVelocity = (polarVelocities[0] / Telescope.MAX_MINUS_MIN_M);
                 double jointVelocity = (polarVelocities[1] / r) / (2.0 * Math.PI);
 
                 SmartDashboard.putNumber("Target Telescope Velocity", telescopeVelocity);
