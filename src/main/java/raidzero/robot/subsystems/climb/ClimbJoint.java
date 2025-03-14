@@ -1,17 +1,14 @@
 package raidzero.robot.subsystems.climb;
 
-import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import java.util.function.BooleanSupplier;
 import raidzero.robot.Constants;
 
 public class ClimbJoint extends SubsystemBase {
@@ -32,7 +29,7 @@ public class ClimbJoint extends SubsystemBase {
 
     /**
      * Moves the joint to the desired setpoint
-     * 
+     *
      * @param setpoint The desired setpoint
      * @return A {@link Command} that moves the joint to the desired setpoint
      */
@@ -56,7 +53,7 @@ public class ClimbJoint extends SubsystemBase {
 
     /**
      * Stops the joint motor
-     * 
+     *
      * @return A {@link Command} that stops the motor
      */
     public Command stop() {
@@ -65,7 +62,7 @@ public class ClimbJoint extends SubsystemBase {
 
     /**
      * Sets the position of the joint
-     * 
+     *
      * @param setptiont The desired position of the joint
      */
     public void setPosition(double setptiont) {
@@ -74,7 +71,7 @@ public class ClimbJoint extends SubsystemBase {
 
     /**
      * Gets the position of the feedback sensor of the joint
-     * 
+     *
      * @return The position of the feedback sensor
      */
     public double getPosition() {
@@ -83,7 +80,7 @@ public class ClimbJoint extends SubsystemBase {
 
     /**
      * Gets the velocity of the feedback sensor of the joint
-     * 
+     *
      * @return The feedback velocity in mechanism rotations per second
      */
     public double getVelocity() {
@@ -92,7 +89,7 @@ public class ClimbJoint extends SubsystemBase {
 
     /**
      * Returns a {@link BooleanSupplier} that checks if the joint is deployed
-     * 
+     *
      * @return A {@link BooleanSupplier} that checks if the joint is deployed
      */
     public BooleanSupplier isDeployed() {
@@ -108,7 +105,7 @@ public class ClimbJoint extends SubsystemBase {
 
     /**
      * Gets the {@link TalonFXConfiguration} for the joint motor
-     * 
+     *
      * @return The {@link TalonFXConfiguration} for the joint motor
      */
     private TalonFXConfiguration jointConfiguration() {
@@ -144,7 +141,7 @@ public class ClimbJoint extends SubsystemBase {
 
     /**
      * Gets the {@link ClimbJoint} subsystem instance
-     * 
+     *
      * @return The {@link ClimbJoint} subsystem instance
      */
     public static ClimbJoint system() {

@@ -50,7 +50,7 @@ Eg:
 
 ### Reviewers
 
-- MINIMUM 2 prog heads 
+- MINIMUM 2 prog heads
     1. Programming captain
     2. Relevant programming subsystem head
 - MINIMUM 1 mentor
