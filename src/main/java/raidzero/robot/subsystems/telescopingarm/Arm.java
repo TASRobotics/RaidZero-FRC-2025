@@ -5,7 +5,9 @@ import java.util.function.BooleanSupplier;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -14,6 +16,7 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.fasterxml.jackson.core.filter.JsonPointerBasedFilter;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -24,6 +27,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 import raidzero.robot.Constants.TelescopingArm.Telescope;
+import raidzero.robot.Constants.TelescopingArm.Joint;
+import raidzero.robot.Constants.TelescopingArm.Joint.Slot1;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 
 public class Arm extends SubsystemBase {
@@ -33,19 +38,17 @@ public class Arm extends SubsystemBase {
     private double[] currentPose;
     private double intakePosYOffset;
 
-    private boolean jointNeutralMode;
-
     private static Arm system;
 
     /**
      * Constructs an {@link Arm} subsystem instance
      */
     private Arm() {
-        telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID);
+        telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID, "Kaynebus");
         telescope.getConfigurator().apply(telescopeConfiguration());
         telescope.setNeutralMode(NeutralModeValue.Brake);
 
-        joint = new TalonFX(Constants.TelescopingArm.Joint.MOTOR_ID);
+        joint = new TalonFX(Constants.TelescopingArm.Joint.MOTOR_ID, "Kaynebus");
         joint.getConfigurator().apply((jointConfiguration()));
         joint.setNeutralMode(NeutralModeValue.Brake);
 
@@ -54,51 +57,43 @@ public class Arm extends SubsystemBase {
 
         currentPose = new double[] { 0.0, 0.0 };
         intakePosYOffset = 0.0;
-        jointNeutralMode = true;
     }
 
     public Command moveTheArmInAStraightLineUsingDifferentialTransformations(double[] desiredPosition, double[] cartesianVelocities) {
-        double r = (this.getTelescopePosition() * Telescope.CONVERSION_FACTOR);
-        double theta = this.getJointPosition() * (2.0 * Math.PI);
-
-        double[][] rotationMatix = new double[][] {
-            { Math.cos(theta), Math.sin(theta) },
-            { -1.0 * Math.sin(theta), Math.cos(theta) },
-        };
-
-        double[] polarVelocities = matrixMultiplication(rotationMatix, cartesianVelocities);
-
-        double telescopeVelocity = polarVelocities[0] / (Telescope.MAX_HEIGHT_M - Telescope.MIN_HEIGHT_M);
-        double jointVelocity = (polarVelocities[1] / r) / (2.0 * Math.PI);
-
         return defer(
-            () -> this.moveWithVelocities(jointVelocity, telescopeVelocity).until(armWithinSetpoint(desiredPosition))
-                .andThen(moveWithoutDelay(desiredPosition))
+            () -> {
+                double r = (this.getTelescopePosition() * (Telescope.MAX_MINUS_MIN_M + Telescope.MIN_HEIGHT_M));
+                double theta = this.getJointPosition() * (2.0 * Math.PI);
+
+                SmartDashboard.putNumber("current radius", r);
+                SmartDashboard.putNumber("current angle", theta);
+
+
+                double[][] rotationMatix = new double[][] {
+                    { Math.cos(theta), Math.sin(theta) },
+                    { -1.0 * Math.sin(theta), Math.cos(theta) },
+                };
+
+                double[] polarVelocities = matrixMultiplication(rotationMatix, cartesianVelocities);
+
+                double telescopeVelocity = polarVelocities[0] / (Telescope.MAX_HEIGHT_M - Telescope.MIN_HEIGHT_M);
+                double jointVelocity = (polarVelocities[1] / r) / (2.0 * Math.PI);
+
+                SmartDashboard.putNumber("Target Telescope Velocity", telescopeVelocity);
+                SmartDashboard.putNumber("Target Joint Velocity", jointVelocity);
+
+                return moveWithDynamicMM(desiredPosition, jointVelocity, telescopeVelocity);
+            }
         );
-
-        // var telescopeConfig = telescopeConfiguration();
-        // telescopeConfig.MotionMagic.MotionMagicCruiseVelocity = telescopeVelocity;
-        // telescope.getConfigurator().apply(telescopeConfig);
-
-        // var jointConfig = jointConfiguration();
-        // jointConfig.MotionMagic.MotionMagicCruiseVelocity = jointVelocity;
-        // joint.getConfigurator().apply(jointConfig);
-
-        // return defer(
-        // () -> moveWithoutDelay(desiredPosition)
-        // );
     }
 
-    private BooleanSupplier armWithinSetpoint(double[] setpoint) {
-        double[] position = calculateCurrentPosition();
+    private Command moveWithDynamicMM(double[] setpoint, double jointVelocity, double telescopeVelocity) {
+        double jointSetpoint = calculateJointAngle(setpoint);
+        double telescopeSetpoint = calculateTelescopeHeight(setpoint);
 
-        return () -> Math.abs(position[0] - setpoint[0]) < 0.02 || Math.abs(position[1] - setpoint[1]) < 0.02;
-    }
-
-    public Command moveWithVelocities(double jointVelocity, double telescopeVelocity) {
         return run(() -> {
-            joint.setControl(new MotionMagicVelocityVoltage(jointVelocity));
-            telescope.setControl(new MotionMagicVelocityVoltage(telescopeVelocity));
+            joint.setControl(new DynamicMotionMagicVoltage(jointSetpoint, jointVelocity, Joint.ACCELERATION, Joint.JERK));
+            telescope.setControl(new DynamicMotionMagicVoltage(telescopeSetpoint, telescopeVelocity, Telescope.ACCELERATION, Telescope.JERK));
         });
     }
 
@@ -227,7 +222,7 @@ public class Arm extends SubsystemBase {
      * @return A {@link Command} that moves the telescope to the desired setpoint
      */
     public void moveTelescope(double setpoint) {
-        telescope.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+        telescope.setControl((new MotionMagicVoltage(0)).withPosition(setpoint).withSlot(0));
         SmartDashboard.putNumber("Telescope Setpoint", setpoint);
     }
 
@@ -238,7 +233,7 @@ public class Arm extends SubsystemBase {
      * @return A {@link Command} that moves the joint to the desired setpoint
      */
     public void moveJoint(double setpoint) {
-        joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+        joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint).withSlot(0));
         SmartDashboard.putNumber("Joint Setpoint", setpoint);
     }
 
@@ -248,12 +243,10 @@ public class Arm extends SubsystemBase {
      * @Note This should only be called during disabled.
      */
     public void updateCoastMode() {
-        if (shouldBeInCoast() && jointNeutralMode == true) {
+        if (shouldBeInCoast()) {
             joint.setNeutralMode(NeutralModeValue.Coast);
-            jointNeutralMode = false;
-        } else if (jointNeutralMode == false) {
+        } else {
             joint.setNeutralMode(NeutralModeValue.Brake);
-            jointNeutralMode = true;
         }
     }
 
@@ -366,6 +359,9 @@ public class Arm extends SubsystemBase {
 
         SmartDashboard.putNumber("Calculated X", calculateCurrentPosition()[0]);
         SmartDashboard.putNumber("Calculated Y", calculateCurrentPosition()[1]);
+
+        SmartDashboard.putNumber("Telescope Encoder Position", this.getTelescopePosition());
+        SmartDashboard.putNumber("Joint Encoder Position", this.getJointPosition());
     }
 
     /**
@@ -390,9 +386,18 @@ public class Arm extends SubsystemBase {
             .withMotionMagicAcceleration(Constants.TelescopingArm.Telescope.ACCELERATION)
             .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
 
-        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
-        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = 0.0;
-        configuration.HardwareLimitSwitch.ForwardLimitEnable = false;
+        configuration.Slot1 = new Slot1Configs()
+            .withKS(Constants.TelescopingArm.Telescope.KS)
+            .withKV(Constants.TelescopingArm.Telescope.KV)
+            .withKA(Constants.TelescopingArm.Telescope.KA)
+            .withKG(Constants.TelescopingArm.Telescope.KG)
+            .withKP(Constants.TelescopingArm.Telescope.Slot1.KP)
+            .withKI(Constants.TelescopingArm.Telescope.Slot1.KI)
+            .withKD(Constants.TelescopingArm.Telescope.Slot1.KD);
+
+        configuration.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = true;
+        configuration.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = 0.0;
+        configuration.HardwareLimitSwitch.ReverseLimitEnable = true;
 
         configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
 
@@ -423,6 +428,15 @@ public class Arm extends SubsystemBase {
             .withKP(Constants.TelescopingArm.Joint.KP)
             .withKI(Constants.TelescopingArm.Joint.KI)
             .withKD(Constants.TelescopingArm.Joint.KD);
+
+        configuration.Slot1 = new Slot1Configs()
+            .withKS(Constants.TelescopingArm.Joint.KS)
+            .withKV(Constants.TelescopingArm.Joint.KV)
+            .withKA(Constants.TelescopingArm.Joint.KA)
+            .withKG(Constants.TelescopingArm.Joint.KG)
+            .withKP(Constants.TelescopingArm.Joint.Slot1.KP)
+            .withKI(Constants.TelescopingArm.Joint.Slot1.KI)
+            .withKD(Constants.TelescopingArm.Joint.Slot1.KD);
 
         configuration.Slot0.GravityType = Constants.TelescopingArm.Joint.GRAVITY_TYPE_VALUE;
 

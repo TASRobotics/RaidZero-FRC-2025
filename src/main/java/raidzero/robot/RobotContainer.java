@@ -92,7 +92,12 @@ public class RobotContainer {
             )
         );
 
-        // arm.setDefaultCommand(arm.moveWithoutDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        arm.setDefaultCommand(arm.moveWithoutDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
+        // arm.setDefaultCommand(
+        //     arm.moveTheArmInAStraightLineUsingDifferentialTransformations(
+        //         Constants.TelescopingArm.Positions.INTAKE_POS_M, Constants.TelescopingArm.Positions.CARTESIAN_MAX_VELOCITIES_MPS
+        //     )
+        // );
 
         coralIntake.setDefaultCommand(coralIntake.stop());
 
@@ -143,13 +148,23 @@ public class RobotContainer {
             arm.moveTo(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
+
+        // operator.button(Constants.Bindings.L3).whileTrue(
+        // arm.moveTo(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
+        // .onlyIf(swerve.isArmDeployable())
+        // );
+
         operator.button(Constants.Bindings.L3).whileTrue(
-            arm.moveTo(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
-                .onlyIf(swerve.isArmDeployable())
+            arm.moveTheArmInAStraightLineUsingDifferentialTransformations(
+                Constants.TelescopingArm.Positions.L3_SCORING_POS_M, Constants.TelescopingArm.Positions.CARTESIAN_MAX_VELOCITIES_MPS
+            )
         );
 
         operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE).negate()).whileTrue(
-            arm.moveToL4()
+            // arm.moveToL4()
+            arm.moveTheArmInAStraightLineUsingDifferentialTransformations(
+                Constants.TelescopingArm.Positions.L4_SCORING_POS_M, Constants.TelescopingArm.Positions.CARTESIAN_MAX_VELOCITIES_MPS
+            )
                 .onlyIf(swerve.isArmDeployable())
         );
         operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE))

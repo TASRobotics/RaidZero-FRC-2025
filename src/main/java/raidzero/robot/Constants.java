@@ -186,7 +186,7 @@ public class Constants {
             public static final double KD = 0.0;
 
             public static final double CRUISE_VELOCITY = 0.2;
-            public static final double ACCELERATION = 0.6;
+            public static final double ACCELERATION = 0.8;
             public static final double JERK = 0.0;
 
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Arm_Cosine;
@@ -194,6 +194,12 @@ public class Constants {
             public static final double STATOR_CURRENT_LIMT = 30.0;
             public static final double SUPPLY_CURRENT_LIMIT = 30.0;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
+
+            public class Slot1 {
+                public static final double KP = 40.0;
+                public static final double KI = 0.0;
+                public static final double KD = 0.0;
+            }
         }
 
         public class Positions {
@@ -210,6 +216,8 @@ public class Constants {
             public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.81 };
 
             public static final double[] HOME_POS_M = { 0.0, 0.0 };
+
+            public static final double[] CARTESIAN_MAX_VELOCITIES_MPS = { 2.0, 2.0 };
         }
 
         public class Telescope {
@@ -233,12 +241,18 @@ public class Constants {
             public static final GravityTypeValue GRAVITY_TYPE_VALUE = GravityTypeValue.Elevator_Static;
 
             public static final double CRUISE_VELOCITY = 1.5;
-            public static final double ACCELERATION = 5.0;
+            public static final double ACCELERATION = 6.0;
             public static final double JERK = 0.0;
 
             public static final double MAX_HEIGHT_M = 1.952;
             public static final double MIN_HEIGHT_M = 0.870;
             public static final double MAX_MINUS_MIN_M = MAX_HEIGHT_M - MIN_HEIGHT_M;
+
+            public class Slot1 {
+                public static final double KP = 20.0;
+                public static final double KI = 0.0;
+                public static final double KD = 0.0;
+            }
         }
     }
 
