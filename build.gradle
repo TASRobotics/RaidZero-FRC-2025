@@ -3,6 +3,12 @@ plugins {
     id "com.diffplug.spotless" version "6.20.0"
     id "edu.wpi.first.GradleRIO" version "2025.2.1"
     id "net.ltgt.errorprone" version "4.0.1"
+    id "checkstyle"
+}
+
+checkstyle {
+    toolVersion = '8.29'
+    configFile = rootProject.file('checkstyle.xml')
 }
 
 java {
@@ -112,15 +118,30 @@ deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
 
+tasks.named('checkstyleMain') {
+    onlyIf { getProjectBooleanProperty('main') }
+}
+
+tasks.withType(Javadoc) {
+    failOnError = getProjectBooleanProperty('main', false)
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+tasks.withType(Checkstyle) {
+    exclude '**/Telemetry.java',
+            '**/TunerConstants.java',
+            '**/LimelightHelpers.java',
+            '**/Robot.java',
+            '**/Main.java'
+}
+
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
     options.errorprone.errorproneArgs.add '-XepExcludedPaths:(.*/raidzero/lib/.*)'
     options.errorprone.disableWarningsInGeneratedCode = true
     options.errorprone.errorproneArgs.add '-Xep:InconsistentCapitalization:OFF'
-}
-
-javadoc {
-    options.links("https://github.wpilib.org/allwpilib/docs/release/java/")
 }
 
 spotless {
