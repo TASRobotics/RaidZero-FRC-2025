@@ -37,14 +37,9 @@ public class LazyCan extends LaserCan {
     }
 
     public boolean getStatus() {
-        if (threshold == 0) {
-            threshold = 500;
-        }
-        boolean status = false;
-        if (getMeasurement() != null) {
-            status = getMeasurement().distance_mm <= threshold;
-        }
-        return status;
+        measurement = getMeasurement();
+        
+        return measurement != null ? getMeasurement().distance_mm <= threshold : false;
     }
 
     public LazyCan withRegionOfInterest(int x, int y, int w, int h) {
@@ -60,14 +55,17 @@ public class LazyCan extends LaserCan {
     }
 
     public void build() {
-        if (this.regionOfInterest == null) {
+        if (regionOfInterest == null) {
             regionOfInterest = new RegionOfInterest(4, 4, 8, 8);
         }
-        if (this.rangingMode == null) {
+        if (rangingMode == null) {
             rangingMode = RangingMode.SHORT;
         }
-        if (this.timingBudget == null) {
+        if (timingBudget == null) {
             timingBudget = TimingBudget.TIMING_BUDGET_33MS;
+        }
+        if (threshold == 0) {
+            threshold = 500;
         }
 
         try {
