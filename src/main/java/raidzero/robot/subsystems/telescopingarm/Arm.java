@@ -335,8 +335,9 @@ public class Arm extends SubsystemBase {
             .withMotionMagicAcceleration(Constants.TelescopingArm.Telescope.ACCELERATION)
             .withMotionMagicJerk(Constants.TelescopingArm.Telescope.JERK);
 
-        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionEnable = true;
-        configuration.HardwareLimitSwitch.ForwardLimitAutosetPositionValue = 0.0;
+        configuration.HardwareLimitSwitch.ReverseLimitAutosetPositionEnable = true;
+        configuration.HardwareLimitSwitch.ReverseLimitAutosetPositionValue = 0.0;
+        configuration.HardwareLimitSwitch.ReverseLimitEnable = false;
 
         configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Telescope.CONVERSION_FACTOR;
 
