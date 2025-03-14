@@ -60,14 +60,13 @@ public class Arm extends SubsystemBase {
     }
 
     public Command moveTheArmInAStraightLineUsingDifferentialTransformations(double[] desiredPosition, double[] cartesianVelocities) {
-        return defer(
+        return run(
             () -> {
-                double r = (this.getTelescopePosition() * (Telescope.MAX_MINUS_MIN_M + Telescope.MIN_HEIGHT_M));
+                double r = this.getTelescopePosition() * Telescope.MAX_MINUS_MIN_M + Telescope.MIN_HEIGHT_M;
                 double theta = this.getJointPosition() * (2.0 * Math.PI);
 
                 SmartDashboard.putNumber("current radius", r);
                 SmartDashboard.putNumber("current angle", theta);
-
 
                 double[][] rotationMatix = new double[][] {
                     { Math.cos(theta), Math.sin(theta) },
@@ -82,19 +81,15 @@ public class Arm extends SubsystemBase {
                 SmartDashboard.putNumber("Target Telescope Velocity", telescopeVelocity);
                 SmartDashboard.putNumber("Target Joint Velocity", jointVelocity);
 
-                return moveWithDynamicMM(desiredPosition, jointVelocity, telescopeVelocity);
+                double jointSetpoint = calculateJointAngle(desiredPosition);
+                double telescopeSetpoint = calculateTelescopeHeight(desiredPosition);
+
+                joint.setControl(new DynamicMotionMagicVoltage(jointSetpoint, jointVelocity, Joint.ACCELERATION, Joint.JERK));
+                telescope.setControl(
+                    new DynamicMotionMagicVoltage(telescopeSetpoint, telescopeVelocity, Telescope.ACCELERATION, Telescope.JERK)
+                );
             }
         );
-    }
-
-    private Command moveWithDynamicMM(double[] setpoint, double jointVelocity, double telescopeVelocity) {
-        double jointSetpoint = calculateJointAngle(setpoint);
-        double telescopeSetpoint = calculateTelescopeHeight(setpoint);
-
-        return run(() -> {
-            joint.setControl(new DynamicMotionMagicVoltage(jointSetpoint, jointVelocity, Joint.ACCELERATION, Joint.JERK));
-            telescope.setControl(new DynamicMotionMagicVoltage(telescopeSetpoint, telescopeVelocity, Telescope.ACCELERATION, Telescope.JERK));
-        });
     }
 
     public double[] matrixMultiplication(double[][] a, double[] b) {
