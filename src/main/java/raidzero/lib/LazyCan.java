@@ -6,7 +6,7 @@ public class LazyCan extends LaserCan {
 
     /**
      * Creates a new LaserCAN sensor.
-     * 
+     *
      * @param canId The CAN ID for the LaserCAN sensor
      */
     public LazyCan(int canId) {
@@ -15,7 +15,7 @@ public class LazyCan extends LaserCan {
 
     /**
      * Gets the distance in mm from the sensor
-     * 
+     *
      * @return The distance in mm, -1 if the sensor cannot be found
      */
     public int getDistanceMm() {

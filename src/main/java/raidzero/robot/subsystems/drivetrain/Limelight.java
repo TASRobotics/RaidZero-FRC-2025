@@ -1,7 +1,6 @@
 package raidzero.robot.subsystems.drivetrain;
 
 import com.ctre.phoenix6.Utils;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -49,7 +48,7 @@ public class Limelight extends SubsystemBase {
 
     /**
      * Sets the stream mode of the limelight
-     * 
+     *
      * @param limelightName The name of the limelight
      * @param mode {@link STREAM_MODE} of the limelight
      */
@@ -65,7 +64,7 @@ public class Limelight extends SubsystemBase {
 
     /**
      * Sets the pipeline of the limelight
-     * 
+     *
      * @param limelightName The name of the limelight
      * @param pipeline The pipeline index
      */
@@ -75,7 +74,7 @@ public class Limelight extends SubsystemBase {
 
     /**
      * Sets the LED mode of the limelight
-     * 
+     *
      * @param limelightName The name of the limelight
      * @param mode The LED mode
      */
@@ -140,7 +139,7 @@ public class Limelight extends SubsystemBase {
                     .getDistance(limeFLPrev.pose.getTranslation()) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.02)) ||
                 (limeFL.rawFiducials.length > 0 && limeFL.rawFiducials[0].ambiguity > 0.5 &&
                     limeFL.rawFiducials[0].distToCamera > 4.0) ||
-                (limeFL.pose.equals(new Pose2d(0, 0, Rotation2d.fromDegrees(0))));
+                limeFL.pose.equals(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
             if (!ignoreAllLimes && !ignoreFlLime) {
                 SmartDashboard.putBoolean("FLpose", true);
@@ -184,7 +183,7 @@ public class Limelight extends SubsystemBase {
                     .getDistance(limeFRPrev.pose.getTranslation()) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.02)) ||
                 (limeFR.rawFiducials.length > 0 && limeFR.rawFiducials[0].ambiguity > 0.5 &&
                     limeFR.rawFiducials[0].distToCamera > 4.0) ||
-                (limeFR.pose.equals(new Pose2d(0, 0, Rotation2d.fromDegrees(0))));
+                limeFR.pose.equals(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
             if (!ignoreAllLimes && !ignoreFrLime) {
                 SmartDashboard.putBoolean("FRpose", true);
@@ -228,7 +227,7 @@ public class Limelight extends SubsystemBase {
                     .getDistance(limeBLPrev.pose.getTranslation()) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.02)) ||
                 (limeBL.rawFiducials.length > 0 && limeBL.rawFiducials[0].ambiguity > 0.5 &&
                     limeBL.rawFiducials[0].distToCamera > 4.0) ||
-                (limeBL.pose.equals(new Pose2d(0, 0, Rotation2d.fromDegrees(0))));
+                limeBL.pose.equals(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
             if (!ignoreAllLimes && !ignoreBlLime) {
                 SmartDashboard.putBoolean("BLpose", true);
@@ -272,7 +271,7 @@ public class Limelight extends SubsystemBase {
                     .getDistance(limeBRPrev.pose.getTranslation()) > TunerConstants.kSpeedAt12Volts.baseUnitMagnitude() * 0.02)) ||
                 (limeBR.rawFiducials.length > 0 && limeBR.rawFiducials[0].ambiguity > 0.5 &&
                     limeBR.rawFiducials[0].distToCamera > 4.0) ||
-                (limeBR.pose.equals(new Pose2d(0, 0, Rotation2d.fromDegrees(0))));
+                limeBR.pose.equals(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
 
             if (!ignoreAllLimes && !ignoreBrLime) {
                 SmartDashboard.putBoolean("BRpose", true);
@@ -293,7 +292,7 @@ public class Limelight extends SubsystemBase {
 
     /**
      * Checks if a pose is inside the field dimensions
-     * 
+     *
      * @param pose The {@link Pose2d} to check
      * @return True if the pose is inside the field dimensions, false otherwise
      */
@@ -306,7 +305,7 @@ public class Limelight extends SubsystemBase {
 
     /**
      * Gets the {@link Limelight} subsystem instance
-     * 
+     *
      * @return The {@link Limelight} subsystem instance
      */
     public static Limelight system() {

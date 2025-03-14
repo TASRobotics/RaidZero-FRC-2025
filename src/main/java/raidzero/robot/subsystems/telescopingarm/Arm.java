@@ -11,7 +11,6 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,7 +39,7 @@ public class Arm extends SubsystemBase {
         telescope.setNeutralMode(NeutralModeValue.Brake);
 
         joint = new TalonFX(Constants.TelescopingArm.Joint.MOTOR_ID);
-        joint.getConfigurator().apply((jointConfiguration()));
+        joint.getConfigurator().apply(jointConfiguration());
         joint.setNeutralMode(NeutralModeValue.Brake);
 
         jointCANcoder = new CANcoder(Constants.TelescopingArm.Joint.CANCODER_ID);
@@ -52,7 +51,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Moves the arm to the desired x and y setpoints
-     * 
+     *
      * @param desiredPosition The desired x and y setpoints
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
@@ -80,7 +79,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Moves the arm to the desired x and y setpoints without delay
-     * 
+     *
      * @param desiredPosition The desired x and y setpoints
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
@@ -98,9 +97,9 @@ public class Arm extends SubsystemBase {
 
     /**
      * Moves the arm to the desired x and y setpoints with a delay
-     * 
-     * @Note This method should only be used when lowering the arm
-     * 
+     *
+     * <p><strong>Note:</strong> This method should only be used when lowering the arm.</p>
+     *
      * @param desiredPosition The desired x and y setpoints
      * @return A {@link Command} that moves the arm to the desired setpoints
      */
@@ -119,7 +118,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Decreases the intake Y offset by a desired amount
-     * 
+     *
      * @param ammount The desired offset amount
      */
     public void decreaseIntakeYOffset(double ammount) {
@@ -135,7 +134,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Moves the arm to the intake position
-     * 
+     *
      * @return A {@link Command} that moves the arm to the intake position
      */
     public Command moveToIntake() {
@@ -160,7 +159,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Moves the arm to the L4 scoring position
-     * 
+     *
      * @return A {@link Command} that moves the arm to the L4 scoring position
      */
     public Command moveToL4() {
@@ -174,7 +173,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Moves the arm to a vertical position
-     * 
+     *
      * @return A {@link Command} that moves the arm to a vertical position
      */
     public Command climbPos() {
@@ -186,9 +185,8 @@ public class Arm extends SubsystemBase {
 
     /**
      * Runs just the telescope to the supplied setpoint
-     * 
+     *
      * @param setpoint The target setpoint in percentage of full range of motion
-     * @return A {@link Command} that moves the telescope to the desired setpoint
      */
     public void moveTelescope(double setpoint) {
         telescope.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
@@ -197,9 +195,8 @@ public class Arm extends SubsystemBase {
 
     /**
      * Runs just the joint to the supplied setpoint
-     * 
+     *
      * @param setpoint The target setpoint in rotations
-     * @return A {@link Command} that moves the joint to the desired setpoint
      */
     public void moveJoint(double setpoint) {
         joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
@@ -208,8 +205,8 @@ public class Arm extends SubsystemBase {
 
     /**
      * Updates the coast mode of the joint motor based on climb joint position
-     * 
-     * @Note This should only be called during disabled.
+     *
+     * <p><strong>Note:</strong> This should only be called during disabled.</p>
      */
     public void updateCoastMode() {
         if (shouldBeInCoast()) {
@@ -223,7 +220,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Checks if the arm joint should be in coast mode
-     * 
+     *
      * @return True if the arm joint should be in coast mode, false otherwise
      */
     private boolean shouldBeInCoast() {
@@ -232,7 +229,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Zeroes the the relative encoder position in the telescope motor
-     * 
+     *
      * @return A {@link Command} that zeroes the telescope motor position
      */
     public Command zeroTelescopePosition() {
@@ -241,7 +238,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Checks if the arm is in a deployed height
-     * 
+     *
      * @return True if the arm is in a deployed height, false otherwise
      */
     public boolean isUp() {
@@ -250,9 +247,8 @@ public class Arm extends SubsystemBase {
 
     /**
      * Calculates the target telescope position given the x and y setpoints
-     * 
-     * @param x The x setpoint in meters
-     * @param y The y setpoint in meters
+     *
+     * @param position The desired position in meters
      * @return Target motor position in rotations
      */
     public double calculateTelescopeHeight(double[] position) {
@@ -263,18 +259,17 @@ public class Arm extends SubsystemBase {
 
     /**
      * Calculates the target arm position given the x and y setpoints
-     * 
-     * @param x The x setpoint in meters
-     * @param y The y setpoint in meters
+     *
+     * @param position The desired position in meters
      * @return The target arm position in rotations
      */
     public double calculateJointAngle(double[] position) {
-        return (Math.atan2(position[1], position[0])) * 180 / Math.PI / 360.0;
+        return Math.atan2(position[1], position[0]) * 180 / Math.PI / 360.0;
     }
 
     /**
      * Gets the telescope motor's encoder position
-     * 
+     *
      * @return The telescope motor encoder position in rotations
      */
     public double getTelescopePosition() {
@@ -283,7 +278,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Gets the arm motor's encoder position
-     * 
+     *
      * @return The arm motor encoder position in rotations
      */
     public double getJointPosition() {
@@ -320,7 +315,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Gets the {@link TalonFXConfiguration} for the telescope
-     * 
+     *
      * @return The {@link TalonFXConfiguration} for the telescope
      */
     private TalonFXConfiguration telescopeConfiguration() {
@@ -352,7 +347,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Gets the {@link TalonFXConfiguration} for the arm joint
-     * 
+     *
      * @return The {@link TalonFXConfiguration} for the arm joint
      */
     private TalonFXConfiguration jointConfiguration() {
@@ -392,7 +387,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Gets the {@link CANcoderConfiguration} for the joint CANCoder
-     * 
+     *
      * @return The {@link CANcoderConfiguration} for the joint CANCoder
      */
     private CANcoderConfiguration jointCANCoderConfiguration() {
@@ -407,7 +402,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Gets the {@link Arm} subsystem instance
-     * 
+     *
      * @return The {@link Arm} subsystem instance
      */
     public static Arm system() {
