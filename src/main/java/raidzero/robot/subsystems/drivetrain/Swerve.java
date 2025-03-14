@@ -2,10 +2,6 @@ package raidzero.robot.subsystems.drivetrain;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.List;
-import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
-
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
@@ -16,7 +12,6 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
-
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -27,8 +22,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -39,8 +34,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import raidzero.robot.subsystems.drivetrain.TunerConstants.TunerSwerveDrivetrain;
+import java.util.List;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 import raidzero.robot.Constants;
+import raidzero.robot.subsystems.drivetrain.TunerConstants.TunerSwerveDrivetrain;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -235,7 +233,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      * Returns a command that applies the specified control request to this swerve
      * drivetrain.
      *
-     * @param request Function returning the request to apply
+     * @param requestSupplier Function returning the request to apply
      * @return Command to run
      */
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -266,7 +264,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     /**
      * Uses PathPlanner's {@link AutoBuilder#pathfindToPose} to move to the desired pose
-     * 
+     *
      * @param pose The desired pose
      * @return A {@link DeferredCommand} that moves the robot to the desired pose
      */
@@ -286,7 +284,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     /**
      * Moves the robot to the nearest left or right reef
-     * 
+     *
      * @param reef Desired left or right reef from {@link Constants.Swerve.REEFS}
      * @return A {@link DeferredCommand} that moves the robot to the nearest left or right reef
      */
@@ -310,7 +308,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     /**
      * Moves the robot to the nearest coral station
-     * 
+     *
      * @return A {@link DeferredCommand} that moves the robot to the nearest coral station
      */
     public Command pathToStation() {
@@ -323,7 +321,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     /**
      * Returns a {@link BooleanSupplier} that checks if the arm is able to be deployed
-     * 
+     *
      * @return A {@link BooleanSupplier} that checks if the arm is able to be deployed
      */
     public BooleanSupplier isArmDeployable() {
@@ -342,7 +340,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     /**
      * Returns a {@link BooleanSupplier} that checks if the robot is not in a climb zone
-     * 
+     *
      * @return A {@link BooleanSupplier} that checks if the robot is not in a climb zone
      */
     public BooleanSupplier isNotInClimbZone() {
@@ -358,7 +356,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      * <li>Transforms each waypoint in the provided list for the red alliance
      * <li><b><em>This method modifies the points within the list
      * </ul>
-     * 
+     *
      * @param waypoints The list of Pose2d waypoints (defined in blue origin coordinates)
      */
     private void transformWaypointsForAlliance(List<Pose2d> waypoints) {
@@ -380,7 +378,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     /**
      * Stops the swerve
-     * 
+     *
      * @return A {@link Command} to stop the swerve
      */
     public Command stop() {
@@ -489,7 +487,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     /**
      * Gets the {@link Swerve} subsystem instance
-     * 
+     *
      * @return The {@link Swerve} subsystem instance
      */
     public static Swerve system() {

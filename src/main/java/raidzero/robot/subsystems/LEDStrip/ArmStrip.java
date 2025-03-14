@@ -1,23 +1,21 @@
 
 package raidzero.robot.subsystems.LEDStrip;
 
+import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.ColorFlowAnimation;
+import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
+import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.StrobeAnimation;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import raidzero.robot.Constants;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.telescopingarm.Arm;
 import raidzero.robot.subsystems.telescopingarm.CoralIntake;
-
-import com.ctre.phoenix.led.CANdle;
-import com.ctre.phoenix.led.CANdleConfiguration;
-import com.ctre.phoenix.led.ColorFlowAnimation;
-import com.ctre.phoenix.led.RainbowAnimation;
-import com.ctre.phoenix.led.StrobeAnimation;
-import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class ArmStrip implements Subsystem {
 
@@ -315,7 +313,7 @@ public class ArmStrip implements Subsystem {
 
     /**
      * Gets a {@link CANdleConfiguration} for the CANdle LED strip
-     * 
+     *
      * @return A {@link CANdleConfiguration} for the CANdle LED strip
      */
     private CANdleConfiguration candleConfig() {
@@ -324,7 +322,7 @@ public class ArmStrip implements Subsystem {
 
     /**
      * Gets the {@link ArmStrip} subsystem instance
-     * 
+     *
      * @return The {@link ArmStrip} subsystem instance
      */
     public static ArmStrip system() {

@@ -1,12 +1,10 @@
 package raidzero.robot;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-
-import com.ctre.phoenix6.signals.GravityTypeValue;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Constants {
     public class AlgaeIntake {

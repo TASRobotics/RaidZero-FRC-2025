@@ -5,12 +5,10 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import raidzero.robot.Constants;
 
 public class AlgaeIntake extends SubsystemBase {
@@ -28,7 +26,7 @@ public class AlgaeIntake extends SubsystemBase {
 
     /**
      * Runs the roller at the desired speed
-     * 
+     *
      * @param speed The desired speed
      * @return A {@link Command} that runs the roller at the desired speed
      */
@@ -38,7 +36,7 @@ public class AlgaeIntake extends SubsystemBase {
 
     /**
      * Moves the roller at the desired speed
-     * 
+     *
      * @param speed The desired speed
      */
     private void run(double speed) {
@@ -54,7 +52,7 @@ public class AlgaeIntake extends SubsystemBase {
 
     /**
      * Gets the {@link SparkMaxConfig} for the roller motor
-     * 
+     *
      * @return The {@link SparkMaxConfig} for the roller motor
      */
     private SparkBaseConfig rollerConfig() {
@@ -67,7 +65,7 @@ public class AlgaeIntake extends SubsystemBase {
 
     /**
      * Gets the {@link AlgaeIntake} subsystem instance
-     * 
+     *
      * @return The {@link AlgaeIntake} subsystem instance
      */
     public static AlgaeIntake system() {
