@@ -134,7 +134,8 @@ tasks.withType(Checkstyle) {
             '**/TunerConstants.java',
             '**/LimelightHelpers.java',
             '**/Robot.java',
-            '**/Main.java'
+            '**/Main.java',
+            "**/AutomatedTestMain.java"
 }
 
 tasks.withType(JavaCompile) {
