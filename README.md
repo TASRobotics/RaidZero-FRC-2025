@@ -102,7 +102,7 @@
 | Right Stick X   | Robot rotation speed           | N/A      |
 | Left Bumper     | Extake coral                   | Hold     |
 | Right Bumper    | Intake coral                   | Tap      |
-| A               | Robot centric slowed driving   | Tap      |
+| A               | Robot centric slowed driving   | Hold     |
 | B               | OTF to closest station         | Hold     |
 | X               | OTF to closest left reef       | Hold     |
 | Y               | OTF to closest right reef      | Hold     |
@@ -112,10 +112,10 @@
 
 | Button ID  | Function                      | Tap/Hold |
 |------------|-------------------------------|----------|
-| 1          | Retract climb winch           | Hold     |
-| 2          | Extend climb winch            | Tap      |
-| 3          | Deploy climb                  | Hold     |
-| 4          | Check L4 slam                 | Tap      |
+| 1          | Retract climb winch (Up)      | Hold     |
+| 2          | Deploy climb                  | Tap      |
+| 3          | Extend climb winch (Down)     | Hold     |
+| 4          | Check L4 slam                 | Hold     |
 | 5          | L4 Slam                       | Tap      |
 | 6          | Unbound                       | N/A      |
 | 7          | Arm L2                        | Hold     |

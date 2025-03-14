@@ -1,16 +1,30 @@
 plugins {
     id "java"
+    id "com.diffplug.spotless" version "6.20.0"
     id "edu.wpi.first.GradleRIO" version "2025.2.1"
+    id "net.ltgt.errorprone" version "4.0.1"
+    id "checkstyle"
 }
 
-
+checkstyle {
+    toolVersion = '8.29'
+    configFile = rootProject.file('checkstyle.xml')
+}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-def ROBOT_MAIN_CLASS = "raidzero.robot.Main"
+def getProjectBooleanProperty(String name, boolean defaultValue = false) {
+    if (!project.hasProperty(name)) {
+        return defaultValue
+    }
+
+    return Boolean.parseBoolean(project.getProperty(name))
+}
+
+def ROBOT_MAIN_CLASS = getProjectBooleanProperty('automatedTest') ? "raidzero.robot.test.AutomatedTestMain" : "raidzero.robot.Main"
 
 // Define my targets (RoboRIO) and artifacts (deployable files)
 // This is added by GradleRIO's backing project DeployUtils.
@@ -43,8 +57,6 @@ deploy {
     }
 }
 
-
-
 def deployArtifact = deploy.targets.roborio.artifacts.frcJava
 
 // Set to true to use debug for JNI.
@@ -56,6 +68,8 @@ def includeDesktopSupport = true
 // Defining my dependencies. In this case, WPILib (+ friends), and vendor libraries.
 // Also defines JUnit 5.
 dependencies {
+    compileOnly group: "com.google.errorprone", name: "error_prone_annotations", version: "2.28.0"
+
     annotationProcessor wpi.java.deps.wpilibAnnotations()
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
@@ -76,8 +90,8 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    
 
+    errorprone group: "com.google.errorprone", name: "error_prone_core", version: "2.28.0"
 }
 
 test {
@@ -104,7 +118,56 @@ deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
 
-// Configure string concat to always inline compile
+tasks.named('checkstyleMain') {
+    onlyIf { getProjectBooleanProperty('main') }
+}
+
+tasks.withType(Javadoc) {
+    failOnError = getProjectBooleanProperty('main', false)
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+tasks.withType(Checkstyle) {
+    exclude '**/Telemetry.java',
+            '**/TunerConstants.java',
+            '**/LimelightHelpers.java',
+            '**/Robot.java',
+            '**/Main.java',
+            "**/AutomatedTestMain.java"
+}
+
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+    options.errorprone.errorproneArgs.add '-XepExcludedPaths:(.*/raidzero/lib/.*)'
+    options.errorprone.disableWarningsInGeneratedCode = true
+    options.errorprone.errorproneArgs.add '-Xep:InconsistentCapitalization:OFF'
 }
+
+spotless {
+    format "misc", {
+        target "*"
+        targetExclude "simgui*.json", "**/build/**", "**/build-*/**", "**/bin/**",
+                     "/.*", "WPILib-License.md", "gradlew", "networktables.json",
+                     "networktables.json.bck"
+        toggleOffOn()
+        trimTrailingWhitespace()
+    }
+
+    java {
+        importOrder()
+        eclipse().configFile rootProject.file("eclipse-formatter.xml")
+        toggleOffOn()
+        trimTrailingWhitespace()
+    }
+}
+
+tasks.named("build") {
+    dependsOn("spotlessApply")
+}
+tasks.named("deploy") {
+    dependsOn("spotlessApply")
+}
+
+spotlessCheck.mustRunAfter(compileJava)
