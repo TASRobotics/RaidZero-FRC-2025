@@ -94,14 +94,14 @@ public class ArmStrip implements Subsystem {
      * The E-stopped loop of the CANdle LED strip
      */
     private void loopEstopped() {
-        if (animationApplied || animation2Applied || animation3Applied) {
+        if (animation2Applied || animation3Applied) {
             resetAnimation();
         }
 
         if (!animationApplied) {
             candle.clearAnimation(0);
             candle.clearAnimation(1);
-            candle.animate(new StrobeAnimation(25, 0, 0, 0, 0.001, -1));
+            candle.animate(new StrobeAnimation(255, 0, 0, 0, 0.001, -1));
             animationApplied = true;
             animation2Applied = false;
             animation3Applied = false;
@@ -112,11 +112,24 @@ public class ArmStrip implements Subsystem {
      * The disabled loop of the CANdle LED strip
      */
     private void loopDisabled() {
-        if (ClimbJoint.system().isDeployed().getAsBoolean()) {
+        if (DriverStation.isAutonomous() && DriverStation.getMatchTime() > 0.0) {
+            if (animation2Applied || animation3Applied) {
+                resetAnimation();
+            }
+
+            if (!animationApplied) {
+                candle.clearAnimation(0);
+                candle.clearAnimation(1);
+                candle.animate(new StrobeAnimation(255, 0, 0, 0, 0.001, -1));
+                animationApplied = true;
+                animation2Applied = false;
+                animation3Applied = false;
+            }
+        } else if (ClimbJoint.system().isDeployed().getAsBoolean()) {
             if (!animation3Applied) {
                 candle.clearAnimation(0);
                 candle.clearAnimation(1);
-                candle.animate(new RainbowAnimation(255, 0.75, -1));
+                candle.animate(new RainbowAnimation(255, 1.0, -1));
                 animationApplied = false;
                 animation2Applied = false;
                 animation3Applied = true;
@@ -141,11 +154,15 @@ public class ArmStrip implements Subsystem {
 
             if (strobeTimer.hasElapsed(strobeInterval)) {
                 if (strobeAlternate) {
+                    candle.setLEDs(255, 0, 0, 0, 0, 4);
+                    candle.setLEDs(0, 0, 0, 0, 4, 4);
                     candle.setLEDs(255, 0, 0, 0, 8, 25);
-                    candle.setLEDs(0, 0, 0, 0, 33, 25);
+                    candle.setLEDs(0, 0, 0, 0, 33, 27);
                 } else {
+                    candle.setLEDs(0, 0, 0, 0, 0, 4);
+                    candle.setLEDs(255, 0, 0, 0, 4, 4);
                     candle.setLEDs(0, 0, 0, 0, 8, 25);
-                    candle.setLEDs(255, 0, 0, 0, 33, 25);
+                    candle.setLEDs(255, 0, 0, 0, 33, 27);
                 }
 
                 strobeAlternate = !strobeAlternate;
@@ -170,13 +187,21 @@ public class ArmStrip implements Subsystem {
      * The autonomous loop of the CANdle LED strip
      */
     private void loopAutonomous() {
+        if (animationApplied || animation2Applied || animation3Applied) {
+            resetAnimation();
+        }
+
         if (strobeTimer.hasElapsed(strobeInterval)) {
             if (strobeAlternate) {
-                candle.setLEDs(255, 165, 0, 0, 0, 25);
-                candle.setLEDs(0, 255, 0, 0, 33, 25);
+                candle.setLEDs(255, 165, 0, 0, 0, 4);
+                candle.setLEDs(0, 255, 0, 0, 4, 4);
+                candle.setLEDs(255, 165, 0, 0, 8, 25);
+                candle.setLEDs(0, 255, 0, 0, 33, 27);
             } else {
-                candle.setLEDs(0, 255, 0, 0, 0, 25);
-                candle.setLEDs(255, 165, 0, 0, 33, 25);
+                candle.setLEDs(0, 255, 0, 0, 0, 4);
+                candle.setLEDs(255, 165, 0, 0, 4, 4);
+                candle.setLEDs(0, 255, 0, 0, 8, 25);
+                candle.setLEDs(255, 165, 0, 0, 33, 27);
             }
 
             strobeAlternate = !strobeAlternate;
@@ -195,7 +220,7 @@ public class ArmStrip implements Subsystem {
                 candle.clearAnimation(0);
                 candle.clearAnimation(1);
                 candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Backward, 8), 0);
-                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Forward, 33), 1);
+                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 27, Direction.Forward, 33), 1);
                 animationApplied = false;
                 animation2Applied = true;
                 animation3Applied = false;
@@ -205,7 +230,7 @@ public class ArmStrip implements Subsystem {
                 candle.clearAnimation(0);
                 candle.clearAnimation(1);
                 candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Forward, 8), 0);
-                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Backward, 33), 1);
+                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 27, Direction.Backward, 33), 1);
                 animationApplied = false;
                 animation2Applied = true;
                 animation3Applied = false;
@@ -217,11 +242,15 @@ public class ArmStrip implements Subsystem {
 
             if (strobeTimer.hasElapsed(strobeInterval)) {
                 if (strobeAlternate) {
+                    candle.setLEDs(0, 255, 0, 0, 0, 4);
+                    candle.setLEDs(255, 0, 0, 0, 4, 4);
                     candle.setLEDs(0, 255, 0, 0, 8, 25);
-                    candle.setLEDs(255, 0, 0, 0, 33, 25);
+                    candle.setLEDs(255, 0, 0, 0, 33, 27);
                 } else {
+                    candle.setLEDs(255, 0, 0, 0, 0, 4);
+                    candle.setLEDs(0, 255, 0, 0, 4, 4);
                     candle.setLEDs(255, 0, 0, 0, 8, 25);
-                    candle.setLEDs(0, 255, 0, 0, 33, 25);
+                    candle.setLEDs(0, 255, 0, 0, 33, 27);
                 }
 
                 strobeAlternate = !strobeAlternate;
@@ -234,11 +263,15 @@ public class ArmStrip implements Subsystem {
 
             if (strobeTimer.hasElapsed(strobeInterval)) {
                 if (strobeAlternate) {
+                    candle.setLEDs(255, 10, 250, 0, 0, 4);
+                    candle.setLEDs(255, 0, 0, 0, 4, 4);
                     candle.setLEDs(255, 10, 250, 0, 8, 25);
-                    candle.setLEDs(255, 0, 0, 0, 33, 25);
+                    candle.setLEDs(255, 0, 0, 0, 33, 27);
                 } else {
+                    candle.setLEDs(255, 0, 0, 0, 0, 4);
+                    candle.setLEDs(255, 10, 250, 0, 4, 4);
                     candle.setLEDs(255, 0, 0, 0, 8, 25);
-                    candle.setLEDs(255, 10, 250, 0, 33, 25);
+                    candle.setLEDs(255, 10, 250, 0, 33, 27);
                 }
 
                 strobeAlternate = !strobeAlternate;
@@ -251,11 +284,15 @@ public class ArmStrip implements Subsystem {
 
             if (strobeTimer.hasElapsed(strobeInterval)) {
                 if (strobeAlternate) {
+                    candle.setLEDs(255, 10, 250, 0, 0, 4);
+                    candle.setLEDs(0, 255, 0, 0, 4, 4);
                     candle.setLEDs(255, 10, 250, 0, 8, 25);
-                    candle.setLEDs(0, 255, 0, 0, 33, 25);
+                    candle.setLEDs(0, 255, 0, 0, 33, 27);
                 } else {
+                    candle.setLEDs(0, 255, 0, 0, 0, 4);
+                    candle.setLEDs(255, 10, 250, 0, 4, 4);
                     candle.setLEDs(0, 255, 0, 0, 8, 25);
-                    candle.setLEDs(255, 10, 250, 0, 33, 25);
+                    candle.setLEDs(255, 10, 250, 0, 33, 27);
                 }
 
                 strobeAlternate = !strobeAlternate;
@@ -268,11 +305,15 @@ public class ArmStrip implements Subsystem {
 
             if (strobeTimer.hasElapsed(strobeInterval)) {
                 if (strobeAlternate) {
+                    candle.setLEDs(255, 10, 250, 0, 0, 4);
+                    candle.setLEDs(0, 0, 0, 0, 4, 4);
                     candle.setLEDs(255, 10, 250, 0, 8, 25);
-                    candle.setLEDs(0, 0, 0, 0, 33, 25);
+                    candle.setLEDs(0, 0, 0, 0, 33, 27);
                 } else {
+                    candle.setLEDs(0, 0, 0, 0, 0, 4);
+                    candle.setLEDs(255, 10, 250, 0, 4, 4);
                     candle.setLEDs(0, 0, 0, 0, 8, 25);
-                    candle.setLEDs(255, 10, 250, 0, 33, 25);
+                    candle.setLEDs(255, 10, 250, 0, 33, 27);
                 }
 
                 strobeAlternate = !strobeAlternate;
@@ -309,6 +350,25 @@ public class ArmStrip implements Subsystem {
         candle.clearAnimation(0);
         candle.clearAnimation(1);
         candle.animate(new RainbowAnimation(255, 0.75, -1));
+    }
+
+    /**
+     * Sets the LED to red, green, blue in alternating sequence
+     */
+    private void testCandleSequence() {
+        candle.setLEDs(255, 0, 0, 0, 0, 5);
+        candle.setLEDs(0, 255, 0, 0, 5, 5);
+        candle.setLEDs(0, 0, 255, 0, 10, 5);
+        candle.setLEDs(255, 0, 0, 0, 15, 5);
+        candle.setLEDs(0, 255, 0, 0, 20, 5);
+        candle.setLEDs(0, 0, 255, 0, 25, 5);
+        candle.setLEDs(255, 0, 0, 0, 30, 5);
+        candle.setLEDs(0, 255, 0, 0, 35, 5);
+        candle.setLEDs(0, 0, 255, 0, 40, 5);
+        candle.setLEDs(255, 0, 0, 0, 45, 5);
+        candle.setLEDs(0, 255, 0, 0, 50, 5);
+        candle.setLEDs(0, 0, 255, 0, 55, 5);
+        candle.setLEDs(255, 0, 0, 0, 60, 5);
     }
 
     /**
