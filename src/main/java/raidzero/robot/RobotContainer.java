@@ -85,7 +85,8 @@ public class RobotContainer {
     private void configureBindings() {
         swerve.setDefaultCommand(
             swerve.applyRequest(
-                () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
+                () -> fieldCentricDrive
+                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * swerve.getSpeedModifier() * (arm.isUp() ? 0.3 : 1.0))
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed * swerve.getSpeedModifier() * (arm.isUp() ? 0.3 : 1.0))
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )

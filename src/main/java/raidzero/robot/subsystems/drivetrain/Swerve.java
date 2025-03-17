@@ -393,7 +393,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     /**
      * Gets the current modifier for max speed
-     * 
+     *
      * @return the modifier for max speed
      */
     public double getSpeedModifier() {
@@ -402,7 +402,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     /**
      * Sets the current modifi9er for max speed
-     * 
+     *
      * @param speedModifier the modifier for max speed
      */
     public void setSpeedModifier(double speedModifier) {
@@ -439,6 +439,8 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         modulePublisher.set(this.getState().ModuleStates);
         botpose.set(this.getState().Pose);
         field.setRobotPose(this.getState().Pose);
+
+        SmartDashboard.putNumber("Bot Speed", speedModifier * 100.0);
     }
 
     /**
