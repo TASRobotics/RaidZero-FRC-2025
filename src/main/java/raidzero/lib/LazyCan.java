@@ -2,9 +2,14 @@ package raidzero.lib;
 
 import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
+import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
+import au.grapplerobotics.interfaces.LaserCanInterface.RegionOfInterest;
+import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
 import edu.wpi.first.wpilibj.DriverStation;
 
-public class LazyCan extends LaserCan {
+public class LazyCan {
+    private LaserCan laserCan;
     private int canId;
 
     private RangingMode rangingMode;
@@ -21,7 +26,7 @@ public class LazyCan extends LaserCan {
      * @param canId The CAN ID for the LaserCAN sensor
      */
     public LazyCan(int canId) {
-        super(canId);
+        laserCan = new LaserCan(canId);
         this.canId = canId;
     }
 
@@ -31,22 +36,22 @@ public class LazyCan extends LaserCan {
      * @return The distance in mm, -1 if the sensor cannot be found
      */
     public int getDistanceMm() {
-        measurement = getMeasurement();
+        measurement = laserCan.getMeasurement();
 
         return measurement != null ? measurement.distance_mm : -1;
     }
 
     public boolean getStatus() {
-        measurement = getMeasurement();
+        measurement = laserCan.getMeasurement();
         
-        return measurement != null ? getMeasurement().distance_mm <= threshold : false;
+        return measurement != null ? measurement.distance_mm <= threshold : false;
     }
 
     public LazyCan withRegionOfInterest(int x, int y, int w, int h) {
         regionOfInterest = new RegionOfInterest(x, y, w, h);
 
         try {
-            this.setRegionOfInterest(regionOfInterest);
+            laserCan.setRegionOfInterest(regionOfInterest);
         } catch (ConfigurationFailedException e) {
             DriverStation.reportError("LaserCan " + canId + ": RegionOfInterest Configuration failed! " + e, true);
         }
@@ -69,9 +74,9 @@ public class LazyCan extends LaserCan {
         }
 
         try {
-            this.setRegionOfInterest(regionOfInterest);
-            this.setRangingMode(rangingMode);
-            this.setTimingBudget(timingBudget);
+            laserCan.setRegionOfInterest(regionOfInterest);
+            laserCan.setRangingMode(rangingMode);
+            laserCan.setTimingBudget(timingBudget);
         } catch (ConfigurationFailedException e) {
             DriverStation.reportError("LaserCan " + canId + ": Configuration failed! " + e, true);
         }
@@ -80,7 +85,7 @@ public class LazyCan extends LaserCan {
     public LazyCan withRangingMode(RangingMode rangingMode) {
         this.rangingMode = rangingMode;
         try {
-            this.setRangingMode(rangingMode);
+            laserCan.setRangingMode(rangingMode);
         } catch (ConfigurationFailedException e) {
             System.out.println("LaserCan " + canId + ": RangingMode Configuration failed! " + e);
         }
@@ -90,7 +95,7 @@ public class LazyCan extends LaserCan {
     public LazyCan withTimingBudget(TimingBudget timingBudget) {
         this.timingBudget = timingBudget;
         try {
-            this.setTimingBudget(timingBudget);
+            laserCan.setTimingBudget(timingBudget);
         } catch (ConfigurationFailedException e) {
             DriverStation.reportError("LaserCan " + canId + ": TimingBudget Configuration failed! " + e, true);
         }
@@ -100,10 +105,5 @@ public class LazyCan extends LaserCan {
     public LazyCan withThreshold(int threshold) {
         this.threshold = threshold;
         return this;
-    }
-
-    @Override
-    public void close() throws Exception {
-        super.close();
     }
 }
