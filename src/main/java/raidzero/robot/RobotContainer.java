@@ -86,7 +86,7 @@ public class RobotContainer {
         swerve.setDefaultCommand(
             swerve.applyRequest(
                 () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * swerve.getSpeedModifier() * (arm.isUp() ? 0.3 : 1.0))
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )
         );
@@ -108,8 +108,8 @@ public class RobotContainer {
             )
         );
 
-        joystick.leftBumper().whileTrue(coralIntake.extake());
-        joystick.rightBumper().onTrue(coralIntake.intake());
+        joystick.leftTrigger().whileTrue(coralIntake.extake());
+        joystick.rightTrigger().onTrue(coralIntake.intake());
 
         joystick.b().whileTrue(
             swerve.pathToStation()
@@ -132,6 +132,9 @@ public class RobotContainer {
         joystick.povDown().whileTrue(
             arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
         );
+
+        joystick.rightBumper().onTrue(new InstantCommand(() -> swerve.setSpeedModifier(1.0)));
+        joystick.leftBumper().onTrue(new InstantCommand(() -> swerve.setSpeedModifier(0.67)));
 
         // * Operator controls
         operator.button(Constants.Bindings.TOP_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(0.01), arm));
