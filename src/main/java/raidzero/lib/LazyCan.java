@@ -101,4 +101,9 @@ public class LazyCan extends LaserCan {
         this.threshold = threshold;
         return this;
     }
+
+    @Override
+    public void close() throws Exception {
+        super.close();
+    }
 }
