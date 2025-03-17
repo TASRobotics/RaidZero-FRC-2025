@@ -41,12 +41,26 @@ public class LazyCan {
         return measurement != null ? measurement.distance_mm : -1;
     }
 
+    /**
+     * Returns true if the LaserCan finds an object within the distance threshold
+     * 
+     * @return if there is an object within the distance threshold
+     */
     public boolean withinThreshold() {
         measurement = laserCan.getMeasurement();
         
         return measurement != null ? measurement.distance_mm <= threshold : false;
     }
 
+    /**
+     * Sets the reigon of interest for the lasercan
+     * 
+     * @param x the x start position for the reigon
+     * @param y the y start position for the reigon
+     * @param w the width of the reigon
+     * @param h the height of the reigon
+     * @return the current LazyCan Object
+     */
     public LazyCan withRegionOfInterest(int x, int y, int w, int h) {
         regionOfInterest = new RegionOfInterest(x, y, w, h);
 
@@ -59,29 +73,12 @@ public class LazyCan {
         return this;
     }
 
-    public void build() {
-        if (regionOfInterest == null) {
-            regionOfInterest = new RegionOfInterest(4, 4, 8, 8);
-        }
-        if (rangingMode == null) {
-            rangingMode = RangingMode.SHORT;
-        }
-        if (timingBudget == null) {
-            timingBudget = TimingBudget.TIMING_BUDGET_33MS;
-        }
-        if (threshold == 0) {
-            threshold = 500;
-        }
-
-        try {
-            laserCan.setRegionOfInterest(regionOfInterest);
-            laserCan.setRangingMode(rangingMode);
-            laserCan.setTimingBudget(timingBudget);
-        } catch (ConfigurationFailedException e) {
-            DriverStation.reportError("LaserCan " + canId + ": Configuration failed! " + e, true);
-        }
-    }
-
+    /**
+     * Sets the ranging mode of the LaserCan
+     * 
+     * @param rangingMode the new ranging mode
+     * @return the current LazyCan Object
+     */
     public LazyCan withRangingMode(RangingMode rangingMode) {
         this.rangingMode = rangingMode;
         try {
@@ -92,6 +89,12 @@ public class LazyCan {
         return this;
     }
 
+    /**
+     * Sets the timing budget of the LaserCan
+     * 
+     * @param timingBudget the new timing budget
+     * @return the current LazyCan Object
+     */
     public LazyCan withTimingBudget(TimingBudget timingBudget) {
         this.timingBudget = timingBudget;
         try {
@@ -102,6 +105,12 @@ public class LazyCan {
         return this;
     }
 
+    /**
+     * Sets the distance threshold of the LaserCan
+     * 
+     * @param threshold the new threshold in milimeters
+     * @return the current LazyCan object
+     */
     public LazyCan withThreshold(double threshold) {
         this.threshold = threshold;
         return this;

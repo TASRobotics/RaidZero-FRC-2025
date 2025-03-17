@@ -60,6 +60,11 @@ public class CoralIntake extends SubsystemBase {
             );
     }
 
+    /**
+     * Returns true if the current is above a pre-defined threshold to consider it stalling
+     * 
+     * @return if the motor is stalliing
+     */
     private boolean isStalling() {
         return roller.getStatorCurrent().getValueAsDouble() > Intake.STALL_CURRENT_THRESHOLD;
     }
