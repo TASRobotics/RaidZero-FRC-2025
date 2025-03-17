@@ -15,7 +15,7 @@ import raidzero.lib.LazyCan;
 import raidzero.robot.Constants;
 
 public class CoralIntake extends SubsystemBase {
-    private TalonFXS roller, follow;
+    private TalonFXS roller;
 
     private LazyCan bottomLaser, topLaser;
 
@@ -28,27 +28,11 @@ public class CoralIntake extends SubsystemBase {
         roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID);
         roller.getConfigurator().apply(rollerConfiguration());
 
-        follow = new TalonFXS(Constants.TelescopingArm.Intake.FOLLOW_ID);
-        follow.setControl(new Follower(Constants.TelescopingArm.Intake.MOTOR_ID, true));
-        follow.getConfigurator().apply(followConfiguration());
+        bottomLaser = new LazyCan(0).withRangingMode(RangingMode.SHORT)
+            .withRegionOfInterest(8, 4, 6, 8).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
 
-        bottomLaser = new LazyCan(0);
-        try {
-            bottomLaser.setRangingMode(RangingMode.SHORT);
-            bottomLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
-            bottomLaser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
-        } catch (Exception e) {
-            System.out.println("LaserCan Config Error");
-        }
-
-        topLaser = new LazyCan(1);
-        try {
-            topLaser.setRangingMode(RangingMode.SHORT);
-            topLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
-            topLaser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
-        } catch (Exception e) {
-            System.out.println("LaserCan Config Error");
-        }
+        topLaser = new LazyCan(1).withRangingMode(RangingMode.SHORT)
+            .withRegionOfInterest(8, 4, 6, 8).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
     }
 
     /**
