@@ -169,7 +169,6 @@ public class RobotContainer {
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
-        operator.button(Constants.Bindings.CORAL_SCOOCH).onTrue(coralIntake.scoochCoral());
 
         operator.button(Constants.Bindings.CLIMB_DEPLOY)
             .onTrue(
