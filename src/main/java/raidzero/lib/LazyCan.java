@@ -18,7 +18,7 @@ public class LazyCan {
 
     private Measurement measurement;
 
-    private int threshold;
+    private double threshold;
 
     /**
      * Creates a new LaserCAN sensor.
@@ -41,7 +41,7 @@ public class LazyCan {
         return measurement != null ? measurement.distance_mm : -1;
     }
 
-    public boolean getStatus() {
+    public boolean withinThreshold() {
         measurement = laserCan.getMeasurement();
         
         return measurement != null ? measurement.distance_mm <= threshold : false;
@@ -102,7 +102,7 @@ public class LazyCan {
         return this;
     }
 
-    public LazyCan withThreshold(int threshold) {
+    public LazyCan withThreshold(double threshold) {
         this.threshold = threshold;
         return this;
     }
