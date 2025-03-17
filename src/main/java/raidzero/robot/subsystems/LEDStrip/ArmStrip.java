@@ -353,6 +353,15 @@ public class ArmStrip implements Subsystem {
     }
 
     /**
+     * Sets the strobe interval
+     *
+     * @param interval The interval in seconds
+     */
+    public void setStrobeInterval(double interval) {
+        strobeInterval = interval;
+    }
+
+    /**
      * Sets the LED to red, green, blue in alternating sequence
      */
     private void testCandleSequence() {
