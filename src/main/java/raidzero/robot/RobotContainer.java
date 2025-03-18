@@ -111,6 +111,9 @@ public class RobotContainer {
             )
         );
 
+        joystick.rightBumper().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.15)));
+        joystick.rightBumper().negate().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.5)));
+
         joystick.a().whileTrue(
             swerve.applyRequest(
                 () -> robotCentricDrive.withVelocityY(slewRateLimiter.calculate(-joystick.getLeftX()) * MaxSpeed * 0.3)
