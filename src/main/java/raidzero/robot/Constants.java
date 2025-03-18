@@ -153,7 +153,7 @@ public class Constants {
             public static final int MOTOR_ID = 12;
             public static final int FOLLOW_ID = 13;
 
-            public static final double INTAKE_SPEED = 0.08;
+            public static final double INTAKE_SPEED = 0.25;
             public static final double INTAKE_LOWER_SPEED = 0.05;
 
             public static final double EXTAKE_SPEED = 0.1;
@@ -162,6 +162,12 @@ public class Constants {
             public static final double LASERCAN_DISTANCE_THRESHOLD_MM = 50.0;
 
             public static final int CURRENT_LIMIT = 25;
+
+            public static final int SERVO_HUB_ID = 3;
+
+            public static final int SERVO_RETRACTED = 1950;
+            public static final int SERVO_EXTENDED = 1300;
+            public static final int SERVO_CENTER_WIDTH = 1625;
         }
 
         public class Joint {
