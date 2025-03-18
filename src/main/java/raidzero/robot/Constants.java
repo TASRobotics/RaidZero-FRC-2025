@@ -163,6 +163,9 @@ public class Constants {
 
             public static final int CURRENT_LIMIT = 25;
 
+            public static final int BOTTOM_LASERCAN_ID = 0;
+            public static final int TOP_LASERCAN_ID = 1;
+
             public static final int SERVO_HUB_ID = 3;
 
             public static final int SERVO_RETRACTED = 1950;

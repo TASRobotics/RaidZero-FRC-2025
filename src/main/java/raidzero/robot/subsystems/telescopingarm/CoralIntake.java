@@ -39,12 +39,12 @@ public class CoralIntake extends SubsystemBase {
         follow.setControl(new Follower(Constants.TelescopingArm.Intake.MOTOR_ID, true));
         follow.getConfigurator().apply(followConfiguration());
 
-        bottomLaser = new LazyCan(0)
+        bottomLaser = new LazyCan(Constants.TelescopingArm.Intake.BOTTOM_LASERCAN_ID)
             .withRangingMode(RangingMode.SHORT)
             .withRegionOfInterest(8, 4, 6, 8)
             .withTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
 
-        topLaser = new LazyCan(1)
+        topLaser = new LazyCan(Constants.TelescopingArm.Intake.TOP_LASERCAN_ID)
             .withRangingMode(RangingMode.SHORT)
             .withRegionOfInterest(8, 4, 6, 8)
             .withTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
