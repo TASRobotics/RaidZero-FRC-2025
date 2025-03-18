@@ -86,7 +86,7 @@ public class Constants {
             public static final double KV = 1.2;
             public static final double KA = 0.1;
 
-            public static final double KP = 15.0;
+            public static final double KP = 20.0;
             public static final double KI = 0.0;
             public static final double KD = 0.0;
 
@@ -95,8 +95,8 @@ public class Constants {
 
             public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
-            public static final double CURRENT_LIMIT = 20.0;
-            public static final double SUPPLY_CURRENT_LIMIT = 20.0;
+            public static final double CURRENT_LIMIT = 80.0;
+            public static final double SUPPLY_CURRENT_LIMIT = 80.0;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
 
             public static final double FORWARD_SOFT_LIMIT = 0.5;

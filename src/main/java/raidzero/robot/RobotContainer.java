@@ -197,6 +197,9 @@ public class RobotContainer {
         operator.button(Constants.Bindings.CLIMB_DOWN)
             .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
+        operator.axisGreaterThan(0, 0.6).whileTrue(climbJoint.run(0.125));
+        operator.axisGreaterThan(1, 0.6).whileTrue(climbJoint.run(0.28));
+
         swerve.registerTelemetry(logger::telemeterize);
     }
 
