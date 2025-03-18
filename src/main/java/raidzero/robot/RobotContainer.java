@@ -136,11 +136,11 @@ public class RobotContainer {
 
         joystick.rightBumper().onTrue(
             new InstantCommand(() -> swerve.setSpeedModifier(1.0))
-                .andThen(new InstantCommand(() -> armStrip.setStrobeInterval(0.75)))
+                .andThen(new InstantCommand(() -> armStrip.setStrobeInterval(0.15)))
         );
         joystick.leftBumper().onTrue(
             new InstantCommand(() -> swerve.setSpeedModifier(0.67))
-                .andThen(new InstantCommand(() -> armStrip.setStrobeInterval(0.25)))
+                .andThen(new InstantCommand(() -> armStrip.setStrobeInterval(0.50)))
         );
 
         // * Operator controls
