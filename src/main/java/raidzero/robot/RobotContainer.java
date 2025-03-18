@@ -177,6 +177,8 @@ public class RobotContainer {
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
         operator.button(Constants.Bindings.CORAL_SCOOCH).onTrue(coralIntake.scoochCoral());
 
+        operator.button(Constants.Bindings.BOTTOM_RIGHT).onTrue(coralIntake.unstuckServo());
+
         operator.button(Constants.Bindings.CLIMB_DEPLOY)
             .onTrue(
                 Commands.waitSeconds(0.2)
