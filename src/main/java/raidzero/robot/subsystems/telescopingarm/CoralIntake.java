@@ -83,7 +83,7 @@ public class CoralIntake extends SubsystemBase {
      * @return A {@link Command} to scooch the coral upwards
      */
     public Command scoochCoral() {
-        return run(() -> roller.set(-Constants.TelescopingArm.Intake.INTAKE_SPEED))
+        return run(() -> roller.set(-Constants.TelescopingArm.Intake.INTAKE_LOWER_SPEED))
             .until(() -> getTopLaserDistance() <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM);
     }
 
