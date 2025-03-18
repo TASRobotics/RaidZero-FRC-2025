@@ -68,6 +68,22 @@ public class LazyCan {
     }
 
     /**
+     * Sets the reigon of interest for the lasercan
+     * 
+     * @param regionOfInterest The region of interest
+     * @return The current {@link LazyCan} instance
+     */
+    public LazyCan withRegionOfInterest(RegionOfInterest regionOfInterest) {
+        try {
+            laserCan.setRegionOfInterest(regionOfInterest);
+        } catch (ConfigurationFailedException e) {
+            DriverStation.reportError("LaserCan " + canId + ": RegionOfInterest Configuration failed! " + e, true);
+        }
+
+        return this;
+    }
+
+    /**
      * Sets the ranging mode of the LaserCan
      *
      * @param rangingMode the new ranging mode
