@@ -67,7 +67,7 @@ public class LazyCan {
 
     /**
      * Sets the reigon of interest for the lasercan
-     * 
+     *
      * @param regionOfInterest The region of interest
      * @return The current {@link LazyCan} instance
      */
