@@ -1,7 +1,6 @@
 package raidzero.robot.subsystems.telescopingarm;
 
 import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
-import au.grapplerobotics.interfaces.LaserCanInterface.RegionOfInterest;
 import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.Follower;
@@ -32,23 +31,15 @@ public class CoralIntake extends SubsystemBase {
         follow.setControl(new Follower(Constants.TelescopingArm.Intake.MOTOR_ID, true));
         follow.getConfigurator().apply(followConfiguration());
 
-        bottomLaser = new LazyCan(0);
-        try {
-            bottomLaser.setRangingMode(RangingMode.SHORT);
-            bottomLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
-            bottomLaser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
-        } catch (Exception e) {
-            System.out.println("LaserCan Config Error");
-        }
+        bottomLaser = new LazyCan(0)
+            .withRangingMode(RangingMode.SHORT)
+            .withRegionOfInterest(8, 4, 6, 8)
+            .withTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
 
-        topLaser = new LazyCan(1);
-        try {
-            topLaser.setRangingMode(RangingMode.SHORT);
-            topLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
-            topLaser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
-        } catch (Exception e) {
-            System.out.println("LaserCan Config Error");
-        }
+        topLaser = new LazyCan(1)
+            .withRangingMode(RangingMode.SHORT)
+            .withRegionOfInterest(8, 4, 6, 8)
+            .withTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
     }
 
     /**
