@@ -95,6 +95,7 @@ public class LazyCan {
         } catch (ConfigurationFailedException e) {
             System.out.println("LaserCan " + canId + ": RangingMode Configuration failed! " + e);
         }
+
         return this;
     }
 
@@ -110,6 +111,7 @@ public class LazyCan {
         } catch (ConfigurationFailedException e) {
             DriverStation.reportError("LaserCan " + canId + ": TimingBudget Configuration failed! " + e, true);
         }
+
         return this;
     }
 
