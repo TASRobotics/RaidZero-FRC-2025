@@ -160,21 +160,12 @@ public class RobotContainer {
                 .onlyIf(swerve.isArmDeployable())
         );
 
-        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE).negate()).whileTrue(
+        operator.button(Constants.Bindings.L4).negate().whileTrue(
             arm.moveToL4()
                 .onlyIf(swerve.isArmDeployable())
         );
-        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE))
-            .whileTrue(arm.moveWithoutDelay(Constants.TelescopingArm.Positions.L4_CHECK_POSITION).onlyIf(() -> arm.isUp()));
 
-        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_EXTAKE))
-            .onTrue(
-                arm.moveWithoutDelay(Constants.TelescopingArm.Positions.L4_GRAND_SLAM).onlyIf(() -> arm.isUp())
-                    .until(
-                        () -> arm.getJointPosition() >= arm.calculateJointAngle(Constants.TelescopingArm.Positions.L4_GRAND_SLAM) &&
-                            arm.getTelescopePosition() <= arm.calculateTelescopeHeight(Constants.TelescopingArm.Positions.L4_GRAND_SLAM)
-                    ).withTimeout(0.5)
-            );
+        operator.button(Constants.Bindings.ALGAE_INTAKE).onTrue(coralIntake.contingencyIntake());
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());

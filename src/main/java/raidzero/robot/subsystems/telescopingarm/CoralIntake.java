@@ -2,6 +2,8 @@ package raidzero.robot.subsystems.telescopingarm;
 
 import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
 import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
+
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFXS;
@@ -17,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.lib.LazyCan;
 import raidzero.robot.Constants;
+import raidzero.robot.Constants.TelescopingArm.Intake;
 
 public class CoralIntake extends SubsystemBase {
     private TalonFXS roller, follow;
@@ -74,6 +77,18 @@ public class CoralIntake extends SubsystemBase {
     public Command intake() {
         return run(() -> roller.set(Constants.TelescopingArm.Intake.INTAKE_SPEED))
             .until(() -> getBottomLaserDistance() <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM);
+    }
+
+    public Command contingencyIntake() {
+        return startRun(
+            () -> roller.getConfigurator().apply(
+                rollerConfiguration().withCurrentLimits(
+                    new CurrentLimitsConfigs().withSupplyCurrentLimit(3).withSupplyCurrentLowerLimit(1.5).withSupplyCurrentLowerTime(0.05)
+                )
+            ),
+            () -> roller.set(Constants.TelescopingArm.Intake.INTAKE_SPEED - 0.05)
+        ).until(() -> getBottomLaserDistance() <= Intake.LASERCAN_DISTANCE_THRESHOLD_MM)
+            .finallyDo(() -> roller.getConfigurator().apply(rollerConfiguration()));
     }
 
     /**
