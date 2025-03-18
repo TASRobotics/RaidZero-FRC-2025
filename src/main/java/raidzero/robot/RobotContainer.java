@@ -86,12 +86,8 @@ public class RobotContainer {
         swerve.setDefaultCommand(
             swerve.applyRequest(
                 () -> fieldCentricDrive
-                    .withVelocityX(
-                        -joystick.getLeftY() * MaxSpeed * (joystick.rightBumper().getAsBoolean() ? 1.0 : 0.67) * (arm.isUp() ? 0.3 : 1.0)
-                    )
-                    .withVelocityY(
-                        -joystick.getLeftX() * MaxSpeed * (joystick.rightBumper().getAsBoolean() ? 1.0 : 0.67) * (arm.isUp() ? 0.3 : 1.0)
-                    )
+                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )
         );
@@ -106,6 +102,15 @@ public class RobotContainer {
         climbWinch.setDefaultCommand(climbWinch.stop());
 
         // * Driver controls
+        joystick.rightBumper().whileTrue(
+            swerve.applyRequest(
+                () -> fieldCentricDrive
+                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * (arm.isUp() ? 0.3 : 1.0))
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
+            )
+        );
+
         joystick.a().whileTrue(
             swerve.applyRequest(
                 () -> robotCentricDrive.withVelocityY(slewRateLimiter.calculate(-joystick.getLeftX()) * MaxSpeed * 0.3)
