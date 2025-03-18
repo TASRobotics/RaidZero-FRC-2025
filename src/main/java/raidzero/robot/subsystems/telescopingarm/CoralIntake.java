@@ -121,6 +121,15 @@ public class CoralIntake extends SubsystemBase {
         return run(() -> roller.set(speed));
     }
 
+    @Override
+    public void periodic() {
+        if (getBottomLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM) {
+            intakeBlock.setPulseWidth(Constants.TelescopingArm.Intake.SERVO_EXTENDED);
+        } else {
+            intakeBlock.setPulseWidth(Constants.TelescopingArm.Intake.SERVO_RETRACTED);
+        }
+    }
+
     /**
      * Gets the distance from the LaserCAN
      *
