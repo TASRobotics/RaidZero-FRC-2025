@@ -195,19 +195,19 @@ public class Constants {
         }
 
         public static class Positions {
-            public static final double[] L4_SCORING_POS_M = { -0.24, 2.72 };
-            public static final double[] L4_SCORING_POS_M_BLUE = { -0.17, 2.68 };
-            public static final double[] L4_CHECK_POSITION = { -0.25, 2.62 };
-            public static final double[] L4_GRAND_SLAM = { -0.2, 1.57 };
+            public static double[] L4_SCORING_POS_M = { -0.24, 2.72 };
+            public static double[] L4_SCORING_POS_M_BLUE = { -0.17, 2.68 };
+            public static double[] L4_CHECK_POSITION = { -0.25, 2.62 };
+            public static double[] L4_GRAND_SLAM = { -0.2, 1.57 };
 
-            public static final double[] L3_SCORING_POS_M = { -0.25, 1.57 };
-            public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
-            public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
+            public static double[] L3_SCORING_POS_M = { -0.25, 1.57 };
+            public static double[] L2_SCORING_POS_M = { -0.2, 0.9 };
+            public static double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static final double[] INTAKE_POS_M = { 0.5, 0.835 };
-            public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.81 };
+            public static double[] INTAKE_POS_M = { 0.5, 0.835 };
+            public static double[] INTAKE_POS_M_BLUE = { 0.5, 0.81 };
 
-            public static final double[] HOME_POS_M = { 0.0, 0.0 };
+            public static double[] HOME_POS_M = { 0.0, 0.0 };
         }
 
         public static class Telescope {
