@@ -12,10 +12,6 @@ public class LazyCan {
     private LaserCan laserCan;
     private int canId;
 
-    private RangingMode rangingMode;
-    private RegionOfInterest regionOfInterest;
-    private TimingBudget timingBudget;
-
     private Measurement measurement;
 
     private double threshold;
@@ -62,10 +58,8 @@ public class LazyCan {
      * @return the current LazyCan Object
      */
     public LazyCan withRegionOfInterest(int x, int y, int w, int h) {
-        regionOfInterest = new RegionOfInterest(x, y, w, h);
-
         try {
-            laserCan.setRegionOfInterest(regionOfInterest);
+            laserCan.setRegionOfInterest(new RegionOfInterest(x, y, w, h));
         } catch (ConfigurationFailedException e) {
             DriverStation.reportError("LaserCan " + canId + ": RegionOfInterest Configuration failed! " + e, true);
         }
@@ -80,7 +74,6 @@ public class LazyCan {
      * @return the current LazyCan Object
      */
     public LazyCan withRangingMode(RangingMode rangingMode) {
-        this.rangingMode = rangingMode;
         try {
             laserCan.setRangingMode(rangingMode);
         } catch (ConfigurationFailedException e) {
@@ -96,7 +89,6 @@ public class LazyCan {
      * @return the current LazyCan Object
      */
     public LazyCan withTimingBudget(TimingBudget timingBudget) {
-        this.timingBudget = timingBudget;
         try {
             laserCan.setTimingBudget(timingBudget);
         } catch (ConfigurationFailedException e) {
