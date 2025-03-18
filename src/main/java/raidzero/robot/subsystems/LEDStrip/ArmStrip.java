@@ -80,14 +80,14 @@ public class ArmStrip implements Subsystem {
         armIsLegal = arm.getJointPosition() >= Constants.CANdle.ARM_JOINT_LOWER_BOUND &&
             arm.getJointPosition() <= Constants.CANdle.ARM_JOINT_UPPER_BOUND;
 
-        coralTooDown = CoralIntake.system().getTopLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
-            CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+        coralTooDown = CoralIntake.system().getTopLaserDistance() > Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
+            CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM;
 
-        coralTooUp = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
-            CoralIntake.system().getBottomLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+        coralTooUp = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
+            CoralIntake.system().getBottomLaserDistance() > Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM;
 
-        coralIsIn = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
-            CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+        coralIsIn = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
+            CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM;
     }
 
     /**

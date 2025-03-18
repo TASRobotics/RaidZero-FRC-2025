@@ -110,7 +110,7 @@ public class RobotContainer {
         );
 
         joystick.leftTrigger().whileTrue(coralIntake.extake());
-        joystick.rightTrigger().onTrue(coralIntake.intake());
+        joystick.rightTrigger().onTrue(coralIntake.intakeSimple());
 
         joystick.b().whileTrue(
             swerve.pathToStation()
@@ -245,8 +245,8 @@ public class RobotContainer {
             "ExtakeCoral",
             coralIntake.run(0.1).until(
                 () -> {
-                    return coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
-                        coralIntake.getTopLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+                    return coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
+                        coralIntake.getTopLaserDistance() >= Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM;
                 }
             ).withTimeout(1.0).andThen(() -> coralIntake.stop())
         );

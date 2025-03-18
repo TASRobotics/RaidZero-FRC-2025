@@ -3,10 +3,8 @@ package raidzero.robot;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -164,15 +162,17 @@ public class Constants {
             public static final int SUPPLY_CURRENT_LIMIT = 50;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
 
-            public static final double LASERCAN_DISTANCE_THRESHOLD_MM = 50.0;
+            public static final double TOP_LASER_THRESHOLD_MM = 100.0;
+            public static final double BOTTOM_LASER_THRESHOLD_MM = 50.0;
 
-            public static final double INTAKE_SPEED = 0.20;
-            public static final double INTAKE_LOWER_SPEED = 0.10;
-            public static final double EJECT_SPEED = -0.1;
+            public static final double INTAKE_SPEED = 0.50;
+            public static final double INTAKE_LOWER_SPEED = 0.25;
+            public static final double EJECT_SPEED = -0.50;
+            public static final double REVERSE_SPEED = -0.2;
 
-            public static final int STALL_CURRENT_THRESHOLD = 40;
+            public static final double STALL_CURRENT_THRESHOLD = 20.0;
 
-            public static final double EXTAKE_SPEED = 0.1;
+            public static final double EXTAKE_SPEED = 0.25;
             public static final double EXTAKE_TIMEOUT_S = 1.0;
 
         }
@@ -218,7 +218,7 @@ public class Constants {
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
             public static final double[] INTAKE_POS_M = { 0.5, 0.835 };
-            public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.81 };
+            public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.88 };
 
             public static final double[] HOME_POS_M = { 0.0, 0.0 };
         }

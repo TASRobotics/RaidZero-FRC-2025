@@ -27,13 +27,13 @@ public class CoralIntake extends SubsystemBase {
         roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID);
         roller.getConfigurator().apply(rollerConfiguration());
 
-        bottomLaser = new LazyCan(0).withRangingMode(RangingMode.SHORT)
-            .withRegionOfInterest(8, 4, 6, 8).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
-            .withThreshold(Intake.LASERCAN_DISTANCE_THRESHOLD_MM);
+        bottomLaser = new LazyCan(1).withRangingMode(RangingMode.SHORT)
+            .withRegionOfInterest(8, 8, 16, 16).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
+            .withThreshold(Intake.BOTTOM_LASER_THRESHOLD_MM);
 
-        topLaser = new LazyCan(1).withRangingMode(RangingMode.SHORT)
-            .withRegionOfInterest(8, 4, 6, 8).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
-            .withThreshold(Intake.LASERCAN_DISTANCE_THRESHOLD_MM);
+        topLaser = new LazyCan(0).withRangingMode(RangingMode.SHORT)
+            .withRegionOfInterest(8, 8, 16, 16).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
+            .withThreshold(Intake.TOP_LASER_THRESHOLD_MM);
     }
 
     /**
@@ -55,14 +55,19 @@ public class CoralIntake extends SubsystemBase {
                 new SequentialCommandGroup(
                     run(() -> roller.set(Intake.EJECT_SPEED)).onlyIf(() -> isStalling()).withTimeout(0.5),
                     run(() -> roller.set(Intake.INTAKE_LOWER_SPEED)).onlyIf(() -> !isStalling()).until(() -> bottomLaser.withinThreshold())
-                        .andThen(() -> roller.set(Intake.EJECT_SPEED)).until(() -> !bottomLaser.withinThreshold())
+                        .andThen(() -> roller.set(Intake.REVERSE_SPEED)).until(() -> !bottomLaser.withinThreshold())
                 )
             );
     }
 
+    public Command intakeSimple() {
+        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> bottomLaser.withinThreshold())
+            .andThen(run(() -> roller.set(Intake.REVERSE_SPEED)).withTimeout(0.5));
+    }
+
     /**
      * Returns true if the current is above a pre-defined threshold to consider it stalling
-     * 
+     *
      * @return if the motor is stalliing
      */
     private boolean isStalling() {
