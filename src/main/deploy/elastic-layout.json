@@ -55,19 +55,6 @@
               "red_start_time": 15,
               "yellow_start_time": 30
             }
-          },
-          {
-            "title": "Speed cap",
-            "x": 0.0,
-            "y": 384.0,
-            "width": 512.0,
-            "height": 256.0,
-            "type": "Large Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/Speed cap",
-              "period": 0.06,
-              "data_type": "double"
-            }
           }
         ]
       }

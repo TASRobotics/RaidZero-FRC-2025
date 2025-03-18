@@ -86,8 +86,8 @@ public class RobotContainer {
         swerve.setDefaultCommand(
             swerve.applyRequest(
                 () -> fieldCentricDrive
-                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * swerve.getSpeedModifier() * (arm.isUp() ? 0.3 : 1.0))
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * swerve.getSpeedModifier() * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )
         );
@@ -102,6 +102,18 @@ public class RobotContainer {
         climbWinch.setDefaultCommand(climbWinch.stop());
 
         // * Driver controls
+        joystick.rightBumper().whileTrue(
+            swerve.applyRequest(
+                () -> fieldCentricDrive
+                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * (arm.isUp() ? 0.3 : 1.0))
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
+            )
+        );
+
+        joystick.rightBumper().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.15)));
+        joystick.rightBumper().negate().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.5)));
+
         joystick.a().whileTrue(
             swerve.applyRequest(
                 () -> robotCentricDrive.withVelocityY(slewRateLimiter.calculate(-joystick.getLeftX()) * MaxSpeed * 0.3)
@@ -132,15 +144,6 @@ public class RobotContainer {
 
         joystick.povDown().whileTrue(
             arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
-        );
-
-        joystick.rightBumper().onTrue(
-            new InstantCommand(() -> swerve.setSpeedModifier(1.0))
-                .andThen(new InstantCommand(() -> armStrip.setStrobeInterval(0.15)))
-        );
-        joystick.leftBumper().onTrue(
-            new InstantCommand(() -> swerve.setSpeedModifier(0.67))
-                .andThen(new InstantCommand(() -> armStrip.setStrobeInterval(0.50)))
         );
 
         // * Operator controls
