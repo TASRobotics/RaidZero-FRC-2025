@@ -102,7 +102,7 @@ public class RobotContainer {
         climbWinch.setDefaultCommand(climbWinch.stop());
 
         // * Driver controls
-        joystick.rightBumper().whileTrue(
+        joystick.rightTrigger().whileTrue(
             swerve.applyRequest(
                 () -> fieldCentricDrive
                     .withVelocityX(-joystick.getLeftY() * MaxSpeed * (arm.isUp() ? 0.3 : 1.0))
@@ -111,8 +111,8 @@ public class RobotContainer {
             )
         );
 
-        joystick.rightBumper().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.15)));
-        joystick.rightBumper().negate().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.5)));
+        joystick.rightTrigger().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.15)));
+        joystick.rightTrigger().negate().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.5)));
 
         joystick.a().whileTrue(
             swerve.applyRequest(
@@ -121,8 +121,8 @@ public class RobotContainer {
             )
         );
 
-        joystick.leftTrigger().whileTrue(coralIntake.extake());
-        joystick.rightTrigger().onTrue(coralIntake.intake());
+        joystick.leftBumper().whileTrue(coralIntake.extake());
+        joystick.rightBumper().onTrue(coralIntake.intake());
 
         joystick.b().whileTrue(
             swerve.pathToStation()
@@ -178,7 +178,7 @@ public class RobotContainer {
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
-        operator.button(Constants.Bindings.CORAL_SCOOCH).onTrue(coralIntake.scoochCoral());
+        operator.button(Constants.Bindings.CORAL_SCOOCH).whileTrue(coralIntake.run(-Constants.TelescopingArm.Intake.EXTAKE_SPEED));
 
         operator.button(Constants.Bindings.BOTTOM_RIGHT).onTrue(coralIntake.unstuckServo());
 

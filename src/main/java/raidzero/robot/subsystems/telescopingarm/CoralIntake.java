@@ -77,16 +77,6 @@ public class CoralIntake extends SubsystemBase {
     }
 
     /**
-     * Creates a {@link Command} to scooch the coral upwards if too low
-     *
-     * @return A {@link Command} to scooch the coral upwards
-     */
-    public Command scoochCoral() {
-        return run(() -> roller.set(-Constants.TelescopingArm.Intake.INTAKE_LOWER_SPEED))
-            .until(() -> getTopLaserDistance() <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM);
-    }
-
-    /**
      * Creates a {@link Command} to move the coral upwards to unstuck the servo block
      *
      * @return A {@link Command} to move the coral upwards
