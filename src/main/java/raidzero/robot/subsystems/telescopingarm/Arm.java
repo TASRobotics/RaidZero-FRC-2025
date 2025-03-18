@@ -189,7 +189,7 @@ public class Arm extends SubsystemBase {
      * @param setpoint The target setpoint in percentage of full range of motion
      */
     public void moveTelescope(double setpoint) {
-        telescope.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+        telescope.setControl(new MotionMagicVoltage(0).withPosition(setpoint));
         SmartDashboard.putNumber("Telescope Setpoint", setpoint);
     }
 
@@ -199,7 +199,7 @@ public class Arm extends SubsystemBase {
      * @param setpoint The target setpoint in rotations
      */
     public void moveJoint(double setpoint) {
-        joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint));
+        joint.setControl(new MotionMagicVoltage(0).withPosition(setpoint));
         SmartDashboard.putNumber("Joint Setpoint", setpoint);
     }
 

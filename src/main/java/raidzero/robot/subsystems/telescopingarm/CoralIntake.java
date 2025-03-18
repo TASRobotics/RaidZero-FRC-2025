@@ -39,12 +39,12 @@ public class CoralIntake extends SubsystemBase {
         follow.setControl(new Follower(Constants.TelescopingArm.Intake.MOTOR_ID, true));
         follow.getConfigurator().apply(followConfiguration());
 
-        bottomLaser = new LazyCan(0)
+        bottomLaser = new LazyCan(Constants.TelescopingArm.Intake.BOTTOM_LASERCAN_ID)
             .withRangingMode(RangingMode.SHORT)
             .withRegionOfInterest(8, 4, 6, 8)
             .withTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
 
-        topLaser = new LazyCan(1)
+        topLaser = new LazyCan(Constants.TelescopingArm.Intake.TOP_LASERCAN_ID)
             .withRangingMode(RangingMode.SHORT)
             .withRegionOfInterest(8, 4, 6, 8)
             .withTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
@@ -67,10 +67,9 @@ public class CoralIntake extends SubsystemBase {
     }
 
     /**
-     * Creates a {@link Command} to run the intake at the specified speed
+     * Creates a {@link Command} to intake the coral
      *
-     * @param speed The speed as a percentage
-     * @return The command to be scheduled and run
+     * @return A {@link Command} to intake the coral
      */
     public Command intake() {
         return run(() -> roller.set(Constants.TelescopingArm.Intake.INTAKE_SPEED))
@@ -107,10 +106,9 @@ public class CoralIntake extends SubsystemBase {
     }
 
     /**
-     * Creates a {@link Command} to extake at the specified speed
+     * Creates a {@link Command} to extake the coral
      *
-     * @param speed The desired speed [0, 1.0]
-     * @return A {@link Command} to extake at the specified speed
+     * @return A {@link Command} to extake the coral
      */
     public Command extake() {
         return run(() -> roller.set(Constants.TelescopingArm.Intake.EXTAKE_SPEED))
@@ -120,7 +118,7 @@ public class CoralIntake extends SubsystemBase {
     /**
      * Creates a {@link Command} to run the roller at the specified speed
      *
-     * @param setpoint The speed to run the roller at [-1, 1]
+     * @param speed The speed to run the roller at [-1, 1]
      * @return A {@link Command} to run the roller at the specified speed
      */
     public Command run(double speed) {
