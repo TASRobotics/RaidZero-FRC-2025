@@ -38,9 +38,9 @@ public class LazyCan {
     }
 
     /**
-     * Returns true if the LaserCan finds an object within the distance threshold
+     * Checks if the LaserCan finds an object within the distance threshold
      *
-     * @return if there is an object within the distance threshold
+     * @return True if there is an object within the distance threshold, false otherwise
      */
     public boolean withinThreshold() {
         measurement = laserCan.getMeasurement();
@@ -55,7 +55,7 @@ public class LazyCan {
      * @param y the y start position for the reigon
      * @param w the width of the reigon
      * @param h the height of the reigon
-     * @return the current LazyCan Object
+     * @return The current {@link LazyCan} instance
      */
     public LazyCan withRegionOfInterest(int x, int y, int w, int h) {
         try {
@@ -86,8 +86,8 @@ public class LazyCan {
     /**
      * Sets the ranging mode of the LaserCan
      *
-     * @param rangingMode the new ranging mode
-     * @return the current LazyCan Object
+     * @param rangingMode The ranging mode
+     * @return The current {@link LazyCan} instance
      */
     public LazyCan withRangingMode(RangingMode rangingMode) {
         try {
@@ -101,8 +101,8 @@ public class LazyCan {
     /**
      * Sets the timing budget of the LaserCan
      *
-     * @param timingBudget the new timing budget
-     * @return the current LazyCan Object
+     * @param timingBudget The timing budget
+     * @return The current {@link LazyCan} instance
      */
     public LazyCan withTimingBudget(TimingBudget timingBudget) {
         try {
@@ -116,8 +116,8 @@ public class LazyCan {
     /**
      * Sets the distance threshold of the LaserCan
      *
-     * @param threshold the new threshold in milimeters
-     * @return the current LazyCan object
+     * @param threshold The threshold in milimeters
+     * @return The current {@link LazyCan} instance
      */
     public LazyCan withThreshold(double threshold) {
         this.threshold = threshold;
