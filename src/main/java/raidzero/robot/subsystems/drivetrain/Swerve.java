@@ -440,7 +440,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         botpose.set(this.getState().Pose);
         field.setRobotPose(this.getState().Pose);
 
-        SmartDashboard.putNumber("Bot Speed", speedModifier * 100.0);
+        SmartDashboard.putNumber("Speed cap", speedModifier * 100.0);
     }
 
     /**

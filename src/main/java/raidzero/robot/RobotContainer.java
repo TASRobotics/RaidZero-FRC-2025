@@ -134,8 +134,14 @@ public class RobotContainer {
             arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
         );
 
-        joystick.rightBumper().onTrue(new InstantCommand(() -> swerve.setSpeedModifier(1.0)));
-        joystick.leftBumper().onTrue(new InstantCommand(() -> swerve.setSpeedModifier(0.67)));
+        joystick.rightBumper().onTrue(
+            new InstantCommand(() -> swerve.setSpeedModifier(1.0))
+                .andThen(new InstantCommand(() -> armStrip.setStrobeInterval(0.15)))
+        );
+        joystick.leftBumper().onTrue(
+            new InstantCommand(() -> swerve.setSpeedModifier(0.67))
+                .andThen(new InstantCommand(() -> armStrip.setStrobeInterval(0.50)))
+        );
 
         // * Operator controls
         operator.button(Constants.Bindings.TOP_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(0.01), arm));
