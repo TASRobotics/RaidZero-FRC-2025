@@ -74,11 +74,7 @@ public class CoralIntake extends SubsystemBase {
      */
     public Command intake() {
         return run(() -> roller.set(Constants.TelescopingArm.Intake.INTAKE_SPEED))
-            .until(() -> getBottomLaserDistance() <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM)
-            .andThen(
-                run(() -> roller.set(-Constants.TelescopingArm.Intake.INTAKE_SPEED))
-                    .withTimeout(0.1)
-            );
+            .until(() -> getBottomLaserDistance() <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM);
     }
 
     /**
