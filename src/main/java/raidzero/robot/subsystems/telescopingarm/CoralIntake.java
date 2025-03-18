@@ -8,6 +8,11 @@ import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.servohub.ServoChannel;
+import com.revrobotics.servohub.ServoChannel.ChannelId;
+import com.revrobotics.servohub.ServoHub;
+import com.revrobotics.servohub.config.ServoChannelConfig.BehaviorWhenDisabled;
+import com.revrobotics.servohub.config.ServoHubConfig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.lib.LazyCan;
@@ -15,6 +20,9 @@ import raidzero.robot.Constants;
 
 public class CoralIntake extends SubsystemBase {
     private TalonFXS roller, follow;
+
+    private ServoHub servoHub;
+    private ServoChannel intakeBlock;
 
     private LazyCan bottomLaser, topLaser;
 
@@ -40,6 +48,13 @@ public class CoralIntake extends SubsystemBase {
             .withRangingMode(RangingMode.SHORT)
             .withRegionOfInterest(8, 4, 6, 8)
             .withTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
+
+        servoHub = new ServoHub(Constants.TelescopingArm.Intake.SERVO_HUB_ID);
+        servoHub.configure(getServoHubConfig(), ServoHub.ResetMode.kResetSafeParameters);
+
+        intakeBlock = servoHub.getServoChannel(ChannelId.kChannelId2);
+        intakeBlock.setPowered(true);
+        intakeBlock.setEnabled(true);
     }
 
     /**
@@ -153,6 +168,25 @@ public class CoralIntake extends SubsystemBase {
         configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         return configuration;
+    }
+
+    /**
+     * Gets the {@link ServoHubConfig} for the REV Servo Hub
+     *
+     * @return The {@link ServoHubConfig} for the REV Servo Hub
+     */
+    private ServoHubConfig getServoHubConfig() {
+        ServoHubConfig config = new ServoHubConfig();
+
+        config.channel2
+            .pulseRange(
+                Constants.TelescopingArm.Intake.SERVO_EXTENDED,
+                Constants.TelescopingArm.Intake.SERVO_CENTER_WIDTH,
+                Constants.TelescopingArm.Intake.SERVO_RETRACTED
+            )
+            .disableBehavior(BehaviorWhenDisabled.kSupplyPower);
+
+        return config;
     }
 
     /**

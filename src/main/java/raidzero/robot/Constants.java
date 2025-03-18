@@ -162,6 +162,12 @@ public class Constants {
             public static final double LASERCAN_DISTANCE_THRESHOLD_MM = 50.0;
 
             public static final int CURRENT_LIMIT = 25;
+
+            public static final int SERVO_HUB_ID = 3;
+
+            public static final int SERVO_RETRACTED = 1950;
+            public static final int SERVO_EXTENDED = 1300;
+            public static final int SERVO_CENTER_WIDTH = 1625;
         }
 
         public class Joint {
