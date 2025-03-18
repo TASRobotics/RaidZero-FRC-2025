@@ -86,8 +86,12 @@ public class RobotContainer {
         swerve.setDefaultCommand(
             swerve.applyRequest(
                 () -> fieldCentricDrive
-                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * swerve.getSpeedModifier() * (arm.isUp() ? 0.3 : 1.0))
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * swerve.getSpeedModifier() * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityX(
+                        -joystick.getLeftY() * MaxSpeed * (joystick.rightBumper().getAsBoolean() ? 1.0 : 0.67) * (arm.isUp() ? 0.3 : 1.0)
+                    )
+                    .withVelocityY(
+                        -joystick.getLeftX() * MaxSpeed * (joystick.rightBumper().getAsBoolean() ? 1.0 : 0.67) * (arm.isUp() ? 0.3 : 1.0)
+                    )
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )
         );
@@ -132,15 +136,6 @@ public class RobotContainer {
 
         joystick.povDown().whileTrue(
             arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
-        );
-
-        joystick.rightBumper().onTrue(
-            new InstantCommand(() -> swerve.setSpeedModifier(1.0))
-                .andThen(new InstantCommand(() -> armStrip.setStrobeInterval(0.15)))
-        );
-        joystick.leftBumper().onTrue(
-            new InstantCommand(() -> swerve.setSpeedModifier(0.67))
-                .andThen(new InstantCommand(() -> armStrip.setStrobeInterval(0.50)))
         );
 
         // * Operator controls
