@@ -43,9 +43,7 @@ public class LazyCan {
      * @return True if there is an object within the distance threshold, false otherwise
      */
     public boolean withinThreshold() {
-        measurement = laserCan.getMeasurement();
-
-        return measurement != null ? measurement.distance_mm <= threshold : false;
+        return getDistanceMm() <= threshold;
     }
 
     /**
