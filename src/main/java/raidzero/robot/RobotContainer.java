@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
+import raidzero.robot.subsystems.algaedescore.AlgaeExtake;
+import raidzero.robot.subsystems.algaedescore.Telescope;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 import raidzero.robot.subsystems.climb.Winch;
 import raidzero.robot.subsystems.drivetrain.Limelight;
@@ -52,6 +54,9 @@ public class RobotContainer {
 
     public final Arm arm = Arm.system();
     public final CoralIntake coralIntake = CoralIntake.system();
+
+    public final Telescope algaeTelescope = Telescope.system();
+    public final AlgaeExtake algaeExtake = AlgaeExtake.system();
 
     public final Limelight limes = Limelight.system();
 
@@ -94,7 +99,10 @@ public class RobotContainer {
 
         // arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
         arm.setDefaultCommand(arm.moveToIntake());
+        algaeTelescope.setDefaultCommand(algaeTelescope.moveToHome());
+
         coralIntake.setDefaultCommand(coralIntake.stop());
+        algaeExtake.setDefaultCommand(algaeExtake.stop());
 
         // algaeIntake.setDefaultCommand(algaeIntake.moveJoint(Constants.AlgaeIntake.Joint.HOME_POSITION));
 
@@ -147,38 +155,38 @@ public class RobotContainer {
         );
 
         // * Operator controls
-        operator.button(Constants.Bindings.TOP_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(0.01), arm));
-        operator.button(Constants.Bindings.BOTTOM_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(-0.01), arm));
-        operator.button(Constants.Bindings.TOP_RIGHT).onTrue(new InstantCommand(() -> arm.removeIntakeOffset(), arm));
+        operator.button(Constants.Bindings.Digital.TOP_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(0.01), arm));
+        operator.button(Constants.Bindings.Digital.BOTTOM_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(-0.01), arm));
+        operator.button(Constants.Bindings.Digital.TOP_RIGHT).onTrue(new InstantCommand(() -> arm.removeIntakeOffset(), arm));
 
-        operator.button(Constants.Bindings.L2).whileTrue(
+        operator.button(Constants.Bindings.Digital.L2).whileTrue(
             arm.moveTo(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
-        operator.button(Constants.Bindings.L3).whileTrue(
+        operator.button(Constants.Bindings.Digital.L3).whileTrue(
             arm.moveTo(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
 
-        operator.button(Constants.Bindings.L4).negate().whileTrue(
+        operator.button(Constants.Bindings.Digital.L4).negate().whileTrue(
             arm.moveToL4()
                 .onlyIf(swerve.isArmDeployable())
         );
 
-        operator.button(Constants.Bindings.ALGAE_INTAKE).onTrue(coralIntake.contingencyIntake());
+        operator.button(Constants.Bindings.Digital.ALGAE_INTAKE).onTrue(coralIntake.contingencyIntake());
 
-        operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
-        operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
-        operator.button(Constants.Bindings.CORAL_SCOOCH).whileTrue(coralIntake.run(-Constants.TelescopingArm.Intake.EXTAKE_SPEED));
+        operator.button(Constants.Bindings.Digital.CORAL_EXTAKE).whileTrue(coralIntake.extake());
+        operator.button(Constants.Bindings.Digital.CORAL_INTAKE).onTrue(coralIntake.intake());
+        operator.button(Constants.Bindings.Digital.CORAL_SCOOCH).whileTrue(coralIntake.run(-Constants.TelescopingArm.Intake.EXTAKE_SPEED));
 
-        operator.button(Constants.Bindings.BOTTOM_RIGHT).onTrue(coralIntake.unstuckServo());
+        operator.button(Constants.Bindings.Digital.BOTTOM_RIGHT).onTrue(coralIntake.unstuckServo());
 
-        operator.button(Constants.Bindings.CLIMB_DEPLOY)
+        operator.button(Constants.Bindings.Digital.CLIMB_DEPLOY)
             .onTrue(
                 Commands.waitSeconds(0.2)
                     .andThen(
                         climbJoint.run(Constants.Climb.Joint.DEPLOYED_POS)
-                            .until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
+                            .until(() -> operator.button(Constants.Bindings.Digital.CLIMB_UP).getAsBoolean())
                             .andThen(() -> climbJoint.stop()).alongWith(
                                 new InstantCommand(
                                     () -> climbJoint.setDeployedState()
@@ -186,20 +194,22 @@ public class RobotContainer {
                             )
                     )
             );
-        operator.button(Constants.Bindings.CLIMB_DEPLOY).onTrue(arm.climbPos());
+        operator.button(Constants.Bindings.Digital.CLIMB_DEPLOY).onTrue(arm.climbPos());
 
-        // operator.button(Constants.Bindings.CLIMB_UP)
+        // operator.button(Constants.Bindings.Digital.CLIMB_UP)
         // .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
-        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED));
-        operator.button(Constants.Bindings.CLIMB_UP).onTrue(climbJoint.retract());
+        operator.button(Constants.Bindings.Digital.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED));
+        operator.button(Constants.Bindings.Digital.CLIMB_UP).onTrue(climbJoint.retract());
 
-        operator.button(Constants.Bindings.CLIMB_DOWN)
+        operator.button(Constants.Bindings.Digital.CLIMB_DOWN)
             .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
-        operator.axisGreaterThan(0, 0.6).whileTrue(climbJoint.run(0.125));
-        operator.axisGreaterThan(1, 0.6).whileTrue(climbJoint.run(0.28));
-
+        operator.axisGreaterThan(Constants.Bindings.Analog.ALGAE_EXTAKE, 0.6)
+            .whileTrue(
+                algaeTelescope.moveToExtake()
+                    .alongWith(algaeExtake.extake(Constants.AlgaeDescore.Extake.EXTAKE_SPEED))
+            );
         swerve.registerTelemetry(logger::telemeterize);
     }
 

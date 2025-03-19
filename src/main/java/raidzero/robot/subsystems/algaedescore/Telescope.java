@@ -7,28 +7,35 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 import raidzero.robot.subsystems.algaeintake.AlgaeJoint;
 
-public class Telescope extends SubsystemBase{
+public class Telescope extends SubsystemBase {
     private TalonFX telescope;
     private static Telescope system;
 
-    private Telescope(){
+    private Telescope() {
         telescope = new TalonFX(Constants.AlgaeDescore.Telescope.MOTOR_ID, "rio");
         telescope.getConfigurator().apply(telescopeConfiguration());
         telescope.setNeutralMode(NeutralModeValue.Brake);
     }
 
-    public Command moveTo(double setpoint){
+    public Command moveToExtake() {
+        return moveTo(Constants.AlgaeDescore.Telescope.EXTAKE_POSITION);
+    }
+
+    public Command moveToHome() {
+        return moveTo(Constants.AlgaeDescore.Telescope.HOME_POSITION);
+    }
+
+    public Command moveTo(double setpoint) {
         return run(() -> telescope.setControl(new MotionMagicVoltage(0).withPosition(setpoint)));
     }
 
-    public void stop(){
+    public void stop() {
         telescope.stopMotor();
     }
 

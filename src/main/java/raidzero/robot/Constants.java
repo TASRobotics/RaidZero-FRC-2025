@@ -45,26 +45,32 @@ public class Constants {
     }
 
     public static class Bindings {
-        public static final int CLIMB_UP = 1;
-        public static final int CLIMB_DEPLOY = 2;
-        public static final int CLIMB_DOWN = 3;
+        public static class Digital {
+            public static final int CLIMB_UP = 1;
+            public static final int CLIMB_DEPLOY = 2;
+            public static final int CLIMB_DOWN = 3;
 
-        public static final int ALGAE_INTAKE = 4;
-        public static final int ALGAE_EXTAKE = 5;
+            public static final int ALGAE_INTAKE = 4;
+            public static final int ALGAE_EXTAKE = 5;
 
-        public static final int L1 = 6;
-        public static final int L2 = 7;
-        public static final int L3 = 8;
-        public static final int L4 = 9;
+            public static final int L1 = 6;
+            public static final int L2 = 7;
+            public static final int L3 = 8;
+            public static final int L4 = 9;
 
-        public static final int CORAL_EXTAKE = 10;
-        public static final int CORAL_INTAKE = 11;
-        public static final int CORAL_SCOOCH = 12;
+            public static final int CORAL_EXTAKE = 10;
+            public static final int CORAL_INTAKE = 11;
+            public static final int CORAL_SCOOCH = 12;
 
-        public static final int TOP_RIGHT = 13;
-        public static final int BOTTOM_RIGHT = 14;
-        public static final int BOTTOM_LEFT = 15;
-        public static final int TOP_LEFT = 16;
+            public static final int TOP_RIGHT = 13;
+            public static final int BOTTOM_RIGHT = 14;
+            public static final int BOTTOM_LEFT = 15;
+            public static final int TOP_LEFT = 16;
+        }
+
+        public static class Analog {
+            public static final int ALGAE_EXTAKE = 0;
+        }
     }
 
     public static class CANdle {
@@ -254,15 +260,25 @@ public class Constants {
     public static class AlgaeDescore {
         public static class Extake {
             public static final int MOTOR_ID = 0;
+
+            public static final double CONVERSION_FACTOR = 1.0;
+            public static final double EXTAKE_SPEED = 0.0;
         }
+
         public static class Telescope {
             public static final int MOTOR_ID = 18;
 
             public static final double CONVERSION_FACTOR = 1.0;
 
-            public static final double STATOR_CURRENT_LIMIT = 40.0;
-            public static final double SUPPLY_CURRENT_LIMIT = 40.0;
+            public static final double EXTAKE_POSITION = 0.0;
+            public static final double HOME_POSITION = 0.0;
+
+            public static final double STATOR_CURRENT_LIMIT = 10.0;
+            public static final double SUPPLY_CURRENT_LIMIT = 10.0;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
+
+            public static final double TOP_SOFT_LIMIT = 0.0;
+            public static final double BOTTOM_SOFT_LIMIT = 0.0;
 
             public static final double KP = 0.0;
             public static final double KI = 0.0;
