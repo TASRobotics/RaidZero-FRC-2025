@@ -160,7 +160,7 @@ public class RobotContainer {
                 .onlyIf(swerve.isArmDeployable())
         );
 
-        operator.button(Constants.Bindings.L4).negate().whileTrue(
+        operator.button(Constants.Bindings.L4).whileTrue(
             arm.moveToL4()
                 .onlyIf(swerve.isArmDeployable())
         );
@@ -197,8 +197,8 @@ public class RobotContainer {
         operator.button(Constants.Bindings.CLIMB_DOWN)
             .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
-        operator.axisGreaterThan(0, 0.6).whileTrue(climbJoint.run(0.125));
-        operator.axisGreaterThan(1, 0.6).whileTrue(climbJoint.run(0.28));
+        // operator.axisGreaterThan(0, 0.6).whileTrue(climbJoint.run(0.125));
+        // operator.axisGreaterThan(1, 0.6).whileTrue(climbJoint.run(0.28));
 
         swerve.registerTelemetry(logger::telemeterize);
     }
