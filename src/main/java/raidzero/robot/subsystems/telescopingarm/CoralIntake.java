@@ -43,12 +43,12 @@ public class CoralIntake extends SubsystemBase {
 
         bottomLaser = new LazyCan(Constants.TelescopingArm.Intake.BOTTOM_LASERCAN_ID)
             .withRangingMode(RangingMode.SHORT)
-            .withRegionOfInterest(8, 4, 6, 8)
+            .withRegionOfInterest(8, 8, 4, 4)
             .withTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
 
         topLaser = new LazyCan(Constants.TelescopingArm.Intake.TOP_LASERCAN_ID)
             .withRangingMode(RangingMode.SHORT)
-            .withRegionOfInterest(8, 4, 6, 8)
+            .withRegionOfInterest(8, 8, 4, 4)
             .withTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
 
         servoHub = new ServoHub(Constants.TelescopingArm.Intake.SERVO_HUB_ID);

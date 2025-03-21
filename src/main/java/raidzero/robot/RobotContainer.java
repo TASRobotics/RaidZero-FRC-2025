@@ -169,7 +169,7 @@ public class RobotContainer {
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
-        operator.button(Constants.Bindings.CORAL_SCOOCH).whileTrue(coralIntake.run(-Constants.TelescopingArm.Intake.EXTAKE_SPEED));
+        operator.button(Constants.Bindings.CORAL_SCOOCH).whileTrue(coralIntake.run(-Constants.TelescopingArm.Intake.SCOOCH_SPEED));
 
         operator.button(Constants.Bindings.BOTTOM_RIGHT).onTrue(coralIntake.unstuckServo());
 

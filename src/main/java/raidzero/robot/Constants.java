@@ -154,7 +154,9 @@ public class Constants {
             public static final int FOLLOW_ID = 13;
 
             public static final double INTAKE_SPEED = 0.25;
-            public static final double INTAKE_LOWER_SPEED = 0.05;
+            public static final double INTAKE_LOWER_SPEED = 0.035;
+
+            public static final double SCOOCH_SPEED = 0.6;
 
             public static final double EXTAKE_SPEED = 0.1;
             public static final double EXTAKE_TIMEOUT_S = 1.0;
@@ -213,8 +215,8 @@ public class Constants {
             public static double[] L2_SCORING_POS_M = { -0.2, 0.9 };
             public static double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static double[] INTAKE_POS_M = { 0.5, 0.835 };
-            public static double[] INTAKE_POS_M_BLUE = { 0.5, 0.81 };
+            public static double[] INTAKE_POS_M = { 0.5, 0.864 };
+            public static double[] INTAKE_POS_M_BLUE = { 0.5, 0.864 };
 
             public static double[] HOME_POS_M = { 0.0, 0.0 };
         }
