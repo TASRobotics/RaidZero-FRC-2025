@@ -72,8 +72,8 @@ public class Constants {
 
         public static final double CLIMB_JOINT_THRESHOLD = 0.125;
 
-        public static final double ARM_JOINT_LOWER_BOUND = 0.1754;
-        public static final double ARM_JOINT_UPPER_BOUND = 0.1805;
+        public static final double ARM_JOINT_LOWER_BOUND = 0.183;
+        public static final double ARM_JOINT_UPPER_BOUND = 0.188;
     }
 
     public static class Climb {
