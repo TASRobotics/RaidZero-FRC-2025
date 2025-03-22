@@ -112,7 +112,8 @@ public class ArmStrip implements Subsystem {
      * The disabled loop of the CANdle LED strip
      */
     private void loopDisabled() {
-        if (DriverStation.isAutonomous() && DriverStation.getMatchTime() > 0.0) {
+        if (DriverStation.isAutonomous() && DriverStation.getMatchTime() < 14.5 &&
+            DriverStation.getMatchTime() > 0.0) {
             if (animation2Applied || animation3Applied) {
                 resetAnimation();
             }
