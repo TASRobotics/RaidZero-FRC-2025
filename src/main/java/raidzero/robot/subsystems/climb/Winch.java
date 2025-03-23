@@ -51,7 +51,7 @@ public class Winch extends SubsystemBase {
         TalonFXConfiguration configuration = new TalonFXConfiguration()
             .withOpenLoopRamps(
                 new OpenLoopRampsConfigs()
-                    .withDutyCycleOpenLoopRampPeriod(1)
+                    .withDutyCycleOpenLoopRampPeriod(0.2)
             );
 
         return configuration;
