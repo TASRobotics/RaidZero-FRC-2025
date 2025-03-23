@@ -4,13 +4,16 @@
 
 package raidzero.robot;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +28,8 @@ import raidzero.robot.subsystems.climb.Winch;
 import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
-import raidzero.robot.subsystems.telescopingarm.*;
+import raidzero.robot.subsystems.telescopingarm.Arm;
+import raidzero.robot.subsystems.telescopingarm.CoralIntake;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -191,11 +195,11 @@ public class RobotContainer {
         // operator.button(Constants.Bindings.CLIMB_UP)
         // .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
-        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED));
+        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3));
         operator.button(Constants.Bindings.CLIMB_UP).onTrue(climbJoint.retract());
 
         operator.button(Constants.Bindings.CLIMB_DOWN)
-            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
+            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3).onlyIf(climbJoint.isDeployed()));
 
         // operator.axisGreaterThan(0, 0.6).whileTrue(climbJoint.run(0.125));
         // operator.axisGreaterThan(1, 0.6).whileTrue(climbJoint.run(0.28));

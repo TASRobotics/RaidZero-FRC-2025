@@ -1,5 +1,6 @@
 package raidzero.robot.subsystems.climb;
 
+import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -27,7 +28,10 @@ public class Winch extends SubsystemBase {
      * @param speed The speed to run the winch at
      * @return A {@link Command} that runs the winch at the specified speed
      */
-    public Command run(double speed) {
+    public Command run(double speed, boolean ramp) {
+        if(ramp)
+            winch.getConfigurator().apply(winchConfigWithRampRate());
+
         return run(() -> winch.set(speed));
     }
 
@@ -47,6 +51,14 @@ public class Winch extends SubsystemBase {
      */
     private TalonFXConfiguration winchConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
+
+        return configuration;
+    }
+
+    private TalonFXConfiguration winchConfigWithRampRate() {
+        TalonFXConfiguration configuration = new TalonFXConfiguration()
+            .withOpenLoopRamps(new OpenLoopRampsConfigs()
+                .withDutyCycleOpenLoopRampPeriod(0.2));
 
         return configuration;
     }
