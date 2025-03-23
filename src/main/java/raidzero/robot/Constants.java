@@ -211,7 +211,7 @@ public class Constants {
             public static double[] L4_CHECK_POSITION = { -0.25, 2.62 };
             public static double[] L4_GRAND_SLAM = { -0.2, 1.57 };
 
-            public static double[] L3_SCORING_POS_M = { -0.25, 1.57 };
+            public static double[] L3_SCORING_POS_M = { -0.20, 1.57 };
             public static double[] L2_SCORING_POS_M = { -0.2, 0.9 };
             public static double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
