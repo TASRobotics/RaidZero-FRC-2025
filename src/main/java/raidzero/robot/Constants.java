@@ -72,8 +72,8 @@ public class Constants {
 
         public static final double CLIMB_JOINT_THRESHOLD = 0.125;
 
-        public static final double ARM_JOINT_LOWER_BOUND = 0.1754;
-        public static final double ARM_JOINT_UPPER_BOUND = 0.1805;
+        public static final double ARM_JOINT_LOWER_BOUND = 0.183;
+        public static final double ARM_JOINT_UPPER_BOUND = 0.188;
     }
 
     public static class Climb {
@@ -86,7 +86,7 @@ public class Constants {
             public static final double KV = 1.2;
             public static final double KA = 0.1;
 
-            public static final double KP = 15.0;
+            public static final double KP = 20.0;
             public static final double KI = 0.0;
             public static final double KD = 0.0;
 
@@ -95,8 +95,8 @@ public class Constants {
 
             public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
-            public static final double CURRENT_LIMIT = 20.0;
-            public static final double SUPPLY_CURRENT_LIMIT = 20.0;
+            public static final double CURRENT_LIMIT = 80.0;
+            public static final double SUPPLY_CURRENT_LIMIT = 80.0;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
 
             public static final double FORWARD_SOFT_LIMIT = 0.5;
@@ -154,7 +154,9 @@ public class Constants {
             public static final int FOLLOW_ID = 13;
 
             public static final double INTAKE_SPEED = 0.25;
-            public static final double INTAKE_LOWER_SPEED = 0.05;
+            public static final double INTAKE_LOWER_SPEED = 0.04;
+
+            public static final double SCOOCH_SPEED = 0.06;
 
             public static final double EXTAKE_SPEED = 0.1;
             public static final double EXTAKE_TIMEOUT_S = 1.0;
@@ -178,7 +180,7 @@ public class Constants {
             public static final int CANCODER_ID = 11;
 
             public static final double CANCODER_GEAR_RATIO = 28.0 / 80.0;
-            public static final double CANCODER_OFFSET = -(0.358398 - (0.25 / CANCODER_GEAR_RATIO));
+            public static final double CANCODER_OFFSET = -(0.352783 - (0.25 / CANCODER_GEAR_RATIO));
             public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
 
             public static final double CONVERSION_FACTOR = (120.0 / 12.0) * 20.0;
@@ -204,17 +206,17 @@ public class Constants {
         }
 
         public static class Positions {
-            public static double[] L4_SCORING_POS_M = { -0.24, 2.72 };
+            public static double[] L4_SCORING_POS_M = { -0.24, 2.65 };
             public static double[] L4_SCORING_POS_M_BLUE = { -0.17, 2.68 };
             public static double[] L4_CHECK_POSITION = { -0.25, 2.62 };
             public static double[] L4_GRAND_SLAM = { -0.2, 1.57 };
 
-            public static double[] L3_SCORING_POS_M = { -0.25, 1.57 };
+            public static double[] L3_SCORING_POS_M = { -0.20, 1.57 };
             public static double[] L2_SCORING_POS_M = { -0.2, 0.9 };
             public static double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static double[] INTAKE_POS_M = { 0.5, 0.835 };
-            public static double[] INTAKE_POS_M_BLUE = { 0.5, 0.81 };
+            public static double[] INTAKE_POS_M = { 0.5, 0.8425 };
+            public static double[] INTAKE_POS_M_BLUE = { 0.5, 0.8425 };
 
             public static double[] HOME_POS_M = { 0.0, 0.0 };
         }

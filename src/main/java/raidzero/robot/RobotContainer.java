@@ -4,7 +4,9 @@
 
 package raidzero.robot;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -25,7 +27,8 @@ import raidzero.robot.subsystems.climb.Winch;
 import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
-import raidzero.robot.subsystems.telescopingarm.*;
+import raidzero.robot.subsystems.telescopingarm.Arm;
+import raidzero.robot.subsystems.telescopingarm.CoralIntake;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -160,25 +163,16 @@ public class RobotContainer {
                 .onlyIf(swerve.isArmDeployable())
         );
 
-        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE).negate()).whileTrue(
+        operator.button(Constants.Bindings.L4).whileTrue(
             arm.moveToL4()
                 .onlyIf(swerve.isArmDeployable())
         );
-        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE))
-            .whileTrue(arm.moveWithoutDelay(Constants.TelescopingArm.Positions.L4_CHECK_POSITION).onlyIf(() -> arm.isUp()));
 
-        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_EXTAKE))
-            .onTrue(
-                arm.moveWithoutDelay(Constants.TelescopingArm.Positions.L4_GRAND_SLAM).onlyIf(() -> arm.isUp())
-                    .until(
-                        () -> arm.getJointPosition() >= arm.calculateJointAngle(Constants.TelescopingArm.Positions.L4_GRAND_SLAM) &&
-                            arm.getTelescopePosition() <= arm.calculateTelescopeHeight(Constants.TelescopingArm.Positions.L4_GRAND_SLAM)
-                    ).withTimeout(0.5)
-            );
+        operator.button(Constants.Bindings.ALGAE_INTAKE).onTrue(coralIntake.contingencyIntake());
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
-        operator.button(Constants.Bindings.CORAL_SCOOCH).whileTrue(coralIntake.run(-Constants.TelescopingArm.Intake.EXTAKE_SPEED));
+        operator.button(Constants.Bindings.CORAL_SCOOCH).whileTrue(coralIntake.run(-Constants.TelescopingArm.Intake.SCOOCH_SPEED));
 
         operator.button(Constants.Bindings.BOTTOM_RIGHT).onTrue(coralIntake.unstuckServo());
 
@@ -200,11 +194,14 @@ public class RobotContainer {
         // operator.button(Constants.Bindings.CLIMB_UP)
         // .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
-        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED));
+        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3));
         operator.button(Constants.Bindings.CLIMB_UP).onTrue(climbJoint.retract());
 
         operator.button(Constants.Bindings.CLIMB_DOWN)
-            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
+            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3).onlyIf(climbJoint.isDeployed()));
+
+        // operator.axisGreaterThan(0, 0.6).whileTrue(climbJoint.run(0.125));
+        // operator.axisGreaterThan(1, 0.6).whileTrue(climbJoint.run(0.28));
 
         swerve.registerTelemetry(logger::telemeterize);
     }
