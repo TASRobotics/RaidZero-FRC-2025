@@ -78,6 +78,11 @@ public class CoralIntake extends SubsystemBase {
             .until(() -> getBottomLaserDistance() <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM);
     }
 
+    /**
+     * Creates a {@link Command} to intake the coral slower
+     *
+     * @return A {@link Command} to intake the coral slower
+     */
     public Command contingencyIntake() {
         return startRun(
             () -> roller.getConfigurator().apply(
