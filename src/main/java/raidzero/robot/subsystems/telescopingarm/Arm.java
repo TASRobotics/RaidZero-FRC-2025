@@ -52,7 +52,7 @@ public class Arm extends SubsystemBase {
         joint.getConfigurator().apply((jointConfiguration()));
         joint.setNeutralMode(NeutralModeValue.Brake);
 
-        jointCANcoder = new CANcoder(Constants.TelescopingArm.Joint.CANCODER_ID);
+        jointCANcoder = new CANcoder(Constants.TelescopingArm.Joint.CANCODER_ID, "Kaynebus");
         jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
 
         currentPose = new double[] { 0.0, 0.0 };
