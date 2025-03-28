@@ -16,7 +16,7 @@ public class Winch extends SubsystemBase {
      * Constructs a {@link Winch} subsystem instance
      */
     private Winch() {
-        winch = new TalonFX(Constants.Climb.Winch.MOTOR_ID);
+        winch = new TalonFX(Constants.Climb.Winch.MOTOR_ID, Constants.RIO_BUS);
         winch.getConfigurator().apply(winchConfiguration());
         winch.setNeutralMode(NeutralModeValue.Brake);
     }

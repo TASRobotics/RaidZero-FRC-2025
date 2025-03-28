@@ -24,7 +24,7 @@ public class CoralIntake extends SubsystemBase {
      * Constructs a {@link CoralIntake} subsystem instance
      */
     private CoralIntake() {
-        roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID);
+        roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID, "rio");
         roller.getConfigurator().apply(rollerConfiguration());
 
         bottomLaser = new LazyCan(1).withRangingMode(RangingMode.SHORT)

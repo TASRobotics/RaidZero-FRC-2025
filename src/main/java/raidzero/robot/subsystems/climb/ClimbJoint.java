@@ -22,7 +22,7 @@ public class ClimbJoint extends SubsystemBase {
      * Constructs a {@link ClimbJoint} subsystem instance
      */
     private ClimbJoint() {
-        joint = new TalonFX(Constants.Climb.Joint.MOTOR_ID);
+        joint = new TalonFX(Constants.Climb.Joint.MOTOR_ID, Constants.RIO_BUS);
         joint.getConfigurator().apply(jointConfiguration());
         joint.setNeutralMode(NeutralModeValue.Brake);
     }

@@ -38,7 +38,7 @@ public class ArmStrip implements Subsystem {
      * Constructs a {@link ArmStrip} subsystem.
      */
     private ArmStrip() {
-        this.candle = new CANdle(Constants.CANdle.CAN_ID, Constants.CANIVORE_NAME);
+        this.candle = new CANdle(Constants.CANdle.CAN_ID, Constants.BASE_CANIVORE);
         this.arm = Arm.system();
 
         this.candle.configAllSettings(candleConfig());

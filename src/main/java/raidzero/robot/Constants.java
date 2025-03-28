@@ -255,7 +255,9 @@ public class Constants {
         }
     }
 
-    public static final String CANIVORE_NAME = "CANdoAttitude";
+    public static final String BASE_CANIVORE = "CANdoAttitude";
+    public static final String KAYNE_BUS = "Kaynebus";
+    public static final String RIO_BUS = "rio";
 
     public static final double STICK_DEADBAND = 0.2;
 }
