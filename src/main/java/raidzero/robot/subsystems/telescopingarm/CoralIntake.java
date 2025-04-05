@@ -2,8 +2,11 @@ package raidzero.robot.subsystems.telescopingarm;
 
 import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
 import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
+
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.StaticBrake;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -63,6 +66,10 @@ public class CoralIntake extends SubsystemBase {
     public Command intakeSimple() {
         return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> bottomLaser.withinThreshold())
             .andThen(run(() -> roller.set(Intake.REVERSE_SPEED)).withTimeout(0.5));
+    }
+
+    public Command runWithVelocity(double velocity) {
+        return run(() -> roller.setControl(new VelocityVoltage(velocity)));
     }
 
     /**
@@ -136,6 +143,8 @@ public class CoralIntake extends SubsystemBase {
         configuration.CurrentLimits.StatorCurrentLimit = Intake.STATOR_CURRENT_LIMIT;
         configuration.CurrentLimits.SupplyCurrentLimit = Intake.SUPPLY_CURRENT_LIMIT;
         configuration.CurrentLimits.SupplyCurrentLowerTime = Intake.SUPPLY_CURRENT_LOWER_TIME;
+
+        configuration.Slot0 = new Slot0Configs().withKP(Intake.KP).withKI(Intake.KI).withKD(Intake.KD);
 
         configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 

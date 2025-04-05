@@ -175,6 +175,10 @@ public class Constants {
             public static final double EXTAKE_SPEED = 0.25;
             public static final double EXTAKE_TIMEOUT_S = 1.0;
 
+            public static final double KP = 1.0;
+            public static final double KI = 0.0;
+            public static final double KD = 0.0;
+
         }
 
         public class Joint {
