@@ -171,6 +171,7 @@ public class Constants {
             public static final double REVERSE_SPEED = -0.2;
 
             public static final double STALL_CURRENT_THRESHOLD = 20.0;
+            public static final double CURRENT_SPIKE_THRESHOLD = 20.0;
 
             public static final double EXTAKE_SPEED = 0.25;
             public static final double EXTAKE_TIMEOUT_S = 1.0;

@@ -5,6 +5,8 @@ import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFXS;
@@ -48,6 +50,8 @@ public class CoralIntake extends SubsystemBase {
 
     /**
      * Creates a {@link Command} to run the intake at the specified speed
+     * 
+     * old freaky intake logic from bae
      *
      * @param speed The speed as a percentage
      * @return The command to be scheduled and run
@@ -63,13 +67,24 @@ public class CoralIntake extends SubsystemBase {
             );
     }
 
+    /**
+     * patel's logic from teams (PLEASE TUNE THIS) 
+     * 
+     * @return its the command bro
+     */
+    public Command patelIntake() {
+        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> currentSpike())
+            .andThen(() -> roller.setControl(new MotionMagicTorqueCurrentFOC(roller.getPosition().getValueAsDouble() + 5)));
+    }
+
+    /**
+     * Literally just run it unitl bottom laser
+     * 
+     * @return if i need to explain what a command is I don't think you should be reading this
+     */
     public Command intakeSimple() {
         return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> bottomLaser.withinThreshold())
             .andThen(run(() -> roller.set(Intake.REVERSE_SPEED)).withTimeout(0.5));
-    }
-
-    public Command runWithVelocity(double velocity) {
-        return run(() -> roller.setControl(new VelocityVoltage(velocity)));
     }
 
     /**
@@ -79,6 +94,15 @@ public class CoralIntake extends SubsystemBase {
      */
     private boolean isStalling() {
         return roller.getStatorCurrent().getValueAsDouble() > Intake.STALL_CURRENT_THRESHOLD;
+    }
+
+    /**
+     * Not to be confused with currant spike
+     * 
+     * @return if your currant i mean current is spiking
+     */
+    private boolean currentSpike() {
+        return roller.getStatorCurrent().getValueAsDouble() > Intake.CURRENT_SPIKE_THRESHOLD;
     }
 
     /**
