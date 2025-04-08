@@ -6,10 +6,8 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import raidzero.robot.Constants;
 
 public class AlgaeJoint extends SubsystemBase {
@@ -28,12 +26,12 @@ public class AlgaeJoint extends SubsystemBase {
 
     /**
      * Moves the joint to the desired setpoint
-     * 
+     *
      * @param setpoint The desired setpoint
      * @return A {@link Command} that moves the joint to the desired setpoint
      */
     public Command moveJoint(double setpoint) {
-        return run(() -> joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint)));
+        return run(() -> joint.setControl(new MotionMagicVoltage(0).withPosition(setpoint)));
     }
 
     /**
@@ -45,7 +43,7 @@ public class AlgaeJoint extends SubsystemBase {
 
     /**
      * Gets the {@link TalonFXConfiguration} for the joint motor
-     * 
+     *
      * @return The {@link TalonFXConfiguration} for the joint motor
      */
     private TalonFXConfiguration jointConfiguration() {
@@ -77,7 +75,7 @@ public class AlgaeJoint extends SubsystemBase {
 
     /**
      * Gets the {@link AlgaeJoint} subsystem instance
-     * 
+     *
      * @return The {@link AlgaeJoint} subsystem instance
      */
     public static AlgaeJoint system() {

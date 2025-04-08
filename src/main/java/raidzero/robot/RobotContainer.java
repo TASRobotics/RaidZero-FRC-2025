@@ -4,29 +4,31 @@
 
 package raidzero.robot;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
-
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 import raidzero.robot.subsystems.climb.Winch;
 import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
-import raidzero.robot.subsystems.telescopingarm.*;
+import raidzero.robot.subsystems.telescopingarm.Arm;
+import raidzero.robot.subsystems.telescopingarm.CoralIntake;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -86,7 +88,8 @@ public class RobotContainer {
     private void configureBindings() {
         swerve.setDefaultCommand(
             swerve.applyRequest(
-                () -> fieldCentricDrive.withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
+                () -> fieldCentricDrive
+                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )
@@ -107,6 +110,18 @@ public class RobotContainer {
         climbWinch.setDefaultCommand(climbWinch.stop());
 
         // * Driver controls
+        joystick.rightTrigger().whileTrue(
+            swerve.applyRequest(
+                () -> fieldCentricDrive
+                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * (arm.isUp() ? 0.3 : 1.0))
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
+            )
+        );
+
+        joystick.rightTrigger().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.15)));
+        joystick.rightTrigger().negate().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.5)));
+
         joystick.a().whileTrue(
             swerve.applyRequest(
                 () -> robotCentricDrive.withVelocityY(slewRateLimiter.calculate(-joystick.getLeftX()) * MaxSpeed * 0.3)
@@ -167,21 +182,9 @@ public class RobotContainer {
             )
                 .onlyIf(swerve.isArmDeployable())
         );
-        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE))
-            .whileTrue(arm.moveWithoutDelay(Constants.TelescopingArm.Positions.L4_CHECK_POSITION).onlyIf(() -> arm.isUp()));
-
-        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_EXTAKE))
-            .onTrue(
-                arm.moveWithoutDelay(Constants.TelescopingArm.Positions.L4_GRAND_SLAM).onlyIf(() -> arm.isUp())
-                    .until(
-                        () -> arm.getJointPosition() >= arm.calculateJointAngle(Constants.TelescopingArm.Positions.L4_GRAND_SLAM) &&
-                            arm.getTelescopePosition() <= arm.calculateTelescopeHeight(Constants.TelescopingArm.Positions.L4_GRAND_SLAM)
-                    ).withTimeout(0.5)
-            );
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
-        operator.button(Constants.Bindings.CORAL_SCOOCH).onTrue(coralIntake.scoochCoral());
 
         operator.button(Constants.Bindings.CLIMB_DEPLOY)
             .onTrue(
@@ -201,11 +204,14 @@ public class RobotContainer {
         // operator.button(Constants.Bindings.CLIMB_UP)
         // .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
-        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED));
+        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3));
         operator.button(Constants.Bindings.CLIMB_UP).onTrue(climbJoint.retract());
 
         operator.button(Constants.Bindings.CLIMB_DOWN)
-            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
+            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3).onlyIf(climbJoint.isDeployed()));
+
+        // operator.axisGreaterThan(0, 0.6).whileTrue(climbJoint.run(0.125));
+        // operator.axisGreaterThan(1, 0.6).whileTrue(climbJoint.run(0.28));
 
         swerve.registerTelemetry(logger::telemeterize);
     }
@@ -258,8 +264,8 @@ public class RobotContainer {
             "ExtakeCoral",
             coralIntake.run(0.1).until(
                 () -> {
-                    return coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
-                        coralIntake.getTopLaserDistance() >= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+                    return coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
+                        coralIntake.getTopLaserDistance() >= Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM;
                 }
             ).withTimeout(1.0).andThen(() -> coralIntake.stop())
         );
@@ -268,7 +274,7 @@ public class RobotContainer {
 
     /**
      * Returns the selected autonomous command
-     * 
+     *
      * @return A {@link Command} representing the selected autonomous command
      */
     public Command getAutonomousCommand() {

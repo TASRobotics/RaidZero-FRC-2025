@@ -1,26 +1,21 @@
 package raidzero.robot.subsystems.telescopingarm;
 
-import com.ctre.phoenix6.configs.TalonFXSConfiguration;
-import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.hardware.TalonFXS;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.MotorArrangementValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
-import au.grapplerobotics.LaserCan;
-import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
-import au.grapplerobotics.interfaces.LaserCanInterface.RegionOfInterest;
 import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXSConfiguration;
+import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import raidzero.lib.LazyCan;
 import raidzero.robot.Constants;
+import raidzero.robot.Constants.TelescopingArm.Intake;
 
 public class CoralIntake extends SubsystemBase {
-    private TalonFXS roller, follow;
+    private TalonFXS roller;
 
-    private LaserCan bottomLaser, topLaser;
+    private LazyCan bottomLaser, topLaser;
 
     private static CoralIntake system;
 
@@ -28,69 +23,58 @@ public class CoralIntake extends SubsystemBase {
      * Constructs a {@link CoralIntake} subsystem instance
      */
     private CoralIntake() {
-        roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID);
+        roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID, "rio");
         roller.getConfigurator().apply(rollerConfiguration());
 
-        follow = new TalonFXS(Constants.TelescopingArm.Intake.FOLLOW_ID);
-        follow.setControl(new Follower(Constants.TelescopingArm.Intake.MOTOR_ID, true));
-        follow.getConfigurator().apply(followConfiguration());
+        bottomLaser = new LazyCan(1).withRangingMode(RangingMode.SHORT)
+            .withRegionOfInterest(14, 8, 4, 16).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
+            .withThreshold(Intake.BOTTOM_LASER_THRESHOLD_MM);
 
-        bottomLaser = new LaserCan(0);
-        try {
-            bottomLaser.setRangingMode(RangingMode.SHORT);
-            bottomLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
-            bottomLaser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
-        } catch (Exception e) {
-            System.out.println("LaserCan Config Error");
-        }
-
-        topLaser = new LaserCan(1);
-        try {
-            topLaser.setRangingMode(RangingMode.SHORT);
-            topLaser.setRegionOfInterest(new RegionOfInterest(8, 4, 6, 8));
-            topLaser.setTimingBudget(TimingBudget.TIMING_BUDGET_20MS);
-        } catch (Exception e) {
-            System.out.println("LaserCan Config Error");
-        }
+        topLaser = new LazyCan(0).withRangingMode(RangingMode.LONG)
+            .withRegionOfInterest(8, 14, 16, 4).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
+            .withThreshold(Intake.TOP_LASER_THRESHOLD_MM);
     }
 
     /**
-     * Gets the roller motor controller for disabled init to check for position
-     * 
-     * @return The Roller motor
-     */
-    public TalonFXS getRoller() {
-        return roller;
-    }
-
-    /**
-     * Creates a {@link Command} to run the intake at the specified speed
-     * 
-     * @param speed The speed as a percentage
-     * @return The command to be scheduled and run
+     * Intakes coral
+     *
+     * @return A {@link Command}
      */
     public Command intake() {
-        return run(() -> roller.set(Constants.TelescopingArm.Intake.INTAKE_SPEED))
-            .until(() -> getBottomLaserDistance() <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM)
-            .andThen(
-                run(() -> roller.set(-Constants.TelescopingArm.Intake.INTAKE_SPEED))
-                    .withTimeout(0.1)
-            );
+        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> currentSpike())
+            .andThen(() -> roller.set(Intake.LOWER_SPEED)).until(() -> bottomLaser.withinThreshold());
     }
 
     /**
-     * Creates a {@link Command} to scooch the coral upwards if too low
-     * 
-     * @return A {@link Command} to scooch the coral upwards
+     * Runs the intake at the normal speed until a current spike is detected. Used for autons.
+     *
+     * @return A {@link Command}
      */
-    public Command scoochCoral() {
-        return run(() -> roller.set(-Constants.TelescopingArm.Intake.INTAKE_SPEED))
-            .until(() -> getTopLaserDistance() <= Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM);
+    public Command autoIntakeP1() {
+        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> currentSpike());
+    }
+
+    /**
+     * Runs the intake until the bottom bottom laser sees a coral. Used for autons.
+     *
+     * @return A {@link Command}
+     */
+    public Command autoIntakeP2() {
+        return run(() -> roller.set(Intake.LOWER_SPEED)).until(() -> bottomLaser.withinThreshold());
+    }
+
+    /**
+     * Detects if the stator of the motor is above the predefined threshold
+     *
+     * @return True if the current is above the specified spike threshold
+     */
+    private boolean currentSpike() {
+        return roller.getStatorCurrent().getValueAsDouble() > Intake.CURRENT_SPIKE_THRESHOLD;
     }
 
     /**
      * Creates a {@link Command} to stop the intake
-     * 
+     *
      * @return A {@link Command} to stop the intake
      */
     public Command stop() {
@@ -98,9 +82,8 @@ public class CoralIntake extends SubsystemBase {
     }
 
     /**
-     * Creates a {@link Command} to extake at the specified speed
-     * 
-     * @param speed The desired speed [0, 1.0]
+     * Creates a {@link Command} to extake the coral
+     *
      * @return A {@link Command} to extake at the specified speed
      */
     public Command extake() {
@@ -110,8 +93,8 @@ public class CoralIntake extends SubsystemBase {
 
     /**
      * Creates a {@link Command} to run the roller at the specified speed
-     * 
-     * @param setpoint The speed to run the roller at [-1, 1]
+     *
+     * @param speed The speed to run the roller at [-1, 1]
      * @return A {@link Command} to run the roller at the specified speed
      */
     public Command run(double speed) {
@@ -120,51 +103,38 @@ public class CoralIntake extends SubsystemBase {
 
     /**
      * Gets the distance from the LaserCAN
-     * 
+     *
      * @return The distance in mm, -1 if the LaserCAN cannot be found
      */
     public int getTopLaserDistance() {
-        Measurement measurement = topLaser.getMeasurement();
-
-        return measurement != null ? measurement.distance_mm : -1;
+        return topLaser.getDistanceMm();
     }
 
     /**
      * Gets the distance from the LaserCAN
-     * 
+     *
      * @return The distance in mm, -1 if the LaserCAN cannot be found
      */
     public int getBottomLaserDistance() {
-        Measurement measurement = bottomLaser.getMeasurement();
-
-        return measurement != null ? measurement.distance_mm : -1;
+        return bottomLaser.getDistanceMm();
     }
 
     /**
      * Gets the {@link TalonFXSConfiguration} for the roller motor
-     * 
+     *
      * @return The {@link TalonFXSConfiguration} for the roller motor
      */
     private TalonFXSConfiguration rollerConfiguration() {
         TalonFXSConfiguration configuration = new TalonFXSConfiguration();
 
-        configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
-        configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        configuration.Commutation.MotorArrangement = Intake.MOTOR_ARRANGEMENT;
+        configuration.MotorOutput.Inverted = Intake.INVERTED_VALUE;
 
-        configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        configuration.CurrentLimits.StatorCurrentLimit = Intake.STATOR_CURRENT_LIMIT;
+        configuration.CurrentLimits.SupplyCurrentLimit = Intake.SUPPLY_CURRENT_LIMIT;
+        configuration.CurrentLimits.SupplyCurrentLowerTime = Intake.SUPPLY_CURRENT_LOWER_TIME;
 
-        return configuration;
-    }
-
-    /**
-     * Gets the {@link TalonFXSConfiguration} for the roller follower
-     * 
-     * @return The {@link TalonFXSConfiguration} for the roller follower
-     */
-    private TalonFXSConfiguration followConfiguration() {
-        TalonFXSConfiguration configuration = new TalonFXSConfiguration();
-
-        configuration.Commutation.MotorArrangement = MotorArrangementValue.Minion_JST;
+        configuration.Slot0 = new Slot0Configs().withKP(Intake.KP).withKI(Intake.KI).withKD(Intake.KD);
 
         configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
@@ -173,7 +143,7 @@ public class CoralIntake extends SubsystemBase {
 
     /**
      * Gets the {@link CoralIntake} subsystem instance
-     * 
+     *
      * @return The {@link CoralIntake} subsystem instance
      */
     public static CoralIntake system() {

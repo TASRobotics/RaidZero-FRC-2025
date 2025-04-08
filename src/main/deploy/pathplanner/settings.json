@@ -3,10 +3,11 @@
   "robotLength": 0.758,
   "holonomicMode": true,
   "pathFolders": [
+    "LEAVE",
+    "Left",
+    "LeftBLUE",
     "Processor",
     "ProcessorBLUE",
-    "Left",
-    "LEAVE",
     "Tuning"
   ],
   "autoFolders": [],

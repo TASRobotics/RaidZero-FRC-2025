@@ -9,19 +9,19 @@
       "prevControl": null,
       "nextControl": {
         "x": 2.308132596123537,
-        "y": 1.773069669586734
+        "y": 1.7730696695867336
       },
       "isLocked": true,
       "linkedName": "Station-Processor"
     },
     {
       "anchor": {
-        "x": 3.73,
-        "y": 3.02
+        "x": 3.715,
+        "y": 3.005
       },
       "prevControl": {
-        "x": 2.9610293262395833,
-        "y": 2.504248924299277
+        "x": 2.946029326239583,
+        "y": 2.489248924299277
       },
       "nextControl": null,
       "isLocked": false,
