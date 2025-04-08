@@ -1,14 +1,11 @@
 package raidzero.robot.subsystems.telescopingarm;
 
-import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
-import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -16,7 +13,6 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.fasterxml.jackson.core.filter.JsonPointerBasedFilter;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -28,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
 import raidzero.robot.Constants.TelescopingArm.Telescope;
 import raidzero.robot.Constants.TelescopingArm.Joint;
-import raidzero.robot.Constants.TelescopingArm.Joint.Slot1;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 
 public class Arm extends SubsystemBase {
