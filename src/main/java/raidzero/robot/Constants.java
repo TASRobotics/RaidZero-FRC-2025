@@ -163,15 +163,15 @@ public class Constants {
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
 
             public static final double TOP_LASER_THRESHOLD_MM = 100.0;
-            public static final double BOTTOM_LASER_THRESHOLD_MM = 50.0;
+            public static final double BOTTOM_LASER_THRESHOLD_MM = 100.0;
 
-            public static final double INTAKE_SPEED = 0.50;
-            public static final double INTAKE_LOWER_SPEED = 0.25;
+            public static final double INTAKE_SPEED = 0.25;
+            public static final double LOWER_SPEED = 0.15;
             public static final double EJECT_SPEED = -0.50;
             public static final double REVERSE_SPEED = -0.2;
 
             public static final double STALL_CURRENT_THRESHOLD = 20.0;
-            public static final double CURRENT_SPIKE_THRESHOLD = 20.0;
+            public static final double CURRENT_SPIKE_THRESHOLD = 10.0;
 
             public static final double EXTAKE_SPEED = 0.25;
             public static final double EXTAKE_TIMEOUT_S = 1.0;
@@ -187,7 +187,7 @@ public class Constants {
             public static final int CANCODER_ID = 11;
 
             public static final double CANCODER_GEAR_RATIO = 28.0 / 80.0;
-            public static final double CANCODER_OFFSET = -(0.358398 - (0.25 / CANCODER_GEAR_RATIO));
+            public static final double CANCODER_OFFSET = -(0.325684 - (0.25 / CANCODER_GEAR_RATIO));
             public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
 
             public static final double CONVERSION_FACTOR = (120.0 / 12.0) * 20.0;
@@ -213,7 +213,7 @@ public class Constants {
         }
 
         public class Positions {
-            public static final double[] L4_SCORING_POS_M = { -0.24, 2.72 };
+            public static final double[] L4_SCORING_POS_M = { -0.24, 2.75 };
             public static final double[] L4_SCORING_POS_M_BLUE = { -0.17, 2.68 };
             public static final double[] L4_CHECK_POSITION = { -0.25, 2.62 };
             public static final double[] L4_GRAND_SLAM = { -0.2, 1.57 };

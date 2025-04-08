@@ -110,7 +110,7 @@ public class RobotContainer {
         );
 
         joystick.leftTrigger().whileTrue(coralIntake.extake());
-        joystick.rightTrigger().onTrue(coralIntake.intakeSimple());
+        joystick.rightTrigger().onTrue(coralIntake.intake());
 
         joystick.b().whileTrue(
             swerve.pathToStation()

@@ -2,13 +2,10 @@ package raidzero.robot.subsystems.telescopingarm;
 
 import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
 import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
-
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.StaticBrake;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,73 +30,46 @@ public class CoralIntake extends SubsystemBase {
         roller.getConfigurator().apply(rollerConfiguration());
 
         bottomLaser = new LazyCan(1).withRangingMode(RangingMode.SHORT)
-            .withRegionOfInterest(8, 8, 16, 16).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
+            .withRegionOfInterest(14, 8, 4, 16).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
             .withThreshold(Intake.BOTTOM_LASER_THRESHOLD_MM);
 
-        topLaser = new LazyCan(0).withRangingMode(RangingMode.SHORT)
-            .withRegionOfInterest(8, 8, 16, 16).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
+        topLaser = new LazyCan(0).withRangingMode(RangingMode.LONG)
+            .withRegionOfInterest(8, 14, 16, 4).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
             .withThreshold(Intake.TOP_LASER_THRESHOLD_MM);
     }
 
     /**
-     * Sets the motor to static brake mode for disabled init to check for position
-     */
-    public void enableStaticBrake() {
-        roller.setControl(new StaticBrake());
-    }
-
-    /**
-     * Creates a {@link Command} to run the intake at the specified speed
-     * 
-     * old freaky intake logic from bae
+     * Intakes coral
      *
-     * @param speed The speed as a percentage
-     * @return The command to be scheduled and run
+     * @return A {@link Command}
      */
     public Command intake() {
-        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> topLaser.withinThreshold())
-            .andThen(
-                new SequentialCommandGroup(
-                    run(() -> roller.set(Intake.EJECT_SPEED)).onlyIf(() -> isStalling()).withTimeout(0.5),
-                    run(() -> roller.set(Intake.INTAKE_LOWER_SPEED)).onlyIf(() -> !isStalling()).until(() -> bottomLaser.withinThreshold())
-                        .andThen(() -> roller.set(Intake.REVERSE_SPEED)).until(() -> !bottomLaser.withinThreshold())
-                )
-            );
-    }
-
-    /**
-     * patel's logic from teams (PLEASE TUNE THIS) 
-     * 
-     * @return its the command bro
-     */
-    public Command patelIntake() {
         return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> currentSpike())
-            .andThen(() -> roller.setControl(new MotionMagicTorqueCurrentFOC(roller.getPosition().getValueAsDouble() + 5)));
+            .andThen(() -> roller.set(Intake.LOWER_SPEED)).until(() -> bottomLaser.withinThreshold());
     }
 
     /**
-     * Literally just run it unitl bottom laser
-     * 
-     * @return if i need to explain what a command is I don't think you should be reading this
-     */
-    public Command intakeSimple() {
-        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> bottomLaser.withinThreshold())
-            .andThen(run(() -> roller.set(Intake.REVERSE_SPEED)).withTimeout(0.5));
-    }
-
-    /**
-     * Returns true if the current is above a pre-defined threshold to consider it stalling
+     * Runs the intake at the normal speed until a current spike is detected. Used for autons.
      *
-     * @return if the motor is stalliing
+     * @return A {@link Command}
      */
-    private boolean isStalling() {
-        return roller.getStatorCurrent().getValueAsDouble() > Intake.STALL_CURRENT_THRESHOLD;
+    public Command autoIntakeP1() {
+        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> currentSpike());
     }
 
     /**
-     * Not to be confused with currant spike
-     * 
-     * @return if your currant i mean current is spiking
+     * Runs the intake until the bottom bottom laser sees a coral. Used for autons.
+     *
+     * @return A {@link Command}
+     */
+    public Command autoIntakeP2() {
+        return run(() -> roller.set(Intake.LOWER_SPEED)).until(() -> bottomLaser.withinThreshold());
+    }
+
+    /**
+     * Detects if the stator of the motor is above the predefined threshold
+     *
+     * @return True if the current is above the specified spike threshold
      */
     private boolean currentSpike() {
         return roller.getStatorCurrent().getValueAsDouble() > Intake.CURRENT_SPIKE_THRESHOLD;
@@ -117,7 +87,6 @@ public class CoralIntake extends SubsystemBase {
     /**
      * Creates a {@link Command} to extake at the specified speed
      *
-     * @param speed The desired speed [0, 1.0]
      * @return A {@link Command} to extake at the specified speed
      */
     public Command extake() {
