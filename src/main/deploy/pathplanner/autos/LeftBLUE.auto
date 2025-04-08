@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left-1"
+                  "pathName": "LeftBLUE-1"
                 }
               },
               {
@@ -65,7 +65,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left-2"
+                        "pathName": "LeftBLUE-2"
                       }
                     }
                   ]
@@ -93,7 +93,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left-3"
+                  "pathName": "LeftBLUE-3"
                 }
               },
               {
@@ -147,7 +147,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left-4"
+                        "pathName": "LeftBLUE-4"
                       }
                     }
                   ]
@@ -175,7 +175,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Left-5"
+                  "pathName": "LeftBLUE-5"
                 }
               },
               {

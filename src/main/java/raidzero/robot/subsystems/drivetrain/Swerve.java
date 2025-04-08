@@ -69,8 +69,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
 
     private boolean waypointsTransformed = false;
 
-    private double speedModifier = 0.67;
-
     private static Swerve system;
 
     /*
@@ -386,27 +384,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     public Command stop() {
         return runOnce(
             () -> this.setControl(
-                (new SwerveRequest.RobotCentric()).withVelocityX(0.0).withVelocityY(0.0).withRotationalRate(0.0)
+                new SwerveRequest.RobotCentric().withVelocityX(0.0).withVelocityY(0.0).withRotationalRate(0.0)
             )
         );
-    }
-
-    /**
-     * Gets the current modifier for max speed
-     *
-     * @return the modifier for max speed
-     */
-    public double getSpeedModifier() {
-        return speedModifier;
-    }
-
-    /**
-     * Sets the current modifi9er for max speed
-     *
-     * @param speedModifier the modifier for max speed
-     */
-    public void setSpeedModifier(double speedModifier) {
-        this.speedModifier = speedModifier;
     }
 
     @Override
@@ -439,8 +419,6 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
         modulePublisher.set(this.getState().ModuleStates);
         botpose.set(this.getState().Pose);
         field.setRobotPose(this.getState().Pose);
-
-        SmartDashboard.putNumber("Bot Speed", speedModifier * 100.0);
     }
 
     /**

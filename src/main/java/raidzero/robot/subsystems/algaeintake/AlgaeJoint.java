@@ -31,7 +31,7 @@ public class AlgaeJoint extends SubsystemBase {
      * @return A {@link Command} that moves the joint to the desired setpoint
      */
     public Command moveJoint(double setpoint) {
-        return run(() -> joint.setControl((new MotionMagicVoltage(0)).withPosition(setpoint)));
+        return run(() -> joint.setControl(new MotionMagicVoltage(0).withPosition(setpoint)));
     }
 
     /**

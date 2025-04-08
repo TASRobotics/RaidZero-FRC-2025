@@ -4,7 +4,9 @@
 
 package raidzero.robot;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -25,7 +27,8 @@ import raidzero.robot.subsystems.climb.Winch;
 import raidzero.robot.subsystems.drivetrain.Limelight;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.drivetrain.TunerConstants;
-import raidzero.robot.subsystems.telescopingarm.*;
+import raidzero.robot.subsystems.telescopingarm.Arm;
+import raidzero.robot.subsystems.telescopingarm.CoralIntake;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -86,8 +89,8 @@ public class RobotContainer {
         swerve.setDefaultCommand(
             swerve.applyRequest(
                 () -> fieldCentricDrive
-                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * swerve.getSpeedModifier() * (arm.isUp() ? 0.3 : 1.0))
-                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * swerve.getSpeedModifier() * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * 0.67 * (arm.isUp() ? 0.3 : 1.0))
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
             )
         );
@@ -102,6 +105,18 @@ public class RobotContainer {
         climbWinch.setDefaultCommand(climbWinch.stop());
 
         // * Driver controls
+        joystick.rightTrigger().whileTrue(
+            swerve.applyRequest(
+                () -> fieldCentricDrive
+                    .withVelocityX(-joystick.getLeftY() * MaxSpeed * (arm.isUp() ? 0.3 : 1.0))
+                    .withVelocityY(-joystick.getLeftX() * MaxSpeed * (arm.isUp() ? 0.3 : 1.0))
+                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate)
+            )
+        );
+
+        joystick.rightTrigger().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.15)));
+        joystick.rightTrigger().negate().onTrue(new InstantCommand(() -> armStrip.setStrobeInterval(0.5)));
+
         joystick.a().whileTrue(
             swerve.applyRequest(
                 () -> robotCentricDrive.withVelocityY(slewRateLimiter.calculate(-joystick.getLeftX()) * MaxSpeed * 0.3)
@@ -109,8 +124,8 @@ public class RobotContainer {
             )
         );
 
-        joystick.leftTrigger().whileTrue(coralIntake.extake());
-        joystick.rightTrigger().onTrue(coralIntake.intake());
+        joystick.leftBumper().whileTrue(coralIntake.extake());
+        joystick.rightBumper().onTrue(coralIntake.intake());
 
         joystick.b().whileTrue(
             swerve.pathToStation()
@@ -134,9 +149,6 @@ public class RobotContainer {
             arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
         );
 
-        joystick.rightBumper().onTrue(new InstantCommand(() -> swerve.setSpeedModifier(1.0)));
-        joystick.leftBumper().onTrue(new InstantCommand(() -> swerve.setSpeedModifier(0.67)));
-
         // * Operator controls
         operator.button(Constants.Bindings.TOP_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(0.01), arm));
         operator.button(Constants.Bindings.BOTTOM_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(-0.01), arm));
@@ -151,24 +163,16 @@ public class RobotContainer {
                 .onlyIf(swerve.isArmDeployable())
         );
 
-        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE).negate()).whileTrue(
+        operator.button(Constants.Bindings.L4).whileTrue(
             arm.moveToL4()
                 .onlyIf(swerve.isArmDeployable())
         );
-        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_INTAKE))
-            .whileTrue(arm.moveWithoutDelay(Constants.TelescopingArm.Positions.L4_CHECK_POSITION).onlyIf(() -> arm.isUp()));
 
-        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.ALGAE_EXTAKE))
-            .onTrue(
-                arm.moveWithoutDelay(Constants.TelescopingArm.Positions.L4_GRAND_SLAM).onlyIf(() -> arm.isUp())
-                    .until(
-                        () -> arm.getJointPosition() >= arm.calculateJointAngle(Constants.TelescopingArm.Positions.L4_GRAND_SLAM) &&
-                            arm.getTelescopePosition() <= arm.calculateTelescopeHeight(Constants.TelescopingArm.Positions.L4_GRAND_SLAM)
-                    ).withTimeout(0.5)
-            );
+        operator.button(Constants.Bindings.ALGAE_INTAKE).onTrue(coralIntake.contingencyIntake());
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
+        operator.button(Constants.Bindings.CORAL_SCOOCH).onTrue(coralIntake.scoochCoral());
 
         operator.button(Constants.Bindings.CLIMB_DEPLOY)
             .onTrue(
@@ -188,11 +192,14 @@ public class RobotContainer {
         // operator.button(Constants.Bindings.CLIMB_UP)
         // .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
 
-        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED));
+        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3));
         operator.button(Constants.Bindings.CLIMB_UP).onTrue(climbJoint.retract());
 
         operator.button(Constants.Bindings.CLIMB_DOWN)
-            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
+            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3).onlyIf(climbJoint.isDeployed()));
+
+        // operator.axisGreaterThan(0, 0.6).whileTrue(climbJoint.run(0.125));
+        // operator.axisGreaterThan(1, 0.6).whileTrue(climbJoint.run(0.28));
 
         swerve.registerTelemetry(logger::telemeterize);
     }

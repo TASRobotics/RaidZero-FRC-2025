@@ -1,6 +1,7 @@
 package raidzero.lib;
 
 import au.grapplerobotics.ConfigurationFailedException;
+import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
@@ -28,6 +29,8 @@ public class LazyCan {
     public LazyCan(int canId) {
         laserCan = new LaserCan(canId);
         this.canId = canId;
+        laserCan = new LaserCan(canId);
+        this.canId = canId;
     }
 
     /**
@@ -36,6 +39,7 @@ public class LazyCan {
      * @return The distance in mm, -1 if the sensor cannot be found
      */
     public int getDistanceMm() {
+        measurement = laserCan.getMeasurement();
         measurement = laserCan.getMeasurement();
 
         return measurement != null ? measurement.distance_mm : -1;

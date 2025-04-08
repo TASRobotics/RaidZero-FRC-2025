@@ -8,15 +8,24 @@ import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.servohub.ServoChannel;
+import com.revrobotics.servohub.ServoChannel.ChannelId;
+import com.revrobotics.servohub.ServoHub;
+import com.revrobotics.servohub.config.ServoChannelConfig.BehaviorWhenDisabled;
+import com.revrobotics.servohub.config.ServoHubConfig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.lib.LazyCan;
 import raidzero.robot.Constants;
 import raidzero.robot.Constants.TelescopingArm.Intake;
+import raidzero.robot.Constants.TelescopingArm.Intake;
 
 public class CoralIntake extends SubsystemBase {
     private TalonFXS roller;
+
+    private ServoHub servoHub;
+    private ServoChannel intakeBlock;
 
     private LazyCan bottomLaser, topLaser;
 
@@ -85,7 +94,7 @@ public class CoralIntake extends SubsystemBase {
     }
 
     /**
-     * Creates a {@link Command} to extake at the specified speed
+     * Creates a {@link Command} to extake the coral
      *
      * @return A {@link Command} to extake at the specified speed
      */
@@ -97,7 +106,7 @@ public class CoralIntake extends SubsystemBase {
     /**
      * Creates a {@link Command} to run the roller at the specified speed
      *
-     * @param setpoint The speed to run the roller at [-1, 1]
+     * @param speed The speed to run the roller at [-1, 1]
      * @return A {@link Command} to run the roller at the specified speed
      */
     public Command run(double speed) {
@@ -141,7 +150,7 @@ public class CoralIntake extends SubsystemBase {
 
         configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        return configuration;
+        return config;
     }
 
     /**

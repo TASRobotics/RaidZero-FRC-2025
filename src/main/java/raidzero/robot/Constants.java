@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Constants {
-    public class AlgaeIntake {
-        public class Joint {
+    public static class AlgaeIntake {
+        public static class Joint {
             public static final int MOTOR_ID = 14;
             public static final double CONVERSION_FACTOR = (54.0 / 30.0) * 9.0;
 
@@ -38,7 +38,7 @@ public class Constants {
             public static final double CURRENT_SPIKE_THRESHOLD_AMPS = 25.0;
         }
 
-        public class Intake {
+        public static class Intake {
             public static final int MOTOR_ID = 15;
             public static final double CONVERSION_FACTOR = 45.0;
 
@@ -46,7 +46,7 @@ public class Constants {
         }
     }
 
-    public class Bindings {
+    public static class Bindings {
         public static final int CLIMB_UP = 1;
         public static final int CLIMB_DEPLOY = 2;
         public static final int CLIMB_DOWN = 3;
@@ -69,17 +69,17 @@ public class Constants {
         public static final int TOP_LEFT = 16;
     }
 
-    public class CANdle {
+    public static class CANdle {
         public static final int CAN_ID = 1;
 
         public static final double CLIMB_JOINT_THRESHOLD = 0.125;
 
-        public static final double ARM_JOINT_LOWER_BOUND = 0.1754;
-        public static final double ARM_JOINT_UPPER_BOUND = 0.1805;
+        public static final double ARM_JOINT_LOWER_BOUND = 0.183;
+        public static final double ARM_JOINT_UPPER_BOUND = 0.188;
     }
 
-    public class Climb {
-        public class Joint {
+    public static class Climb {
+        public static class Joint {
             public static final int MOTOR_ID = 17;
             public static final double SENSOR_TO_MECHANISM_RATIO = 80.0 / 10.0;
 
@@ -88,7 +88,7 @@ public class Constants {
             public static final double KV = 1.2;
             public static final double KA = 0.1;
 
-            public static final double KP = 15.0;
+            public static final double KP = 20.0;
             public static final double KI = 0.0;
             public static final double KD = 0.0;
 
@@ -97,8 +97,8 @@ public class Constants {
 
             public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
-            public static final double CURRENT_LIMIT = 20.0;
-            public static final double SUPPLY_CURRENT_LIMIT = 20.0;
+            public static final double CURRENT_LIMIT = 80.0;
+            public static final double SUPPLY_CURRENT_LIMIT = 80.0;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
 
             public static final double FORWARD_SOFT_LIMIT = 0.5;
@@ -108,14 +108,14 @@ public class Constants {
             public static final double MOTION_MAGIC_ACCELERATION = 1.0;
         }
 
-        public class Winch {
+        public static class Winch {
             public static final int MOTOR_ID = 16;
 
             public static final double SPEED = 0.75;
         }
     }
 
-    public class Swerve {
+    public static class Swerve {
         public static enum REEFS {
             LEFT, RIGHT
         }
@@ -150,8 +150,8 @@ public class Constants {
         );
     }
 
-    public class TelescopingArm {
-        public class Intake {
+    public static class TelescopingArm {
+        public static class Intake {
             public static final int MOTOR_ID = 12;
 
             public static final MotorArrangementValue MOTOR_ARRANGEMENT = MotorArrangementValue.Minion_JST;
@@ -182,7 +182,7 @@ public class Constants {
 
         }
 
-        public class Joint {
+        public static class Joint {
             public static final int MOTOR_ID = 11;
             public static final int CANCODER_ID = 11;
 
@@ -218,17 +218,17 @@ public class Constants {
             public static final double[] L4_CHECK_POSITION = { -0.25, 2.62 };
             public static final double[] L4_GRAND_SLAM = { -0.2, 1.57 };
 
-            public static final double[] L3_SCORING_POS_M = { -0.25, 1.57 };
-            public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
-            public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
+            public static double[] L3_SCORING_POS_M = { -0.20, 1.57 };
+            public static double[] L2_SCORING_POS_M = { -0.2, 0.9 };
+            public static double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
             public static final double[] INTAKE_POS_M = { 0.5, 0.835 };
             public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.88 };
 
-            public static final double[] HOME_POS_M = { 0.0, 0.0 };
+            public static double[] HOME_POS_M = { 0.0, 0.0 };
         }
 
-        public class Telescope {
+        public static class Telescope {
             public static final int MOTOR_ID = 10;
 
             public static final double CONVERSION_FACTOR = 52.643555;
