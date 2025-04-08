@@ -150,7 +150,7 @@ public class CoralIntake extends SubsystemBase {
 
         configuration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        return config;
+        return configuration;
     }
 
     /**
