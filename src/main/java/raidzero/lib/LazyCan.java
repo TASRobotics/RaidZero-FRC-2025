@@ -1,7 +1,6 @@
 package raidzero.lib;
 
 import au.grapplerobotics.ConfigurationFailedException;
-import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import au.grapplerobotics.interfaces.LaserCanInterface.Measurement;
 import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
@@ -13,9 +12,7 @@ public class LazyCan {
     private LaserCan laserCan;
     private int canId;
 
-    private RangingMode rangingMode;
     private RegionOfInterest regionOfInterest;
-    private TimingBudget timingBudget;
 
     private Measurement measurement;
 
@@ -84,7 +81,6 @@ public class LazyCan {
      * @return the current LazyCan Object
      */
     public LazyCan withRangingMode(RangingMode rangingMode) {
-        this.rangingMode = rangingMode;
         try {
             laserCan.setRangingMode(rangingMode);
         } catch (ConfigurationFailedException e) {
@@ -100,7 +96,6 @@ public class LazyCan {
      * @return the current LazyCan Object
      */
     public LazyCan withTimingBudget(TimingBudget timingBudget) {
-        this.timingBudget = timingBudget;
         try {
             laserCan.setTimingBudget(timingBudget);
         } catch (ConfigurationFailedException e) {

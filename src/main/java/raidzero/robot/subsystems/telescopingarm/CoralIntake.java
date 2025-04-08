@@ -4,28 +4,16 @@ import au.grapplerobotics.interfaces.LaserCanInterface.RangingMode;
 import au.grapplerobotics.interfaces.LaserCanInterface.TimingBudget;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.servohub.ServoChannel;
-import com.revrobotics.servohub.ServoChannel.ChannelId;
-import com.revrobotics.servohub.ServoHub;
-import com.revrobotics.servohub.config.ServoChannelConfig.BehaviorWhenDisabled;
-import com.revrobotics.servohub.config.ServoHubConfig;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.lib.LazyCan;
 import raidzero.robot.Constants;
 import raidzero.robot.Constants.TelescopingArm.Intake;
-import raidzero.robot.Constants.TelescopingArm.Intake;
 
 public class CoralIntake extends SubsystemBase {
     private TalonFXS roller;
-
-    private ServoHub servoHub;
-    private ServoChannel intakeBlock;
 
     private LazyCan bottomLaser, topLaser;
 

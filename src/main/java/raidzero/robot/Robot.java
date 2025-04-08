@@ -5,7 +5,6 @@
 package raidzero.robot;
 
 import au.grapplerobotics.CanBridge;
-import com.ctre.phoenix6.controls.StaticBrake;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -17,7 +16,6 @@ import raidzero.lib.Elastic;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
 import raidzero.robot.subsystems.drivetrain.Swerve;
 import raidzero.robot.subsystems.telescopingarm.Arm;
-import raidzero.robot.subsystems.telescopingarm.CoralIntake;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
