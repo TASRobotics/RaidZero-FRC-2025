@@ -13,7 +13,6 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
-import raidzero.robot.Constants.TelescopingArm.Telescope;
 import raidzero.robot.Constants.TelescopingArm.Joint;
+import raidzero.robot.Constants.TelescopingArm.Telescope;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 
 public class Arm extends SubsystemBase {
@@ -56,7 +55,7 @@ public class Arm extends SubsystemBase {
         intakePosYOffset = 0.0;
     }
 
-    public Command moveTheArmInAStraightLineUsingDifferentialTransformations(double[] desiredPosition, double[] cartesianVelocities) {
+    public Command moveTheArmInAStraightLineUsingDifferentialTransformations(double[] desiredPosition, double[] cartesianVelocities, double[] cartesianAccelerations) {
         return run(
             () -> {
                 double r = (this.getTelescopePosition() * Telescope.MAX_MINUS_MIN_M) + Telescope.MIN_HEIGHT_M;
@@ -65,25 +64,45 @@ public class Arm extends SubsystemBase {
                 SmartDashboard.putNumber("current radius", r);
                 SmartDashboard.putNumber("current angle", theta);
 
-                double[][] rotationMatix = new double[][] {
+                double[][] inverseRotationMatix = new double[][] {
                     { Math.cos(theta), Math.sin(theta) },
                     { -1.0 * Math.sin(theta), Math.cos(theta) },
                 };
 
-                double[] polarVelocities = matrixMultiplication(rotationMatix, cartesianVelocities);
+                double[] polarVelocities = matrixMultiplication(inverseRotationMatix, cartesianVelocities);
+                double thetaVelocity = polarVelocities[1] / r;
 
                 double telescopeVelocity = (polarVelocities[0] / Telescope.MAX_MINUS_MIN_M);
-                double jointVelocity = (polarVelocities[1] / r) / (2.0 * Math.PI);
+                double jointVelocity = thetaVelocity / (2.0 * Math.PI);
 
                 SmartDashboard.putNumber("Target Telescope Velocity", telescopeVelocity);
                 SmartDashboard.putNumber("Target Joint Velocity", jointVelocity);
 
+                double[][] rotationMatrixDerivative = new double[][] {
+                    { -1.0 * Math.sin(theta) * thetaVelocity, Math.cos(theta) * thetaVelocity },
+                    { -1.0 * Math.cos(theta) * thetaVelocity, -1.0 * Math.sin(theta) * thetaVelocity },
+                };
+
+                double[] nonLinearCorrection = matrixMultiplication(rotationMatrixDerivative, cartesianVelocities);
+
+                double[] rotatedAccelerations = matrixMultiplication(inverseRotationMatix, cartesianAccelerations);
+
+                double[] polarAccelerations = new double[] { nonLinearCorrection[0] + rotatedAccelerations[0],
+                    nonLinearCorrection[1] + rotatedAccelerations[1] - polarVelocities[0] * thetaVelocity };
+                double thetaAcceleration = polarAccelerations[1] / r;
+
+                double telescopeAcceleration = polarAccelerations[0] / Telescope.MAX_MINUS_MIN_M;
+                double jointAcceleration = thetaAcceleration / (2.0 * Math.PI);
+
+                SmartDashboard.putNumber("Target Telescope Acceleration", telescopeAcceleration);
+                SmartDashboard.putNumber("Target Joint Acceleration", jointAcceleration);
+
                 double jointSetpoint = calculateJointAngle(desiredPosition);
                 double telescopeSetpoint = calculateTelescopeHeight(desiredPosition);
 
-                joint.setControl(new DynamicMotionMagicVoltage(jointSetpoint, jointVelocity, Joint.ACCELERATION, Joint.JERK));
+                joint.setControl(new DynamicMotionMagicVoltage(jointSetpoint, jointVelocity, jointAcceleration, Joint.JERK));
                 telescope.setControl(
-                    new DynamicMotionMagicVoltage(telescopeSetpoint, telescopeVelocity, Telescope.ACCELERATION, Telescope.JERK)
+                    new DynamicMotionMagicVoltage(telescopeSetpoint, telescopeVelocity, telescopeAcceleration, Telescope.JERK)
                 );
             }
         );
@@ -300,7 +319,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Gets the arm motor's encoder position
-     * 
+     *
      * @return The arm motor encoder position in relative position as a percentage of full extension
      */
     public double getJointPosition() {
@@ -331,7 +350,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Calculates the current x and y septoint in meters from the joint angle and telescope extension.
-     * 
+     *
      * @return the calculated setpoint in meters
      */
     public double[] calculateCurrentPosition() {

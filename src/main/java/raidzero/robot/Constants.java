@@ -234,6 +234,7 @@ public class Constants {
             public static final double[] HOME_POS_M = { 0.0, 0.0 };
 
             public static final double[] CARTESIAN_MAX_VELOCITIES_MPS = { 2.0, 2.0 };
+            public static final double[] CARTESIAN_MAX_ACCELERATIONS_MPS = { 1.0, 1.0 };
         }
 
         public static class Telescope {
