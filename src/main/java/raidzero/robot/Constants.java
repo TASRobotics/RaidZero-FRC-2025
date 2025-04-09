@@ -3,6 +3,7 @@ package raidzero.robot;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,6 +147,18 @@ public class Constants {
                 new Pose2d(5.2619, 3.05047, Rotation2d.fromDegrees(120)) // 22 Right
             )
         );
+
+        public static final double PROFILED_PID_XY_KP = 1.0;
+        public static final double PROFILED_PID_XY_KI = 0.0;
+        public static final double PROFILED_PID_XY_KD = 0.0;
+        public static final double PROFILED_PID_MAX_VELOCITY_MPS = 3.5;
+        public static final double PROFILED_PID_MAX_ACCEL_MPS2 = 4.0;
+
+        public static final double PROFILED_PID_ROT_KP = 1.0;
+        public static final double PROFILED_PID_ROT_KI = 0.0;
+        public static final double PROFILED_PID_ROT_KD = 0.0;
+        public static final double PROFILED_PID_MAX_ANGULAR_VEL_RPS = Units.degreesToRadians(540);
+        public static final double PROFILED_PID_MAX_ANGULAR_ACCEL_RPS2 = Units.degreesToRadians(720);
     }
 
     public static class TelescopingArm {
