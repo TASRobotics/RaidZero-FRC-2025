@@ -13,6 +13,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,6 +21,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
@@ -64,6 +66,28 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     private StructArrayPublisher<SwerveModuleState> modulePublisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("ModuleStates", SwerveModuleState.struct).publish();
     private StructPublisher<Pose2d> botpose = NetworkTableInstance.getDefault().getStructTopic("botPoseNT", Pose2d.struct).publish();
+
+    private final ProfiledPIDController profiledXYPidController = new ProfiledPIDController(
+        Constants.Swerve.PROFILED_PID_XY_KP,
+        Constants.Swerve.PROFILED_PID_XY_KI,
+        Constants.Swerve.PROFILED_PID_XY_KD,
+        new TrapezoidProfile.Constraints(
+            Constants.Swerve.PROFILED_PID_MAX_VELOCITY_MPS,
+            Constants.Swerve.PROFILED_PID_MAX_ACCEL_MPS2
+        )
+    );
+    private final ProfiledPIDController profiledRotPidController = new ProfiledPIDController(
+        Constants.Swerve.PROFILED_PID_ROT_KP,
+        Constants.Swerve.PROFILED_PID_ROT_KI,
+        Constants.Swerve.PROFILED_PID_ROT_KD,
+        new TrapezoidProfile.Constraints(
+            Constants.Swerve.PROFILED_PID_MAX_ANGULAR_VEL_RPS,
+            Constants.Swerve.PROFILED_PID_MAX_ANGULAR_ACCEL_RPS2
+        )
+    );
+    private final SwerveRequest.FieldCentric fieldCentricDrive = new SwerveRequest.FieldCentric();
+
+    private SwerveDriveState state = new SwerveDriveState();
 
     private final Field2d field = new Field2d();
 
@@ -280,6 +304,63 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                 )
             ).finallyDo((interrupted) -> this.stop())
         );
+    }
+
+    /**
+     * Uses {@link ProfiledPIDController} and {@link SwerveRequest.FieldCentricFacingAngle} to move to the desired pose
+     *
+     * @param pose The desired pose
+     * @return A {@link DeferredCommand} that moves the robot to the desired pose
+     */
+    public Command goToPoseProfiled(Pose2d pose) {
+        profiledXYPidController.reset(0, getDirectionalChassisSpeeds(pose.getRotation()));
+        profiledRotPidController.reset(0, getPigeon2().getAngularVelocityZWorld().getValueAsDouble());
+        double goal = getSwerveState().Pose.getTranslation().getDistance(pose.getTranslation());
+
+        // return defer(
+        return run(
+            () -> {
+                double vel = profiledXYPidController.calculate(
+                    getSwerveState().Pose.getTranslation().getDistance(pose.getTranslation()),
+                    goal
+                );
+
+                setControl(
+                    fieldCentricDrive
+                        .withVelocityX(
+                            vel * Math.cos(pose.getRotation().getRadians())
+                        )
+                        .withVelocityY(
+                            vel * Math.sin(pose.getRotation().getRadians())
+                        )
+                        .withRotationalRate(
+                            profiledRotPidController.calculate(
+                                this.getSwerveState().Pose.getRotation().getDegrees(),
+                                pose.getRotation().getDegrees()
+                            )
+                        )
+                );
+            }
+        ).finallyDo((interrupted) -> this.stop());
+        // );
+    }
+
+    public Command pathToReefProfiled(Constants.Swerve.REEFS reef) {
+        return defer(() -> {
+            Pose2d target = null;
+
+            if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+                target = this.getSwerveState().Pose.nearest(
+                    (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.RIGHT_REEF_WAYPOINTS : Constants.Swerve.LEFT_REEF_WAYPOINTS
+                );
+            } else {
+                target = this.getSwerveState().Pose.nearest(
+                    (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.LEFT_REEF_WAYPOINTS : Constants.Swerve.RIGHT_REEF_WAYPOINTS
+                );
+            }
+
+            return goToPoseProfiled(target);
+        });
     }
 
     /**

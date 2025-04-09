@@ -14,6 +14,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -131,12 +133,28 @@ public class RobotContainer {
             swerve.pathToStation()
         );
 
+        // joystick.x().whileTrue(
+        // swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
+        // );
+
+        // joystick.y().whileTrue(
+        // swerve.pathToReef(Constants.Swerve.REEFS.RIGHT)
+        // );
+
         joystick.x().whileTrue(
-            swerve.pathToReef(Constants.Swerve.REEFS.LEFT)
+            swerve.goToPoseProfiled(
+                new Pose2d(swerve.getSwerveState().Pose.getTranslation(), Rotation2d.fromDegrees(90))
+            )
         );
 
         joystick.y().whileTrue(
-            swerve.pathToReef(Constants.Swerve.REEFS.RIGHT)
+            swerve.goToPoseProfiled(
+                new Pose2d(
+                    4.568,
+                    1.856,
+                    Rotation2d.fromDegrees(0)
+                )
+            )
         );
 
         joystick.povRight().whileTrue(
