@@ -293,11 +293,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
             Pose2d target = null;
 
             if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
-                target = this.getState().Pose.nearest(
+                target = this.getSwerveState().Pose.nearest(
                     (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.RIGHT_REEF_WAYPOINTS : Constants.Swerve.LEFT_REEF_WAYPOINTS
                 );
             } else {
-                target = this.getState().Pose.nearest(
+                target = this.getSwerveState().Pose.nearest(
                     (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.LEFT_REEF_WAYPOINTS : Constants.Swerve.RIGHT_REEF_WAYPOINTS
                 );
             }
@@ -313,7 +313,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     public Command pathToStation() {
         return defer(() -> {
-            Pose2d target = this.getState().Pose.nearest(Constants.Swerve.STATION_WAYPOINTS);
+            Pose2d target = this.getSwerveState().Pose.nearest(Constants.Swerve.STATION_WAYPOINTS);
 
             return goToPose(target).withTimeout(0.01).andThen(goToPose(target));
         });
@@ -326,11 +326,11 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     public BooleanSupplier isArmDeployable() {
         return () -> {
-            Translation2d currTranslation = this.getState().Pose.getTranslation();
-            ChassisSpeeds currSpeeds = this.getState().Speeds;
+            Translation2d currTranslation = this.getSwerveState().Pose.getTranslation();
+            ChassisSpeeds currSpeeds = this.getSwerveState().Speeds;
 
             return currTranslation.getDistance(
-                this.getState().Pose.nearest(Constants.Swerve.STATION_WAYPOINTS).getTranslation()
+                this.getSwerveState().Pose.nearest(Constants.Swerve.STATION_WAYPOINTS).getTranslation()
             ) > 1.25 &&
                 (currTranslation.getX() < 7.525 ||
                     currTranslation.getX() > 10.025) &&
@@ -345,7 +345,7 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      */
     public BooleanSupplier isNotInClimbZone() {
         return () -> {
-            Translation2d currTranslation = this.getState().Pose.getTranslation();
+            Translation2d currTranslation = this.getSwerveState().Pose.getTranslation();
 
             return currTranslation.getX() > 7.525 && currTranslation.getX() < 10.025;
         };
@@ -416,9 +416,32 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
             });
         }
 
-        modulePublisher.set(this.getState().ModuleStates);
-        botpose.set(this.getState().Pose);
-        field.setRobotPose(this.getState().Pose);
+        modulePublisher.set(this.getSwerveState().ModuleStates);
+        botpose.set(this.getSwerveState().Pose);
+        field.setRobotPose(this.getSwerveState().Pose);
+
+        state = this.getState();
+    }
+
+    /**
+     * Gets the current state of the swerve
+     *
+     * @return The currents state of the swerve as a {@link SwerveDriveState}
+     */
+    public SwerveDriveState getSwerveState() {
+        return state;
+    }
+
+    public double getDirectionalChassisSpeeds(Rotation2d qDirection) {
+        ChassisSpeeds speeds = ChassisSpeeds.fromRobotRelativeSpeeds(getSwerveState().Speeds, getSwerveState().Pose.getRotation());
+
+        return (qDirection.getCos() * speeds.vxMetersPerSecond) + (qDirection.getSin() * speeds.vyMetersPerSecond);
+    }
+
+    public double getSwerveVelocity() {
+        return Math.sqrt(
+            Math.pow(this.getSwerveState().Speeds.vxMetersPerSecond, 2) + Math.pow(this.getSwerveState().Speeds.vyMetersPerSecond, 2)
+        );
     }
 
     /**
@@ -464,9 +487,9 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     private void configureAutoBuilder() {
         try {
             AutoBuilder.configure(
-                () -> this.getState().Pose,
+                () -> this.getSwerveState().Pose,
                 this::resetPose,
-                () -> this.getState().Speeds,
+                () -> this.getSwerveState().Speeds,
                 (speeds, feedforwards) -> setControl(
                     pathplannerSpeeds.withSpeeds(speeds)
                         .withWheelForceFeedforwardsX(feedforwards.robotRelativeForcesXNewtons())

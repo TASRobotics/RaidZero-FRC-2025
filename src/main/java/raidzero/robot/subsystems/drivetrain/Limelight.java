@@ -120,7 +120,7 @@ public class Limelight extends SubsystemBase {
     private void updateFrontLeft() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-fl",
-            swerve.getState().Pose.getRotation().getDegrees(),
+            swerve.getSwerveState().Pose.getRotation().getDegrees(),
             swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble(),
             0,
             0,
@@ -164,7 +164,7 @@ public class Limelight extends SubsystemBase {
     private void updateFrontRight() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-fr",
-            swerve.getState().Pose.getRotation().getDegrees(),
+            swerve.getSwerveState().Pose.getRotation().getDegrees(),
             swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble(),
             0,
             0,
@@ -208,7 +208,7 @@ public class Limelight extends SubsystemBase {
     private void updateBackLeft() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-bl",
-            swerve.getState().Pose.getRotation().getDegrees(),
+            swerve.getSwerveState().Pose.getRotation().getDegrees(),
             swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble(),
             0,
             0,
@@ -252,7 +252,7 @@ public class Limelight extends SubsystemBase {
     private void updateBackRight() {
         LimelightHelpers.SetRobotOrientation(
             "limelight-br",
-            swerve.getState().Pose.getRotation().getDegrees(),
+            swerve.getSwerveState().Pose.getRotation().getDegrees(),
             swerve.getPigeon2().getAngularVelocityZWorld().getValueAsDouble(),
             0,
             0,
