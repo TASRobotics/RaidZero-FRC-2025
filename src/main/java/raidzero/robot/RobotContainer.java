@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import raidzero.robot.Constants.TelescopingArm.Positions;
 import raidzero.robot.subsystems.LEDStrip.ArmStrip;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 import raidzero.robot.subsystems.climb.Winch;
@@ -154,22 +155,24 @@ public class RobotContainer {
         operator.button(Constants.Bindings.BOTTOM_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(-0.01), arm));
         operator.button(Constants.Bindings.TOP_RIGHT).onTrue(new InstantCommand(() -> arm.removeIntakeOffset(), arm));
 
-        operator.button(Constants.Bindings.L2).whileTrue(
+        operator.button(Constants.Bindings.L2).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate()).whileTrue(
             arm.moveTo(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
-        operator.button(Constants.Bindings.L3).whileTrue(
+        operator.button(Constants.Bindings.L3).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate()).whileTrue(
             arm.moveTo(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
         );
 
-        operator.button(Constants.Bindings.L4).whileTrue(
+        operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate()).whileTrue(
             arm.moveToL4()
                 .onlyIf(swerve.isArmDeployable())
         );
 
-        operator.button(Constants.Bindings.CORAL_EXTAKE).whileTrue(coralIntake.extake());
+        operator.button(Constants.Bindings.CORAL_EXTAKE).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate())
+            .whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
+        operator.button(Constants.Bindings.CORAL_SCOOCH).whileTrue(coralIntake.run(Constants.TelescopingArm.Intake.REVERSE_SPEED));
 
         operator.button(Constants.Bindings.CLIMB_DEPLOY)
             .onTrue(
@@ -186,17 +189,38 @@ public class RobotContainer {
             );
         operator.button(Constants.Bindings.CLIMB_DEPLOY).onTrue(arm.climbPos());
 
-        // operator.button(Constants.Bindings.CLIMB_UP)
-        // .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
-
         operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3));
         operator.button(Constants.Bindings.CLIMB_UP).onTrue(climbJoint.retract());
 
         operator.button(Constants.Bindings.CLIMB_DOWN)
             .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3).onlyIf(climbJoint.isDeployed()));
 
-        // operator.axisGreaterThan(0, 0.6).whileTrue(climbJoint.run(0.125));
-        // operator.axisGreaterThan(1, 0.6).whileTrue(climbJoint.run(0.28));
+        // default arm if the top laser sees but botom doesn't it goes to vertical + run intake at 0.2
+        operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L3).negate())
+            .and(operator.button(Constants.Bindings.L2).negate()).and(operator.button(Constants.Bindings.L4).negate())
+            // .and(operator.button(Constants.Bindings.CORAL_EXTAKE).negate())
+            .whileTrue(arm.moveWithRotations(0.25, 0));
+
+        operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L3).negate())
+            .and(operator.button(Constants.Bindings.L2).negate())
+            .whileTrue(coralIntake.holdAlgae());
+
+        // bottom right + l3 = l3 algae + intake
+        operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L3))
+            .whileTrue(arm.moveTo(Positions.L3_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
+
+        // bottom right + l2 = l2 algae + intake
+        operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L2))
+            .whileTrue(arm.moveTo(Positions.L2_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
+
+        // bottom right + l4 = barge position? (near l4)
+        operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L4))
+            .whileTrue(arm.moveTo(Positions.BARGE_SCORE_POS_M));
+        // .alongWith(Commands.waitSeconds(0.7).andThen(coralIntake.extaxeAlgae())));
+
+        // bottom right + out = out algae
+        operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.CORAL_EXTAKE))
+            .whileTrue(coralIntake.extaxeAlgae());
 
         swerve.registerTelemetry(logger::telemeterize);
     }

@@ -41,8 +41,23 @@ public class CoralIntake extends SubsystemBase {
      * @return A {@link Command}
      */
     public Command intake() {
-        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> currentSpike())
-            .andThen(() -> roller.set(Intake.LOWER_SPEED)).until(() -> bottomLaser.withinThreshold());
+        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> bottomLaser.withinThreshold());
+    }
+
+    public Command intakeAlgae() {
+        return run(() -> roller.set(Intake.INTAKE_SPEED));
+    }
+
+    public Command extaxeAlgae() {
+        return run(() -> roller.set(Intake.ALGAE_EJECT_SPEED));
+    }
+
+    public Command extaxeAlgaeSlow() {
+        return run(() -> roller.set(-0.2));
+    }
+
+    public Command holdAlgae() {
+        return run(() -> roller.set(Intake.HOLD_SPEED));
     }
 
     /**
@@ -108,6 +123,14 @@ public class CoralIntake extends SubsystemBase {
      */
     public int getTopLaserDistance() {
         return topLaser.getDistanceMm();
+    }
+
+    public boolean topLaserWithinThreshold() {
+        return topLaser.withinThreshold();
+    }
+
+    public boolean bottomLaserWithinThreshold() {
+        return bottomLaser.withinThreshold();
     }
 
     /**

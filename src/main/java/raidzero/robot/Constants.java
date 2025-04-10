@@ -158,23 +158,27 @@ public class Constants {
 
             public static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
 
-            public static final int STATOR_CURRENT_LIMIT = 40;
+            public static final int STATOR_CURRENT_LIMIT = 50;
             public static final int SUPPLY_CURRENT_LIMIT = 50;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
 
             public static final double TOP_LASER_THRESHOLD_MM = 100.0;
             public static final double BOTTOM_LASER_THRESHOLD_MM = 100.0;
 
-            public static final double INTAKE_SPEED = 0.25;
-            public static final double LOWER_SPEED = 0.15;
-            public static final double EJECT_SPEED = -0.50;
+            public static final double INTAKE_SPEED = 0.85;
+            public static final double LOWER_SPEED = 0.25;
+            public static final double EJECT_SPEED = -0.80;
             public static final double REVERSE_SPEED = -0.2;
 
             public static final double STALL_CURRENT_THRESHOLD = 20.0;
             public static final double CURRENT_SPIKE_THRESHOLD = 10.0;
 
-            public static final double EXTAKE_SPEED = 0.25;
+            public static final double EXTAKE_SPEED = 0.80;
             public static final double EXTAKE_TIMEOUT_S = 1.0;
+
+            public static final double ALGAE_INTAKE_SPEED = 1.0;
+            public static final double ALGAE_EJECT_SPEED = -1.0;
+            public static final double HOLD_SPEED = 0.4;
 
             public static final double KP = 1.0;
             public static final double KI = 0.0;
@@ -212,18 +216,22 @@ public class Constants {
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
         }
 
-        public class Positions {
+        public static class Positions {
             public static final double[] L4_SCORING_POS_M = { -0.24, 2.75 };
             public static final double[] L4_SCORING_POS_M_BLUE = { -0.17, 2.68 };
             public static final double[] L4_CHECK_POSITION = { -0.25, 2.62 };
             public static final double[] L4_GRAND_SLAM = { -0.2, 1.57 };
 
-            public static double[] L3_SCORING_POS_M = { -0.20, 1.57 };
-            public static double[] L2_SCORING_POS_M = { -0.2, 0.9 };
-            public static double[] L1_SCORING_POS_M = { 0.0, 0.0 };
+            public static final double[] L3_SCORING_POS_M = { -0.20, 1.57 };
+            public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
+            public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
             public static final double[] INTAKE_POS_M = { 0.5, 0.835 };
             public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.88 };
+
+            public static final double[] L3_ALGAE_POS_M = { 0.75, 1.3 };
+            public static final double[] L2_ALGAE_POS_M = { 0.5, 0.853 };
+            public static final double[] BARGE_SCORE_POS_M = { 0, 2.8 };
 
             public static double[] HOME_POS_M = { 0.0, 0.0 };
         }

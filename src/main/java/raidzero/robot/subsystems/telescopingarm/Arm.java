@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import raidzero.robot.Constants;
 import raidzero.robot.subsystems.climb.ClimbJoint;
 
@@ -75,6 +76,12 @@ public class Arm extends SubsystemBase {
             return run(() -> moveTelescope(telescopeSetpoint))
                 .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
         }
+    }
+
+    public Command moveWithRotations(double jointSetpoint, double telescopeSetpoint) {
+        return run(
+            () -> moveJoint(jointSetpoint)
+        ).alongWith(Commands.waitSeconds(0.3).andThen(() -> moveTelescope(telescopeSetpoint)));
     }
 
     /**
@@ -155,6 +162,7 @@ public class Arm extends SubsystemBase {
             );
 
         }
+
     }
 
     /**
