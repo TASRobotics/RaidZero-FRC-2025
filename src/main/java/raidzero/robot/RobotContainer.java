@@ -195,30 +195,23 @@ public class RobotContainer {
         operator.button(Constants.Bindings.CLIMB_DOWN)
             .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3).onlyIf(climbJoint.isDeployed()));
 
-        // default arm if the top laser sees but botom doesn't it goes to vertical + run intake at 0.2
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L3).negate())
             .and(operator.button(Constants.Bindings.L2).negate()).and(operator.button(Constants.Bindings.L4).negate())
-            // .and(operator.button(Constants.Bindings.CORAL_EXTAKE).negate())
             .whileTrue(arm.moveWithRotations(0.25, 0));
 
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L3).negate())
             .and(operator.button(Constants.Bindings.L2).negate())
             .whileTrue(coralIntake.holdAlgae());
 
-        // bottom right + l3 = l3 algae + intake
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L3))
             .whileTrue(arm.moveTo(Positions.L3_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
 
-        // bottom right + l2 = l2 algae + intake
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L2))
             .whileTrue(arm.moveTo(Positions.L2_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
 
-        // bottom right + l4 = barge position? (near l4)
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L4))
             .whileTrue(arm.moveTo(Positions.BARGE_SCORE_POS_M));
-        // .alongWith(Commands.waitSeconds(0.7).andThen(coralIntake.extaxeAlgae())));
 
-        // bottom right + out = out algae
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.CORAL_EXTAKE))
             .whileTrue(coralIntake.extaxeAlgae());
 
