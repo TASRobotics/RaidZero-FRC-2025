@@ -72,33 +72,6 @@ public class CoralIntake extends SubsystemBase {
     }
 
     /**
-     * Runs the intake at the normal speed until a current spike is detected. Used for autons.
-     *
-     * @return A {@link Command}
-     */
-    public Command autoIntakeP1() {
-        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> currentSpike());
-    }
-
-    /**
-     * Runs the intake until the bottom bottom laser sees a coral. Used for autons.
-     *
-     * @return A {@link Command}
-     */
-    public Command autoIntakeP2() {
-        return run(() -> roller.set(Intake.LOWER_SPEED)).until(() -> bottomLaser.withinThreshold());
-    }
-
-    /**
-     * Detects if the stator of the motor is above the predefined threshold
-     *
-     * @return True if the current is above the specified spike threshold
-     */
-    private boolean currentSpike() {
-        return roller.getStatorCurrent().getValueAsDouble() > Intake.CURRENT_SPIKE_THRESHOLD;
-    }
-
-    /**
      * Creates a {@link Command} to stop the intake
      *
      * @return A {@link Command} to stop the intake
