@@ -44,18 +44,29 @@ public class CoralIntake extends SubsystemBase {
         return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> bottomLaser.withinThreshold());
     }
 
+    /**
+     * Intakes Algae
+
+     * @return A {@link Command}
+     */
     public Command intakeAlgae() {
         return run(() -> roller.set(Intake.INTAKE_SPEED));
     }
 
+    /**
+     * Extakes Algae
+     * 
+     * @return A {@link Command}
+     */
     public Command extaxeAlgae() {
         return run(() -> roller.set(Intake.ALGAE_EJECT_SPEED));
     }
 
-    public Command extaxeAlgaeSlow() {
-        return run(() -> roller.set(-0.2));
-    }
-
+    /**
+     * Holds the algae by applying a small amount of voltage
+     * 
+     * @return A {@link Command}
+     */
     public Command holdAlgae() {
         return run(() -> roller.set(Intake.HOLD_SPEED));
     }
