@@ -178,22 +178,15 @@ public class RobotContainer {
             .onTrue(
                 Commands.waitSeconds(0.2)
                     .andThen(
-                        climbJoint.run(Constants.Climb.Joint.DEPLOYED_POS)
-                            .until(() -> operator.button(Constants.Bindings.CLIMB_UP).getAsBoolean())
-                            .andThen(() -> climbJoint.stop()).alongWith(
-                                new InstantCommand(
-                                    () -> climbJoint.setDeployedState()
-                                )
-                            )
-                    )
+                        climbWinch.run(-1.0)
+                    ).withTimeout(1.75)
             );
         operator.button(Constants.Bindings.CLIMB_DEPLOY).onTrue(arm.climbPos());
 
-        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3));
-        operator.button(Constants.Bindings.CLIMB_UP).onTrue(climbJoint.retract());
+        operator.button(Constants.Bindings.CLIMB_UP).whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED));
 
         operator.button(Constants.Bindings.CLIMB_DOWN)
-            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED, climbJoint.getPosition() > 0.3).onlyIf(climbJoint.isDeployed()));
+            .whileTrue(climbWinch.run(-Constants.Climb.Winch.SPEED));
 
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L3).negate())
             .and(operator.button(Constants.Bindings.L2).negate()).and(operator.button(Constants.Bindings.L4).negate())
