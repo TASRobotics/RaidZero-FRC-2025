@@ -172,7 +172,8 @@ public class RobotContainer {
         operator.button(Constants.Bindings.CORAL_EXTAKE).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate())
             .whileTrue(coralIntake.extake());
         operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
-        operator.button(Constants.Bindings.CORAL_SCOOCH).whileTrue(coralIntake.run(Constants.TelescopingArm.Intake.REVERSE_SPEED));
+        operator.button(Constants.Bindings.CORAL_SCOOCH).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate())
+            .whileTrue(coralIntake.run(Constants.TelescopingArm.Intake.REVERSE_SPEED));
 
         operator.button(Constants.Bindings.CLIMB_DEPLOY)
             .onTrue(
@@ -207,6 +208,9 @@ public class RobotContainer {
 
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.CORAL_EXTAKE))
             .whileTrue(coralIntake.extaxeAlgae());
+
+        operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.CORAL_SCOOCH))
+            .whileTrue(coralIntake.run(-0.2));
 
         swerve.registerTelemetry(logger::telemeterize);
     }
