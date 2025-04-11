@@ -39,7 +39,7 @@ public class ClimbJoint extends SubsystemBase {
 
     /**
      * Retracts the joint and stops the motor once vertical
-     * 
+     *
      * @return A {@link Command} that retracts the joint
      */
     public Command retract() {

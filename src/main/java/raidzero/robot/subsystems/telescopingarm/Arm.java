@@ -79,7 +79,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Moves the arm to the desired joint and telescope setpoints
-     * 
+     *
      * @param jointSetpoint The desired joint setpoint in rotations
      * @param telescopeSetpoint The desired telescope setpoint in percentage of full range of motion
      * @return A {@link Command} that moves the arm to the desired setpoints

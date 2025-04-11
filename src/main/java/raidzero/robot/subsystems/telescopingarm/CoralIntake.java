@@ -53,7 +53,7 @@ public class CoralIntake extends SubsystemBase {
      * Intakes a coral until the top laser is triggered
      *
      * <p><strong>Note:</strong> This method should only be used during the autonomous period.</p>
-     * 
+     *
      * @return A {@link Command} that intakes a coral until the top laser is triggered
      */
     public Command autoIntakeP1() {
@@ -64,7 +64,7 @@ public class CoralIntake extends SubsystemBase {
      * Intakes a coral until the bottom laser is triggered
      *
      * <p><strong>Note:</strong> This method should only be used during the autonomous period.</p>
-     * 
+     *
      * @return A {@link Command} that intakes a coral until the bottom laser is triggered
      */
     public Command autoIntakeP2() {
@@ -144,7 +144,7 @@ public class CoralIntake extends SubsystemBase {
 
     /**
      * Checks if the roller should be in coast mode
-     * 
+     *
      * @return True if the roller should be in coast mode, false otherwise
      */
     private boolean shouldBeInCoast() {
@@ -162,7 +162,7 @@ public class CoralIntake extends SubsystemBase {
 
     /**
      * Checks if the top laser is within the threshold
-     * 
+     *
      * @return True if the top laser is within the threshold, false otherwise
      */
     public boolean topLaserWithinThreshold() {
@@ -171,7 +171,7 @@ public class CoralIntake extends SubsystemBase {
 
     /**
      * Checks if the bottom laser is within the threshold
-     * 
+     *
      * @return True if the bottom laser is within the threshold, false otherwise
      */
     public boolean bottomLaserWithinThreshold() {
