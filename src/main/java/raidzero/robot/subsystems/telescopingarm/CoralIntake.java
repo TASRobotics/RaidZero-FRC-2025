@@ -24,7 +24,7 @@ public class CoralIntake extends SubsystemBase {
      * Constructs a {@link CoralIntake} subsystem instance
      */
     private CoralIntake() {
-        roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID, "rio");
+        roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID, Constants.RIO_BUS);
         roller.getConfigurator().apply(rollerConfiguration());
 
         follower = new TalonFXS(13);
@@ -73,7 +73,7 @@ public class CoralIntake extends SubsystemBase {
 
     /**
      * Intakes an lgae
-
+    
      * @return A {@link Command} that intakes an algae
      */
     public Command intakeAlgae() {
