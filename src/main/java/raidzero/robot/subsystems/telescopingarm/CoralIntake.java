@@ -85,7 +85,7 @@ public class CoralIntake extends SubsystemBase {
      *
      * @return A {@link Command} that extakes an algae
      */
-    public Command extaxeAlgae() {
+    public Command extakeAlgae() {
         return run(() -> roller.set(Intake.ALGAE_EJECT_SPEED));
     }
 

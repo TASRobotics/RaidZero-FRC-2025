@@ -134,8 +134,8 @@ public class Arm extends SubsystemBase {
      *
      * @param amount The desired offset amount
      */
-    public void decreaseIntakeYOffset(double ammount) {
-        intakePosYOffset += ammount;
+    public void decreaseIntakeYOffset(double amount) {
+        intakePosYOffset += amount;
     }
 
     /**

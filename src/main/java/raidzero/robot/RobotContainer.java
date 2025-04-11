@@ -208,7 +208,7 @@ public class RobotContainer {
             .whileTrue(arm.moveTo(Positions.BARGE_SCORE_POS_M));
 
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.CORAL_EXTAKE))
-            .whileTrue(coralIntake.extaxeAlgae());
+            .whileTrue(coralIntake.extakeAlgae());
 
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.CORAL_SCOOCH))
             .whileTrue(coralIntake.run(-0.2));
