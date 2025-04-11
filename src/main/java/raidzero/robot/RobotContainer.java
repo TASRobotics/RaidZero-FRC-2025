@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -261,12 +262,14 @@ public class RobotContainer {
 
         NamedCommands.registerCommand(
             "ExtakeCoral",
-            coralIntake.run(0.1).until(
-                () -> {
-                    return coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
-                        coralIntake.getTopLaserDistance() >= Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM;
-                }
-            ).withTimeout(1.0).andThen(() -> coralIntake.stop())
+            coralIntake.run(Constants.TelescopingArm.Intake.EXTAKE_SPEED)
+                .onlyIf(() -> DriverStation.isAutonomousEnabled() && DriverStation.getMatchTime() >= 0.75)
+                .until(
+                    () -> {
+                        return coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
+                            coralIntake.getTopLaserDistance() >= Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM;
+                    }
+                ).andThen(() -> coralIntake.stop())
         );
         NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stop()));
     }
