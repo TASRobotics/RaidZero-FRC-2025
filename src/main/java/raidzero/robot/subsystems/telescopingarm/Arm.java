@@ -77,6 +77,13 @@ public class Arm extends SubsystemBase {
         }
     }
 
+    /**
+     * Moves the arm to the desired joint and telescope setpoints
+     * 
+     * @param jointSetpoint The desired joint setpoint in rotations
+     * @param telescopeSetpoint The desired telescope setpoint in percentage of full range of motion
+     * @return A {@link Command} that moves the arm to the desired setpoints
+     */
     public Command moveWithRotations(double jointSetpoint, double telescopeSetpoint) {
         return run(
             () -> moveJoint(jointSetpoint)
@@ -123,9 +130,9 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Decreases the intake Y offset by a desired amount
+     * Adjusts the intake Y offset by a desired amount
      *
-     * @param ammount The desired offset amount
+     * @param amount The desired offset amount
      */
     public void decreaseIntakeYOffset(double ammount) {
         intakePosYOffset += ammount;

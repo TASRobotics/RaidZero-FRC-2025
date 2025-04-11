@@ -41,35 +41,49 @@ public class CoralIntake extends SubsystemBase {
     }
 
     /**
-     * Intakes coral
+     * Intakes a coral
      *
-     * @return A {@link Command}
+     * @return A {@link Command} that intakes a coral
      */
     public Command intake() {
         return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> bottomLaser.withinThreshold());
     }
 
+    /**
+     * Intakes a coral until the top laser is triggered
+     *
+     * <p><strong>Note:</strong> This method should only be used during the autonomous period.</p>
+     * 
+     * @return A {@link Command} that intakes a coral until the top laser is triggered
+     */
     public Command autoIntakeP1() {
         return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> topLaser.withinThreshold());
     }
 
+    /**
+     * Intakes a coral until the bottom laser is triggered
+     *
+     * <p><strong>Note:</strong> This method should only be used during the autonomous period.</p>
+     * 
+     * @return A {@link Command} that intakes a coral until the bottom laser is triggered
+     */
     public Command autoIntakeP2() {
         return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> bottomLaser.withinThreshold());
     }
 
     /**
-     * Intakes Algae
+     * Intakes an lgae
 
-     * @return A {@link Command}
+     * @return A {@link Command} that intakes an algae
      */
     public Command intakeAlgae() {
         return run(() -> roller.set(Intake.INTAKE_SPEED));
     }
 
     /**
-     * Extakes Algae
+     * Extakes an algae
      *
-     * @return A {@link Command}
+     * @return A {@link Command} that extakes an algae
      */
     public Command extaxeAlgae() {
         return run(() -> roller.set(Intake.ALGAE_EJECT_SPEED));
@@ -78,25 +92,25 @@ public class CoralIntake extends SubsystemBase {
     /**
      * Holds the algae by applying a small amount of voltage
      *
-     * @return A {@link Command}
+     * @return A {@link Command} that holds the algae
      */
     public Command holdAlgae() {
         return run(() -> roller.set(Intake.HOLD_SPEED));
     }
 
     /**
-     * Creates a {@link Command} to stop the intake
+     * Stops the intake
      *
-     * @return A {@link Command} to stop the intake
+     * @return A {@link Command} that stops the intake
      */
     public Command stop() {
         return runOnce(() -> roller.stopMotor());
     }
 
     /**
-     * Creates a {@link Command} to extake the coral
+     * Extakes a coral
      *
-     * @return A {@link Command} to extake at the specified speed
+     * @return A {@link Command} that extakes a coral
      */
     public Command extake() {
         return run(() -> roller.set(Constants.TelescopingArm.Intake.EXTAKE_SPEED))
@@ -104,7 +118,7 @@ public class CoralIntake extends SubsystemBase {
     }
 
     /**
-     * Creates a {@link Command} to run the roller at the specified speed
+     * Runs the roller at the specified speed
      *
      * @param speed The speed to run the roller at [-1, 1]
      * @return A {@link Command} to run the roller at the specified speed
@@ -113,6 +127,11 @@ public class CoralIntake extends SubsystemBase {
         return run(() -> roller.set(speed));
     }
 
+    /**
+     * Updates the coast mode of the roller and follower motors
+     *
+     * <p><strong>Note:</strong> This should only be called during disabled.</p>
+     */
     public void updateCoastMode() {
         if (shouldBeInCoast()) {
             roller.setNeutralMode(NeutralModeValue.Coast);
@@ -123,6 +142,11 @@ public class CoralIntake extends SubsystemBase {
         }
     }
 
+    /**
+     * Checks if the roller should be in coast mode
+     * 
+     * @return True if the roller should be in coast mode, false otherwise
+     */
     private boolean shouldBeInCoast() {
         return getTopLaserDistance() < 10;
     }
@@ -136,10 +160,20 @@ public class CoralIntake extends SubsystemBase {
         return topLaser.getDistanceMm();
     }
 
+    /**
+     * Checks if the top laser is within the threshold
+     * 
+     * @return True if the top laser is within the threshold, false otherwise
+     */
     public boolean topLaserWithinThreshold() {
         return topLaser.withinThreshold();
     }
 
+    /**
+     * Checks if the bottom laser is within the threshold
+     * 
+     * @return True if the bottom laser is within the threshold, false otherwise
+     */
     public boolean bottomLaserWithinThreshold() {
         return bottomLaser.withinThreshold();
     }
@@ -175,6 +209,11 @@ public class CoralIntake extends SubsystemBase {
         return configuration;
     }
 
+    /**
+     * Gets the {@link TalonFXSConfiguration} for the follower motor
+     *
+     * @return The {@link TalonFXSConfiguration} for the follower motor
+     */
     private TalonFXSConfiguration followerConfiguration() {
         TalonFXSConfiguration configuration = new TalonFXSConfiguration();
 
