@@ -223,7 +223,7 @@ public class Constants {
             public static final double[] L4_GRAND_SLAM = { -0.2, 1.57 };
 
             public static final double[] L3_SCORING_POS_M = { -0.20, 1.57 };
-            public static final double[] L2_SCORING_POS_M = { -0.2, 0.9 };
+            public static final double[] L2_SCORING_POS_M = { -0.15, 0.9 };
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
             public static final double[] INTAKE_POS_M = { 0.5, 0.835 };
