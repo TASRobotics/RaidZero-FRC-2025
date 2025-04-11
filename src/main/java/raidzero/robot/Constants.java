@@ -162,7 +162,7 @@ public class Constants {
             public static final int SUPPLY_CURRENT_LIMIT = 50;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
 
-            public static final double TOP_LASER_THRESHOLD_MM = 100.0;
+            public static final double TOP_LASER_THRESHOLD_MM = 50.0;
             public static final double BOTTOM_LASER_THRESHOLD_MM = 100.0;
 
             public static final double INTAKE_SPEED = 0.85;
