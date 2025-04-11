@@ -135,7 +135,7 @@ public class ArmStrip implements Subsystem {
                 animation2Applied = false;
                 animation3Applied = true;
             }
-        } else if (armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
+        } else if (armIsLegal && CoralIntake.system().getTopLaserDistance() < 10 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
             if (!animation2Applied) {
                 candle.clearAnimation(0);
                 candle.clearAnimation(1);
@@ -144,7 +144,7 @@ public class ArmStrip implements Subsystem {
                 animationApplied = false;
                 animation3Applied = false;
             }
-        } else if (!armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
+        } else if (!armIsLegal && CoralIntake.system().getTopLaserDistance() < 10 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
             if (animationApplied || animation2Applied || animation3Applied) {
                 candle.clearAnimation(0);
                 candle.clearAnimation(1);

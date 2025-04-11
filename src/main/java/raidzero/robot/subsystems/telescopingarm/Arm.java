@@ -231,7 +231,7 @@ public class Arm extends SubsystemBase {
      * @return True if the arm joint should be in coast mode, false otherwise
      */
     private boolean shouldBeInCoast() {
-        return (ClimbJoint.system().getPosition() < Constants.CANdle.CLIMB_JOINT_THRESHOLD);
+        return CoralIntake.system().getTopLaserDistance() < 10;
     }
 
     /**

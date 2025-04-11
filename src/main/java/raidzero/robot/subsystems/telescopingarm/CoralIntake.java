@@ -105,6 +105,20 @@ public class CoralIntake extends SubsystemBase {
         return run(() -> roller.set(speed));
     }
 
+    public void updateCoastMode() {
+        if (shouldBeInCoast()) {
+            roller.setNeutralMode(NeutralModeValue.Coast);
+            follower.setNeutralMode(NeutralModeValue.Coast);
+        } else {
+            roller.setNeutralMode(NeutralModeValue.Brake);
+            follower.setNeutralMode(NeutralModeValue.Brake);
+        }
+    }
+
+    private boolean shouldBeInCoast() {
+        return getTopLaserDistance() < 10;
+    }
+
     /**
      * Gets the distance from the LaserCAN
      *
