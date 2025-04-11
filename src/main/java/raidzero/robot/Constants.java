@@ -173,7 +173,7 @@ public class Constants {
             public static final double STALL_CURRENT_THRESHOLD = 20.0;
             public static final double CURRENT_SPIKE_THRESHOLD = 10.0;
 
-            public static final double EXTAKE_SPEED = 0.80;
+            public static final double EXTAKE_SPEED = 1.0;
             public static final double EXTAKE_TIMEOUT_S = 1.0;
 
             public static final double ALGAE_INTAKE_SPEED = 1.0;
