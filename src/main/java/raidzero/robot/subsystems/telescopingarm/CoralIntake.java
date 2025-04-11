@@ -49,6 +49,14 @@ public class CoralIntake extends SubsystemBase {
         return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> bottomLaser.withinThreshold());
     }
 
+    public Command autoIntakeP1() {
+        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> topLaser.withinThreshold());
+    }
+
+    public Command autoIntakeP2() {
+        return run(() -> roller.set(Intake.INTAKE_SPEED)).until(() -> bottomLaser.withinThreshold());
+    }
+
     /**
      * Intakes Algae
 
