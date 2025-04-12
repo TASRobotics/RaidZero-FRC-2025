@@ -197,10 +197,14 @@ public class RobotContainer {
             .whileTrue(coralIntake.holdAlgae());
 
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L3))
-            .whileTrue(arm.moveTo(Positions.L3_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
+            .whileTrue(
+                arm.moveTo(Positions.L3_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae())
+            );
 
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L2))
-            .whileTrue(arm.moveTo(Positions.L2_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
+            .whileTrue(
+                arm.moveTo(Positions.L2_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae())
+            );
 
         operator.button(Constants.Bindings.BOTTOM_RIGHT).and(operator.button(Constants.Bindings.L4))
             .whileTrue(arm.moveTo(Positions.BARGE_SCORE_POS_M));
