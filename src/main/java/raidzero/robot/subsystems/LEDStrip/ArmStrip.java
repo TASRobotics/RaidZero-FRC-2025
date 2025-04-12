@@ -216,16 +216,6 @@ public class ArmStrip implements Subsystem {
     private void loopTeleop() {
         if (ClimbJoint.system().isDeployed().getAsBoolean()) {
             candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.05, -1));
-        } else if (coralTooDown) {
-            if (!animation2Applied) {
-                candle.clearAnimation(0);
-                candle.clearAnimation(1);
-                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Backward, 8), 0);
-                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 27, Direction.Forward, 33), 1);
-                animationApplied = false;
-                animation2Applied = true;
-                animation3Applied = false;
-            }
         } else if (coralTooUp) {
             if (!animation2Applied) {
                 candle.clearAnimation(0);
