@@ -31,7 +31,7 @@ public class CoralIntake extends SubsystemBase {
         follower.setControl(new Follower(Intake.MOTOR_ID, false));
 
         bottomLaser = new LazyCan(1).withRangingMode(RangingMode.SHORT)
-            .withRegionOfInterest(14, 8, 4, 16).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
+            .withRegionOfInterest(14, 8, 16, 16).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
             .withThreshold(Intake.BOTTOM_LASER_THRESHOLD_MM);
 
         topLaser = new LazyCan(0).withRangingMode(RangingMode.LONG)
