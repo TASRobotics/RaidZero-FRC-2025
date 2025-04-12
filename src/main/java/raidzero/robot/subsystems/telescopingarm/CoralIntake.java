@@ -73,7 +73,7 @@ public class CoralIntake extends SubsystemBase {
 
     /**
      * Intakes an lgae
-    
+
      * @return A {@link Command} that intakes an algae
      */
     public Command intakeAlgae() {
