@@ -22,7 +22,7 @@ public class ArmStrip implements Subsystem {
     private CANdle candle;
     private Arm arm;
 
-    private boolean armIsLegal, coralTooDown, coralTooUp, coralIsIn = false;
+    private boolean armIsLegal, coralTooUp, coralIsIn = false;
 
     private boolean strobeAlternate = false;
     private Timer strobeTimer = new Timer();
@@ -80,14 +80,10 @@ public class ArmStrip implements Subsystem {
         armIsLegal = arm.getJointPosition() >= Constants.CANdle.ARM_JOINT_LOWER_BOUND &&
             arm.getJointPosition() <= Constants.CANdle.ARM_JOINT_UPPER_BOUND;
 
-        coralTooDown = CoralIntake.system().getTopLaserDistance() > Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
-            CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM;
-
         coralTooUp = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
-            CoralIntake.system().getBottomLaserDistance() > Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM;
+            CoralIntake.system().getBottomLaserDistance() > Constants.TelescopingArm.Intake.BOTTOM_LASER_THRESHOLD_MM;
 
-        coralIsIn = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
-            CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM;
+        coralIsIn = CoralIntake.system().bottomLaserWithinThreshold();
     }
 
     /**
