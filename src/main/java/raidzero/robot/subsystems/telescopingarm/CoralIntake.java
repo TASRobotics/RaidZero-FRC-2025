@@ -7,6 +7,7 @@ import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.lib.LazyCan;
@@ -184,6 +185,14 @@ public class CoralIntake extends SubsystemBase {
      */
     public int getBottomLaserDistance() {
         return bottomLaser.getDistanceMm();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Top laser mm", getTopLaserDistance());
+        SmartDashboard.putNumber("Bottom laser mm", getBottomLaserDistance());
+        SmartDashboard.putBoolean("Top laser", topLaserWithinThreshold());
+        SmartDashboard.putBoolean("Bottom laser", bottomLaserWithinThreshold());
     }
 
     /**
