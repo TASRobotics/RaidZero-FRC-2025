@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import raidzero.robot.Constants.TelescopingArm.Positions;
@@ -273,9 +274,11 @@ public class RobotContainer {
                 .until(
                     () -> {
                         return coralIntake.getBottomLaserDistance() >= Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
-                            coralIntake.getTopLaserDistance() >= Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM;
+                            coralIntake.getTopLaserDistance() >= Constants.TelescopingArm.Intake.BOTTOM_LASER_THRESHOLD_MM;
                     }
-                ).andThen(() -> coralIntake.stop())
+                )
+                .andThen(new WaitCommand(0.1))
+                .andThen(() -> coralIntake.stop())
         );
         NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stop()));
     }
