@@ -148,6 +148,9 @@ public class Constants {
                 new Pose2d(5.2619, 3.05047, Rotation2d.fromDegrees(120)) // 22 Right
             )
         );
+
+        public static final Pose2d BLUE_PROCESSOR = new Pose2d(5.987542, 0.78, Rotation2d.fromDegrees(90));
+        public static final Pose2d RED_PROCESSOR = new Pose2d(17.55 - 5.987542, 8.05 - 0.78, Rotation2d.fromDegrees(180));
     }
 
     public static class TelescopingArm {

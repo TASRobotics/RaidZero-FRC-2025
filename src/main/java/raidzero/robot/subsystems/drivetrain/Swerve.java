@@ -307,6 +307,25 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
     }
 
     /**
+     * Moves the robot to the red or blue processor depending on current alliance
+     *
+     * @return A {@link DeferredCommand} that moves the robot to the red or blue processor
+     */
+    public Command pathToProcessor() {
+        return defer(() -> {
+            Pose2d target = null;
+
+            if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+                target = Constants.Swerve.RED_PROCESSOR;
+            } else {
+                target = Constants.Swerve.BLUE_PROCESSOR;
+            }
+
+            return goToPose(target).withTimeout(0.01).andThen(goToPose(target));
+        });
+    }
+
+    /**
      * Moves the robot to the nearest coral station
      *
      * @return A {@link DeferredCommand} that moves the robot to the nearest coral station

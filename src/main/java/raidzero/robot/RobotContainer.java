@@ -148,7 +148,7 @@ public class RobotContainer {
         );
 
         joystick.povDown().whileTrue(
-            arm.moveWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE)
+            swerve.pathToProcessor()
         );
 
         // * Operator controls
