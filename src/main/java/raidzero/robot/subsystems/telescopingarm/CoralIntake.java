@@ -15,7 +15,6 @@ import raidzero.robot.Constants.TelescopingArm.Intake;
 
 public class CoralIntake extends SubsystemBase {
     private TalonFXS roller, follower;
-
     private LazyCan bottomLaser, topLaser;
 
     private static CoralIntake system;

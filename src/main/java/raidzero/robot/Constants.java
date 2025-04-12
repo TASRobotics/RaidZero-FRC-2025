@@ -158,8 +158,8 @@ public class Constants {
 
             public static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
 
-            public static final int STATOR_CURRENT_LIMIT = 50;
-            public static final int SUPPLY_CURRENT_LIMIT = 50;
+            public static final int STATOR_CURRENT_LIMIT = 30;
+            public static final int SUPPLY_CURRENT_LIMIT = 30;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
 
             public static final double TOP_LASER_THRESHOLD_MM = 50.0;
@@ -178,7 +178,7 @@ public class Constants {
 
             public static final double ALGAE_INTAKE_SPEED = 1.0;
             public static final double ALGAE_EJECT_SPEED = -1.0;
-            public static final double HOLD_SPEED = 0.4;
+            public static final double HOLD_SPEED = 0.1;
 
             public static final double KP = 1.0;
             public static final double KI = 0.0;
@@ -230,7 +230,7 @@ public class Constants {
             public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.88 };
 
             public static final double[] L3_ALGAE_POS_M = { 0.75, 1.3 };
-            public static final double[] L2_ALGAE_POS_M = { 0.5, 0.853 };
+            public static final double[] L2_ALGAE_POS_M = { 0.6, 0.7 };
             public static final double[] BARGE_SCORE_POS_M = { 0, 2.8 };
 
             public static double[] HOME_POS_M = { 0.0, 0.0 };
