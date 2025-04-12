@@ -98,7 +98,6 @@ public class RobotContainer {
         );
 
         // arm.setDefaultCommand(arm.moveArmWithDelay(Constants.TelescopingArm.Positions.INTAKE_POS_M));
-        arm.setDefaultCommand(arm.moveToIntake());
         coralIntake.setDefaultCommand(coralIntake.stop());
 
         // algaeIntake.setDefaultCommand(algaeIntake.moveJoint(Constants.AlgaeIntake.Joint.HOME_POSITION));
@@ -159,15 +158,18 @@ public class RobotContainer {
         operator.button(Constants.Bindings.L2).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate()).whileTrue(
             arm.moveTo(Constants.TelescopingArm.Positions.L2_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
+                .alongWith(new InstantCommand(() -> arm.checkDefaultCommand()))
         );
         operator.button(Constants.Bindings.L3).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate()).whileTrue(
             arm.moveTo(Constants.TelescopingArm.Positions.L3_SCORING_POS_M)
                 .onlyIf(swerve.isArmDeployable())
+                .alongWith(new InstantCommand(() -> arm.checkDefaultCommand()))
         );
 
         operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate()).whileTrue(
             arm.moveToL4()
                 .onlyIf(swerve.isArmDeployable())
+                .alongWith(new InstantCommand(() -> arm.checkDefaultCommand()))
         );
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate())

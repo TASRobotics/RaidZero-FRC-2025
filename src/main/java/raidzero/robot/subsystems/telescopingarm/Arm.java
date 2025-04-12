@@ -198,6 +198,15 @@ public class Arm extends SubsystemBase {
     }
 
     /**
+     * Checks if a default command is present. If it isn't present, it will assign {@link Arm#moveToIntake()} as the default command.
+     */
+    public void checkDefaultCommand() {
+        if (this.getDefaultCommand() == null) {
+            this.setDefaultCommand(this.moveToIntake());
+        }
+    }
+
+    /**
      * Runs just the telescope to the supplied setpoint
      *
      * @param setpoint The target setpoint in percentage of full range of motion
@@ -325,6 +334,7 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Elevator pos", getTelescopePosition());
         SmartDashboard.putNumber("Intake Y Offset", Math.round(intakePosYOffset * 100) / 100.0);
+        SmartDashboard.putBoolean("DefaultCommand", this.getDefaultCommand() != null);
     }
 
     /**
