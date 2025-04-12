@@ -230,7 +230,7 @@ public class Constants {
             public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
             public static final double[] INTAKE_POS_M = { 0.5, 0.835 };
-            public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.88 };
+            public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.875 };
 
             public static final double[] L3_ALGAE_POS_M = { 0.75, 1.3 };
             public static final double[] L2_ALGAE_POS_M = { 0.6, 0.7 };
