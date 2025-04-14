@@ -22,7 +22,7 @@ public class ArmStrip implements Subsystem {
     private CANdle candle;
     private Arm arm;
 
-    private boolean armIsLegal, coralTooDown, coralTooUp, coralIsIn = false;
+    private boolean armIsLegal, coralTooUp, coralIsIn = false;
 
     private boolean strobeAlternate = false;
     private Timer strobeTimer = new Timer();
@@ -38,7 +38,7 @@ public class ArmStrip implements Subsystem {
      * Constructs a {@link ArmStrip} subsystem.
      */
     private ArmStrip() {
-        this.candle = new CANdle(Constants.CANdle.CAN_ID, Constants.CANIVORE_NAME);
+        this.candle = new CANdle(Constants.CANdle.CAN_ID, Constants.BASE_CANIVORE);
         this.arm = Arm.system();
 
         this.candle.configAllSettings(candleConfig());
@@ -80,14 +80,10 @@ public class ArmStrip implements Subsystem {
         armIsLegal = arm.getJointPosition() >= Constants.CANdle.ARM_JOINT_LOWER_BOUND &&
             arm.getJointPosition() <= Constants.CANdle.ARM_JOINT_UPPER_BOUND;
 
-        coralTooDown = CoralIntake.system().getTopLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
-            CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+        coralTooUp = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
+            CoralIntake.system().getBottomLaserDistance() > Constants.TelescopingArm.Intake.BOTTOM_LASER_THRESHOLD_MM;
 
-        coralTooUp = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
-            CoralIntake.system().getBottomLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
-
-        coralIsIn = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
-            CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+        coralIsIn = CoralIntake.system().bottomLaserWithinThreshold();
     }
 
     /**
@@ -135,7 +131,7 @@ public class ArmStrip implements Subsystem {
                 animation2Applied = false;
                 animation3Applied = true;
             }
-        } else if (armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
+        } else if (armIsLegal && CoralIntake.system().getTopLaserDistance() < 10 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
             if (!animation2Applied) {
                 candle.clearAnimation(0);
                 candle.clearAnimation(1);
@@ -144,7 +140,7 @@ public class ArmStrip implements Subsystem {
                 animationApplied = false;
                 animation3Applied = false;
             }
-        } else if (!armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
+        } else if (!armIsLegal && CoralIntake.system().getTopLaserDistance() < 10 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
             if (animationApplied || animation2Applied || animation3Applied) {
                 candle.clearAnimation(0);
                 candle.clearAnimation(1);
@@ -216,16 +212,6 @@ public class ArmStrip implements Subsystem {
     private void loopTeleop() {
         if (ClimbJoint.system().isDeployed().getAsBoolean()) {
             candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.05, -1));
-        } else if (coralTooDown) {
-            if (!animation2Applied) {
-                candle.clearAnimation(0);
-                candle.clearAnimation(1);
-                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Backward, 8), 0);
-                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 27, Direction.Forward, 33), 1);
-                animationApplied = false;
-                animation2Applied = true;
-                animation3Applied = false;
-            }
         } else if (coralTooUp) {
             if (!animation2Applied) {
                 candle.clearAnimation(0);

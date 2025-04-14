@@ -1,6 +1,8 @@
 package raidzero.robot;
 
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import java.util.ArrayList;
@@ -109,7 +111,7 @@ public class Constants {
         public static class Winch {
             public static final int MOTOR_ID = 16;
 
-            public static final double SPEED = 0.75;
+            public static final double SPEED = 1.0;
         }
     }
 
@@ -127,9 +129,9 @@ public class Constants {
 
         public static final List<Pose2d> LEFT_REEF_WAYPOINTS = new ArrayList<Pose2d>(
             List.of(
-                new Pose2d(3.70, 3.16, Rotation2d.fromDegrees(60)), // 17 Left
+                new Pose2d(3.735, 3.14, Rotation2d.fromDegrees(60)), // 17 Left
                 new Pose2d(3.30, 4.15, Rotation2d.fromDegrees(0)), // 18 Left
-                new Pose2d(4.05, 5.1, Rotation2d.fromDegrees(300)), // 19 Left
+                new Pose2d(4.06, 5.105, Rotation2d.fromDegrees(300)), // 19 Left
                 new Pose2d(5.2619, 4.99953, Rotation2d.fromDegrees(240)), // 20 Left
                 new Pose2d(5.70, 3.85, Rotation2d.fromDegrees(180)), // 21 Left
                 new Pose2d(4.9113, 2.93927, Rotation2d.fromDegrees(120)) // 22 Left
@@ -140,39 +142,51 @@ public class Constants {
             List.of(
                 new Pose2d(4.05, 2.95, Rotation2d.fromDegrees(60)), // 17 Right
                 new Pose2d(3.30, 3.85, Rotation2d.fromDegrees(0)), // 18 Right
-                new Pose2d(3.70, 4.89, Rotation2d.fromDegrees(300)), // 19 Right
-                new Pose2d(4.9419, 5.16453, Rotation2d.fromDegrees(240)), // 20 Right
+                new Pose2d(3.713, 4.925, Rotation2d.fromDegrees(300)), // 19 Right
+                new Pose2d(4.9489, 5.16, Rotation2d.fromDegrees(240)), // 20 Right
                 new Pose2d(5.70, 4.20, Rotation2d.fromDegrees(180)), // 21 Right
                 new Pose2d(5.2619, 3.05047, Rotation2d.fromDegrees(120)) // 22 Right
             )
         );
+
+        public static final Pose2d BLUE_PROCESSOR = new Pose2d(5.987542, 0.78, Rotation2d.fromDegrees(90));
+        public static final Pose2d RED_PROCESSOR = new Pose2d(17.55 - 5.987542, 8.05 - 0.78, Rotation2d.fromDegrees(180));
     }
 
     public static class TelescopingArm {
         public static class Intake {
             public static final int MOTOR_ID = 12;
-            public static final int FOLLOW_ID = 13;
 
-            public static final double INTAKE_SPEED = 0.25;
-            public static final double INTAKE_LOWER_SPEED = 0.04;
+            public static final MotorArrangementValue MOTOR_ARRANGEMENT = MotorArrangementValue.Minion_JST;
 
-            public static final double SCOOCH_SPEED = 0.06;
+            public static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
 
-            public static final double EXTAKE_SPEED = 0.1;
+            public static final int STATOR_CURRENT_LIMIT = 30;
+            public static final int SUPPLY_CURRENT_LIMIT = 30;
+            public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
+
+            public static final double TOP_LASER_THRESHOLD_MM = 50.0;
+            public static final double BOTTOM_LASER_THRESHOLD_MM = 100.0;
+
+            public static final double INTAKE_SPEED = 0.85;
+            public static final double LOWER_SPEED = 0.25;
+            public static final double EJECT_SPEED = -0.80;
+            public static final double REVERSE_SPEED = -0.2;
+
+            public static final double STALL_CURRENT_THRESHOLD = 20.0;
+            public static final double CURRENT_SPIKE_THRESHOLD = 10.0;
+
+            public static final double EXTAKE_SPEED = 1.0;
             public static final double EXTAKE_TIMEOUT_S = 1.0;
 
-            public static final double LASERCAN_DISTANCE_THRESHOLD_MM = 50.0;
+            public static final double ALGAE_INTAKE_SPEED = 1.0;
+            public static final double ALGAE_EJECT_SPEED = -1.0;
+            public static final double HOLD_SPEED = 0.1;
 
-            public static final int CURRENT_LIMIT = 25;
+            public static final double KP = 1.0;
+            public static final double KI = 0.0;
+            public static final double KD = 0.0;
 
-            public static final int BOTTOM_LASERCAN_ID = 0;
-            public static final int TOP_LASERCAN_ID = 1;
-
-            public static final int SERVO_HUB_ID = 3;
-
-            public static final int SERVO_RETRACTED = 1950;
-            public static final int SERVO_EXTENDED = 1300;
-            public static final int SERVO_CENTER_WIDTH = 1625;
         }
 
         public static class Joint {
@@ -180,7 +194,7 @@ public class Constants {
             public static final int CANCODER_ID = 11;
 
             public static final double CANCODER_GEAR_RATIO = 28.0 / 80.0;
-            public static final double CANCODER_OFFSET = -(0.352783 - (0.25 / CANCODER_GEAR_RATIO));
+            public static final double CANCODER_OFFSET = -(0.325684 - (0.25 / CANCODER_GEAR_RATIO));
             public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
 
             public static final double CONVERSION_FACTOR = (120.0 / 12.0) * 20.0;
@@ -206,17 +220,21 @@ public class Constants {
         }
 
         public static class Positions {
-            public static double[] L4_SCORING_POS_M = { -0.24, 2.65 };
-            public static double[] L4_SCORING_POS_M_BLUE = { -0.17, 2.68 };
-            public static double[] L4_CHECK_POSITION = { -0.25, 2.62 };
-            public static double[] L4_GRAND_SLAM = { -0.2, 1.57 };
+            public static final double[] L4_SCORING_POS_M = { -0.24, 2.75 };
+            public static final double[] L4_SCORING_POS_M_BLUE = { -0.17, 2.68 };
+            public static final double[] L4_CHECK_POSITION = { -0.25, 2.62 };
+            public static final double[] L4_GRAND_SLAM = { -0.2, 1.57 };
 
-            public static double[] L3_SCORING_POS_M = { -0.20, 1.57 };
-            public static double[] L2_SCORING_POS_M = { -0.2, 0.9 };
-            public static double[] L1_SCORING_POS_M = { 0.0, 0.0 };
+            public static final double[] L3_SCORING_POS_M = { -0.20, 1.57 };
+            public static final double[] L2_SCORING_POS_M = { -0.15, 0.9 };
+            public static final double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static double[] INTAKE_POS_M = { 0.5, 0.8425 };
-            public static double[] INTAKE_POS_M_BLUE = { 0.5, 0.8425 };
+            public static final double[] INTAKE_POS_M = { 0.5, 0.835 };
+            public static final double[] INTAKE_POS_M_BLUE = { 0.5, 0.875 };
+
+            public static final double[] L3_ALGAE_POS_M = { 0.75, 1.3 };
+            public static final double[] L2_ALGAE_POS_M = { 0.6, 0.7 };
+            public static final double[] BARGE_SCORE_POS_M = { 0, 2.8 };
 
             public static double[] HOME_POS_M = { 0.0, 0.0 };
         }
@@ -253,7 +271,9 @@ public class Constants {
         }
     }
 
-    public static final String CANIVORE_NAME = "CANdoAttitude";
+    public static final String BASE_CANIVORE = "CANdoAttitude";
+    public static final String KAYNE_BUS = "Kaynebus";
+    public static final String RIO_BUS = "rio";
 
     public static final double STICK_DEADBAND = 0.2;
 }

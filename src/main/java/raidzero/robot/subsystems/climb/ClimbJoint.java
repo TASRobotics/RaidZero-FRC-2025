@@ -22,7 +22,7 @@ public class ClimbJoint extends SubsystemBase {
      * Constructs a {@link ClimbJoint} subsystem instance
      */
     private ClimbJoint() {
-        joint = new TalonFX(Constants.Climb.Joint.MOTOR_ID);
+        joint = new TalonFX(Constants.Climb.Joint.MOTOR_ID, Constants.RIO_BUS);
         joint.getConfigurator().apply(jointConfiguration());
         joint.setNeutralMode(NeutralModeValue.Brake);
     }
@@ -39,6 +39,7 @@ public class ClimbJoint extends SubsystemBase {
 
     /**
      * Retracts the joint and stops the motor once vertical
+     *
      * @return A {@link Command} that retracts the joint
      */
     public Command retract() {
@@ -88,7 +89,7 @@ public class ClimbJoint extends SubsystemBase {
     }
 
     /**
-     * Returns a {@link BooleanSupplier} that checks if the joint is deployed
+     * Checks if the joint is deployed
      *
      * @return A {@link BooleanSupplier} that checks if the joint is deployed
      */

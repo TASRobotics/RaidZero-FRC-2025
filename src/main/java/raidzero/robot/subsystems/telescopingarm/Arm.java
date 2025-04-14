@@ -34,15 +34,15 @@ public class Arm extends SubsystemBase {
      * Constructs an {@link Arm} subsystem instance
      */
     private Arm() {
-        telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID);
+        telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID, "Kaynebus");
         telescope.getConfigurator().apply(telescopeConfiguration());
         telescope.setNeutralMode(NeutralModeValue.Brake);
 
-        joint = new TalonFX(Constants.TelescopingArm.Joint.MOTOR_ID);
+        joint = new TalonFX(Constants.TelescopingArm.Joint.MOTOR_ID, "Kaynebus");
         joint.getConfigurator().apply(jointConfiguration());
         joint.setNeutralMode(NeutralModeValue.Brake);
 
-        jointCANcoder = new CANcoder(Constants.TelescopingArm.Joint.CANCODER_ID);
+        jointCANcoder = new CANcoder(Constants.TelescopingArm.Joint.CANCODER_ID, "Kaynebus");
         jointCANcoder.getConfigurator().apply(jointCANCoderConfiguration());
 
         currentPose = new double[] { 0.0, 0.0 };
@@ -75,6 +75,19 @@ public class Arm extends SubsystemBase {
             return run(() -> moveTelescope(telescopeSetpoint))
                 .alongWith(Commands.waitSeconds(0.1).andThen(() -> moveJoint(jointSetpoint)));
         }
+    }
+
+    /**
+     * Moves the arm to the desired joint and telescope setpoints
+     *
+     * @param jointSetpoint The desired joint setpoint in rotations
+     * @param telescopeSetpoint The desired telescope setpoint in percentage of full range of motion
+     * @return A {@link Command} that moves the arm to the desired setpoints
+     */
+    public Command moveWithRotations(double jointSetpoint, double telescopeSetpoint) {
+        return run(
+            () -> moveJoint(jointSetpoint)
+        ).alongWith(Commands.waitSeconds(0.3).andThen(() -> moveTelescope(telescopeSetpoint)));
     }
 
     /**
@@ -117,12 +130,12 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Decreases the intake Y offset by a desired amount
+     * Adjusts the intake Y offset by a desired amount
      *
-     * @param ammount The desired offset amount
+     * @param amount The desired offset amount
      */
-    public void decreaseIntakeYOffset(double ammount) {
-        intakePosYOffset += ammount;
+    public void decreaseIntakeYOffset(double amount) {
+        intakePosYOffset += amount;
     }
 
     /**
@@ -155,6 +168,7 @@ public class Arm extends SubsystemBase {
             );
 
         }
+
     }
 
     /**
@@ -181,6 +195,15 @@ public class Arm extends SubsystemBase {
             moveJoint(0.3);
             moveTelescope(0.0);
         });
+    }
+
+    /**
+     * Checks if a default command is present. If it isn't present, it will assign {@link Arm#moveToIntake()} as the default command.
+     */
+    public void checkDefaultCommand() {
+        if (this.getDefaultCommand() == null) {
+            this.setDefaultCommand(this.moveToIntake());
+        }
     }
 
     /**
@@ -224,7 +247,7 @@ public class Arm extends SubsystemBase {
      * @return True if the arm joint should be in coast mode, false otherwise
      */
     private boolean shouldBeInCoast() {
-        return (ClimbJoint.system().getPosition() < Constants.CANdle.CLIMB_JOINT_THRESHOLD);
+        return CoralIntake.system().getTopLaserDistance() < 10;
     }
 
     /**
@@ -311,6 +334,7 @@ public class Arm extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Elevator pos", getTelescopePosition());
         SmartDashboard.putNumber("Intake Y Offset", Math.round(intakePosYOffset * 100) / 100.0);
+        SmartDashboard.putBoolean("DefaultCommand", this.getDefaultCommand() != null);
     }
 
     /**

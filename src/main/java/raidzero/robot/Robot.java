@@ -5,7 +5,6 @@
 package raidzero.robot;
 
 import au.grapplerobotics.CanBridge;
-import com.ctre.phoenix6.controls.StaticBrake;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -24,12 +23,15 @@ public class Robot extends TimedRobot {
 
     private final RobotContainer m_robotContainer;
 
+    private boolean alreadyEnabled;
+
     public Robot() {
         m_robotContainer = new RobotContainer();
         CanBridge.runTCP();
 
         WebServer.start(5800, Filesystem.getDeployDirectory().getPath());
         Elastic.selectTab("Setup");
+        alreadyEnabled = false;
     }
 
     @Override
@@ -44,14 +46,15 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        Arm.system().updateCoastMode();
-
-        Swerve.system().initializeOtf();
+        if (!alreadyEnabled) {
+            Arm.system().updateCoastMode();
+            CoralIntake.system().updateCoastMode();
+            Swerve.system().initializeOtf();
+        }
     }
 
     @Override
     public void disabledExit() {
-        CoralIntake.system().getRoller().setControl(new StaticBrake());
         ArmStrip.system().resetAnimation();
     }
 
@@ -64,6 +67,7 @@ public class Robot extends TimedRobot {
         }
 
         Elastic.selectTab("Autonomous");
+        alreadyEnabled = true;
     }
 
     @Override
