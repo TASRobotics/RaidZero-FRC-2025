@@ -84,12 +84,12 @@
 
 #### Coral intake
 
-| Device Name        | Device Type                    | CAN ID | CAN Bus |
-|--------------------|--------------------------------|--------|---------|
-| CoralIntake        | TalonFXS - Minion              | 12     | RoboRIO |
-| CoralIntake follow | TalonFXS - Minion              | 13     | RoboRIO |
-| LaserCAN top       | Grapple Robotics - LaserCAN    | 1      | RoboRIO |
-| LaserCAN bottom    | Grapple Robotics - LaserCAN    | 0      | RoboRIO |
+| Device Name             | Device Type                    | CAN ID | CAN Bus |
+|-------------------------|--------------------------------|--------|---------|
+| CoralIntake - leader    | TalonFXS - Minion              | 12     | RoboRIO |
+| CoralIntake - follower  | TalonFXS - Minion              | 13     | RoboRIO |
+| LaserCAN top            | Grapple Robotics - LaserCAN    | 1      | RoboRIO |
+| LaserCAN bottom         | Grapple Robotics - LaserCAN    | 0      | RoboRIO |
 
 ## Controls
 
@@ -102,32 +102,44 @@
 | Right Stick X   | Robot rotation speed           | N/A      |
 | Left Bumper     | Extake coral                   | Hold     |
 | Right Bumper    | Intake coral                   | Tap      |
+| Right Trigger   | Uncap max swerve speed         | Hold     |
 | A               | Robot centric slowed driving   | Hold     |
 | B               | OTF to closest station         | Hold     |
 | X               | OTF to closest left reef       | Hold     |
 | Y               | OTF to closest right reef      | Hold     |
 | POV Right       | X swerve brake                 | Hold     |
+| POV Down        | OTF to processor               | Hold     |
 
 ### Operator
 
-| Button ID  | Function                      | Tap/Hold |
-|------------|-------------------------------|----------|
-| 1          | Retract climb winch (Up)      | Hold     |
-| 2          | Deploy climb                  | Tap      |
-| 3          | Extend climb winch (Down)     | Hold     |
-| 4          | Check L4 slam                 | Hold     |
-| 5          | L4 Slam                       | Tap      |
-| 6          | Unbound                       | N/A      |
-| 7          | Arm L2                        | Hold     |
-| 8          | Arm L3                        | Hold     |
-| 9          | Arm L4                        | Hold     |
-| 10         | Extake coral                  | Hold     |
-| 11         | Intake coral                  | Tap      |
-| 12         | Scooch coral upwards          | Tap      |
-| 13         | Reset intake Y offset         | Tap      |
-| 14         | Unbound                       | N/A      |
-| 15         | Decrease intake Y offset      | Tap      |
-| 16         | Increase intake Y offset      | Tap      |
+| Button ID  | Function                              | Tap/Hold |
+|------------|---------------------------------------|----------|
+| 1          | Retract climb winch (Up)              | Hold     |
+| 2          | Deploy climb                          | Tap      |
+| 3          | Extend climb winch (Down)             | Hold     |
+| 4          | Check L4 slam                         | Hold     |
+| 5          | L4 Slam                               | Tap      |
+| 6          | Unbound                               | N/A      |
+| 7          | Arm L2                                | Hold     |
+| 8          | Arm L3                                | Hold     |
+| 9          | Arm L4                                | Hold     |
+| 10         | Extake coral                          | Hold     |
+| 11         | Intake coral                          | Tap      |
+| 12         | Scooch coral upwards                  | Tap      |
+| 13         | Reset intake Y offset                 | Tap      |
+| 14         | Move arm to vertical & hold algae     | Hold     |
+| 15         | Decrease intake Y offset              | Tap      |
+| 16         | Increase intake Y offset              | Tap      |
+
+### Operator combination keybinds
+
+| Button ID(s)  | Function                           | Tap/Hold                                       |
+|---------------|------------------------------------|------------------------------------------------|
+| 14 + 7        | Move arm to l2 & intake algae      | Hold then Hold then release 7                  |
+| 14 + 8        | Move arm to L3 & intake algae      | Hold then Hold then release 8                  |
+| 14 + 9 + 10   | Move arm to L4 & intake algae      | Hold then Hold then Hold when arm reaches L4   |
+| 14 + 10       | Ejects the algae                   | Hold then Hold                                 |
+| 14 + 12       | Releases the algae                 | Hold then Hold                                 |
 
 ## Libraries/APIs used
 
