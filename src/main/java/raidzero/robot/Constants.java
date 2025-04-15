@@ -155,7 +155,11 @@ public class Constants {
 
     public static class TelescopingArm {
         public static class Intake {
-            public static final int MOTOR_ID = 12;
+            public static final int LEADER_ID = 12;
+            public static final int FOLLOWER_ID = 13;
+
+            public static final int TOP_LASERCAN = 0;
+            public static final int BOTTOM_LASERCAN = 1;
 
             public static final MotorArrangementValue MOTOR_ARRANGEMENT = MotorArrangementValue.Minion_JST;
 
@@ -186,7 +190,6 @@ public class Constants {
             public static final double KP = 1.0;
             public static final double KI = 0.0;
             public static final double KD = 0.0;
-
         }
 
         public static class Joint {

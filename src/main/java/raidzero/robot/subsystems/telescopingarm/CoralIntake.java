@@ -24,18 +24,18 @@ public class CoralIntake extends SubsystemBase {
      * Constructs a {@link CoralIntake} subsystem instance
      */
     private CoralIntake() {
-        roller = new TalonFXS(Constants.TelescopingArm.Intake.MOTOR_ID, Constants.RIO_BUS);
+        roller = new TalonFXS(Constants.TelescopingArm.Intake.LEADER_ID, Constants.RIO_BUS);
         roller.getConfigurator().apply(rollerConfiguration());
 
-        follower = new TalonFXS(13);
+        follower = new TalonFXS(Constants.TelescopingArm.Intake.FOLLOWER_ID);
         follower.getConfigurator().apply(followerConfiguration());
-        follower.setControl(new Follower(Intake.MOTOR_ID, false));
+        follower.setControl(new Follower(Constants.TelescopingArm.Intake.LEADER_ID, false));
 
-        bottomLaser = new LazyCan(1).withRangingMode(RangingMode.SHORT)
+        bottomLaser = new LazyCan(Constants.TelescopingArm.Intake.BOTTOM_LASERCAN).withRangingMode(RangingMode.SHORT)
             .withRegionOfInterest(14, 8, 16, 16).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
             .withThreshold(Intake.BOTTOM_LASER_THRESHOLD_MM);
 
-        topLaser = new LazyCan(0).withRangingMode(RangingMode.LONG)
+        topLaser = new LazyCan(Constants.TelescopingArm.Intake.TOP_LASERCAN).withRangingMode(RangingMode.LONG)
             .withRegionOfInterest(8, 14, 16, 4).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
             .withThreshold(Intake.TOP_LASER_THRESHOLD_MM);
     }
