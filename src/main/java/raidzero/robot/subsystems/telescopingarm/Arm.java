@@ -172,6 +172,11 @@ public class Arm extends SubsystemBase {
 
     }
 
+    /**
+     * Moves the arm to its home position
+     * 
+     * @return A {@link Command} that moves the arm to its home position
+     */
     public Command home() {
         return run(() -> moveJoint(0.25))
             .alongWith(
@@ -180,6 +185,12 @@ public class Arm extends SubsystemBase {
             );
     }
 
+
+    /**
+     * Sets the telescope motor position
+     *
+     * @param position The desired position in rotations
+     */
     public void setJointPosition(double position) {
         joint.setPosition(position);
     }

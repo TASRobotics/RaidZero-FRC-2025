@@ -98,6 +98,14 @@ public class CoralIntake extends SubsystemBase {
         return run(() -> roller.set(Intake.HOLD_SPEED));
     }
 
+    /**
+     * <ul>
+     * <li>Idle behavior for the intake</li>
+     * <li>If only the top laser is within the threshold, the roller will hold the algae. Otherwise, it will stop the motor.</li>
+     * </ul>
+     *
+     * @return A {@link Command} for the idle behavior for the intake
+     */
     public Command idleBehavior() {
         return run(() -> {
             if (topLaser.withinThreshold() && !bottomLaser.withinThreshold()) {
