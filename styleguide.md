@@ -103,3 +103,46 @@ public void someMethod() {
     a += (this.someBoolean ? 2 : 4);
 }
 ```
+
+## Importing constants
+
+- Statically import the class of the subsystem constants in code instead of doing `Constants.Subsystem.Subclass.VALUE`
+
+For example, we have a value called `MAX_VEL` inside the `Subpart` class.
+
+```java
+public class Constants {
+    public static class Subsystem {
+        public static class Subpart {
+            public static final double MAX_VEL = 2.5;
+        }
+    }
+}
+```
+
+Instead of doing this:
+
+```java
+import raidzero.robot.Constants;
+
+// Inside a method
+motor.set(Constants.Subsystem.Subpart.MAX_VEL);
+```
+
+or, 
+
+```java
+import raidzero.robot.Constants.Subsystem.Subpart;
+
+// Inside a method
+motor.set(Subpart.MAX_VEL);
+```
+
+do this:
+
+```java
+import static raidzero.robot.Constants.Subsystem.Subpart.*;
+
+// Inside a method
+motor.set(MAX_VEL);
+```
