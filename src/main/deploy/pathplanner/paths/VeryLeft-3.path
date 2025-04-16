@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.248517711612533,
+        "y": 4.038594391996579
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.4069803587147889,
+        "y": 4.043063999229753
+      },
+      "isLocked": false,
+      "linkedName": "VeryLeft-AT18"
+    },
+    {
+      "anchor": {
+        "x": 0.6196242173487184,
+        "y": 6.6860778642073475
+      },
+      "prevControl": {
+        "x": 1.679187527508803,
+        "y": 5.324883775308098
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "VeryLeft-Station"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "station appr",
+      "minWaypointRelativePos": 0.8598462481831404,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.2,
+        "maxAcceleration": 5.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 3.0,
+        "y": 6.0
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.21002906976744168,
+      "maxWaypointRelativePos": 0.4938624182412792,
+      "name": "rid algae"
+    }
+  ],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.244
+  },
+  "reversed": false,
+  "folder": "VeryLeft",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

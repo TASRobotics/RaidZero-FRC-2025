@@ -280,6 +280,20 @@ public class RobotContainer {
                 .andThen(() -> coralIntake.stop())
         );
         NamedCommands.registerCommand("IntakeCoral", coralIntake.intake().andThen(coralIntake.stop()));
+
+        NamedCommands.registerCommand(
+            "ArmL2Algae",
+            arm.moveTo(Constants.TelescopingArm.Positions.L2_ALGAE_POS_M)
+                .withTimeout(0.75)
+        );
+        NamedCommands.registerCommand(
+            "ArmL3Algae",
+            arm.moveTo(Constants.TelescopingArm.Positions.L3_ALGAE_POS_M)
+                .withTimeout(0.75)
+        );
+
+        NamedCommands.registerCommand("IntakeAlgae", coralIntake.intakeAlgae());
+        NamedCommands.registerCommand("LetGoAlgae", coralIntake.run(-0.2).withTimeout(1.0));
     }
 
     /**

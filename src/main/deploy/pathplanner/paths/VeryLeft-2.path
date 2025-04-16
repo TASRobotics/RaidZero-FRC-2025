@@ -1,0 +1,70 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.248517711612533,
+        "y": 4.176129920619834
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4451795343771243,
+        "y": 4.176126732657803
+      },
+      "isLocked": false,
+      "linkedName": "VeryLeft-ReefA"
+    },
+    {
+      "anchor": {
+        "x": 1.9509857367204568,
+        "y": 4.1
+      },
+      "prevControl": {
+        "x": 1.2353069866603028,
+        "y": 4.1
+      },
+      "nextControl": {
+        "x": 2.723102649058684,
+        "y": 4.1
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.248517711612533,
+        "y": 4.038594391996579
+      },
+      "prevControl": {
+        "x": 2.4505913978544056,
+        "y": 4.038594391996579
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "VeryLeft-AT18"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "VeryLeft",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
