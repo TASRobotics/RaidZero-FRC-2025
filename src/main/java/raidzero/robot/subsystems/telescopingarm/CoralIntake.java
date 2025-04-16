@@ -98,6 +98,16 @@ public class CoralIntake extends SubsystemBase {
         return run(() -> roller.set(Intake.HOLD_SPEED));
     }
 
+    public Command idleBehavior() {
+        return run(() -> {
+            if (topLaser.withinThreshold() && !bottomLaser.withinThreshold()) {
+                roller.set(Intake.HOLD_SPEED);
+            } else {
+                roller.stopMotor();
+            }
+        });
+    }
+
     /**
      * Stops the intake
      *

@@ -9,43 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Constants {
-    public static class AlgaeIntake {
-        public static class Joint {
-            public static final int MOTOR_ID = 14;
-            public static final double CONVERSION_FACTOR = (54.0 / 30.0) * 9.0;
-
-            public static final double INTAKE_POSITION = 0.0;
-            public static final double HOME_POSITION = 0.3;
-
-            public static final double KS = 0.025390625;
-            public static final double KG = 0.02734375;
-            public static final double KV = 0.5555555820465088;
-            public static final double KA = 0.014000000432133675;
-
-            public static final double KP = 20.0;
-            public static final double KI = 0.0;
-            public static final double KD = 0.0;
-
-            public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
-
-            public static final double CURRENT_LIMIT = 30.0;
-            public static final double SUPPLY_CURRENT_LIMIT = 40.0;
-            public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
-
-            public static final double MOTION_MAGIC_CRUISE_VELOCITY = 0.7;
-            public static final double MOTION_MAGIC_ACCELERATION = 4.5;
-
-            public static final double CURRENT_SPIKE_THRESHOLD_AMPS = 25.0;
-        }
-
-        public static class Intake {
-            public static final int MOTOR_ID = 15;
-            public static final double CONVERSION_FACTOR = 45.0;
-
-            public static final double INTAKE_SPEED = 0.2;
-        }
-    }
-
     public static class Bindings {
         public static final int CLIMB_UP = 1;
         public static final int CLIMB_DEPLOY = 2;
@@ -199,6 +162,7 @@ public class Constants {
             public static final double CANCODER_GEAR_RATIO = 28.0 / 80.0;
             public static final double CANCODER_OFFSET = -(0.325684 - (0.25 / CANCODER_GEAR_RATIO));
             public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
+            public static final double SENSOR_TO_MECHANISM_RATIO = 200.0;
 
             public static final double CONVERSION_FACTOR = (120.0 / 12.0) * 20.0;
 

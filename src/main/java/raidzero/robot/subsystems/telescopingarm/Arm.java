@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
+import raidzero.robot.Constants.Climb.Joint;
+import raidzero.robot.Constants.TelescopingArm.Positions;
 
 public class Arm extends SubsystemBase {
     private TalonFX telescope, joint;
@@ -170,6 +172,18 @@ public class Arm extends SubsystemBase {
 
     }
 
+    public Command home() {
+        return run(() -> moveJoint(0.25))
+            .alongWith(
+                Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
+                    .andThen(() -> moveTelescope(0.0))
+            );
+    }
+
+    public void setJointPosition(double position) {
+        joint.setPosition(position);
+    }
+
     /**
      * Moves the arm to the L4 scoring position
      *
@@ -201,7 +215,7 @@ public class Arm extends SubsystemBase {
      */
     public void checkDefaultCommand() {
         if (this.getDefaultCommand() == null) {
-            this.setDefaultCommand(this.moveToIntake());
+            this.setDefaultCommand(this.home());
         }
     }
 
@@ -377,9 +391,10 @@ public class Arm extends SubsystemBase {
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
-        configuration.Feedback.SensorToMechanismRatio = 1.0 / Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
-        configuration.Feedback.RotorToSensorRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR *
-            Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
+        // configuration.Feedback.SensorToMechanismRatio = 1.0 / Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
+        // configuration.Feedback.RotorToSensorRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR *
+        // Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
+        configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Joint.SENSOR_TO_MECHANISM_RATIO;
 
         configuration.Slot0 = new Slot0Configs()
             .withKS(Constants.TelescopingArm.Joint.KS)
@@ -401,8 +416,8 @@ public class Arm extends SubsystemBase {
         configuration.CurrentLimits.SupplyCurrentLimit = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LIMIT;
         configuration.CurrentLimits.SupplyCurrentLowerTime = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LOWER_TIME;
 
-        configuration.Feedback.FeedbackRemoteSensorID = Constants.TelescopingArm.Joint.CANCODER_ID;
-        configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
+        // configuration.Feedback.FeedbackRemoteSensorID = Constants.TelescopingArm.Joint.CANCODER_ID;
+        // configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
 
         configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 

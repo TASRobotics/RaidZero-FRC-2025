@@ -61,8 +61,6 @@ public class RobotContainer {
 
     public final Limelight limes = Limelight.system();
 
-    // public final AlgaeJoint algaeIntake = AlgaeJoint.system();
-
     public final ArmStrip armStrip = ArmStrip.system();
 
     public final ClimbJoint climbJoint = ClimbJoint.system();
@@ -83,6 +81,7 @@ public class RobotContainer {
         PathfindingCommand.warmupCommand().schedule();
 
         climbJoint.setPosition(Constants.Climb.Joint.HOME_POS);
+        arm.setJointPosition(0.25);
     }
 
     /**
@@ -98,7 +97,7 @@ public class RobotContainer {
             )
         );
 
-        coralIntake.setDefaultCommand(coralIntake.stop());
+        coralIntake.setDefaultCommand(coralIntake.idleBehavior());
 
         climbJoint.setDefaultCommand(climbJoint.run(Constants.Climb.Joint.HOME_POS));
         climbWinch.setDefaultCommand(climbWinch.stop());
@@ -169,6 +168,8 @@ public class RobotContainer {
                 .onlyIf(swerve.isArmDeployable())
                 .alongWith(new InstantCommand(() -> arm.checkDefaultCommand()))
         );
+
+        operator.button(Constants.Bindings.ALGAE_INTAKE).whileTrue(arm.moveToIntake());
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate())
             .whileTrue(coralIntake.extake());
