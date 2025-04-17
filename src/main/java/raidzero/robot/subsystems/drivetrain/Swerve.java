@@ -292,29 +292,26 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
      * @return A {@link DeferredCommand} that moves the robot to the desired pose
      */
     public Command flyToPose(Pose2d pose) {
-        Pose2d curPose = getState().Pose;
-
-        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-            new Pose2d(curPose.getX(), curPose.getY(), curPose.getRotation()),
-            new Pose2d(pose.getX(), pose.getY(), Rotation2d.fromDegrees(0))
-        );
-
-        PathConstraints constraints = new PathConstraints(
-            2.5,
-            2.25,
-            Units.degreesToRadians(540),
-            Units.degreesToRadians(720)
-        );
-
-        PathPlannerPath alignmentPath = new PathPlannerPath(
-            waypoints,
-            constraints,
-            null,
-            new GoalEndState(0, pose.getRotation())
-        );
-
+        // Pose2d curPose = getState().Pose;
         // resetPose(getState().Pose);
-        return AutoBuilder.followPath(alignmentPath);
+
+        return AutoBuilder.followPath(
+            new PathPlannerPath(
+                PathPlannerPath.waypointsFromPoses(
+                    // new Pose2d(curPose.getX(), curPose.getY(), curPose.getRotation()),
+                    getState().Pose,
+                    new Pose2d(pose.getX(), pose.getY(), Rotation2d.fromDegrees(0))
+                ),
+                new PathConstraints(
+                    2.5,
+                    2.25,
+                    Units.degreesToRadians(540),
+                    Units.degreesToRadians(720)
+                ),
+                null,
+                new GoalEndState(0, pose.getRotation())
+            )
+        );
     }
 
     /**
