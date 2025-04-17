@@ -402,10 +402,10 @@ public class Arm extends SubsystemBase {
     private TalonFXConfiguration jointConfiguration() {
         TalonFXConfiguration configuration = new TalonFXConfiguration();
 
-        // configuration.Feedback.SensorToMechanismRatio = 1.0 / Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
-        // configuration.Feedback.RotorToSensorRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR *
-        // Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
-        configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Joint.SENSOR_TO_MECHANISM_RATIO;
+        configuration.Feedback.SensorToMechanismRatio = 1.0 / Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
+        configuration.Feedback.RotorToSensorRatio = Constants.TelescopingArm.Joint.CONVERSION_FACTOR *
+            Constants.TelescopingArm.Joint.CANCODER_GEAR_RATIO;
+        // configuration.Feedback.SensorToMechanismRatio = Constants.TelescopingArm.Joint.SENSOR_TO_MECHANISM_RATIO;
 
         configuration.Slot0 = new Slot0Configs()
             .withKS(Constants.TelescopingArm.Joint.KS)
@@ -427,8 +427,8 @@ public class Arm extends SubsystemBase {
         configuration.CurrentLimits.SupplyCurrentLimit = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LIMIT;
         configuration.CurrentLimits.SupplyCurrentLowerTime = Constants.TelescopingArm.Joint.SUPPLY_CURRENT_LOWER_TIME;
 
-        // configuration.Feedback.FeedbackRemoteSensorID = Constants.TelescopingArm.Joint.CANCODER_ID;
-        // configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
+        configuration.Feedback.FeedbackRemoteSensorID = Constants.TelescopingArm.Joint.CANCODER_ID;
+        configuration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.SyncCANcoder;
 
         configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
 
