@@ -164,16 +164,22 @@ public class RobotContainer {
         );
 
         operator.button(Constants.Bindings.L4).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate()).whileTrue(
-            arm.moveToL4()
-                .onlyIf(swerve.isArmDeployable())
-                .alongWith(new InstantCommand(() -> arm.checkDefaultCommand()))
+            arm.moveToIntake().withTimeout(0.3).andThen(
+                arm.moveToL4()
+                    .onlyIf(swerve.isArmDeployable())
+                    .alongWith(new InstantCommand(() -> arm.checkDefaultCommand()))
+            )
         );
 
-        operator.button(Constants.Bindings.ALGAE_INTAKE).whileTrue(arm.moveToIntake());
+        // operator.button(Constants.Bindings.ALGAE_INTAKE)
+        //     .whileTrue(arm.moveTo(Positions.L3_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
+        // operator.button(Constants.Bindings.ALGAE_EXTAKE)
+        //     .whileTrue(arm.moveTo(Positions.L2_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate())
             .whileTrue(coralIntake.extake());
-        operator.button(Constants.Bindings.CORAL_INTAKE).onTrue(coralIntake.intake());
+        operator.button(Constants.Bindings.CORAL_INTAKE)
+            .onTrue(coralIntake.intake().alongWith(arm.moveToIntake()).until(() -> coralIntake.bottomLaserWithinThreshold()));
         operator.button(Constants.Bindings.CORAL_SCOOCH).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate())
             .whileTrue(coralIntake.run(Constants.TelescopingArm.Intake.REVERSE_SPEED));
 
