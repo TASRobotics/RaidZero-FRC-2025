@@ -81,7 +81,6 @@ public class RobotContainer {
         PathfindingCommand.warmupCommand().schedule();
 
         climbJoint.setPosition(Constants.Climb.Joint.HOME_POS);
-        arm.setJointPosition(0.25);
     }
 
     /**
