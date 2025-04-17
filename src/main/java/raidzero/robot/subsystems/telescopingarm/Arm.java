@@ -174,7 +174,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Moves the arm to its home position
-     * 
+     *
      * @return A {@link Command} that moves the arm to its home position
      */
     public Command home() {
@@ -184,7 +184,6 @@ public class Arm extends SubsystemBase {
                 moveJoint(0.23);                                                        
             });
     }
-
 
     /**
      * Sets the telescope motor position
