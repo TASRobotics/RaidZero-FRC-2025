@@ -146,6 +146,14 @@ public class RobotContainer {
             swerve.pathToProcessor()
         );
 
+        joystick.povLeft().whileTrue(
+            swerve.flyToReef(Constants.Swerve.REEFS.LEFT)
+        );
+
+        joystick.povUp().whileTrue(
+            swerve.flyToReef(Constants.Swerve.REEFS.RIGHT)
+        );
+
         // * Operator controls
         operator.button(Constants.Bindings.TOP_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(0.01), arm));
         operator.button(Constants.Bindings.BOTTOM_LEFT).onTrue(new InstantCommand(() -> arm.decreaseIntakeYOffset(-0.01), arm));
@@ -171,9 +179,9 @@ public class RobotContainer {
         );
 
         // operator.button(Constants.Bindings.ALGAE_INTAKE)
-        //     .whileTrue(arm.moveTo(Positions.L3_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
+        // .whileTrue(arm.moveTo(Positions.L3_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
         // operator.button(Constants.Bindings.ALGAE_EXTAKE)
-        //     .whileTrue(arm.moveTo(Positions.L2_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
+        // .whileTrue(arm.moveTo(Positions.L2_ALGAE_POS_M).alongWith(coralIntake.intakeAlgae()));
 
         operator.button(Constants.Bindings.CORAL_EXTAKE).and(operator.button(Constants.Bindings.BOTTOM_RIGHT).negate())
             .whileTrue(coralIntake.extake());

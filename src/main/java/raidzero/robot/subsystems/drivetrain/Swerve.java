@@ -11,7 +11,10 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -280,6 +283,62 @@ public class Swerve extends TunerSwerveDrivetrain implements Subsystem {
                 )
             ).finallyDo((interrupted) -> this.stop())
         );
+    }
+
+    /**
+     * Moves the robot to the desired pose using PathPlanner's {@link PathPlannerPath#waypointsFromPoses(List)} {@link AutoBuilder#followPath}
+     *
+     * @param pose The desired pose
+     * @return A {@link DeferredCommand} that moves the robot to the desired pose
+     */
+    public Command flyToPose(Pose2d pose) {
+        Pose2d curPose = getState().Pose;
+
+        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+            new Pose2d(curPose.getX(), curPose.getY(), curPose.getRotation()),
+            new Pose2d(pose.getX(), pose.getY(), Rotation2d.fromDegrees(0))
+        );
+
+        PathConstraints constraints = new PathConstraints(
+            2.5,
+            2.25,
+            Units.degreesToRadians(540),
+            Units.degreesToRadians(720)
+        );
+
+        PathPlannerPath alignmentPath = new PathPlannerPath(
+            waypoints,
+            constraints,
+            null,
+            new GoalEndState(0, pose.getRotation())
+        );
+
+        // resetPose(getState().Pose);
+        return AutoBuilder.followPath(alignmentPath);
+    }
+
+    /**
+     * Moves the robot to the nearest left or right reef using {@link #flyToPose}
+     *
+     * @param reef Desired left or right reef from {@link Constants.Swerve.REEFS}
+     * @return A {@link DeferredCommand} that moves the robot to the nearest left or right reef
+     */
+    public Command flyToReef(Constants.Swerve.REEFS reef) {
+        return defer(() -> {
+            Pose2d target = null;
+
+            if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+                target = this.getState().Pose.nearest(
+                    (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.RIGHT_REEF_WAYPOINTS : Constants.Swerve.LEFT_REEF_WAYPOINTS
+                );
+            } else {
+                target = this.getState().Pose.nearest(
+                    (reef == Constants.Swerve.REEFS.LEFT) ? Constants.Swerve.LEFT_REEF_WAYPOINTS : Constants.Swerve.RIGHT_REEF_WAYPOINTS
+                );
+            }
+
+            return flyToPose(target);
+        });
     }
 
     /**
