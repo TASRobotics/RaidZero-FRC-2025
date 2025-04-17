@@ -179,7 +179,7 @@ public class Arm extends SubsystemBase {
         return run(() -> moveJoint(0.2))
             .until(() -> joint.getPosition().getValueAsDouble() < 0.25).andThen(() -> {
                 moveTelescope(0.0);
-                moveJoint(0.23);                                                        
+                moveJoint(0.23);
             });
     }
 
