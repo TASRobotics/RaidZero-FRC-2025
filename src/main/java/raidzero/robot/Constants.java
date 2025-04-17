@@ -160,7 +160,7 @@ public class Constants {
             public static final int CANCODER_ID = 11;
 
             public static final double CANCODER_GEAR_RATIO = 28.0 / 80.0;
-            public static final double CANCODER_OFFSET = -(0.325684 - (0.25 / CANCODER_GEAR_RATIO));
+            public static final double CANCODER_OFFSET = -(0.348633 - (0.25 / CANCODER_GEAR_RATIO));
             public static final double CANCODER_DISCONTINUITY_POINT = 0.5;
             public static final double SENSOR_TO_MECHANISM_RATIO = 200.0;
 
