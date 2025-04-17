@@ -226,7 +226,7 @@ public class Arm extends SubsystemBase {
      */
     public void checkDefaultCommand() {
         if (this.getDefaultCommand() == null) {
-            this.setDefaultCommand(this.home());
+            this.setDefaultCommand(this.moveToIntake());
         }
     }
 
