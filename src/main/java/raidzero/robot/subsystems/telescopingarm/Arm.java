@@ -178,11 +178,11 @@ public class Arm extends SubsystemBase {
      * @return A {@link Command} that moves the arm to its home position
      */
     public Command home() {
-        return run(() -> moveJoint(0.25))
-            .alongWith(
-                Commands.waitUntil(() -> joint.getPosition().getValueAsDouble() < 0.25)
-                    .andThen(() -> moveTelescope(0.0))
-            );
+        return run(() -> moveJoint(0.2))
+            .until(() -> joint.getPosition().getValueAsDouble() < 0.25).andThen(() -> {
+                moveTelescope(0.0);
+                moveJoint(0.23);                                                        
+            });
     }
 
 
