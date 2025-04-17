@@ -129,7 +129,7 @@ import raidzero.robot.Constants;
 motor.set(Constants.Subsystem.Subpart.MAX_VEL);
 ```
 
-or, 
+or,
 
 ```java
 import raidzero.robot.Constants.Subsystem.Subpart;
