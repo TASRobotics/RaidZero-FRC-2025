@@ -19,8 +19,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
-import raidzero.robot.Constants.Climb.Joint;
-import raidzero.robot.Constants.TelescopingArm.Positions;
 
 public class Arm extends SubsystemBase {
     private TalonFX telescope, joint;
