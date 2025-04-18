@@ -128,8 +128,8 @@ public class Constants {
 
             public static final InvertedValue INVERTED_VALUE = InvertedValue.CounterClockwise_Positive;
 
-            public static final int STATOR_CURRENT_LIMIT = 30;
-            public static final int SUPPLY_CURRENT_LIMIT = 30;
+            public static final int STATOR_CURRENT_LIMIT = 50;
+            public static final int SUPPLY_CURRENT_LIMIT = 50;
             public static final double SUPPLY_CURRENT_LOWER_TIME = 0.0;
 
             public static final double TOP_LASER_THRESHOLD_MM = 50.0;
