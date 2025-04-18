@@ -224,7 +224,7 @@ public class Arm extends SubsystemBase {
      * @return True if the arm joint should be in coast mode, false otherwise
      */
     private boolean shouldBeInCoast() {
-        return CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+        return CoralIntake.system().getBottomLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
     }
 
     /**
