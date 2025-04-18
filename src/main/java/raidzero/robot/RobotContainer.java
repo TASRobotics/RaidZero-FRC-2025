@@ -96,7 +96,7 @@ public class RobotContainer {
             )
         );
 
-        coralIntake.setDefaultCommand(coralIntake.idleBehavior());
+        coralIntake.setDefaultCommand(coralIntake.stop());
 
         climbJoint.setDefaultCommand(climbJoint.run(Constants.Climb.Joint.HOME_POS));
         climbWinch.setDefaultCommand(climbWinch.stop());
