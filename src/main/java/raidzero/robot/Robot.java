@@ -5,6 +5,7 @@
 package raidzero.robot;
 
 import au.grapplerobotics.CanBridge;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -48,7 +49,7 @@ public class Robot extends TimedRobot {
     public void disabledPeriodic() {
         if (!alreadyEnabled) {
             Arm.system().updateCoastMode();
-            CoralIntake.system().updateCoastMode();
+            // CoralIntake.system().updateCoastMode();
             Swerve.system().initializeOtf();
         }
     }
@@ -68,6 +69,9 @@ public class Robot extends TimedRobot {
 
         Elastic.selectTab("Autonomous");
         alreadyEnabled = true;
+
+        CoralIntake.system().setBrakeMode(NeutralModeValue.Brake);
+        Arm.system().setJointBrakeMode(NeutralModeValue.Brake);
     }
 
     @Override
@@ -85,6 +89,9 @@ public class Robot extends TimedRobot {
         }
 
         Elastic.selectTab("Teleoperated");
+
+        CoralIntake.system().setBrakeMode(NeutralModeValue.Brake);
+        Arm.system().setJointBrakeMode(NeutralModeValue.Brake);
     }
 
     @Override
