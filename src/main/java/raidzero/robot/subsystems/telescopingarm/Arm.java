@@ -272,6 +272,15 @@ public class Arm extends SubsystemBase {
     }
 
     /**
+     * Sets the brake mode of the joint motor
+     * 
+     * @param mode The desired {@link NeutralModeValue} mode
+     */
+    public void setJointBrakeMode(NeutralModeValue mode) {
+        joint.setNeutralMode(mode);
+    }
+
+    /**
      * Zeroes the the relative encoder position in the telescope motor
      *
      * @return A {@link Command} that zeroes the telescope motor position
