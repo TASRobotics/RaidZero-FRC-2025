@@ -4,7 +4,6 @@ import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.robot.Constants;
@@ -18,7 +17,7 @@ public class Winch extends SubsystemBase {
      * Constructs a {@link Winch} subsystem instance
      */
     private Winch() {
-        winch = new TalonFX(Constants.Climb.Winch.MOTOR_ID);
+        winch = new TalonFX(Constants.Climb.Winch.MOTOR_ID, "rio");
         winch.getConfigurator().apply(winchConfiguration());
         winch.setNeutralMode(NeutralModeValue.Brake);
     }
@@ -29,7 +28,7 @@ public class Winch extends SubsystemBase {
      * @param speed The speed to run the winch at
      * @return A {@link Command} that runs the winch at the specified speed
      */
-    public Command run(double speed, boolean ramp) {
+    public Command run(double speed) {
         return run(() -> winch.set(speed));
     }
 
@@ -51,7 +50,7 @@ public class Winch extends SubsystemBase {
         TalonFXConfiguration configuration = new TalonFXConfiguration()
             .withOpenLoopRamps(
                 new OpenLoopRampsConfigs()
-                    .withDutyCycleOpenLoopRampPeriod(0.2)
+                    .withDutyCycleOpenLoopRampPeriod(0.1)
             );
 
         return configuration;
