@@ -170,6 +170,16 @@ public class CoralIntake extends SubsystemBase {
     }
 
     /**
+     * Sets the brake mode of the joint motor
+     * 
+     * @param mode The desired {@link NeutralModeValue} mode
+     */
+    public void setBrakeMode(NeutralModeValue mode) {
+        roller.setNeutralMode(mode);
+        // follower.setNeutralMode(mode);
+    }
+
+    /**
      * Gets the distance from the LaserCAN
      *
      * @return The distance in mm, -1 if the LaserCAN cannot be found
