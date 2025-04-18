@@ -148,7 +148,7 @@ public class Constants {
 
             public static final double ALGAE_INTAKE_SPEED = 1.0;
             public static final double ALGAE_EJECT_SPEED = -1.0;
-            public static final double HOLD_SPEED = 0.1;
+            public static final double HOLD_SPEED = 0.3;
 
             public static final double KP = 1.0;
             public static final double KI = 0.0;
