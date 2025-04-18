@@ -171,7 +171,7 @@ public class CoralIntake extends SubsystemBase {
 
     /**
      * Sets the brake mode of the joint motor
-     * 
+     *
      * @param mode The desired {@link NeutralModeValue} mode
      */
     public void setBrakeMode(NeutralModeValue mode) {

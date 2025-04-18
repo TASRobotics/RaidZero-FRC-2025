@@ -151,7 +151,6 @@ public class Arm extends SubsystemBase {
      */
     public Command moveToIntake() {
         if ((DriverStation.getAlliance().orElse(Alliance.Red) == Alliance.Blue)) {
-
             return defer(
                 () -> moveWithDelay(
                     new double[] { Constants.TelescopingArm.Positions.INTAKE_POS_M_BLUE[0],
@@ -273,7 +272,7 @@ public class Arm extends SubsystemBase {
 
     /**
      * Sets the brake mode of the joint motor
-     * 
+     *
      * @param mode The desired {@link NeutralModeValue} mode
      */
     public void setJointBrakeMode(NeutralModeValue mode) {
