@@ -184,8 +184,8 @@ public class RobotContainer {
                     ).withTimeout(1.75)
             );
 
-        operator.button(Constants.Bindings.CLIMB_DEPLOY)
-            .onTrue(arm.climbPos().alongWith(new InstantCommand(() -> climbJoint.setDeployedState())));
+        operator.button(Constants.Bindings.CLIMB_DEPLOY).onTrue(arm.climbPos());
+        operator.button(Constants.Bindings.CLIMB_DEPLOY).onTrue(new InstantCommand(() -> climbJoint.setDeployedState(), climbJoint));
 
         // operator.button(Constants.Bindings.CLIMB_UP)
         // .whileTrue(climbWinch.run(Constants.Climb.Winch.SPEED).onlyIf(climbJoint.isDeployed()));
