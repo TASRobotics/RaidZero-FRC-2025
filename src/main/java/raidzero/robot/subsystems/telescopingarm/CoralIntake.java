@@ -15,7 +15,7 @@ import raidzero.robot.Constants;
 import raidzero.robot.Constants.TelescopingArm.Intake;
 
 public class CoralIntake extends SubsystemBase {
-    private TalonFXS roller, follower;
+    private TalonFXS roller;// , follower;
     private LazyCan bottomLaser, topLaser;
 
     private static CoralIntake system;
@@ -27,9 +27,9 @@ public class CoralIntake extends SubsystemBase {
         roller = new TalonFXS(Constants.TelescopingArm.Intake.LEADER_ID, Constants.RIO_BUS);
         roller.getConfigurator().apply(rollerConfiguration());
 
-        follower = new TalonFXS(Constants.TelescopingArm.Intake.FOLLOWER_ID);
-        follower.getConfigurator().apply(followerConfiguration());
-        follower.setControl(new Follower(Constants.TelescopingArm.Intake.LEADER_ID, false));
+        // follower = new TalonFXS(Constants.TelescopingArm.Intake.FOLLOWER_ID);
+        // follower.getConfigurator().apply(followerConfiguration());
+        // follower.setControl(new Follower(Constants.TelescopingArm.Intake.LEADER_ID, false));
 
         bottomLaser = new LazyCan(Constants.TelescopingArm.Intake.BOTTOM_LASERCAN).withRangingMode(RangingMode.SHORT)
             .withRegionOfInterest(14, 8, 16, 16).withTimingBudget(TimingBudget.TIMING_BUDGET_20MS)
@@ -153,10 +153,10 @@ public class CoralIntake extends SubsystemBase {
     public void updateCoastMode() {
         if (shouldBeInCoast()) {
             roller.setNeutralMode(NeutralModeValue.Coast);
-            follower.setNeutralMode(NeutralModeValue.Coast);
+            // follower.setNeutralMode(NeutralModeValue.Coast);
         } else {
             roller.setNeutralMode(NeutralModeValue.Brake);
-            follower.setNeutralMode(NeutralModeValue.Brake);
+            // follower.setNeutralMode(NeutralModeValue.Brake);
         }
     }
 
