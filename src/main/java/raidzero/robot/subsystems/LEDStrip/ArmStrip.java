@@ -3,8 +3,6 @@ package raidzero.robot.subsystems.LEDStrip;
 
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
-import com.ctre.phoenix.led.ColorFlowAnimation;
-import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -22,7 +20,7 @@ public class ArmStrip implements Subsystem {
     private CANdle candle;
     private Arm arm;
 
-    private boolean armIsLegal, coralTooUp, coralIsIn = false;
+    private boolean armIsLegal, coralIsIn = false;
 
     private boolean strobeAlternate = false;
     private Timer strobeTimer = new Timer();
@@ -79,9 +77,6 @@ public class ArmStrip implements Subsystem {
     private void updateStates() {
         armIsLegal = arm.getJointPosition() >= Constants.CANdle.ARM_JOINT_LOWER_BOUND &&
             arm.getJointPosition() <= Constants.CANdle.ARM_JOINT_UPPER_BOUND;
-
-        coralTooUp = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.TOP_LASER_THRESHOLD_MM &&
-            CoralIntake.system().getBottomLaserDistance() > Constants.TelescopingArm.Intake.BOTTOM_LASER_THRESHOLD_MM;
 
         coralIsIn = CoralIntake.system().bottomLaserWithinThreshold();
     }
@@ -212,16 +207,6 @@ public class ArmStrip implements Subsystem {
     private void loopTeleop() {
         if (ClimbJoint.system().isDeployed().getAsBoolean()) {
             candle.animate(new StrobeAnimation(0, 0, 255, 0, 0.05, -1));
-        } else if (coralTooUp) {
-            if (!animation2Applied) {
-                candle.clearAnimation(0);
-                candle.clearAnimation(1);
-                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 25, Direction.Forward, 8), 0);
-                candle.animate(new ColorFlowAnimation(250, 160, 10, 0, 0.75, 27, Direction.Backward, 33), 1);
-                animationApplied = false;
-                animation2Applied = true;
-                animation3Applied = false;
-            }
         } else if (coralIsIn && !Swerve.system().isArmDeployable().getAsBoolean()) {
             if (animationApplied || animation2Applied || animation3Applied) {
                 resetAnimation();
