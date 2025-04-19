@@ -169,17 +169,17 @@ public class Constants {
         }
 
         public static class Positions {
-            public static double[] L4_SCORING_POS_M = { -0.24, 2.65 };
-            public static double[] L4_SCORING_POS_M_BLUE = { -0.17, 2.68 };
+            public static double[] L4_SCORING_POS_M = { -0.08, 2.68 };
+            public static double[] L4_SCORING_POS_M_BLUE = { -0.08, 2.68 };
             public static double[] L4_CHECK_POSITION = { -0.25, 2.62 };
             public static double[] L4_GRAND_SLAM = { -0.2, 1.57 };
 
-            public static double[] L3_SCORING_POS_M = { -0.20, 1.57 };
-            public static double[] L2_SCORING_POS_M = { -0.2, 0.9 };
+            public static double[] L3_SCORING_POS_M = { -0.13, 1.57 };
+            public static double[] L2_SCORING_POS_M = { -0.13, 0.9 };
             public static double[] L1_SCORING_POS_M = { 0.0, 0.0 };
 
-            public static double[] INTAKE_POS_M = { 0.5, 0.8425 };
-            public static double[] INTAKE_POS_M_BLUE = { 0.5, 0.8425 };
+            public static double[] INTAKE_POS_M = { 0.5, 0.8425 - 0.08 };
+            public static double[] INTAKE_POS_M_BLUE = { 0.5, 0.8425 - 0.08 };
 
             public static double[] HOME_POS_M = { 0.0, 0.0 };
         }
