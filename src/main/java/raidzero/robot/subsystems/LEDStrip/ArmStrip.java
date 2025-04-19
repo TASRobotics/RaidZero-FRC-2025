@@ -22,7 +22,7 @@ public class ArmStrip implements Subsystem {
     private CANdle candle;
     private Arm arm;
 
-    private boolean armIsLegal, coralTooDown, coralTooUp, coralIsIn = false;
+    private boolean armIsLegal, coralTooDown, coralTooUp, coralIsIn, shouldBeInCoast = false;
 
     private boolean strobeAlternate = false;
     private Timer strobeTimer = new Timer();
@@ -88,6 +88,9 @@ public class ArmStrip implements Subsystem {
 
         coralIsIn = CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
             CoralIntake.system().getBottomLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
+
+        shouldBeInCoast = CoralIntake.system().getBottomLaserDistance() > Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM &&
+            CoralIntake.system().getTopLaserDistance() < Constants.TelescopingArm.Intake.LASERCAN_DISTANCE_THRESHOLD_MM;
     }
 
     /**
@@ -135,7 +138,7 @@ public class ArmStrip implements Subsystem {
                 animation2Applied = false;
                 animation3Applied = true;
             }
-        } else if (armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
+        } else if (armIsLegal && shouldBeInCoast && !ClimbJoint.system().isDeployed().getAsBoolean()) {
             if (!animation2Applied) {
                 candle.clearAnimation(0);
                 candle.clearAnimation(1);
@@ -144,7 +147,7 @@ public class ArmStrip implements Subsystem {
                 animationApplied = false;
                 animation3Applied = false;
             }
-        } else if (!armIsLegal && ClimbJoint.system().getPosition() < 0.1 && !ClimbJoint.system().isDeployed().getAsBoolean()) {
+        } else if (!armIsLegal && shouldBeInCoast && !ClimbJoint.system().isDeployed().getAsBoolean()) {
             if (animationApplied || animation2Applied || animation3Applied) {
                 candle.clearAnimation(0);
                 candle.clearAnimation(1);
