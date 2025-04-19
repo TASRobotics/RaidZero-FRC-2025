@@ -14,6 +14,7 @@ import com.revrobotics.servohub.ServoChannel.ChannelId;
 import com.revrobotics.servohub.ServoHub;
 import com.revrobotics.servohub.config.ServoChannelConfig.BehaviorWhenDisabled;
 import com.revrobotics.servohub.config.ServoHubConfig;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import raidzero.lib.LazyCan;
@@ -141,6 +142,9 @@ public class CoralIntake extends SubsystemBase {
         } else {
             intakeBlock.setPulseWidth(Constants.TelescopingArm.Intake.SERVO_RETRACTED);
         }
+
+        SmartDashboard.putNumber("Top", topLaser.getDistanceMm());
+        SmartDashboard.putNumber("Bottom", bottomLaser.getDistanceMm());
     }
 
     /**
