@@ -34,11 +34,11 @@ public class Arm extends SubsystemBase {
      * Constructs an {@link Arm} subsystem instance
      */
     private Arm() {
-        telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID);
+        telescope = new TalonFX(Constants.TelescopingArm.Telescope.MOTOR_ID, "Kaynebus");
         telescope.getConfigurator().apply(telescopeConfiguration());
         telescope.setNeutralMode(NeutralModeValue.Brake);
 
-        joint = new TalonFX(Constants.TelescopingArm.Joint.MOTOR_ID);
+        joint = new TalonFX(Constants.TelescopingArm.Joint.MOTOR_ID, "Kaynebus");
         joint.getConfigurator().apply(jointConfiguration());
         joint.setNeutralMode(NeutralModeValue.Brake);
 
